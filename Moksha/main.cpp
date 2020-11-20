@@ -1,64 +1,54 @@
 #include "interface.h"
+#include "input.h"
+#include "IObserver.h"
 #include <conio.h>
 #include <ctype.h>
 
-string s = "";
+Input input = Input();
+Interface interfacer = Interface(140, 40, 60, 30);
 
-int main() {
-	Interface interfacer = Interface(140, 40, 60, 30);
-	interfacer.set_titulo("Inventory");
-
-	while (1) {
-		bool updated = false;
-
+class Main : public IObserver {
+public:
+	void update() override {
 		// Input
-		if (!_kbhit())
-			continue;
+		if (input.getInput(input.left))
+			interfacer.goLeft();
 
-		if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
-			interfacer.go_left();
-			updated = true;
-		}
+		if (input.getInput(input.right))
+			interfacer.goRight();
 
-		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) {
-			interfacer.go_right();
-			updated = true;
-		}
+		if (input.getInput(input.up))
+			interfacer.goUp();
 
-		if (GetAsyncKeyState(VK_UP) & 0x8000) {
-			interfacer.go_up();
-			updated = true;
-		}
+		if (input.getInput(input.down))
+			interfacer.goDown();
 
-		if (GetAsyncKeyState(VK_DOWN) & 0x8000) {
-			interfacer.go_down();
-			updated = true;
-		}
+		if (input.getInput(input.enter))
+			interfacer.subirLinha();
 
-		if (updated == false) {
-			int c = _getch();
+		if (input.getInput(input.typing))
+			interfacer.addLetra(input.getTyped());
 
-			if (c == 0xe0) {
-				_getch();
-				continue;
-			}
-
-			if (isalnum(c))
-				s += c;
-			if (c == 'c') {
-				interfacer.add_linha(s);
-				updated = true;
-				s = "";
-			}
-		}
 
 		// Design & Draw
-		if (updated) {
-			interfacer.interface_principal();
-			interfacer.draw();
-			updated = false;
-		}
+		interfacer.interfacePrincipal();
+		interfacer.draw();
 	}
 
-	return 0;
-}
+
+	int main() {
+		interfacer.setTitulo("Inventory");
+
+		while (1) {
+			input.input();
+		}
+
+		return 0;
+	}
+};
+
+int main() {
+	Main m = Main();
+	input.add(&m);
+	m.main();
+};

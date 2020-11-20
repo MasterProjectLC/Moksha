@@ -19,7 +19,7 @@ int Interface::getCoords(int x, int y) {
 	return y * screenWidth + x;
 }
 
-void Interface::interface_principal() {
+void Interface::interfacePrincipal() {
 	for (int i = 0; i < screenHeight; i++) {
 		for (int j = 0; j < screenWidth; j++) {
 			int position = getCoords(j, i);
@@ -44,14 +44,18 @@ void Interface::interface_principal() {
 		screen[i] = titulo[j];
 	}
 
+	// Linha Atual
+	string s = linhaAtual;
+	for (int i = 0; i < s.size(); i++)
+		screen[getCoords(separator + i + 1, screenHeight - 1)] = s[i];
+
 	// Linhas
-	int sobre;
-	for (sobre = 0, it = linhas.begin(); it != linhas.end(); it++, sobre++) {
-		string s = *it;
+	int sobre = 1;
+	for (it = linhas.begin(); it != linhas.end(); it++, sobre++) {
+		s = *it;
 		sobre += s.size() / (screenWidth - separator);
-		for (int i = 0; i < s.size(); i++) {
+		for (int i = 0; i < s.size(); i++)
 			screen[getCoords(separator + i + 1, screenHeight - sobre - 1)] = s[i];
-		}
 	}
 }
 
@@ -61,33 +65,40 @@ void Interface::draw() {
 }
 
 
-void Interface::go_left() {
+void Interface::goLeft() {
 	selector--;
 	selector += (selector % screenWidth <= separator) * (screenWidth - separator);
 }
 
-void Interface::go_right() {
+void Interface::goRight() {
 	selector++;
 	selector += (selector % screenWidth <= separator) * (separator + 1 - screenWidth);
 }
 
-void Interface::go_up() {
+void Interface::goUp() {
 	selector = selector - screenWidth;
 	selector += (selector < 0) * screenWidth * screenHeight;
 }
 
-void Interface::go_down() {
+void Interface::goDown() {
 	selector = selector + screenWidth;
 	selector -= (selector > screenWidth * screenHeight) * screenWidth * screenHeight;
 }
 
-void Interface::set_titulo(string titulo) {
+void Interface::setTitulo(string titulo) {
 	this->titulo = titulo;
 }
 
-void Interface::add_linha(string nova) {
-	set_titulo(nova);
-	linhas.push_front(nova);
-	if (linhas.size() > screenHeight)
+void Interface::addLetra(char nova) {
+	linhaAtual += nova;
+}
+
+void Interface::subirLinha() {
+	if (linhaAtual == "")
+		return;
+
+	linhas.push_front(linhaAtual);
+	linhaAtual = "";
+	if (linhas.size() > screenHeight-1)
 		linhas.pop_back();
 }

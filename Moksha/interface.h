@@ -19,6 +19,7 @@ private:
 	int fps;
 
 	string titulo;
+	string linhaAtual = "";
 	list<string> linhas;
 	list<string>::iterator it;
 
@@ -31,15 +32,16 @@ private:
 public:
 	Interface(int screenWidth, int screenHeight, int separator, int fps);
 
-	void interface_principal();
+	void interfacePrincipal();
 
 	void draw();
 
-	void go_left();
-	void go_right();
-	void go_up();
-	void go_down();
+	void goLeft();
+	void goRight();
+	void goUp();
+	void goDown();
 
-	void set_titulo(string titulo);
-	void add_linha(string nova);
+	void setTitulo(string titulo);
+	void addLetra(char nova);
+	void subirLinha();
 };
