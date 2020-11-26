@@ -38,6 +38,23 @@ void Input::input() {
 		if (is_key_pressed(VK_DOWN))
 			setInput(down, true);
 
+		if (is_key_pressed(VK_SPACE)) {
+			if (holding_space == 0 || holding_space > MAX_HOLD)
+				setInput(space, true);
+			holding_space++;
+		} else
+			holding_space = 0;
+
+		if (is_key_pressed(VK_BACK)) {
+			if (holding_back == 0 || holding_back > MAX_HOLD)
+				setInput(backspace, true);
+			holding_back++;
+		} else
+			holding_back = 0;
+
+		if (is_key_pressed(VK_DOWN))
+			setInput(down, true);
+
 		if (is_key_pressed(VK_RETURN))
 			pressed[enter] = true;
 		
@@ -65,10 +82,7 @@ void Input::input() {
 		return;
 
 	notify();
-	setInput(left, false);
-	setInput(right, false);
-	setInput(up, false);
-	setInput(down, false);
-	setInput(typing, false);
-	setInput(enter, false);
+	for (int i = begin+1; i != end; i++) {
+		setInput(i, false);
+	}
 };

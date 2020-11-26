@@ -23,6 +23,12 @@ public:
 		if (input.getInput(input.down))
 			interfacer.goDown();
 
+		if (input.getInput(input.space))
+			interfacer.space();
+
+		if (input.getInput(input.backspace))
+			interfacer.backspace();
+
 		if (input.getInput(input.enter))
 			interfacer.subirLinha();
 
@@ -41,6 +47,7 @@ public:
 
 		while (1) {
 			input.input();
+			interfacer.clocking();
 		}
 
 		return 0;

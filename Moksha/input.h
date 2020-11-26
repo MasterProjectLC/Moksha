@@ -13,11 +13,14 @@ private:
 	bool pressed[100] = {false};
 	bool updated = false;
 	char typed;
+	int holding_space = 0;
+	int holding_back = 0;
+	int const MAX_HOLD = 10;
 
 	void setInput(int index, bool value);
 
 public:
-	enum inputCommands { left, right, up, down, enter, typing };
+	enum inputCommands { begin, left, right, up, down, enter, space, backspace, typing, end };
 	bool getInput(int index);
 	char getTyped();
 	void input();

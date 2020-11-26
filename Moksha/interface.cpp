@@ -6,6 +6,7 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 	this->separator = separator;
 	this->selector = separator + 1;
 	this->fps = fps;
+	this->clock = 0;
 
 	titulo = ""; 
 
@@ -15,9 +16,11 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 	bytesWritten = 0;
 }
 
+
 int Interface::getCoords(int x, int y) {
 	return y * screenWidth + x;
 }
+
 
 void Interface::interfacePrincipal() {
 	for (int i = 0; i < screenHeight; i++) {
@@ -28,10 +31,12 @@ void Interface::interfacePrincipal() {
 				screen[position] = '#';
 			else if (j > separator)
 				screen[position] = ' ';
+			else if (j == screenWidth-1)
+				screen[position] = '\n';
 			else
 				screen[position] = '|';
 
-			if (selector == position)
+			if (selector == position && j != screenWidth - 1)
 				screen[position] = 'O';
 		}
 	}
@@ -46,8 +51,10 @@ void Interface::interfacePrincipal() {
 
 	// Linha Atual
 	string s = linhaAtual;
-	for (int i = 0; i < s.size(); i++)
+	for (int i = 0; i < s.size(); i++) {
 		screen[getCoords(separator + i + 1, screenHeight - 1)] = s[i];
+	}
+	paint(separator+1, screenHeight - 1, s.size(), 'c');
 
 	// Linhas
 	int sobre = 1;
@@ -58,6 +65,50 @@ void Interface::interfacePrincipal() {
 			screen[getCoords(separator + i + 1, screenHeight - sobre - 1)] = s[i];
 	}
 }
+
+
+void Interface::clocking() {
+	(this->clock)++;
+	if (this->clock > ULCOOLDOWN) {
+		this->clock = 0;
+		underline = !(underline);
+		if (underline)
+			screen[getCoords(separator + linhaAtual.size() + 1, screenHeight - 1)] = '_';
+		else
+			screen[getCoords(separator + linhaAtual.size() + 1, screenHeight - 1)] = ' ';
+
+		draw();
+	}
+}
+
+
+void Interface::paint(int initialX, int initialY, int length, char color) {
+	COORD coord;
+	coord.X = initialX; coord.Y = initialY;
+	DWORD actual;
+
+	switch (color) {
+	case 'b':
+		FillConsoleOutputAttribute(console, FOREGROUND_BLUE, length, coord, &actual);
+		break;
+	case 'r':
+		FillConsoleOutputAttribute(console, FOREGROUND_RED, length, coord, &actual);
+		break;
+	case 'g':
+		FillConsoleOutputAttribute(console, FOREGROUND_GREEN, length, coord, &actual);
+		break;
+	case 'p':
+		FillConsoleOutputAttribute(console, FOREGROUND_BLUE | FOREGROUND_RED, length, coord, &actual);
+		break;
+	case 'y':
+		FillConsoleOutputAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN, length, coord, &actual);
+		break;
+	case 'c':
+		FillConsoleOutputAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE, length, coord, &actual);
+		break;
+	}
+}
+
 
 void Interface::draw() {
 	WriteConsoleOutputCharacterW(console, screen, screenWidth*screenHeight, { 0, 0 }, &bytesWritten);
@@ -83,6 +134,14 @@ void Interface::goUp() {
 void Interface::goDown() {
 	selector = selector + screenWidth;
 	selector -= (selector > screenWidth * screenHeight) * screenWidth * screenHeight;
+}
+
+void Interface::space() {
+	linhaAtual += ' ';
+}
+
+void Interface::backspace() {
+	linhaAtual = linhaAtual.substr(0, linhaAtual.length() - 1);
 }
 
 void Interface::setTitulo(string titulo) {
