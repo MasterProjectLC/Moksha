@@ -27,7 +27,10 @@ public:
 			interfacer.space();
 
 		if (input.getInput(input.backspace))
-			interfacer.backspace();
+			interfacer.removeLetra(true);
+
+		if (input.getInput(input.deleter))
+			interfacer.removeLetra(false);
 
 		if (input.getInput(input.enter))
 			interfacer.subirLinha();

@@ -126,6 +126,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="interface.cpp" />
     <ClCompile Include="IObservable.cpp" />
+    <ClCompile Include="jogo.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +134,7 @@
     <ClInclude Include="interface.h" />
     <ClInclude Include="IObservable.h" />
     <ClInclude Include="IObserver.h" />
+    <ClInclude Include="jogo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

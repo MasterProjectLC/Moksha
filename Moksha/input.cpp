@@ -26,34 +26,14 @@ void Input::input() {
 	// Handle pressing
 	if (_kbhit()) {
 		// Single input
-		if (is_key_pressed(VK_LEFT))
-			setInput(left, true);
+		specialHold(VK_LEFT, left);
+		specialHold(VK_RIGHT, right);
+		specialHold(VK_UP, up);
+		specialHold(VK_DOWN, down);
+		specialHold(VK_SPACE, space);
+		specialHold(VK_BACK, backspace);
+		specialHold(VK_DELETE, deleter);
 
-		if (is_key_pressed(VK_RIGHT))
-			setInput(right, true);
-
-		if (is_key_pressed(VK_UP))
-			setInput(up, true);
-
-		if (is_key_pressed(VK_DOWN))
-			setInput(down, true);
-
-		if (is_key_pressed(VK_SPACE)) {
-			if (holding_space == 0 || holding_space > MAX_HOLD)
-				setInput(space, true);
-			holding_space++;
-		} else
-			holding_space = 0;
-
-		if (is_key_pressed(VK_BACK)) {
-			if (holding_back == 0 || holding_back > MAX_HOLD)
-				setInput(backspace, true);
-			holding_back++;
-		} else
-			holding_back = 0;
-
-		if (is_key_pressed(VK_DOWN))
-			setInput(down, true);
 
 		if (is_key_pressed(VK_RETURN))
 			pressed[enter] = true;
@@ -68,7 +48,12 @@ void Input::input() {
 				typed = c;
 				setInput(typing, true);
 			}
+		}
 
+	}
+	else {
+		for (int i = begin + 1; i != end; i++) {
+			holding[i] = 0;
 		}
 	}
 
@@ -86,3 +71,13 @@ void Input::input() {
 		setInput(i, false);
 	}
 };
+
+void Input::specialHold(int inputt, int command) {
+	if (is_key_pressed(inputt)) {
+		if (holding[command] == 0 || holding[command] > MAX_HOLD)
+			setInput(command, true);
+		holding[command]++;
+	}
+	else
+		holding[command] = 0;
+}

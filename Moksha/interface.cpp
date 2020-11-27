@@ -4,7 +4,7 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
 	this->separator = separator;
-	this->selector = separator + 1;
+	this->pointer = 0;
 	this->fps = fps;
 	this->clock = 0;
 
@@ -16,13 +16,23 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 	bytesWritten = 0;
 }
 
-
 int Interface::getCoords(int x, int y) {
 	return y * screenWidth + x;
 }
 
+void Interface::setPointer(int n) {
+	pointer = n;
+	if (pointer < 0)
+		pointer = 0;
+	else if (pointer > linhaAtual.size())
+		pointer = linhaAtual.size();
+}
+
+
+// DESIGN ----------------------------------------------------------------------
 
 void Interface::interfacePrincipal() {
+	// Tela principal
 	for (int i = 0; i < screenHeight; i++) {
 		for (int j = 0; j < screenWidth; j++) {
 			int position = getCoords(j, i);
@@ -35,9 +45,6 @@ void Interface::interfacePrincipal() {
 				screen[position] = '\n';
 			else
 				screen[position] = '|';
-
-			if (selector == position && j != screenWidth - 1)
-				screen[position] = 'O';
 		}
 	}
 	screen[screenWidth * screenHeight - 1] = '\0';
@@ -54,7 +61,8 @@ void Interface::interfacePrincipal() {
 	for (int i = 0; i < s.size(); i++) {
 		screen[getCoords(separator + i + 1, screenHeight - 1)] = s[i];
 	}
-	paint(separator+1, screenHeight - 1, s.size(), 'c');
+	interfaceUnderline(underline);
+	paint(separator+1, screenHeight - 1, s.size()+1, 'c');
 
 	// Linhas
 	int sobre = 1;
@@ -67,20 +75,21 @@ void Interface::interfacePrincipal() {
 }
 
 
-void Interface::clocking() {
-	(this->clock)++;
-	if (this->clock > ULCOOLDOWN) {
-		this->clock = 0;
-		underline = !(underline);
-		if (underline)
-			screen[getCoords(separator + linhaAtual.size() + 1, screenHeight - 1)] = '_';
+void Interface::interfaceUnderline(bool n) {
+	this->clock = 0;
+	underline = n;
+	if (underline) {
+		if (pointer < linhaAtual.size())
+			paintBG(separator + pointer + 1, screenHeight - 1, 1, 'w');
 		else
-			screen[getCoords(separator + linhaAtual.size() + 1, screenHeight - 1)] = ' ';
-
-		draw();
+			screen[getCoords(separator + pointer + 1, screenHeight - 1)] = '_';
 	}
+	else
+		if (pointer < linhaAtual.size())
+			paintBG(separator + pointer + 1, screenHeight - 1, 1, 'b');
+		else
+			screen[getCoords(separator + pointer + 1, screenHeight - 1)] = ' ';
 }
-
 
 void Interface::paint(int initialX, int initialY, int length, char color) {
 	COORD coord;
@@ -109,6 +118,49 @@ void Interface::paint(int initialX, int initialY, int length, char color) {
 	}
 }
 
+void Interface::paintBG(int initialX, int initialY, int length, char color) {
+	COORD coord;
+	coord.X = initialX; coord.Y = initialY;
+	DWORD actual;
+
+	switch (color) {
+	case 'b':
+		FillConsoleOutputAttribute(console, BACKGROUND_BLUE, length, coord, &actual);
+		break;
+	case 'r':
+		FillConsoleOutputAttribute(console, BACKGROUND_RED, length, coord, &actual);
+		break;
+	case 'g':
+		FillConsoleOutputAttribute(console, BACKGROUND_GREEN, length, coord, &actual);
+		break;
+	case 'p':
+		FillConsoleOutputAttribute(console, BACKGROUND_BLUE | BACKGROUND_RED, length, coord, &actual);
+		break;
+	case 'y':
+		FillConsoleOutputAttribute(console, BACKGROUND_RED | BACKGROUND_GREEN, length, coord, &actual);
+		break;
+	case 'c':
+		FillConsoleOutputAttribute(console, BACKGROUND_GREEN | BACKGROUND_BLUE, length, coord, &actual);
+		break;
+	case 'w':
+		FillConsoleOutputAttribute(console, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_RED, length, coord, &actual);
+		break;
+	case 'n':
+		FillConsoleOutputAttribute(console, !BACKGROUND_GREEN | !BACKGROUND_BLUE | !BACKGROUND_RED, length, coord, &actual);
+		break;
+	}
+}
+
+
+// EXECUÇÃO -------------------------------
+
+void Interface::clocking() {
+	(this->clock)++;
+	if (this->clock > ULCOOLDOWN) {
+		interfaceUnderline(!underline);
+		draw();
+	}
+}
 
 void Interface::draw() {
 	WriteConsoleOutputCharacterW(console, screen, screenWidth*screenHeight, { 0, 0 }, &bytesWritten);
@@ -116,32 +168,27 @@ void Interface::draw() {
 }
 
 
+// INPUT ------------------------------------------------------
+
 void Interface::goLeft() {
-	selector--;
-	selector += (selector % screenWidth <= separator) * (screenWidth - separator);
+	setPointer(pointer - 1);
 }
 
 void Interface::goRight() {
-	selector++;
-	selector += (selector % screenWidth <= separator) * (separator + 1 - screenWidth);
+	setPointer(pointer + 1);
 }
 
 void Interface::goUp() {
-	selector = selector - screenWidth;
-	selector += (selector < 0) * screenWidth * screenHeight;
+
 }
 
 void Interface::goDown() {
-	selector = selector + screenWidth;
-	selector -= (selector > screenWidth * screenHeight) * screenWidth * screenHeight;
+
 }
 
 void Interface::space() {
-	linhaAtual += ' ';
-}
-
-void Interface::backspace() {
-	linhaAtual = linhaAtual.substr(0, linhaAtual.length() - 1);
+	addLetra(' ');
+	underline = true;
 }
 
 void Interface::setTitulo(string titulo) {
@@ -149,15 +196,49 @@ void Interface::setTitulo(string titulo) {
 }
 
 void Interface::addLetra(char nova) {
-	linhaAtual += nova;
+	linhaAtual = linhaAtual.substr(0, pointer) + nova + linhaAtual.substr(pointer, linhaAtual.length());
+	setPointer(pointer + 1);
 }
 
-void Interface::subirLinha() {
-	if (linhaAtual == "")
-		return;
+void Interface::removeLetra(bool before) {
+	if (before && pointer > 0) {
+		linhaAtual = linhaAtual.substr(0, pointer-1) + linhaAtual.substr(pointer, linhaAtual.length());
+		setPointer(pointer - 1);
+	}
+	else if (pointer < linhaAtual.length()) {
+		linhaAtual = linhaAtual.substr(0, pointer) + linhaAtual.substr(pointer + 1, linhaAtual.length());
+	}
 
-	linhas.push_front(linhaAtual);
+	underline = true;
+}
+
+
+vector<string> Interface::subirLinha() {
+	vector<string> retorno;
+
+	if (linhaAtual == "")
+		return retorno;
+
+	printLinha(linhaAtual);
+
+	// Credits - techiedelight
+	size_t start;
+	size_t end = 0;
+
+	while ((start = linhaAtual.find_first_not_of(' ', end)) != std::string::npos)
+	{
+		end = linhaAtual.find(' ', start);
+		retorno.push_back(linhaAtual.substr(start, end - start));
+	}
+
 	linhaAtual = "";
-	if (linhas.size() > screenHeight-1)
+	return retorno;
+}
+
+
+void Interface::printLinha(string nova) {
+	linhas.push_front(nova);
+	setPointer(0);
+	if (linhas.size() > screenHeight - 1)
 		linhas.pop_back();
 }

@@ -6,24 +6,24 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <list>
 #include <iterator>
-#include "IObservable.h"
 
 using namespace std;
 
-class Interface : public IObservable {
+class Interface {
 	// Atributos
 private:
 	int screenWidth;
 	int screenHeight;
 	int separator;
-	int selector;
+	int pointer;
 	int fps;
 
 	int clock = 0;
 	boolean underline = false;
-	int const ULCOOLDOWN = 6000;
+	int const ULCOOLDOWN = 10000;
 
 	string titulo;
 	string linhaAtual = "";
@@ -35,24 +35,29 @@ private:
 	DWORD bytesWritten;
 
 	int getCoords(int x, int y);
+	void setPointer(int n);
 
 public:
 	Interface(int screenWidth, int screenHeight, int separator, int fps);
 
 	void interfacePrincipal();
-	void clocking();
-
-	void draw();
+	void interfaceMenu();
+	void interfaceUnderline(bool n);
 	void paint(int initialX, int initialY, int length, char color);
+	void paintBG(int initialX, int initialY, int length, char color);
+
+	void clocking();
+	void draw();
 
 	void goLeft();
 	void goRight();
 	void goUp();
 	void goDown();
 	void space();
-	void backspace();
 
 	void setTitulo(string titulo);
 	void addLetra(char nova);
-	void subirLinha();
+	void removeLetra(bool before);
+	vector<string> subirLinha();
+	void printLinha(string nova);
 };

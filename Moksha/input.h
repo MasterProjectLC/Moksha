@@ -11,16 +11,17 @@ class Input : public IObservable {
 private:
 	bool inputs[100] = {false};
 	bool pressed[100] = {false};
+	int holding[100] = { 0 };
 	bool updated = false;
 	char typed;
-	int holding_space = 0;
-	int holding_back = 0;
 	int const MAX_HOLD = 10;
 
 	void setInput(int index, bool value);
 
+	void specialHold(int inputt, int command);
+
 public:
-	enum inputCommands { begin, left, right, up, down, enter, space, backspace, typing, end };
+	enum inputCommands { begin, left, right, up, down, enter, space, backspace, deleter, typing, end };
 	bool getInput(int index);
 	char getTyped();
 	void input();
