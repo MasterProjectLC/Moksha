@@ -3,7 +3,7 @@
 
 class IObserver {
 public:
-	virtual void update()
+	virtual void update(int id)
 	{
 		OutputDebugStringW(L"My output string.");
 	};

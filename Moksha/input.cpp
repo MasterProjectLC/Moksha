@@ -10,7 +10,7 @@ void Input::setInput(int index, bool value) {
 	updated = value;
 }
 
-bool is_key_pressed(int key) {
+bool isKeyPressed(int key) {
 	if (GetAsyncKeyState(key) & 0x8000)
 		return true;
 	return false;
@@ -33,9 +33,10 @@ void Input::input() {
 		specialHold(VK_SPACE, space);
 		specialHold(VK_BACK, backspace);
 		specialHold(VK_DELETE, deleter);
+		specialHold(VK_TAB, tab);
 
 
-		if (is_key_pressed(VK_RETURN))
+		if (isKeyPressed(VK_RETURN))
 			pressed[enter] = true;
 		
 		// Typing
@@ -58,7 +59,7 @@ void Input::input() {
 	}
 
 	// Handle not pressing
-	if (pressed[enter] == true && !is_key_pressed(VK_RETURN)) {
+	if (pressed[enter] == true && !isKeyPressed(VK_RETURN)) {
 		pressed[enter] = false;
 		setInput(enter, true);
 	}
@@ -73,7 +74,7 @@ void Input::input() {
 };
 
 void Input::specialHold(int inputt, int command) {
-	if (is_key_pressed(inputt)) {
+	if (isKeyPressed(inputt)) {
 		if (holding[command] == 0 || holding[command] > MAX_HOLD)
 			setInput(command, true);
 		holding[command]++;

@@ -1,19 +1,21 @@
 #include "IObservable.h"
 
-void IObservable::add(IObserver* obs) {
+void IObservable::add(IObserver* obs, int callcard) {
 	lista.push_front(obs);
+	callcards.push_front(callcard);
 };
 
 void IObservable::remove(IObserver* obs) {
-	
-	for (it = lista.begin(); *it != obs; it++) {
+	int i = 0;
+	for (it = lista.begin(); *it != obs; it++, i++) {
 	}
 	lista.erase(it);
+	callcards.remove(i);
 };
 
 void IObservable::notify() {
-	for (it = lista.begin(); it != lista.end(); it++) {
-		(*it)->update();
+	for (it = lista.begin(), itt = callcards.begin(); it != lista.end(); it++, itt++) {
+		(*it)->update(*itt);
 	}
 
 };

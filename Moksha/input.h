@@ -21,7 +21,7 @@ private:
 	void specialHold(int inputt, int command);
 
 public:
-	enum inputCommands { begin, left, right, up, down, enter, space, backspace, deleter, typing, end };
+	enum inputCommands { begin, left, right, up, down, enter, space, backspace, deleter, tab, typing, end };
 	bool getInput(int index);
 	char getTyped();
 	void input();

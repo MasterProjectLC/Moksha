@@ -5,8 +5,10 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 	this->screenHeight = screenHeight;
 	this->separator = separator;
 	this->pointer = 0;
+	this->vPointer = 0;
 	this->fps = fps;
 	this->clock = 0;
+	this->textTab = false;
 
 	titulo = ""; 
 
@@ -28,6 +30,31 @@ void Interface::setPointer(int n) {
 		pointer = linhaAtual.size();
 }
 
+void Interface::setVPointer(int n) {
+	if (vPointer == 0 && n != 0)
+		linhaGuardada = linhaAtual.substr(0, linhaAtual.length());
+
+	vPointer = n;
+	if (vPointer < 0)
+		vPointer = 0;
+	else if (vPointer > linhas.size())
+		vPointer = linhas.size();
+
+	if (vPointer == 0)
+		linhaAtual = linhaGuardada.substr(0, linhaGuardada.length());
+	else {
+		int i = 0;
+		for (it = linhas.begin(); it != linhas.end(); it++, i++) {
+			if (i == vPointer-1) {
+				linhaAtual = *it;
+				break;
+			}
+		}
+	}
+
+	setPointer(linhaAtual.size());
+}
+
 
 // DESIGN ----------------------------------------------------------------------
 
@@ -38,7 +65,7 @@ void Interface::interfacePrincipal() {
 			int position = getCoords(j, i);
 
 			if (j < separator)
-				screen[position] = '#';
+				screen[position] = ' ';
 			else if (j > separator)
 				screen[position] = ' ';
 			else if (j == screenWidth-1)
@@ -56,6 +83,15 @@ void Interface::interfacePrincipal() {
 		screen[i] = titulo[j];
 	}
 
+	// Itens
+	int sobre = 1;
+	for (it = itens.begin(); it != itens.end(); it++, sobre++) {
+		string s = *it;
+		sobre += s.size() / separator;
+		for (int i = 0; i < s.size(); i++)
+			screen[getCoords(i, sobre)] = s[i];
+	}
+
 	// Linha Atual
 	string s = linhaAtual;
 	for (int i = 0; i < s.size(); i++) {
@@ -65,7 +101,7 @@ void Interface::interfacePrincipal() {
 	paint(separator+1, screenHeight - 1, s.size()+1, 'c');
 
 	// Linhas
-	int sobre = 1;
+	sobre = 1;
 	for (it = linhas.begin(); it != linhas.end(); it++, sobre++) {
 		s = *it;
 		sobre += s.size() / (screenWidth - separator);
@@ -90,6 +126,7 @@ void Interface::interfaceUnderline(bool n) {
 		else
 			screen[getCoords(separator + pointer + 1, screenHeight - 1)] = ' ';
 }
+
 
 void Interface::paint(int initialX, int initialY, int length, char color) {
 	COORD coord;
@@ -170,20 +207,20 @@ void Interface::draw() {
 
 // INPUT ------------------------------------------------------
 
-void Interface::goLeft() {
+void Interface::pointerLeft() {
 	setPointer(pointer - 1);
 }
 
-void Interface::goRight() {
+void Interface::pointerRight() {
 	setPointer(pointer + 1);
 }
 
-void Interface::goUp() {
-
+void Interface::pointerUp() {
+	setVPointer(vPointer + 1);
 }
 
-void Interface::goDown() {
-
+void Interface::pointerDown() {
+	setVPointer(vPointer - 1);
 }
 
 void Interface::space() {
@@ -193,6 +230,17 @@ void Interface::space() {
 
 void Interface::setTitulo(string titulo) {
 	this->titulo = titulo;
+}
+
+void Interface::setTab(boolean tab) {
+	this->textTab = tab;
+}
+
+void Interface::setItens(vector<string> itens) { 
+	for (int i = 0; i < itens.size(); i++) {
+		if (i >= this->itens.size())
+			this->itens.push_back(itens[i]);
+	}
 }
 
 void Interface::addLetra(char nova) {
@@ -214,30 +262,24 @@ void Interface::removeLetra(bool before) {
 
 
 vector<string> Interface::subirLinha() {
-	vector<string> retorno;
+	// Credits - Nawaz from stack overflow (split string into vector)
+	stringstream ss(linhaAtual);
+	istream_iterator<string> begin(ss);
+	istream_iterator<string> end;
+	vector<string> retorno(begin, end);
+	copy(retorno.begin(), retorno.end(), ostream_iterator<string>(cout, "\n"));
 
 	if (linhaAtual == "")
 		return retorno;
 
 	printLinha(linhaAtual);
-
-	// Credits - techiedelight
-	size_t start;
-	size_t end = 0;
-
-	while ((start = linhaAtual.find_first_not_of(' ', end)) != std::string::npos)
-	{
-		end = linhaAtual.find(' ', start);
-		retorno.push_back(linhaAtual.substr(start, end - start));
-	}
-
-	linhaAtual = "";
 	return retorno;
 }
 
 
 void Interface::printLinha(string nova) {
 	linhas.push_front(nova);
+	setVPointer(0);
 	setPointer(0);
 	if (linhas.size() > screenHeight - 1)
 		linhas.pop_back();

@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <sstream> 
 #include <vector>
 #include <list>
 #include <iterator>
@@ -19,23 +20,32 @@ private:
 	int screenHeight;
 	int separator;
 	int pointer;
+	int vPointer;
 	int fps;
+	boolean textTab;
 
 	int clock = 0;
 	boolean underline = false;
 	int const ULCOOLDOWN = 10000;
 
-	string titulo;
+	// Console
 	string linhaAtual = "";
+	string linhaGuardada = "";
 	list<string> linhas;
 	list<string>::iterator it;
 
+	// Inventario
+	string titulo;
+	list<string> itens;
+
+	// Tela
 	wchar_t *screen;	// wide character array
 	HANDLE console;
 	DWORD bytesWritten;
 
 	int getCoords(int x, int y);
 	void setPointer(int n);
+	void setVPointer(int n);
 
 public:
 	Interface(int screenWidth, int screenHeight, int separator, int fps);
@@ -49,10 +59,10 @@ public:
 	void clocking();
 	void draw();
 
-	void goLeft();
-	void goRight();
-	void goUp();
-	void goDown();
+	void pointerLeft();
+	void pointerRight();
+	void pointerUp();
+	void pointerDown();
 	void space();
 
 	void setTitulo(string titulo);
@@ -60,4 +70,8 @@ public:
 	void removeLetra(bool before);
 	vector<string> subirLinha();
 	void printLinha(string nova);
+
+	boolean getTab() { return textTab; };
+	void setTab(boolean tab);
+	void setItens(vector<string> itens);
 };
