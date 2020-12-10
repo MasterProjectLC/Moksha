@@ -6,28 +6,39 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 	this->separator = separator;
 	this->pointer = 0;
 	this->vPointer = 0;
+	this->invPointer = 1;
+	this->menuPointer = 0;
 	this->fps = fps;
 	this->clock = 0;
+
 	this->textTab = false;
+	this->menu = false;
 
 	titulo = ""; 
 
-	screen = new wchar_t[screenWidth*screenHeight];
-	console = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-	SetConsoleActiveScreenBuffer(console);
-	bytesWritten = 0;
+	graphics = Graphic(screenWidth, screenHeight, fps);
+	input.add(this, 0);
 }
 
-int Interface::getCoords(int x, int y) {
-	return y * screenWidth + x;
+
+int Interface::spread(int size, int n, int i) {
+	if (i >= n)
+		return NULL;
+
+	int interval = size / (n+1);
+	return (i+1)*interval;
+
 }
 
 void Interface::setPointer(int n) {
+	graphics.paintBG(separator + pointer + 1, screenHeight - 1, 1, 'n');
+	graphics.paint(separator + pointer + 1, screenHeight - 1, 1, 'w');
 	pointer = n;
 	if (pointer < 0)
 		pointer = 0;
 	else if (pointer > linhaAtual.size())
 		pointer = linhaAtual.size();
+	interfaceUnderline(true);
 }
 
 void Interface::setVPointer(int n) {
@@ -55,32 +66,103 @@ void Interface::setVPointer(int n) {
 	setPointer(linhaAtual.size());
 }
 
+void Interface::setInvPointer(int n) {
+	interfaceInventario(n);
+}
+
+void Interface::setMenuPointer(int n) {
+	if (n < 0)
+		menuPointer = MENU_OPTIONS.size();
+	else if (n > MENU_OPTIONS.size())
+		menuPointer = 0;
+	else 
+		menuPointer = n;
+}
+
 
 // DESIGN ----------------------------------------------------------------------
 
 void Interface::interfacePrincipal() {
-	// Tela principal
+	interfaceTela();
+	interfaceInventario(invPointer);
+	interfaceConsole();
+
+	if (menu)
+		interfaceMenu();
+
+	// Update
+	graphics.update();
+}
+
+void Interface::interfaceTela() {
 	for (int i = 0; i < screenHeight; i++) {
 		for (int j = 0; j < screenWidth; j++) {
-			int position = getCoords(j, i);
 
 			if (j < separator)
-				screen[position] = ' ';
+				graphics.draw(j, i, ' ');
 			else if (j > separator)
-				screen[position] = ' ';
-			else if (j == screenWidth-1)
-				screen[position] = '\n';
+				graphics.draw(j, i, ' ');
+			else if (j == screenWidth - 1)
+				graphics.draw(j, i, '\n');
 			else
-				screen[position] = '|';
+				graphics.draw(j, i, '|');
 		}
 	}
-	screen[screenWidth * screenHeight - 1] = '\0';
+}
 
+void Interface::interfaceMenu() {
+	int menuWidth = screenWidth / 3;
+	int menuHeight = 2*screenHeight / 3;
+
+	int y_inicio = (screenHeight - menuHeight) / 2;
+	int y_fim = (screenHeight + menuHeight) / 2;
+	int x_inicio = (screenWidth - menuWidth) / 2;
+	int x_fim = (screenWidth + menuWidth) / 2;
+	int optionToDraw = 0;
+
+	// Draw each line
+	for (int y = y_inicio; y <= y_fim && y - y_inicio <= menuProgress; y++) {
+		// Draw side lines
+		graphics.draw(x_inicio, y, '|');
+		graphics.draw(x_fim, y, '|');
+
+		// Draw each cell
+		for (int x = 1 + x_inicio; x < x_fim; x++) {
+			if (y == y_inicio || y == y_fim)
+				graphics.draw(x, y, '-');
+			else {
+				graphics.draw(x, y, ' ');
+			}
+		}
+
+		// Draw menu options
+		if (optionToDraw >= MENU_OPTIONS.size())
+			continue;
+
+		if (y == y_inicio + spread(menuHeight, MENU_OPTIONS.size(), optionToDraw)) {
+			int menuOptionLength = MENU_OPTIONS[optionToDraw].size();
+			graphics.drawString((x_fim + x_inicio - menuOptionLength) / 2, y, MENU_OPTIONS[optionToDraw]);
+
+			if (optionToDraw == menuPointer) {
+				graphics.paint((x_fim + x_inicio - menuOptionLength) / 2, y, menuOptionLength, 'n');
+				graphics.paintBG((x_fim + x_inicio - menuOptionLength) / 2, y, menuOptionLength, 'w');
+			}
+			else {
+				graphics.paint((x_fim + x_inicio - menuOptionLength) / 2, y, menuOptionLength, 'w');
+				graphics.paintBG((x_fim + x_inicio - menuOptionLength) / 2, y, menuOptionLength, 'n');
+			}
+			optionToDraw++;
+		}
+	}
+	
+}
+
+void Interface::interfaceInventario(int n) {
 	// Titulo
 	int tituloCenter = separator / 2;
 	int tituloOffset = titulo.size() / 2;
 	for (int i = tituloCenter - tituloOffset, j = 0; j < titulo.size(); i++, j++) {
-		screen[i] = titulo[j];
+		graphics.draw(i, 0, titulo[j]);
 	}
 
 	// Itens
@@ -89,141 +171,186 @@ void Interface::interfacePrincipal() {
 		string s = *it;
 		sobre += s.size() / separator;
 		for (int i = 0; i < s.size(); i++)
-			screen[getCoords(i, sobre)] = s[i];
+			graphics.draw(i, sobre, s[i]);
 	}
 
+	if (n != invPointer) {
+		graphics.paint(0, -invPointer + 1, separator, 'w');
+		graphics.paintBG(0, -invPointer + 1, separator, 'n');
+		invPointer = n;
+		graphics.paint(0, -invPointer + 1, separator, 'n');
+		graphics.paintBG(0, -invPointer + 1, separator, 'w');
+	}
+
+}
+
+void Interface::interfaceConsole() {
 	// Linha Atual
 	string s = linhaAtual;
-	for (int i = 0; i < s.size(); i++) {
-		screen[getCoords(separator + i + 1, screenHeight - 1)] = s[i];
-	}
+	graphics.drawString(separator + 1, screenHeight - 1, s);
+	graphics.paint(separator + 1, screenHeight - 1, s.size() + 1, 'c');
 	interfaceUnderline(underline);
-	paint(separator+1, screenHeight - 1, s.size()+1, 'c');
 
 	// Linhas
-	sobre = 1;
+	int sobre = 1;
 	for (it = linhas.begin(); it != linhas.end(); it++, sobre++) {
 		s = *it;
 		sobre += s.size() / (screenWidth - separator);
-		for (int i = 0; i < s.size(); i++)
-			screen[getCoords(separator + i + 1, screenHeight - sobre - 1)] = s[i];
+		graphics.drawString(separator + 1, screenHeight - sobre - 1, s);
 	}
 }
-
 
 void Interface::interfaceUnderline(bool n) {
-	this->clock = 0;
 	underline = n;
 	if (underline) {
-		if (pointer < linhaAtual.size())
-			paintBG(separator + pointer + 1, screenHeight - 1, 1, 'w');
+		if (pointer < linhaAtual.size()) {
+			graphics.paintBG(separator + pointer + 1, screenHeight - 1, 1, 'c');
+			graphics.paint(separator + pointer + 1, screenHeight - 1, 1, 'n');
+		}
 		else
-			screen[getCoords(separator + pointer + 1, screenHeight - 1)] = '_';
+			graphics.draw(separator + pointer + 1, screenHeight - 1, '_');
 	}
 	else
-		if (pointer < linhaAtual.size())
-			paintBG(separator + pointer + 1, screenHeight - 1, 1, 'b');
+		if (pointer < linhaAtual.size()) {
+			graphics.paintBG(separator + pointer + 1, screenHeight - 1, 1, 'n');
+			graphics.paint(separator + pointer + 1, screenHeight - 1, 1, 'c');
+		}
 		else
-			screen[getCoords(separator + pointer + 1, screenHeight - 1)] = ' ';
+			graphics.draw(separator + pointer + 1, screenHeight - 1, ' ');
 }
 
-
-void Interface::paint(int initialX, int initialY, int length, char color) {
-	COORD coord;
-	coord.X = initialX; coord.Y = initialY;
-	DWORD actual;
-
-	switch (color) {
-	case 'b':
-		FillConsoleOutputAttribute(console, FOREGROUND_BLUE, length, coord, &actual);
-		break;
-	case 'r':
-		FillConsoleOutputAttribute(console, FOREGROUND_RED, length, coord, &actual);
-		break;
-	case 'g':
-		FillConsoleOutputAttribute(console, FOREGROUND_GREEN, length, coord, &actual);
-		break;
-	case 'p':
-		FillConsoleOutputAttribute(console, FOREGROUND_BLUE | FOREGROUND_RED, length, coord, &actual);
-		break;
-	case 'y':
-		FillConsoleOutputAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN, length, coord, &actual);
-		break;
-	case 'c':
-		FillConsoleOutputAttribute(console, FOREGROUND_GREEN | FOREGROUND_BLUE, length, coord, &actual);
-		break;
-	}
-}
-
-void Interface::paintBG(int initialX, int initialY, int length, char color) {
-	COORD coord;
-	coord.X = initialX; coord.Y = initialY;
-	DWORD actual;
-
-	switch (color) {
-	case 'b':
-		FillConsoleOutputAttribute(console, BACKGROUND_BLUE, length, coord, &actual);
-		break;
-	case 'r':
-		FillConsoleOutputAttribute(console, BACKGROUND_RED, length, coord, &actual);
-		break;
-	case 'g':
-		FillConsoleOutputAttribute(console, BACKGROUND_GREEN, length, coord, &actual);
-		break;
-	case 'p':
-		FillConsoleOutputAttribute(console, BACKGROUND_BLUE | BACKGROUND_RED, length, coord, &actual);
-		break;
-	case 'y':
-		FillConsoleOutputAttribute(console, BACKGROUND_RED | BACKGROUND_GREEN, length, coord, &actual);
-		break;
-	case 'c':
-		FillConsoleOutputAttribute(console, BACKGROUND_GREEN | BACKGROUND_BLUE, length, coord, &actual);
-		break;
-	case 'w':
-		FillConsoleOutputAttribute(console, BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_RED, length, coord, &actual);
-		break;
-	case 'n':
-		FillConsoleOutputAttribute(console, !BACKGROUND_GREEN | !BACKGROUND_BLUE | !BACKGROUND_RED, length, coord, &actual);
-		break;
-	}
-}
 
 
 // EXECUÇÃO -------------------------------
 
 void Interface::clocking() {
+	input.input();
+
+	if (textTab)
+		return;
+
 	(this->clock)++;
-	if (this->clock > ULCOOLDOWN) {
+
+	// Underline pointer
+	if (this->clock % ULCOOLDOWN == 0) {
 		interfaceUnderline(!underline);
-		draw();
+		graphics.update();
+	}
+
+	// Menu progress
+	if (this->clock % MENUANIMATION == 0 && menu) {
+		menuProgress++;
+		interfaceMenu();
+		graphics.update();
 	}
 }
 
-void Interface::draw() {
-	WriteConsoleOutputCharacterW(console, screen, screenWidth*screenHeight, { 0, 0 }, &bytesWritten);
-	Sleep(1000 / fps);
+// INPUT ------------------------------------------------------
+
+void Interface::update(int id) {
+	// Update
+	switch (id) {
+	case 0:
+		inputUpdate();
+		break;
+	}
+
+	// Design & Draw
+	interfacePrincipal();
 }
 
 
-// INPUT ------------------------------------------------------
+void Interface::inputUpdate() {
+	if (input.getInput(input.left))
+		pointerLeft();
+
+	if (input.getInput(input.right))
+		pointerRight();
+
+	if (input.getInput(input.up))
+		pointerUp();
+
+	if (input.getInput(input.down))
+		pointerDown();
+
+	if (input.getInput(input.space))
+		space();
+
+	if (input.getInput(input.backspace))
+		removeLetra(true);
+
+	if (input.getInput(input.deleter))
+		removeLetra(false);
+
+	if (input.getInput(input.enter)) {
+		if (!menu) {
+			args = subirLinha();
+			notifyID = notifyArgs;
+			notify();
+		}
+		else {
+			switch (menuPointer) {
+			case 0: // Resume
+				setMenu(false);
+				break;
+			case 2: // Quit
+				HWND console = GetConsoleWindow();
+				SendMessage(console, WM_CLOSE, 0, NULL);
+				break;
+			}
+		}
+	}
+
+	if (input.getInput(input.tab))
+		setTab(!getTab());
+
+	if (input.getInput(input.escape))
+		setMenu(!getMenu());
+
+	if (input.getInput(input.typing))
+		addLetra(input.getTyped());
+}
 
 void Interface::pointerLeft() {
+	if (menu)
+		return;
+
 	setPointer(pointer - 1);
 }
 
 void Interface::pointerRight() {
+	if (menu)
+		return;
+
 	setPointer(pointer + 1);
 }
 
 void Interface::pointerUp() {
-	setVPointer(vPointer + 1);
+	if (menu)
+		setMenuPointer(menuPointer - 1);
+	else {
+		if (textTab)
+			setInvPointer(invPointer + 1);
+		else
+			setVPointer(vPointer + 1);
+	}
 }
 
 void Interface::pointerDown() {
-	setVPointer(vPointer - 1);
+	if (menu)
+		setMenuPointer(menuPointer + 1);
+	else {
+		if (textTab)
+			setInvPointer(invPointer - 1);
+		else
+			setVPointer(vPointer - 1);
+	}
 }
 
 void Interface::space() {
+	if (menu)
+		return;
+
 	addLetra(' ');
 	underline = true;
 }
@@ -233,7 +360,20 @@ void Interface::setTitulo(string titulo) {
 }
 
 void Interface::setTab(boolean tab) {
+	if (menu)
+		return;
+
 	this->textTab = tab;
+}
+
+void Interface::setMenu(boolean menu) {
+	setMenuPointer(MENU_OPTIONS.size());
+	if (menu == false) {
+		interfaceMenu();
+	}
+
+	this->menu = menu;
+	this->menuProgress = 0;
 }
 
 void Interface::setItens(vector<string> itens) { 
@@ -244,15 +384,22 @@ void Interface::setItens(vector<string> itens) {
 }
 
 void Interface::addLetra(char nova) {
+	if (textTab || menu)
+		return;
+
 	linhaAtual = linhaAtual.substr(0, pointer) + nova + linhaAtual.substr(pointer, linhaAtual.length());
 	setPointer(pointer + 1);
 }
 
 void Interface::removeLetra(bool before) {
+	if (textTab || menu)
+		return;
+
 	if (before && pointer > 0) {
 		linhaAtual = linhaAtual.substr(0, pointer-1) + linhaAtual.substr(pointer, linhaAtual.length());
 		setPointer(pointer - 1);
 	}
+
 	else if (pointer < linhaAtual.length()) {
 		linhaAtual = linhaAtual.substr(0, pointer) + linhaAtual.substr(pointer + 1, linhaAtual.length());
 	}
@@ -269,7 +416,7 @@ vector<string> Interface::subirLinha() {
 	vector<string> retorno(begin, end);
 	copy(retorno.begin(), retorno.end(), ostream_iterator<string>(cout, "\n"));
 
-	if (linhaAtual == "")
+	if (linhaAtual == "" || menu)
 		return retorno;
 
 	printLinha(linhaAtual);

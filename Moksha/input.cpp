@@ -33,11 +33,9 @@ void Input::input() {
 		specialHold(VK_SPACE, space);
 		specialHold(VK_BACK, backspace);
 		specialHold(VK_DELETE, deleter);
-		specialHold(VK_TAB, tab);
-
-
-		if (isKeyPressed(VK_RETURN))
-			pressed[enter] = true;
+		specialHold(VK_TAB, tab, true);
+		specialHold(VK_ESCAPE, escape, true);
+		specialHold(VK_RETURN, enter, true);
 		
 		// Typing
 		if (!updated) {
@@ -58,12 +56,6 @@ void Input::input() {
 		}
 	}
 
-	// Handle not pressing
-	if (pressed[enter] == true && !isKeyPressed(VK_RETURN)) {
-		pressed[enter] = false;
-		setInput(enter, true);
-	}
-
 	if (!updated)
 		return;
 
@@ -74,8 +66,12 @@ void Input::input() {
 };
 
 void Input::specialHold(int inputt, int command) {
+	specialHold(inputt, command, false);
+}
+
+void Input::specialHold(int inputt, int command, boolean once) {
 	if (isKeyPressed(inputt)) {
-		if (holding[command] == 0 || holding[command] > MAX_HOLD)
+		if (holding[command] == 0 || (!once && holding[command] > MAX_HOLD))
 			setInput(command, true);
 		holding[command]++;
 	}

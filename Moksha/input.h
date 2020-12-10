@@ -19,9 +19,10 @@ private:
 	void setInput(int index, bool value);
 
 	void specialHold(int inputt, int command);
+	void specialHold(int inputt, int command, boolean once);
 
 public:
-	enum inputCommands { begin, left, right, up, down, enter, space, backspace, deleter, tab, typing, end };
+	enum inputCommands { begin, left, right, up, down, enter, space, backspace, deleter, tab, typing, escape, end };
 	bool getInput(int index);
 	char getTyped();
 	void input();

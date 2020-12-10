@@ -1,32 +1,41 @@
 #pragma once
-#include <windows.h>
-#include <winuser.h>
-#include <conio.h>
-#include <WinCon.h>
-#include <stdlib.h>
 #include <iostream>
 #include <string>
 #include <sstream> 
 #include <vector>
 #include <list>
 #include <iterator>
+#include "graphics.h"
+#include "IObserver.h"
+#include "input.h"
 
 using namespace std;
 
-class Interface {
+class Interface : public IObserver, public IObservable {
 	// Atributos
 private:
+	int const ULCOOLDOWN = 10000;
+	int const MENUANIMATION = 100;
+	vector<string> const MENU_OPTIONS = { "CONTINUAR", "OPCOES", "SAIR" };
+
+	Graphic graphics = Graphic(0, 0, 0);
+	Input input = Input();
+
+	int spread(int size, int n, int i);
+
+	// Screen & Separator
 	int screenWidth;
 	int screenHeight;
 	int separator;
-	int pointer;
-	int vPointer;
 	int fps;
+
+	// Options
 	boolean textTab;
+	boolean menu;
+	int menuProgress = 0;
 
 	int clock = 0;
 	boolean underline = false;
-	int const ULCOOLDOWN = 10000;
 
 	// Console
 	string linhaAtual = "";
@@ -34,44 +43,62 @@ private:
 	list<string> linhas;
 	list<string>::iterator it;
 
+	void addLetra(char nova);
+	void removeLetra(bool before);
+	vector<string> subirLinha();
+
 	// Inventario
 	string titulo;
 	list<string> itens;
 
-	// Tela
-	wchar_t *screen;	// wide character array
-	HANDLE console;
-	DWORD bytesWritten;
+	// Pointers
+	int pointer;
+	int vPointer;
+	int invPointer;
+	int menuPointer;
 
-	int getCoords(int x, int y);
 	void setPointer(int n);
 	void setVPointer(int n);
+	void setInvPointer(int n);
+	void setMenuPointer(int n);
 
-public:
-	Interface(int screenWidth, int screenHeight, int separator, int fps);
-
-	void interfacePrincipal();
+	// Visual Interface
+	void interfaceTela();
 	void interfaceMenu();
+	void interfaceConsole();
+	void interfaceInventario(int n);
 	void interfaceUnderline(bool n);
-	void paint(int initialX, int initialY, int length, char color);
-	void paintBG(int initialX, int initialY, int length, char color);
 
-	void clocking();
-	void draw();
-
+	// Input
+	void update(int id) override;
+	void inputUpdate();
 	void pointerLeft();
 	void pointerRight();
 	void pointerUp();
 	void pointerDown();
 	void space();
 
-	void setTitulo(string titulo);
-	void addLetra(char nova);
-	void removeLetra(bool before);
-	vector<string> subirLinha();
+	int notifyID;
+	vector<string> args;
+
+public:
+	Interface(int screenWidth, int screenHeight, int separator, int fps);
+
+	void interfacePrincipal();
+	void clocking();
 	void printLinha(string nova);
 
+	enum {notifyArgs};
+
+	// Getters/Setters
+	int getNotifyID() { return notifyID; }
+	vector<string> getArgs() { return args; }
 	boolean getTab() { return textTab; };
+	boolean getMenu() { return menu; };
+
 	void setTab(boolean tab);
+	void setMenu(boolean menu);
+	void setTitulo(string titulo);
 	void setItens(vector<string> itens);
+
 };
