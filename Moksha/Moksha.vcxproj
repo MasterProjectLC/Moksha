@@ -140,6 +140,8 @@
     <ClCompile Include="fileManager.cpp" />
     <ClCompile Include="jogo.cpp" />
     <ClCompile Include="overseer.cpp" />
+    <ClCompile Include="sala.cpp" />
+    <ClCompile Include="splitString.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="conceito.h" />
@@ -152,6 +154,8 @@
     <ClInclude Include="fileManager.h" />
     <ClInclude Include="jogo.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="sala.h" />
+    <ClInclude Include="splitString.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

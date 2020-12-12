@@ -1,6 +1,13 @@
 #include "input.h"
 
 // Input
+Input::Input() {
+	inputs[100] = { false };
+	pressed[100] = { false };
+	holding[100] = { 0 };
+	updated = false;
+}
+
 bool Input::getInput(int index) {
 	return inputs[index];
 };

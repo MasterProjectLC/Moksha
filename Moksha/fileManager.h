@@ -1,18 +1,20 @@
 #pragma once
+#include <Windows.h>
 #include <cstdlib>
-#include <iostream>
 #include <fstream>
+#include <vector>
 #include <string>
-#include <json/json.h>
+#include <iostream>
+#include "splitString.h"
 
 using namespace std;
-using namespace Json;
 
 class FileManager {
 private:
-	void jsonParse(string n);
-	void readFromFile();
 
 public:
 	FileManager();
+
+	vector<string> getFileList(string folder);
+	string readFromFile(string path);
 };

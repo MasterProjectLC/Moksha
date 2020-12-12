@@ -9,12 +9,12 @@ using namespace std;
 
 class Input : public IObservable {
 private:
-	bool inputs[100] = {false};
-	bool pressed[100] = {false};
-	int holding[100] = { 0 };
-	bool updated = false;
-	char typed;
 	int const MAX_HOLD = 10;
+	bool inputs[100];
+	bool pressed[100];
+	int holding[100];
+	bool updated;
+	char typed;
 
 	void setInput(int index, bool value);
 
@@ -22,6 +22,8 @@ private:
 	void specialHold(int inputt, int command, boolean once);
 
 public:
+	Input();
+
 	enum inputCommands { begin, left, right, up, down, enter, space, backspace, deleter, tab, typing, escape, end };
 	bool getInput(int index);
 	char getTyped();

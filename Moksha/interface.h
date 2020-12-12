@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <numeric>
 #include <sstream> 
 #include <vector>
 #include <list>
@@ -8,6 +9,7 @@
 #include "graphics.h"
 #include "IObserver.h"
 #include "input.h"
+#include "splitString.h"
 
 using namespace std;
 
@@ -16,6 +18,8 @@ class Interface : public IObserver, public IObservable {
 private:
 	int const ULCOOLDOWN = 10000;
 	int const MENUANIMATION = 100;
+	int const CLOCKCD = ULCOOLDOWN;
+
 	vector<string> const MENU_OPTIONS = { "CONTINUAR", "OPCOES", "SAIR" };
 
 	Graphic graphics = Graphic(0, 0, 0);
@@ -78,7 +82,6 @@ private:
 	void pointerDown();
 	void space();
 
-	int notifyID;
 	vector<string> args;
 
 public:
@@ -91,7 +94,6 @@ public:
 	enum {notifyArgs};
 
 	// Getters/Setters
-	int getNotifyID() { return notifyID; }
 	vector<string> getArgs() { return args; }
 	boolean getTab() { return textTab; };
 	boolean getMenu() { return menu; };

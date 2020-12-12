@@ -4,33 +4,35 @@ FileManager::FileManager()
 {
 }
 
-void FileManager::jsonParse(string n) {
-	// Open and read File
-	string rawJson;
-	ifstream myfile;
-	char helper[100];
 
-	myfile.open("Files/lingua0.json");
-	while (myfile.getline(helper, 100))	{
-		rawJson = string(helper);
-		cout << rawJson;
+vector<string> FileManager::getFileList(string folder)
+{
+	vector<string> names;
+	string search_path = folder + "/*.*";
+	WIN32_FIND_DATA fd;
+	HANDLE hFind = ::FindFirstFile(search_path.c_str(), &fd);
+	if (hFind != INVALID_HANDLE_VALUE) {
+		do {
+			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+				names.push_back(fd.cFileName);
+			}
+		} while (::FindNextFile(hFind, &fd));
+		::FindClose(hFind);
 	}
-	myfile.close();
-	cout << "\n";
+	return names;
+}
 
-	string text = "{\"1\":{\"name\":\"MIKE\",\"surname\":\"TAYLOR\"},\"2\":{\"name\":\"TOM\",\"surname\":\"JERRY\"}}";
 
-	// Parse JSON
-	JSONCPP_STRING err;
-	Value root;
-	CharReaderBuilder builder;
-	const unique_ptr<CharReader> reader(builder.newCharReader());
+string FileManager::readFromFile(string path) {
+	string line;
+	ifstream myfile(path);
+	string retorno = "";
 
-	if (!reader->parse(rawJson.c_str(), rawJson.c_str() + rawJson.length(), &root, &err))
-		cout << "Error parsing the string" << endl;
+	if (myfile.is_open()) {
+		while (getline(myfile, line))
+			retorno.append(line + '\n');
+		myfile.close();
+	}
 
-	const string name = root["2"][0]["name"].asString();
-	cout << name << endl;
-};
-
-void receiveInput();
+	return retorno;
+}

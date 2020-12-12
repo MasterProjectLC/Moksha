@@ -226,23 +226,22 @@ void Interface::interfaceUnderline(bool n) {
 void Interface::clocking() {
 	input.input();
 
-	if (textTab)
-		return;
-
 	(this->clock)++;
 
 	// Underline pointer
-	if (this->clock % ULCOOLDOWN == 0) {
+	if (!textTab && this->clock % ULCOOLDOWN == 0) {
 		interfaceUnderline(!underline);
 		graphics.update();
+		(this->clock) = 0;
 	}
 
 	// Menu progress
-	if (this->clock % MENUANIMATION == 0 && menu) {
+	if (menu && this->clock % MENUANIMATION == 0) {
 		menuProgress++;
 		interfaceMenu();
 		graphics.update();
 	}
+
 }
 
 // INPUT ------------------------------------------------------
@@ -285,7 +284,7 @@ void Interface::inputUpdate() {
 	if (input.getInput(input.enter)) {
 		if (!menu) {
 			args = subirLinha();
-			notifyID = notifyArgs;
+			setNotifyID(notifyArgs);
 			notify();
 		}
 		else {
@@ -409,12 +408,7 @@ void Interface::removeLetra(bool before) {
 
 
 vector<string> Interface::subirLinha() {
-	// Credits - Nawaz from stack overflow (split string into vector)
-	stringstream ss(linhaAtual);
-	istream_iterator<string> begin(ss);
-	istream_iterator<string> end;
-	vector<string> retorno(begin, end);
-	copy(retorno.begin(), retorno.end(), ostream_iterator<string>(cout, "\n"));
+	vector<string> retorno = splitString(linhaAtual, ' ');
 
 	if (linhaAtual == "" || menu)
 		return retorno;
@@ -425,9 +419,24 @@ vector<string> Interface::subirLinha() {
 
 
 void Interface::printLinha(string nova) {
-	linhas.push_front(nova);
-	setVPointer(0);
-	setPointer(0);
-	if (linhas.size() > screenHeight - 1)
-		linhas.pop_back();
+	vector<string> novaCortada = splitString(nova, '\n');
+	int consoleSize = screenWidth - separator - 1;
+
+	for (int i = 0; i < novaCortada.size(); i++) {
+		if (novaCortada[i].size() > consoleSize) {
+			string strInteira = novaCortada[i];
+			novaCortada.emplace(novaCortada.begin() + i + 1, 
+								novaCortada[i].substr(min(consoleSize, novaCortada[i].find_last_of(' ', consoleSize)+1), string::npos));
+			novaCortada.emplace(novaCortada.begin() + i + 1, 
+								novaCortada[i].substr(0, min(consoleSize, novaCortada[i].find_last_of(' ', consoleSize))));
+			novaCortada.erase(novaCortada.begin() + i);
+		}
+	}
+	for (int i = 0; i < novaCortada.size(); i++) {
+		linhas.push_front(novaCortada[i]);
+		setVPointer(0);
+		setPointer(0);
+		if (linhas.size() > screenHeight - 1)
+			linhas.pop_back();
+	}
 }

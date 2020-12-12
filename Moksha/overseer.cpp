@@ -1,15 +1,22 @@
 #include "interface.h"
 #include "jogo.h"
-//#include "fileManager.h"
 #include <conio.h>
 #include <ctype.h>
 
-Interface interfacer = Interface(140, 40, 60, 30);
-//FileManager fileManager = FileManager();
-Jogo jogo = Jogo();
-
 class Overseer : public IObserver {
+private:
+	Jogo jogo = Jogo();
+	Interface interfacer = Interface(140, 40, 60, 30);
 public:
+	Overseer() {
+		interfacer.add(this, 0);
+		jogo.add(this, 1);
+
+		jogo.imprimirTexto(jogo.getSalaAtual().getName());
+		jogo.imprimirTexto(jogo.getSalaAtual().getSalaAnexaNome(0));
+	}
+
+
 	void update(int id) override {
 		// Update
 		switch (id) {
@@ -25,21 +32,30 @@ public:
 		interfacer.interfacePrincipal();
 	}
 
+
 	void interfaceUpdate() {
 		switch (interfacer.getNotifyID()) {
-		case interfacer.notifyArgs:
+		case this->interfacer.notifyArgs:
 			jogo.receberArgs(interfacer.getArgs());
+			break;
 		}
 	}
 
 
 	void jogoUpdate() {
-		vector<Conceito> inventario = jogo.getInventario();
-		vector<string> paraEnviar;
-		for (vector<Conceito>::iterator it = inventario.begin(); it != inventario.end(); it++)
-			paraEnviar.push_back((*it).getNome());
+		if (jogo.getNotifyID() == jogo.imprimir) {
+			interfacer.printLinha(jogo.getTexto());
+		}
 
-		interfacer.setItens(paraEnviar);
+		else if (jogo.getNotifyID() == jogo.obter) {
+			vector<Conceito> inventario = jogo.getInventario();
+			vector<string> paraEnviar;
+			for (vector<Conceito>::iterator it = inventario.begin(); it != inventario.end(); it++)
+				paraEnviar.push_back((*it).getNome());
+
+			interfacer.setItens(paraEnviar);
+
+		}
 	}
 
 
@@ -57,8 +73,5 @@ public:
 
 int main() {
 	Overseer m = Overseer();
-	interfacer.add(&m, 0);
-	jogo.add(&m, 1);
-
 	m.main();
 };
