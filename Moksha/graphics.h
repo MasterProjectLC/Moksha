@@ -25,6 +25,8 @@ public:
 
 	void draw(int x, int y, char c);
 	void drawString(int x, int y, string s);
+	void drawArea(int x1, int y1, int x2, int y2, char c);
+
 	void paint(int initialX, int initialY, int length, char color);
 	void paintBG(int initialX, int initialY, int length, char color);
 	void update();

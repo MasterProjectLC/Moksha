@@ -60,7 +60,6 @@ public:
 
 
 	int main() {
-		interfacer.setTitulo("Inventory");
 		interfacer.printLinha("Bem-Vindo a Medusa, Sr. Colt. Deixe-me trazer seu jaleco...");
 
 		while (1) {

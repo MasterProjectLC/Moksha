@@ -52,25 +52,28 @@ private:
 	vector<string> subirLinha();
 
 	// Inventario
-	string titulo;
-	list<string> itens;
+	vector<string> titulos;
+	vector<int> tituloPositions;
+	vector<list<string>> itens;
 
 	// Pointers
 	int pointer;
 	int vPointer;
 	int invPointer;
+	int titulosPointer;
 	int menuPointer;
 
 	void setPointer(int n);
 	void setVPointer(int n);
 	void setInvPointer(int n);
+	void setTitulosPointer(int n);
 	void setMenuPointer(int n);
 
 	// Visual Interface
 	void interfaceTela();
 	void interfaceMenu();
 	void interfaceConsole();
-	void interfaceInventario(int n);
+	void interfaceInventario(int invP, int tituloP, bool paintItem = true);
 	void interfaceUnderline(bool n);
 
 	// Input
@@ -100,7 +103,6 @@ public:
 
 	void setTab(boolean tab);
 	void setMenu(boolean menu);
-	void setTitulo(string titulo);
 	void setItens(vector<string> itens);
 
 };

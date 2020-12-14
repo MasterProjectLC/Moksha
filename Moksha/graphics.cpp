@@ -24,6 +24,14 @@ void Graphic::drawString(int x, int y, string s) {
 		draw(i+x, y, s[i]);
 }
 
+void Graphic::drawArea(int x1, int y1, int x2, int y2, char c) {
+	for (int i = x1; i < x2; i++) {
+		for (int j = y1; j < y2; j++) {
+			draw(i, j, c);
+		}
+	}
+}
+
 void Graphic::paint(int initialX, int initialY, int length, char color) {
 	COORD coord;
 	coord.X = initialX; coord.Y = initialY;
