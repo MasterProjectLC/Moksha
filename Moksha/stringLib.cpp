@@ -1,4 +1,4 @@
-#include "splitString.h"
+#include "stringLib.h"
 
 vector<string> splitString(string str, char delim) {
 	vector<string> retorno;
@@ -14,4 +14,12 @@ vector<string> splitString(string str, char delim) {
 	retorno.push_back(str.substr(previous, current - previous));
 
 	return retorno;
+}
+
+string concatStrings(vector<string> args, int inicio) {
+	string r = args.at(inicio);
+	for (int i = inicio + 1; i < args.size(); i++) {
+		r += " " + args.at(i);
+	}
+	return r;
 }

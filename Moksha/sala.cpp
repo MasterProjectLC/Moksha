@@ -1,10 +1,12 @@
 #include "sala.h"
 
-Sala::Sala(string name, string textoInicial, vector<string> salasAnexasNomes) {
+Sala::Sala(string name, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes) {
 	this->name = name;
 	this->textoInicial = textoInicial;
 	this->salasAnexasNomes = salasAnexasNomes;
+	this->objetoNomes = objetoNomes;
 }
+
 
 bool Sala::isSalaAnexa(string salaAnexaNome) {
 	return (getSalaAnexaIndex(salaAnexaNome) != -1);
@@ -17,7 +19,6 @@ int Sala::getSalaAnexaIndex(string alvo) {
 			return salasAnexasIndexes[i];
 		}
 	}
-
 	return -1;
 }
 

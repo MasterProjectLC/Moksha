@@ -9,7 +9,7 @@
 #include "graphics.h"
 #include "IObserver.h"
 #include "input.h"
-#include "splitString.h"
+#include "stringLib.h"
 
 using namespace std;
 

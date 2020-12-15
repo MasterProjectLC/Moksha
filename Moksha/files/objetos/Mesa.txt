@@ -1,0 +1,8 @@
+Nome:
+Mesa
+Acoes:
+examinar,ver
+examinar,ver:
+Uma mesa interessante, mas inconsequente.
+tocar:
+Hmm, a mesa esta um pouco gelada. Sera que aconteceu algo aqui?

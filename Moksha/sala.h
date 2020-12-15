@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "objeto.h"
 
 using namespace std;
 
@@ -12,11 +13,21 @@ private:
 	vector<string> salasAnexasNomes;
 	vector<int> salasAnexasIndexes;
 
+	vector<string> objetoNomes;
+	vector<Objeto> objetos;
+
 public:
 	Sala() {};
-	Sala(string name, string textoInicial, vector<string> salasAnexasNomes);
-	void setupAnexas(vector<int> salasAnexas) { this->salasAnexasIndexes = salasAnexas; };
 
+	// Setup
+	Sala(string name, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
+	void setupAnexas(vector<int> salasAnexas) { this->salasAnexasIndexes = salasAnexas; };
+	void setupObjetos(vector<Objeto> objetos) { this->objetos = objetos; };
+	void addObjeto(Objeto objeto) { objetos.push_back(objeto); };
+
+	void sairSala();
+
+	// Getters
 	string getName() { return name; }
 	string getTextoInicial() { return textoInicial; };
 
@@ -24,7 +35,9 @@ public:
 	int getSalaAnexaIndex(string alvo);
 	int getSalaAnexaIndex(int i);
 	string getSalaAnexaNome(int i);
-
 	int getSalaAnexaCount() { return salasAnexasNomes.size(); }
+
+	vector<Objeto> getObjetos() { return objetos; };
+	vector<string> getObjetoNomes() { return objetoNomes; };
 
 };

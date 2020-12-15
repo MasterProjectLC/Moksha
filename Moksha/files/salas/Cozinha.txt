@@ -3,4 +3,5 @@ Cozinha
 texto:
 A cozinha esta, como sempre, vazia. Nem sei porque vim aqui.
 adjacentes:
-SalaoJantar
+Salao de Jantar
+objetos:

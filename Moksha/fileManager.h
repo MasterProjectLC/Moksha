@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "splitString.h"
+#include "stringLib.h"
 
 using namespace std;
 

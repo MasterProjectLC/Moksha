@@ -45,7 +45,10 @@
     <ClCompile Include="sala.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="splitString.cpp">
+    <ClCompile Include="objeto.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stringLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,7 +86,10 @@
     <ClInclude Include="sala.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="splitString.h">
+    <ClInclude Include="objeto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stringLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

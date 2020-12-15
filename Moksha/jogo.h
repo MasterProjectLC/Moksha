@@ -14,9 +14,11 @@ private:
 	vector<Sala> salas;
 
 	Inventario inventario;
-	string concatenarArgs(vector<string> args, int inicio);
 
 	string texto;
+
+	void generateSalas();
+	void carregarSala(Sala *sala);
 
 public:
 	Jogo();

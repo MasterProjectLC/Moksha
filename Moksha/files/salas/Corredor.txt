@@ -3,4 +3,6 @@ Corredor
 texto:
 Um corredor sem saida. Uma pergunta para os filosofos.
 adjacentes:
-SalaoJantar
+Salao de Jantar
+objetos:
+Relogio

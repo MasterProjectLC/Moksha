@@ -14,7 +14,7 @@ vector<string> FileManager::getFileList(string folder)
 	if (hFind != INVALID_HANDLE_VALUE) {
 		do {
 			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-				names.push_back(fd.cFileName);
+				names.push_back(folder + "/" + fd.cFileName);
 			}
 		} while (::FindNextFile(hFind, &fd));
 		::FindClose(hFind);

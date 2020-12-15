@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -139,9 +139,10 @@
     <ClCompile Include="IObservable.cpp" />
     <ClCompile Include="fileManager.cpp" />
     <ClCompile Include="jogo.cpp" />
+    <ClCompile Include="objeto.cpp" />
     <ClCompile Include="overseer.cpp" />
     <ClCompile Include="sala.cpp" />
-    <ClCompile Include="splitString.cpp" />
+    <ClCompile Include="stringLib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="conceito.h" />
@@ -154,8 +155,9 @@
     <ClInclude Include="fileManager.h" />
     <ClInclude Include="jogo.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="objeto.h" />
     <ClInclude Include="sala.h" />
-    <ClInclude Include="splitString.h" />
+    <ClInclude Include="stringLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
