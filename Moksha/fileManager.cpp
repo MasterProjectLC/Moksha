@@ -23,7 +23,7 @@ vector<string> FileManager::getFileList(string folder)
 }
 
 
-string FileManager::readFromFile(string path) {
+FileDict FileManager::readFromFile(string path) {
 	string line;
 	ifstream myfile(path);
 	string retorno = "";
@@ -34,5 +34,5 @@ string FileManager::readFromFile(string path) {
 		myfile.close();
 	}
 
-	return retorno;
+	return FileDict(retorno);
 }

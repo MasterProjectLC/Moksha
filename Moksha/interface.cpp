@@ -442,6 +442,9 @@ vector<string> Interface::subirLinha() {
 		return retorno;
 
 	printLinha(linhaAtual);
+	linhaGuardada = "";
+	setVPointer(0);
+	setPointer(0);
 	return retorno;
 }
 
@@ -462,8 +465,6 @@ void Interface::printLinha(string nova) {
 	}
 	for (int i = 0; i < novaCortada.size(); i++) {
 		linhas.push_front(novaCortada[i]);
-		setVPointer(0);
-		setPointer(0);
 		if (linhas.size() > screenHeight - 1)
 			linhas.pop_back();
 	}

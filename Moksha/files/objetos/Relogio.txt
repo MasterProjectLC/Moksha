@@ -1,8 +1,8 @@
-Nome:
+nome:
 Relogio
-Acoes:
-examinar,ver
+acoes:
+examinar|ver
 examinar,ver:
-As horas sao:
+As horas sao: 
 obter:
 O relogio eh muito pesado.

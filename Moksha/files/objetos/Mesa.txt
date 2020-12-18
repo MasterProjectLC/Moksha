@@ -1,7 +1,7 @@
-Nome:
+nome:
 Mesa
-Acoes:
-examinar,ver
+acoes:
+examinar|ver
 examinar,ver:
 Uma mesa interessante, mas inconsequente.
 tocar:

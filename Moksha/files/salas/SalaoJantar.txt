@@ -3,6 +3,6 @@ Salao de Jantar
 texto:
 Ninguem veio no Salao de Jantar hoje. Uma pena. Eu poderia ver o passado, presente, futuro dessas pessoas. Mas ninguem se importa mais.
 adjacentes:
-Corredor,Cozinha
+Corredor|Cozinha
 objetos:
 Mesa

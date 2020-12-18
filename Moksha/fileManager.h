@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include "stringLib.h"
+#include "fileDict.h"
 
 using namespace std;
 
@@ -16,5 +17,6 @@ public:
 	FileManager();
 
 	vector<string> getFileList(string folder);
-	string readFromFile(string path);
+	FileDict readFromFile(string path);
+	
 };
