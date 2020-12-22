@@ -1,0 +1,8 @@
+nome:
+Faca
+acoes:
+examinar|ver|obter
+examinar,ver:
+Afiada... afiada demais. Pode ser usada como arma.
+obter:
+Parece util. Vou pegar.

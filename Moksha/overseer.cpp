@@ -48,9 +48,9 @@ public:
 		}
 
 		else if (jogo.getNotifyID() == jogo.obter) {
-			vector<Conceito> inventario = jogo.getInventario();
+			vector<Item> inventario = jogo.getInventario();
 			vector<string> paraEnviar;
-			for (vector<Conceito>::iterator it = inventario.begin(); it != inventario.end(); it++)
+			for (vector<Item>::iterator it = inventario.begin(); it != inventario.end(); it++)
 				paraEnviar.push_back((*it).getNome());
 
 			interfacer.setItens(paraEnviar);

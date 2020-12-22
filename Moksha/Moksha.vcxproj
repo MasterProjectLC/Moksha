@@ -150,9 +150,11 @@
     <ClCompile Include="inventario.cpp" />
     <ClCompile Include="IObservable.cpp" />
     <ClCompile Include="fileManager.cpp" />
+    <ClCompile Include="item.cpp" />
     <ClCompile Include="jogo.cpp" />
     <ClCompile Include="objeto.cpp" />
     <ClCompile Include="overseer.cpp" />
+    <ClCompile Include="personagem.cpp" />
     <ClCompile Include="sala.cpp" />
     <ClCompile Include="stringLib.cpp" />
   </ItemGroup>
@@ -166,9 +168,11 @@
     <ClInclude Include="IObservable.h" />
     <ClInclude Include="IObserver.h" />
     <ClInclude Include="fileManager.h" />
+    <ClInclude Include="item.h" />
     <ClInclude Include="jogo.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="objeto.h" />
+    <ClInclude Include="personagem.h" />
     <ClInclude Include="sala.h" />
     <ClInclude Include="stringLib.h" />
   </ItemGroup>

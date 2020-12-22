@@ -5,3 +5,4 @@ A cozinha esta, como sempre, vazia. Nem sei porque vim aqui.
 adjacentes:
 Salao de Jantar
 objetos:
+Faca

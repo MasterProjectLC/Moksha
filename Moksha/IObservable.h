@@ -16,6 +16,7 @@ public:
 	void add(IObserver* obs, int callcard);
 	void remove(IObserver* obs);
 	void notify();
+	void notify(int id);
 
 	int getNotifyID() { return notifyID; }
 	void setNotifyID(int n) { notifyID = n; }

@@ -45,6 +45,7 @@ private:
 	string linhaAtual = "";
 	string linhaGuardada = "";
 	list<string> linhas;
+	list<string> linhasEnviadas;
 	list<string>::iterator it;
 
 	void addLetra(char nova);

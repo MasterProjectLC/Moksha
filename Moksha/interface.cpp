@@ -61,14 +61,14 @@ void Interface::setVPointer(int n) {
 	vPointer = n;
 	if (vPointer < 0)
 		vPointer = 0;
-	else if (vPointer > linhas.size())
-		vPointer = linhas.size();
+	else if (vPointer > linhasEnviadas.size())
+		vPointer = linhasEnviadas.size();
 
 	if (vPointer == 0)
 		linhaAtual = linhaGuardada.substr(0, linhaGuardada.length());
 	else {
 		int i = 0;
-		for (it = linhas.begin(); it != linhas.end(); it++, i++) {
+		for (it = linhasEnviadas.begin(); it != linhasEnviadas.end(); it++, i++) {
 			if (i == vPointer-1) {
 				linhaAtual = *it;
 				break;
@@ -440,6 +440,10 @@ vector<string> Interface::subirLinha() {
 
 	if (linhaAtual == "" || menu)
 		return retorno;
+
+	linhasEnviadas.push_front(linhaAtual);
+	if (linhasEnviadas.size() > screenHeight - 1)
+		linhasEnviadas.pop_back();
 
 	printLinha(linhaAtual);
 	linhaGuardada = "";

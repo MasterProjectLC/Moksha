@@ -1,0 +1,4 @@
+sem objeto:
+Hm? Nao vejo esse objeto na sala...
+sem acao:
+Nao posso tomar esta acao com esse objeto.

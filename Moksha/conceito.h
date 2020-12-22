@@ -4,9 +4,10 @@
 using namespace std;
 
 class Conceito {
-private:
+protected:
 	string nome;
 public:
+	Conceito() {};
 	Conceito(string nome);
 
 	string getNome() { return nome; };

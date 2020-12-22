@@ -6,3 +6,5 @@ examinar,ver:
 Uma mesa interessante, mas inconsequente.
 tocar:
 Hmm, a mesa esta um pouco gelada. Sera que aconteceu algo aqui?
+obter:
+A mesa eh muito pesada.

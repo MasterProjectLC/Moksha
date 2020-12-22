@@ -1,9 +1,10 @@
 #pragma once
 #include <vector>
+#include "IObservable.h"
 
 using namespace std;
 
-class Objeto {
+class Objeto : public IObservable {
 private:
 	string name;
 
@@ -14,6 +15,8 @@ private:
 public:
 	Objeto() {};
 
+	enum { obter };
+
 	Objeto(string name, vector<string> validActions, vector<vector<string>> actions, vector<vector<string>> responses);
 
 	// Getters
@@ -21,4 +24,6 @@ public:
 
 	vector<vector<string>> getActions() { return actions; };
 	vector<string> getResponses(string action);
+
+	void takeAction(string prompt);
 };

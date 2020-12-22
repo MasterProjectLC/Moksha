@@ -17,5 +17,9 @@ void IObservable::notify() {
 	for (it = lista.begin(), itt = callcards.begin(); it != lista.end(); it++, itt++) {
 		(*it)->update(*itt);
 	}
-
 };
+
+void IObservable::notify(int id) {
+	setNotifyID(id);
+	notify();
+}

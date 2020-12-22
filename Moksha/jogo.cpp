@@ -2,46 +2,44 @@
 
 Jogo::Jogo() {
 	fileManager = FileManager();
-	
+	FileDict fileErros = fileManager.readFromFile("files/erros.txt");
+	erroSemObjeto = fileErros.getValues("sem objeto")[0];
+	erroSemAcao = fileErros.getValues("sem acao")[0];
+
 	generateSalas();
 	salaAtual = salas[1];
 	carregarSala(&salaAtual);
 }
 
 
-void Jogo::imprimirTexto(string texto) {
-	this->texto = texto;
-	setNotifyID(imprimir);
-	notify();
+void Jogo::update(int id) {
+	int nid = objetos[id].getNotifyID();
+	
+	// Obter
+	if (nid == objetos[id].obter) {
+		addItem(objetos[id].getName());
+		objetos.erase(objetos.begin()+id);
+	}
 }
 
 
-vector<Conceito> Jogo::getInventario() {
-	return inventario.getInventario();
+void Jogo::imprimirTexto(string texto) {
+	this->texto = texto;
+	notify(imprimir);
+}
+
+
+vector<Item> Jogo::getInventario() {
+	return jogador.getInventario();
 }
 
 
 void Jogo::receberArgs(vector<string> args) {
-	if (args.size() >= 2) {
-		// Obter item
-		if (args.at(0) == "obter") {
-			inventario.addConceito(concatStrings(args, 1));
-			setNotifyID(obter);
-			notify();
-		}
-
+	if (args.size() >= 2 && jogador.isAcaoValida(args.at(0))) {
 		// Mover para outra sala
-		else if (args.at(0) == "mover") {
+		if (args.at(0) == "mover") {
 			if (salaAtual.isSalaAnexa(concatStrings(args, 1))) {
-				salaAtual = salas[salaAtual.getSalaAnexaIndex(concatStrings(args, 1))];
-				carregarSala(&salaAtual);
-				imprimirTexto("Sala atual: " + salaAtual.getName() + "\n" + salaAtual.getTextoInicial());
-				for (int i = 0; i < salaAtual.getSalaAnexaCount(); i++)
-					imprimirTexto(salas[salaAtual.getSalaAnexaIndex(i)].getName());
-
-				imprimirTexto("Objetos na sala: ");
-				for (int i = 0; i < salaAtual.getObjetos().size(); i++)
-					imprimirTexto(salaAtual.getObjetos()[i].getName());
+				moverSala(&salaAtual, concatStrings(args, 1));
 			}
 			else {
 				imprimirTexto("Sala especificada nao e anexa a sala atual.");
@@ -51,12 +49,26 @@ void Jogo::receberArgs(vector<string> args) {
 		// Objetos
 		else {
 			vector<Objeto> objetosAqui = salaAtual.getObjetos();
+			bool objetoExiste = false;
+			// Procurar objeto
 			for (int i = 0; i < objetosAqui.size(); i++) {
+				// Objeto encontrado
 				if (args.at(1).compare(objetosAqui[i].getName()) == 0) {
+					// Tomar ação
+					objetosAqui[i].takeAction(args.at(0));
+
+					// Imprimir resposta
 					vector<string> responses = objetosAqui[i].getResponses(args.at(0));
 					if (responses.size() > 0) { imprimirTexto(responses[0]); }
+					else { imprimirTexto(erroSemAcao); }
+					objetoExiste = true;
+					break;
 				}
 			}
+			
+			// Objeto não existe
+			if (!objetoExiste)
+				imprimirTexto(erroSemObjeto);
 		}
 	}
 }
@@ -117,9 +129,37 @@ void Jogo::carregarSala(Sala *sala) {
 					objetoResponses.push_back(fileObjeto.getValues(objetoCombos[i][0]));
 				}
 
-				sala->addObjeto(Objeto(fileObjeto.getValue("nome"), fileObjeto.getValues("acoes"), objetoActions, objetoResponses));
+				Objeto newObjeto = Objeto(fileObjeto.getValue("nome"), fileObjeto.getValues("acoes"), objetoActions, objetoResponses);
+				newObjeto.add(this, objetos.size());
+				objetos.push_back(newObjeto);
+				sala->addObjeto(newObjeto);
 				break;
 			}
 		}
 	}
+}
+
+// ACTIONS ----------------------------------
+
+void Jogo::addItem(string item) {
+	jogador.addItem(item);
+	notify(obter);
+}
+
+void Jogo::moverSala(Sala* salaOrigem, string salaDestino) {
+	// Limpeza
+	objetos.clear();
+
+	// Movimento
+	*salaOrigem = salas[salaAtual.getSalaAnexaIndex(salaDestino)];
+	carregarSala(salaOrigem);
+
+	// Mensagens
+	imprimirTexto("Sala atual: " + salaOrigem->getName() + "\n" + salaOrigem->getTextoInicial());
+	for (int i = 0; i < salaOrigem->getSalaAnexaCount(); i++)
+		imprimirTexto(salas[salaOrigem->getSalaAnexaIndex(i)].getName());
+
+	imprimirTexto("Objetos na sala: ");
+	for (int i = 0; i < salaOrigem->getObjetos().size(); i++)
+		imprimirTexto(salaOrigem->getObjetos()[i].getName());
 }
