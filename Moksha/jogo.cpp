@@ -5,102 +5,72 @@ Jogo::Jogo() {
 	FileDict fileErros = fileManager.readFromFile("files/erros.txt");
 	erroSemObjeto = fileErros.getValues("sem objeto")[0];
 	erroSemAcao = fileErros.getValues("sem acao")[0];
+	erroSemSala = fileErros.getValues("sem sala")[0];
 
-	generateSalas();
-	salaAtual = salas[1];
-	carregarSala(&salaAtual);
+	gerarMapa();
+	jogador.setSalaAtual(mapa.getSala(1));
+	carregarSala(jogador.getSalaAtual());
 }
 
 
 void Jogo::update(int id) {
-	int nid = objetos[id].getNotifyID();
+	Objeto objeto = getSalaAtual()->getObjeto(id);
 	
 	// Obter
-	if (nid == objetos[id].obter) {
-		addItem(objetos[id].getName());
-		objetos.erase(objetos.begin()+id);
+	if (objeto.getNotifyID() == objeto.obter) {
+		addItem(objeto.getName());
+
+		Sala* sala = jogador.getSalaAtual();
+		sala->removeObjeto(objeto);
 	}
-}
-
-
-void Jogo::imprimirTexto(string texto) {
-	this->texto = texto;
-	notify(imprimir);
-}
-
-
-vector<Item> Jogo::getInventario() {
-	return jogador.getInventario();
 }
 
 
 void Jogo::receberArgs(vector<string> args) {
 	if (args.size() >= 2 && jogador.isAcaoValida(args.at(0))) {
+		string secondArg = concatStrings(args, 1);
+
 		// Mover para outra sala
 		if (args.at(0) == "mover") {
-			if (salaAtual.isSalaAnexa(concatStrings(args, 1))) {
-				moverSala(&salaAtual, concatStrings(args, 1));
-			}
-			else {
-				imprimirTexto("Sala especificada nao e anexa a sala atual.");
-			}
+			if (getSalaAtual()->isSalaAnexa(secondArg))
+				jogador.setSalaAtual(moverSala(*getSalaAtual(), secondArg));
+			else
+				imprimirTexto(erroSemSala);
 		}
 
 		// Objetos
 		else {
-			vector<Objeto> objetosAqui = salaAtual.getObjetos();
-			bool objetoExiste = false;
-			// Procurar objeto
-			for (int i = 0; i < objetosAqui.size(); i++) {
-				// Objeto encontrado
-				if (args.at(1).compare(objetosAqui[i].getName()) == 0) {
-					// Tomar ação
-					objetosAqui[i].takeAction(args.at(0));
+			if (getSalaAtual()->possuiObjeto(secondArg)) {
+				Objeto objetoAqui = getSalaAtual()->getObjeto(secondArg);
+				objetoAqui.takeAction(args.at(0));
 
-					// Imprimir resposta
-					vector<string> responses = objetosAqui[i].getResponses(args.at(0));
-					if (responses.size() > 0) { imprimirTexto(responses[0]); }
-					else { imprimirTexto(erroSemAcao); }
-					objetoExiste = true;
-					break;
-				}
+				// Imprimir resposta
+				vector<string> responses = objetoAqui.getResponses(args.at(0));
+				if (responses.size() > 0) { imprimirTexto(responses[0]); }
+				else { imprimirTexto(erroSemAcao); }
 			}
-			
+
 			// Objeto não existe
-			if (!objetoExiste)
+			else
 				imprimirTexto(erroSemObjeto);
 		}
 	}
 }
 
-// LOADING & GENERATING ------------------------------------------
+// LIDAR COM MAPA ------------------------------------------
 
-void Jogo::generateSalas() {
+void Jogo::gerarMapa() {
 	vector<string> salaLista = fileManager.getFileList("files/salas");
 
-	// Passe 1 - Gerar objetos de salas e colocá-los no vetor salas
+	// Gerar salas e colocá-los no Mapa
+	vector<Sala> salas;
 	for (int i = 0; i < salaLista.size(); i++) {
 		FileDict fileSala = fileManager.readFromFile(salaLista[i]);
-		Sala novaSala = Sala(fileSala.getValue("nome"), fileSala.getValue("texto"), 
-				fileSala.getValues("adjacentes"), fileSala.getValues("objetos"));
-		salas.push_back(novaSala);
+		salas.push_back(Sala(fileSala.getValue("nome"), fileSala.getValue("texto"),
+							fileSala.getValues("adjacentes"), fileSala.getValues("objetos")));
 	}
 
-	// Passe 2 - popular salasAnexas de cada objeto
-	for (int i = 0; i < salas.size(); i++) {
-		vector<int> salasAnexas;
-
-		for (int j = 0; j < salas[i].getSalaAnexaCount(); j++) {
-			for (int k = 0; k < salas.size(); k++) {
-				cout << salas[i].getSalaAnexaNome(j) + " ? " + salas[k].getName() << endl;
-				if (salas[i].getSalaAnexaNome(j).compare(salas[k].getName()) == 0) {
-
-					salasAnexas.push_back(k);
-				}
-			}
-		}
-		salas[i].setupAnexas(salasAnexas);
-	}
+	mapa = Mapa(salas);
 }
 
 
@@ -117,21 +87,18 @@ void Jogo::carregarSala(Sala *sala) {
 			if (objetoNomes[j].compare(fileObjeto.getValue("nome")) == 0) {
 				vector<vector<string>> objetoActions;
 				vector<vector<string>> objetoResponses;
-
 				vector<vector<string>> objetoCombos = fileObjeto.getKeys();
 				
 				// Cada combo acao-resposta possivel
 				for (int i = 0; i < objetoCombos.size(); i++) {
 					if (objetoCombos[i][0] == "nome" || objetoCombos[i][0] == "acoes")
 						continue;
-
 					objetoActions.push_back(objetoCombos[i]);
 					objetoResponses.push_back(fileObjeto.getValues(objetoCombos[i][0]));
 				}
 
 				Objeto newObjeto = Objeto(fileObjeto.getValue("nome"), fileObjeto.getValues("acoes"), objetoActions, objetoResponses);
-				newObjeto.add(this, objetos.size());
-				objetos.push_back(newObjeto);
+				newObjeto.add(this, j);
 				sala->addObjeto(newObjeto);
 				break;
 			}
@@ -146,20 +113,32 @@ void Jogo::addItem(string item) {
 	notify(obter);
 }
 
-void Jogo::moverSala(Sala* salaOrigem, string salaDestino) {
-	// Limpeza
-	objetos.clear();
-
+Sala Jogo::moverSala(Sala salaOrigem, string salaDestino) {
 	// Movimento
-	*salaOrigem = salas[salaAtual.getSalaAnexaIndex(salaDestino)];
-	carregarSala(salaOrigem);
+	salaOrigem = mapa.getSala(salaDestino);
+	carregarSala(&salaOrigem);
 
 	// Mensagens
-	imprimirTexto("Sala atual: " + salaOrigem->getName() + "\n" + salaOrigem->getTextoInicial());
-	for (int i = 0; i < salaOrigem->getSalaAnexaCount(); i++)
-		imprimirTexto(salas[salaOrigem->getSalaAnexaIndex(i)].getName());
+	imprimirTexto("Sala atual: " + salaOrigem.getName() + "\n" + salaOrigem.getTextoInicial() + "\nSalas anexas:");
+	for (int i = 0; i < salaOrigem.getSalaAnexaCount(); i++)
+		imprimirTexto(salaOrigem.getSalaAnexaNome(i));
 
 	imprimirTexto("Objetos na sala: ");
-	for (int i = 0; i < salaOrigem->getObjetos().size(); i++)
-		imprimirTexto(salaOrigem->getObjetos()[i].getName());
+	vector<Objeto> objetos = salaOrigem.getObjetos();
+	for (int i = 0; i < objetos.size(); i++) {
+		imprimirTexto(objetos[i].getName());
+	}
+
+	return salaOrigem;
+}
+
+
+void Jogo::imprimirTexto(string texto) {
+	this->texto = texto;
+	notify(imprimir);
+}
+
+
+vector<Item> Jogo::getInventario() {
+	return jogador.getInventario();
 }

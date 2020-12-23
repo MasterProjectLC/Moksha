@@ -8,11 +8,13 @@ Objeto::Objeto(string name, vector<string> validActions, vector<vector<string>> 
 }
 
 vector<string> Objeto::getResponses(string action) {
-	for (int i = 0; i < getActions().size(); i++)
+	for (int i = 0; i < getActions().size(); i++) {
 		// Is one of the actions here compatible?
-		for (int j = 0; j < getActions()[i].size(); j++)
+		for (int j = 0; j < getActions()[i].size(); j++) {
 			if (getActions()[i][j].compare(action) == 0)
 				return responses[i];
+		}
+	}
 
 	vector<string> a;
 	return a;

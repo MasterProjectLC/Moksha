@@ -11,4 +11,3 @@ bool Personagem::isAcaoValida(string acao) {
 
 	return false;
 }
-

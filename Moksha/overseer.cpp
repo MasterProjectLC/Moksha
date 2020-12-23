@@ -11,9 +11,6 @@ public:
 	Overseer() {
 		interfacer.add(this, 0);
 		jogo.add(this, 1);
-
-		jogo.imprimirTexto(jogo.getSalaAtual().getName());
-		jogo.imprimirTexto(jogo.getSalaAtual().getSalaAnexaNome(0));
 	}
 
 

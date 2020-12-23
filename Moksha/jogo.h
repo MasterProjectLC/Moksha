@@ -2,7 +2,7 @@
 #include "personagem.h"
 #include "IObservable.h"
 #include "IObserver.h"
-#include "sala.h"
+#include "mapa.h"
 #include "fileManager.h"
 
 using namespace std;
@@ -12,20 +12,21 @@ private:
 	FileManager fileManager;
 	string texto;
 
-	Sala salaAtual;
-	vector<Sala> salas;
-	vector<Objeto> objetos;
-
+	//vector<Objeto> objetos;
 	Personagem jogador;
 
 	string erroSemObjeto;
 	string erroSemAcao;
-
-	void generateSalas();
-	void carregarSala(Sala *sala);
-	void moverSala(Sala* salaOrigem, string salaDestino);
+	string erroSemSala;
 
 	void addItem(string item);
+
+	void gerarMapa();
+	void carregarSala(Sala *sala);
+	Sala moverSala(Sala salaOrigem, string salaDestino);
+	Mapa mapa;
+
+	class No;
 
 public:
 	Jogo();
@@ -34,7 +35,7 @@ public:
 
 	enum { obter, imprimir };
 
-	Sala getSalaAtual() { return salaAtual; }
+	Sala* getSalaAtual() { return jogador.getSalaAtual(); }
 	void receberArgs(vector<string> args);
 
 	vector<Item> getInventario();

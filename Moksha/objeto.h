@@ -14,10 +14,8 @@ private:
 
 public:
 	Objeto() {};
-
-	enum { obter };
-
 	Objeto(string name, vector<string> validActions, vector<vector<string>> actions, vector<vector<string>> responses);
+	enum { obter };
 
 	// Getters
 	string getName() { return name; }
