@@ -1,5 +1,6 @@
 #pragma once
 #include "personagem.h"
+#include "Jenna.h"
 #include "IObservable.h"
 #include "IObserver.h"
 #include "mapa.h"
@@ -14,6 +15,7 @@ private:
 
 	//vector<Objeto> objetos;
 	Personagem jogador;
+	Jenna jenna;
 
 	string erroSemObjeto;
 	string erroSemAcao;
@@ -23,7 +25,7 @@ private:
 
 	void gerarMapa();
 	void carregarSala(Sala *sala);
-	Sala moverSala(Sala salaOrigem, string salaDestino);
+	Sala* moverSala(Sala *salaOrigem, string salaDestino);
 	Mapa mapa;
 
 	class No;

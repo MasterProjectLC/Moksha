@@ -175,6 +175,7 @@
     <ClInclude Include="jogo.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="mapa.h" />
+    <ClInclude Include="npc.h" />
     <ClInclude Include="objeto.h" />
     <ClInclude Include="personagem.h" />
     <ClInclude Include="sala.h" />

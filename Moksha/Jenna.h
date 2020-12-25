@@ -1,8 +1,13 @@
 #pragma once
-#include "personagem.h"
+#include "npc.h"
 
 using namespace std;
 
-class Jenna: public Personagem {
+class Jenna: public NPC {
+private:
+
+public:
+	Jenna() {}
+	Jenna(Mapa* m);
 	void takeAction();
 };

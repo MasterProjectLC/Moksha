@@ -1,8 +1,8 @@
 #include "mapa.h"
-#include <queue>
+#include <windows.h>
+#include <sstream>
 
-
-Mapa::Mapa(vector<Sala> salasRecebidas) {
+Mapa::Mapa(vector<Sala*> salasRecebidas) {
 	// Gerar salas
 	for (int i = 0; i < salasRecebidas.size(); i++) {
 		Node novo = Node(salasRecebidas[i]);
@@ -12,65 +12,108 @@ Mapa::Mapa(vector<Sala> salasRecebidas) {
 	// Popular nós com anexasIndex
 	for (int i = 0; i < salas.size(); i++)
 		// Colocar o index de cada sala anexa no Node
-		for (int j = 0; j < salas[i].getElemento().getSalaAnexaCount(); j++)
+		for (int j = 0; j < salas[i].getElemento()->getSalaAnexaCount(); j++)
 			for (int k = 0; k < salas.size(); k++)
-				if (salas[k].getElemento().getName() == salas[i].getElemento().getSalaAnexaNome(j)) {
+				if (salas[i].getElemento()->getSalaAnexaNome(j) == salas[k].getElemento()->getName()) {
 					salas[i].addAnexa(k);
 					break;
 				}
-}
+};
 
 
-vector<Sala> Mapa::optimalPath(Node salaOrigem, Node salaDestino) {
-	vector<Sala> caminho;
-	queue<Node> salasEsquerdas;
-	queue<Node> salasDireitas;
-	salasEsquerdas.push(salaOrigem);
-	salasDireitas.push(salaDestino);
+queue<Sala*> Mapa::optimalPath(Sala *_salaOrigem, Sala *_salaDestino) {
+	Node *salaOrigem, *salaDestino;
 
-	while (!(salasEsquerdas.empty() || salasDireitas.empty())) {
-		// Esquerda
-		Node salaExaminada = salasEsquerdas.front();
-		if (salaExaminada.getVisitado() == 2) {
+	for (int i = 0; i < salas.size(); i++) {
+		if (salas[i].getElemento()->getName() == _salaOrigem->getName())
+			salaOrigem = &salas[i];
 
-			break;
-		} else if (!salaExaminada.getVisitado()) {
-			salaExaminada.setVisitado(1);
-			for (int i = 0; i < salaExaminada.getAnexas().size(); i++)
-				salasEsquerdas.push(salas[salaExaminada.getAnexas()[i]]);
-		}
-		salasEsquerdas.pop();
-
-		// Direita
-		salaExaminada = salasDireitas.front();
-		if (salaExaminada.getVisitado() == 1) {
-			break;
-		}
-		else if (salaExaminada.getVisitado()) {
-			salaExaminada.setVisitado(2);
-			for (int i = 0; i < salaExaminada.getAnexas().size(); i++)
-				salasDireitas.push(salas[salaExaminada.getAnexas()[i]]);
-		}
-		salasDireitas.pop();
+		if (salas[i].getElemento()->getName() == _salaDestino->getName())
+			salaDestino = &salas[i];
 	}
 
+	queue<Sala*> caminho;
+	queue<Node*> salasEsquerdas; salasEsquerdas.push(salaOrigem);
+	queue<Node*> salasDireitas; salasDireitas.push(salaDestino);
+	vector<Node*> ponte;
+	salaOrigem->setVisitado(1);
+	salaDestino->setVisitado(2);
+
+	while (!salasEsquerdas.empty() && !salasDireitas.empty()) {
+		if (optimalPathHelper(&salasEsquerdas, false, &ponte) || optimalPathHelper(&salasDireitas, true, &ponte)) {
+			// Caminho encontrado - criar vetor
+			// Esquerda
+			stack<Sala*> s;
+			s.push(ponte.at(0)->getElemento());
+			while (ponte.at(0)->temPai()) {
+				ponte.emplace(ponte.begin(), ponte.at(0)->getPai());
+				ponte.erase(ponte.begin()+1);
+				s.push(ponte.at(0)->getElemento());
+			}
+
+			s.pop();
+			while (!s.empty()) {
+				caminho.push(s.top());
+				s.pop();
+			}
+
+			// Direita
+			caminho.push(ponte.at(1)->getElemento());
+			while (ponte.at(1)->temPai()) {
+				ponte.emplace(ponte.begin()+1, ponte.at(1)->getPai());
+				ponte.erase(ponte.begin()+2);
+				caminho.push(ponte.at(1)->getElemento());
+			}
+			break;
+		}
+	}
 	return caminho;
-}
+};
+
+
+bool Mapa::optimalPathHelper(queue<Node*> *salasExaminadas, bool isDireita, vector<Node*> *ponte) {
+	int visitado = 1 + (isDireita), alvo = 1 + (!isDireita);
+
+	if (salasExaminadas->empty())
+		return false;
+
+	Node* salaExaminada = salasExaminadas->front();
+
+	// Iterar pelos nodes anexos à sala examinada
+	for (int i = 0; i < salaExaminada->getAnexas().size(); i++) {
+		// Não examinada ainda - adicionar à lista
+		if (salas[salaExaminada->getAnexas()[i]].getVisitado() == 0) {
+			salasExaminadas->push(&salas[salaExaminada->getAnexas()[i]]);
+			salas[salaExaminada->getAnexas()[i]].setPai(salaExaminada);
+			salas[salaExaminada->getAnexas()[i]].setVisitado(visitado);
+		}
+
+		// Sala do outro lado encontrada! Retorná-la
+		else if (salas[salaExaminada->getAnexas()[i]].getVisitado() == alvo && !isDireita) {
+			ponte->push_back(salaExaminada);
+			ponte->push_back( &salas[salaExaminada->getAnexas()[i]] );
+			return true;
+		}
+	}
+
+	salasExaminadas->pop();
+	return false;
+};
+
 
 bool Mapa::existeSala(string name) {
 	for (int i = 0; i < salas.size(); i++)
-		if (salas[i].getElemento().getName() == name)
+		if (salas[i].getElemento()->getName() == name)
 			return true;
 	return false;
-}
+};
 
-
-Sala Mapa::getSala(int index) { 
+Sala* Mapa::getSala(int index) { 
 	return salas[index].getElemento();
-}
+};
 
-Sala Mapa::getSala(string name) {
+Sala* Mapa::getSala(string name) {
 	for (int i = 0; i < salas.size(); i++)
-		if (salas[i].getElemento().getName() == name)
+		if (salas[i].getElemento()->getName() == name)
 			return getSala(i);
-}
+};

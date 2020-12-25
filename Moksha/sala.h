@@ -23,6 +23,7 @@ public:
 	void setupObjetos(vector<Objeto> objetos) { this->objetos = objetos; };
 	void addObjeto(Objeto objeto) { objetos.push_back(objeto); };
 	void removeObjeto(Objeto objeto);
+	void limparObjetos() { objetos.clear(); }
 
 	// Getters
 	string getName() { return name; }

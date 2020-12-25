@@ -1,7 +1,9 @@
 #pragma once
 #pragma once
 #include <vector>
+#include <queue>
 #include <string>
+#include <stack>
 #include "sala.h"
 
 using namespace std;
@@ -10,20 +12,32 @@ class Mapa {
 private:
 	class Node {
 	private:
-		Sala elemento;
+		Sala *elemento;
 		int visitado;
 		vector<int> anexasIndex;
+		Node* paiIndex;
+		bool temPai_;
 
 	public:
-		Node(Sala elemento) {
+		Node() {};
+
+		Node(Sala *elemento) {
 			this->visitado = 0;
 			this->elemento = elemento;
-		}
+			this->temPai_ = false;
+		};
 
-		int getVisitado() { return visitado; }
-		void setVisitado(int v) { visitado = v; }
+		int getVisitado() { return visitado; };
+		void setVisitado(int v) { visitado = v; };
 
-		Sala getElemento() { return elemento; }
+		bool temPai() { return temPai_; };
+		Node* getPai() { return paiIndex; }
+		void setPai(Node* v) {
+			paiIndex = v;
+			temPai_ = true;
+		};
+
+		Sala* getElemento() { return elemento; };
 
 		void addAnexa(int novo) { anexasIndex.push_back(novo); };
 		vector<int> getAnexas() { return anexasIndex; };
@@ -33,14 +47,14 @@ private:
 	vector<Node> salas;
 	vector<Objeto> objetos;
 
-	vector<Sala> optimalPath(Node salaOrigem, Node salaDestino);
+	bool optimalPathHelper(queue<Node*> *salasExaminadas, bool isDireita, vector<Node*> *ponte);
 
 public:
 	Mapa() {};
+	Mapa(vector<Sala*> salasRecebidas);
 
-	Mapa(vector<Sala> salasRecebidas);
-
+	queue<Sala*> optimalPath(Sala *_salaOrigem, Sala *_salaDestino);
 	bool existeSala(string name);
-	Sala getSala(int index);
-	Sala getSala(string name);
+	Sala* getSala(int index);
+	Sala* getSala(string name);
 };

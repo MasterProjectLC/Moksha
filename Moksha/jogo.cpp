@@ -8,7 +8,12 @@ Jogo::Jogo() {
 	erroSemSala = fileErros.getValues("sem sala")[0];
 
 	gerarMapa();
-	jogador.setSalaAtual(mapa.getSala(1));
+	jogador.setSalaAtual(mapa.getSala("Corredor"));
+
+	jenna = Jenna(&mapa);
+	jenna.setSalaAtual(mapa.getSala("Banheiro"));
+	jenna.setSalaAlvo(mapa.getSala("Corredor"));
+
 	carregarSala(jogador.getSalaAtual());
 }
 
@@ -32,8 +37,11 @@ void Jogo::receberArgs(vector<string> args) {
 
 		// Mover para outra sala
 		if (args.at(0) == "mover") {
+			imprimirTexto("Sala da Jenna: " + jenna.getSalaAtual()->getName());
+			jenna.takeAction();
+
 			if (getSalaAtual()->isSalaAnexa(secondArg))
-				jogador.setSalaAtual(moverSala(*getSalaAtual(), secondArg));
+				jogador.setSalaAtual(moverSala(getSalaAtual(), secondArg));
 			else
 				imprimirTexto(erroSemSala);
 		}
@@ -63,10 +71,10 @@ void Jogo::gerarMapa() {
 	vector<string> salaLista = fileManager.getFileList("files/salas");
 
 	// Gerar salas e colocá-los no Mapa
-	vector<Sala> salas;
+	vector<Sala*> salas;
 	for (int i = 0; i < salaLista.size(); i++) {
 		FileDict fileSala = fileManager.readFromFile(salaLista[i]);
-		salas.push_back(Sala(fileSala.getValue("nome"), fileSala.getValue("texto"),
+		salas.push_back(new Sala(fileSala.getValue("nome"), fileSala.getValue("texto"),
 							fileSala.getValues("adjacentes"), fileSala.getValues("objetos")));
 	}
 
@@ -75,6 +83,8 @@ void Jogo::gerarMapa() {
 
 
 void Jogo::carregarSala(Sala *sala) {
+	sala->limparObjetos();
+
 	vector<string> objetoLista = fileManager.getFileList("files/objetos");
 	vector<string> objetoNomes = sala->getObjetoNomes();
 
@@ -113,18 +123,18 @@ void Jogo::addItem(string item) {
 	notify(obter);
 }
 
-Sala Jogo::moverSala(Sala salaOrigem, string salaDestino) {
+Sala* Jogo::moverSala(Sala* salaOrigem, string salaDestino) {
 	// Movimento
 	salaOrigem = mapa.getSala(salaDestino);
-	carregarSala(&salaOrigem);
+	carregarSala(salaOrigem);
 
 	// Mensagens
-	imprimirTexto("Sala atual: " + salaOrigem.getName() + "\n" + salaOrigem.getTextoInicial() + "\nSalas anexas:");
-	for (int i = 0; i < salaOrigem.getSalaAnexaCount(); i++)
-		imprimirTexto(salaOrigem.getSalaAnexaNome(i));
+	imprimirTexto("Sala atual: " + salaOrigem->getName() + "\n" + salaOrigem->getTextoInicial() + "\nSalas anexas:");
+	for (int i = 0; i < salaOrigem->getSalaAnexaCount(); i++)
+		imprimirTexto(salaOrigem->getSalaAnexaNome(i));
 
 	imprimirTexto("Objetos na sala: ");
-	vector<Objeto> objetos = salaOrigem.getObjetos();
+	vector<Objeto> objetos = salaOrigem->getObjetos();
 	for (int i = 0; i < objetos.size(); i++) {
 		imprimirTexto(objetos[i].getName());
 	}

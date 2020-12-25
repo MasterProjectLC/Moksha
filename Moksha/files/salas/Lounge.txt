@@ -1,0 +1,8 @@
+nome:
+Lounge
+texto:
+Silencio. Pelo menos e um silencio relaxante. Poderia passar horas aqui, se as circunstancias fossem diferentes.
+adjacentes:
+Salao de Jantar
+objetos:
+Mesa

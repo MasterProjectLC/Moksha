@@ -1,0 +1,8 @@
+nome:
+Banheiro
+texto:
+Que cheiro de peixe. Deve ser aqui que eles limpam suas maos depois de cozinhar.
+adjacentes:
+Cozinha
+objetos:
+Mesa

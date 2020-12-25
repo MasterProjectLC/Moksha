@@ -5,10 +5,10 @@
 using namespace std;
 
 class Personagem {
-private:
+protected:
 	vector<string> acoesBasicas{"obter", "mover", "examinar", "ver", "tocar"};
 
-	Sala salaAtual;
+	Sala *salaAtual;
 	Inventario inventario;
 
 public:
@@ -18,8 +18,8 @@ public:
 
 	bool isAcaoValida(string acao);
 
-	void setSalaAtual(Sala const &sala) { salaAtual = sala; }
-	Sala* getSalaAtual() { return &salaAtual; }
+	void setSalaAtual(Sala *sala) { salaAtual = sala; }
+	Sala* getSalaAtual() { return salaAtual; }
 
-	void takeAction() {}
+	void takeAction() {};
 };

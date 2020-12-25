@@ -3,6 +3,6 @@ Salao de Jantar
 texto:
 Ninguem veio ao Salao de Jantar. Tambem, depois de tudo o que aconteceu, nao e uma grande surpresa. Espero que a Willow esteja bem.
 adjacentes:
-Corredor|Cozinha
+Corredor|Cozinha|Lounge
 objetos:
 Mesa

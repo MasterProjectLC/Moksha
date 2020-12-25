@@ -1,5 +1,10 @@
 #include "Jenna.h"
 
-void Jenna::takeAction() {
+Jenna::Jenna(Mapa* m) : NPC(m) {}
 
+void Jenna::takeAction() {
+	if (salaAtual->getName() != salaAlvo->getName() && !caminho.empty()) {
+		setSalaAtual(caminho.front());
+		caminho.pop();
+	}
 }

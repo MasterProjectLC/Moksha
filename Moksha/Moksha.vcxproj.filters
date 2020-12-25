@@ -122,5 +122,8 @@
     <ClInclude Include="mapa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="npc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
