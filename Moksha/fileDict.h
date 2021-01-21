@@ -1,20 +1,9 @@
 #pragma once
-#include <vector>
-#include <string>
-#include <iostream>
-#include "stringLib.h"
+#include "dictionary.h"
 
 using namespace std;
 
-class FileDict {
-private:
-	vector<vector<string>> keys;
-	vector<vector<string>> values;
+class FileDict: public Dictionary {
 public:
 	FileDict(string fileText);
-
-	vector<vector<string>> getKeys() { return keys; };
-	string getValue(string key);
-	vector<string> getValues(string key);
-
 };

@@ -1,120 +1,96 @@
 #include "jogo.h"
 
 Jogo::Jogo() {
-	fileManager = FileManager();
-	FileDict fileErros = fileManager.readFromFile("files/erros.txt");
-	erroSemObjeto = fileErros.getValues("sem objeto")[0];
-	erroSemAcao = fileErros.getValues("sem acao")[0];
-	erroSemSala = fileErros.getValues("sem sala")[0];
-
 	gerarMapa();
+
+	jogador = Jogador();
 	jogador.setSalaAtual(mapa.getSala("Corredor"));
+	jogador.add(this, OBSERVER_OFFSET);
+	personagens[0] = &jogador;
 
 	jenna = Jenna(&mapa);
 	jenna.setSalaAtual(mapa.getSala("Banheiro"));
 	jenna.setSalaAlvo(mapa.getSala("Corredor"));
+	jenna.add(this, OBSERVER_OFFSET+1);
+	personagens[1] = &jenna;
 
-	carregarSala(jogador.getSalaAtual());
+	mapa.carregarSala(jogador.getSalaAtual());
 }
 
 
 void Jogo::update(int id) {
-	Objeto objeto = getSalaAtual()->getObjeto(id);
-	
-	// Obter
-	if (objeto.getNotifyID() == objeto.obter) {
-		addItem(objeto.getName());
+	// Objeto
+	if (id < OBSERVER_OFFSET) {
+		Objeto objeto = getSalaAtual()->getObjeto(id);
 
-		Sala* sala = jogador.getSalaAtual();
-		sala->removeObjeto(objeto);
+		// Obter
+		if (objeto.getNotifyID() == objeto.obter) {
+			addItem(objeto.getName());
+
+			Sala* sala = jogador.getSalaAtual();
+			sala->removeObjeto(objeto);
+		}
+	}
+
+	// Personagem
+	else {
+		id -= OBSERVER_OFFSET;
+		Personagem* personagem = personagens[id];
+
+		switch (personagem->getNotifyID()) {
+		case personagem->imprimir:
+			imprimirTexto(personagem->getNotifyText());
+			break;
+		case personagem->mover:
+			personagem->setSalaAtual(moverSala(personagem->getSalaAtual(), personagem->getNotifyText()));
+			if (id == 0) {
+				// Mensagens (TODO: this is dumb, fix it later)
+				Sala* salaOrigem = personagem->getSalaAtual();
+				imprimirTexto("Sala atual: " + salaOrigem->getName() + "\n" + salaOrigem->getTextoInicial() + "\nSalas anexas:");
+				for (int i = 0; i < salaOrigem->getSalaAnexaCount(); i++)
+					imprimirTexto(salaOrigem->getSalaAnexaNome(i));
+
+				imprimirTexto("Objetos na sala: ");
+				vector<Objeto> objetos = salaOrigem->getObjetos();
+				for (int i = 0; i < objetos.size(); i++) {
+					imprimirTexto(objetos[i].getName());
+				}
+			}
+			break;
+		default:
+			return;
+		}
+		
+		// Player moved. Update everyone
+		if (id == 0) {
+			// TODO: create a separate function for this
+			jenna.takeAction();
+			imprimirTexto("Sala da Jenna: " + jenna.getSalaAtual()->getName());
+		}
 	}
 }
 
 
 void Jogo::receberArgs(vector<string> args) {
-	if (args.size() >= 2 && jogador.isAcaoValida(args.at(0))) {
-		string secondArg = concatStrings(args, 1);
-
-		// Mover para outra sala
-		if (args.at(0) == "mover") {
-			imprimirTexto("Sala da Jenna: " + jenna.getSalaAtual()->getName());
-			jenna.takeAction();
-
-			if (getSalaAtual()->isSalaAnexa(secondArg))
-				jogador.setSalaAtual(moverSala(getSalaAtual(), secondArg));
-			else
-				imprimirTexto(erroSemSala);
-		}
-
-		// Objetos
-		else {
-			if (getSalaAtual()->possuiObjeto(secondArg)) {
-				Objeto objetoAqui = getSalaAtual()->getObjeto(secondArg);
-				objetoAqui.takeAction(args.at(0));
-
-				// Imprimir resposta
-				vector<string> responses = objetoAqui.getResponses(args.at(0));
-				if (responses.size() > 0) { imprimirTexto(responses[0]); }
-				else { imprimirTexto(erroSemAcao); }
-			}
-
-			// Objeto não existe
-			else
-				imprimirTexto(erroSemObjeto);
-		}
-	}
+	jogador.receberArgs(args);
 }
 
 // LIDAR COM MAPA ------------------------------------------
 
 void Jogo::gerarMapa() {
-	vector<string> salaLista = fileManager.getFileList("files/salas");
+	vector<string> salaLista = FileManager::getFileList("files/salas");
 
 	// Gerar salas e colocá-los no Mapa
 	vector<Sala*> salas;
 	for (int i = 0; i < salaLista.size(); i++) {
-		FileDict fileSala = fileManager.readFromFile(salaLista[i]);
+		FileDict fileSala = FileManager::readFromFile(salaLista[i]);
 		salas.push_back(new Sala(fileSala.getValue("nome"), fileSala.getValue("texto"),
 							fileSala.getValues("adjacentes"), fileSala.getValues("objetos")));
 	}
 
-	mapa = Mapa(salas);
+	mapa = Mapa(salas, this);
 }
 
-
-void Jogo::carregarSala(Sala *sala) {
-	sala->limparObjetos();
-
-	vector<string> objetoLista = fileManager.getFileList("files/objetos");
-	vector<string> objetoNomes = sala->getObjetoNomes();
-
-	// Procurar objetos na lista
-	for (int i = 0; i < objetoLista.size(); i++) {
-		FileDict fileObjeto = fileManager.readFromFile(objetoLista[i]);
-
-		for (int j = 0; j < objetoNomes.size(); j++) {
-			// Encontrado
-			if (objetoNomes[j].compare(fileObjeto.getValue("nome")) == 0) {
-				vector<vector<string>> objetoActions;
-				vector<vector<string>> objetoResponses;
-				vector<vector<string>> objetoCombos = fileObjeto.getKeys();
-				
-				// Cada combo acao-resposta possivel
-				for (int i = 0; i < objetoCombos.size(); i++) {
-					if (objetoCombos[i][0] == "nome" || objetoCombos[i][0] == "acoes")
-						continue;
-					objetoActions.push_back(objetoCombos[i]);
-					objetoResponses.push_back(fileObjeto.getValues(objetoCombos[i][0]));
-				}
-
-				Objeto newObjeto = Objeto(fileObjeto.getValue("nome"), fileObjeto.getValues("acoes"), objetoActions, objetoResponses);
-				newObjeto.add(this, j);
-				sala->addObjeto(newObjeto);
-				break;
-			}
-		}
-	}
-}
 
 // ACTIONS ----------------------------------
 
@@ -126,18 +102,7 @@ void Jogo::addItem(string item) {
 Sala* Jogo::moverSala(Sala* salaOrigem, string salaDestino) {
 	// Movimento
 	salaOrigem = mapa.getSala(salaDestino);
-	carregarSala(salaOrigem);
-
-	// Mensagens
-	imprimirTexto("Sala atual: " + salaOrigem->getName() + "\n" + salaOrigem->getTextoInicial() + "\nSalas anexas:");
-	for (int i = 0; i < salaOrigem->getSalaAnexaCount(); i++)
-		imprimirTexto(salaOrigem->getSalaAnexaNome(i));
-
-	imprimirTexto("Objetos na sala: ");
-	vector<Objeto> objetos = salaOrigem->getObjetos();
-	for (int i = 0; i < objetos.size(); i++) {
-		imprimirTexto(objetos[i].getName());
-	}
+	mapa.carregarSala(salaOrigem);
 
 	return salaOrigem;
 }

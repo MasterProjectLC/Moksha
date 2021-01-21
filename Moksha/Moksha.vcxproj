@@ -143,15 +143,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="conceito.cpp" />
+    <ClCompile Include="dictionary.cpp" />
     <ClCompile Include="fileDict.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="interface.cpp" />
     <ClCompile Include="inventario.cpp" />
     <ClCompile Include="IObservable.cpp" />
-    <ClCompile Include="fileManager.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="Jenna.cpp" />
+    <ClCompile Include="jogador.cpp" />
     <ClCompile Include="jogo.cpp" />
     <ClCompile Include="mapa.cpp" />
     <ClCompile Include="objeto.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="stringLib.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dictionary.h" />
     <ClInclude Include="fileDict.h" />
     <ClInclude Include="conceito.h" />
     <ClInclude Include="graphics.h" />
@@ -172,6 +174,7 @@
     <ClInclude Include="fileManager.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="Jenna.h" />
+    <ClInclude Include="jogador.h" />
     <ClInclude Include="jogo.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="mapa.h" />

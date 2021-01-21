@@ -1,8 +1,12 @@
 #include "mapa.h"
 #include <windows.h>
 #include <sstream>
+#include "fileManager.h"
 
-Mapa::Mapa(vector<Sala*> salasRecebidas) {
+
+Mapa::Mapa(vector<Sala*> salasRecebidas, IObserver *observer) {
+	this->observer = observer;
+
 	// Gerar salas
 	for (int i = 0; i < salasRecebidas.size(); i++) {
 		Node novo = Node(salasRecebidas[i]);
@@ -19,6 +23,41 @@ Mapa::Mapa(vector<Sala*> salasRecebidas) {
 					break;
 				}
 };
+
+
+void Mapa::carregarSala(Sala *sala) {
+	sala->limparObjetos();
+
+	vector<string> objetoLista = FileManager::getFileList("files/objetos");
+	vector<string> objetoNomes = sala->getObjetoNomes();
+
+	// Procurar objetos na lista
+	for (int i = 0; i < objetoLista.size(); i++) {
+		FileDict fileObjeto = FileManager::readFromFile(objetoLista[i]);
+
+		for (int j = 0; j < objetoNomes.size(); j++) {
+			// Encontrado - Gerar objeto
+			if (objetoNomes[j].compare(fileObjeto.getValue("nome")) == 0) {
+				vector<vector<string>> objetoActions;
+				vector<vector<string>> objetoResponses;
+				vector<vector<string>> objetoCombos = fileObjeto.getKeys();
+
+				// Cada combo acao-resposta possivel
+				for (int i = 0; i < objetoCombos.size(); i++) {
+					if (objetoCombos[i][0] == "nome" || objetoCombos[i][0] == "acoes")
+						continue;
+					objetoActions.push_back(objetoCombos[i]);
+					objetoResponses.push_back(fileObjeto.getValues(objetoCombos[i][0]));
+				}
+
+				Objeto newObjeto = Objeto(fileObjeto.getValue("nome"), fileObjeto.getValues("acoes"), objetoActions, objetoResponses);
+				newObjeto.add(observer, j);
+				sala->addObjeto(newObjeto);
+				break;
+			}
+		}
+	}
+}
 
 
 queue<Sala*> Mapa::optimalPath(Sala *_salaOrigem, Sala *_salaDestino) {

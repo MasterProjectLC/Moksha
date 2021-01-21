@@ -11,3 +11,17 @@ bool Personagem::isAcaoValida(string acao) {
 
 	return false;
 }
+
+void Personagem::printText(string str) {
+	notifyText = str;
+	notify(imprimir);
+}
+
+void Personagem::move(string str) {
+	notifyText = str;
+	notify(mover);
+}
+
+void Personagem::move(Sala sala) {
+	move(sala.getName());
+}

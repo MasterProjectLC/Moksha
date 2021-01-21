@@ -1,13 +1,15 @@
 #pragma once
 #include "sala.h"
 #include "inventario.h"
+#include "IObservable.h"
 
 using namespace std;
 
-class Personagem {
+class Personagem: public IObservable {
 protected:
 	vector<string> acoesBasicas{"obter", "mover", "examinar", "ver", "tocar"};
-
+	string notifyText;
+	
 	Sala *salaAtual;
 	Inventario inventario;
 
@@ -22,4 +24,10 @@ public:
 	Sala* getSalaAtual() { return salaAtual; }
 
 	void takeAction() {};
+
+	enum { imprimir, mover };
+	void printText(string str);
+	void move(string str);
+	void move(Sala sala);
+	string getNotifyText() { return notifyText; };
 };

@@ -1,6 +1,6 @@
 #pragma once
-#include "personagem.h"
 #include "Jenna.h"
+#include "jogador.h"
 #include "IObservable.h"
 #include "IObserver.h"
 #include "mapa.h"
@@ -10,12 +10,14 @@ using namespace std;
 
 class Jogo : public IObservable, public IObserver {
 private:
-	FileManager fileManager;
+	const int OBSERVER_OFFSET = 500;
+
 	string texto;
 
 	//vector<Objeto> objetos;
-	Personagem jogador;
+	Jogador jogador;
 	Jenna jenna;
+	Personagem* personagens[13];
 
 	string erroSemObjeto;
 	string erroSemAcao;
@@ -24,7 +26,6 @@ private:
 	void addItem(string item);
 
 	void gerarMapa();
-	void carregarSala(Sala *sala);
 	Sala* moverSala(Sala *salaOrigem, string salaDestino);
 	Mapa mapa;
 

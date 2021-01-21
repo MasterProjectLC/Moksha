@@ -24,9 +24,6 @@
     <ClCompile Include="input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fileManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="overseer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -64,6 +61,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mapa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dictionary.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="jogador.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,6 +126,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="npc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dictionary.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="jogador.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

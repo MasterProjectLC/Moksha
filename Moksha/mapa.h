@@ -5,6 +5,8 @@
 #include <string>
 #include <stack>
 #include "sala.h"
+#include "dictionary.h"
+#include "IObserver.h"
 
 using namespace std;
 
@@ -46,12 +48,15 @@ private:
 	// Atributos
 	vector<Node> salas;
 	vector<Objeto> objetos;
+	IObserver* observer;
 
 	bool optimalPathHelper(queue<Node*> *salasExaminadas, bool isDireita, vector<Node*> *ponte);
 
 public:
 	Mapa() {};
-	Mapa(vector<Sala*> salasRecebidas);
+	Mapa(vector<Sala*> salasRecebidas, IObserver *observer);
+
+	void carregarSala(Sala *sala);
 
 	queue<Sala*> optimalPath(Sala *_salaOrigem, Sala *_salaDestino);
 	bool existeSala(string name);

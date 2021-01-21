@@ -13,7 +13,9 @@ private:
 	int notifyID = 0;
 
 public:
+	void add(IObserver obs, int callcard) { add(&obs, callcard); };
 	void add(IObserver* obs, int callcard);
+	void remove(IObserver obs) { remove(&obs); };
 	void remove(IObserver* obs);
 	void notify();
 	void notify(int id);
