@@ -155,4 +155,6 @@ Sala* Mapa::getSala(string name) {
 	for (int i = 0; i < salas.size(); i++)
 		if (salas[i].getElemento()->getName() == name)
 			return getSala(i);
+
+	throw invalid_argument("There's no object with that name :(");
 };

@@ -41,12 +41,16 @@ bool Sala::possuiObjeto(string nome) {
 	return false;
 }
 
+#include <stdexcept>
 Objeto Sala::getObjeto(string nome) {
 	for (int i = 0; i < objetos.size(); i++) {
 		if (nome.compare(objetos[i].getName()) == 0)
 			return objetos[i];
 	}
+
+	throw invalid_argument("There's no object with that name :(");
 }
+
 
 vector<string> Sala::getObjetoNomes() {
 	return objetoNomes;

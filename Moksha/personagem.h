@@ -7,27 +7,35 @@ using namespace std;
 
 class Personagem: public IObservable {
 protected:
-	vector<string> acoesBasicas{"obter", "mover", "examinar", "ver", "tocar"};
+	string nome;
 	string notifyText;
+	vector<string> notifyTargets;
 	
 	Sala *salaAtual;
 	Inventario inventario;
 
 public:
-	vector<Item> getInventario() { return inventario.getItens(); };
-	void addConceito(string nome) { inventario.addConceito(nome); };
-	void addItem(string nome) { inventario.addItem(nome); };
+	string getNome() { return nome; }
 
-	bool isAcaoValida(string acao);
+	vector<Item> getInventario() { return inventario.getItens(); }
+	void addConceito(string nome) { inventario.addConceito(nome); }
+	void addItem(string nome) { inventario.addItem(nome); }
 
-	void setSalaAtual(Sala *sala) { salaAtual = sala; }
-	Sala* getSalaAtual() { return salaAtual; }
+	void setSalaAtual(Sala *sala);
+	Sala* getSalaAtual();
 
-	void takeAction() {};
+	void takeAction() {}
 
-	enum { imprimir, mover };
+	enum { imprimir, mover, mencionar, falar };
 	void printText(string str);
 	void move(string str);
 	void move(Sala sala);
-	string getNotifyText() { return notifyText; };
+	void mention(string obj, vector<string> receivers);
+	void say(string str, vector<string> receivers);
+
+	string getNotifyText() { return notifyText; }
+	vector<string> getNotifyTargets() { return notifyTargets; }
+
+	virtual void executarReacao(string topico, string remetente) {};
+	virtual void verSala(vector<string> pessoasNaSala) {};
 };

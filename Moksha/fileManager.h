@@ -14,7 +14,7 @@ class FileManager {
 private:
 
 public:
-	FileManager();
+	FileManager() {}
 
 	static vector<string> getFileList(string folder)
 	{

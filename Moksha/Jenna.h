@@ -8,6 +8,6 @@ private:
 
 public:
 	Jenna() {}
-	Jenna(Mapa* m);
+	explicit Jenna(Mapa* m);
 	void takeAction();
 };

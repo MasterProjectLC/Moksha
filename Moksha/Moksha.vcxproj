@@ -143,7 +143,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="conceito.cpp" />
-    <ClCompile Include="dictionary.cpp" />
     <ClCompile Include="fileDict.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="input.cpp" />
@@ -155,6 +154,7 @@
     <ClCompile Include="jogador.cpp" />
     <ClCompile Include="jogo.cpp" />
     <ClCompile Include="mapa.cpp" />
+    <ClCompile Include="npc.cpp" />
     <ClCompile Include="objeto.cpp" />
     <ClCompile Include="overseer.cpp" />
     <ClCompile Include="personagem.cpp" />

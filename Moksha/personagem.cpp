@@ -1,15 +1,11 @@
 #include "personagem.h"
 
-bool Personagem::isAcaoValida(string acao) {
-	for (int i = 0; i < acoesBasicas.size(); i++)
-		if (acoesBasicas[i].compare(acao) == 0)
-			return true;
+void Personagem::setSalaAtual(Sala *sala) { 
+	salaAtual = sala;
+}
 
-	for (int i = 0; i < getInventario().size(); i++)
-		if (getInventario()[i].isAcaoValida(acao))
-			return true;
-
-	return false;
+Sala* Personagem::getSalaAtual() {
+	return salaAtual; 
 }
 
 void Personagem::printText(string str) {
@@ -24,4 +20,16 @@ void Personagem::move(string str) {
 
 void Personagem::move(Sala sala) {
 	move(sala.getName());
+}
+
+void Personagem::mention(string obj, vector<string> receivers) {
+	notifyText = obj;
+	notifyTargets = receivers;
+	notify(mencionar);
+}
+
+void Personagem::say(string str, vector<string> receivers) {
+	notifyText = str;
+	notifyTargets = receivers;
+	notify(falar);
 }

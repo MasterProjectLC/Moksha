@@ -16,6 +16,9 @@ void IObservable::remove(IObserver* obs) {
 void IObservable::notify() {
 	for (it = lista.begin(), itt = callcards.begin(); it != lista.end() && itt != callcards.end(); it++, itt++) {
 		(*it)->update(*itt);
+		if (it == lista.end()) {
+			break;
+		}
 	}
 };
 

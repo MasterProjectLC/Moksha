@@ -6,13 +6,13 @@ Jogo::Jogo() {
 	jogador = Jogador();
 	jogador.setSalaAtual(mapa.getSala("Corredor"));
 	jogador.add(this, OBSERVER_OFFSET);
-	personagens[0] = &jogador;
+	personagens.push_back(&jogador);
 
 	jenna = Jenna(&mapa);
 	jenna.setSalaAtual(mapa.getSala("Banheiro"));
 	jenna.setSalaAlvo(mapa.getSala("Corredor"));
 	jenna.add(this, OBSERVER_OFFSET+1);
-	personagens[1] = &jenna;
+	personagens.push_back(&jenna);
 
 	mapa.carregarSala(jogador.getSalaAtual());
 }
@@ -43,31 +43,53 @@ void Jogo::update(int id) {
 			break;
 		case personagem->mover:
 			personagem->setSalaAtual(moverSala(personagem->getSalaAtual(), personagem->getNotifyText()));
-			if (id == 0) {
-				// Mensagens (TODO: this is dumb, fix it later)
-				Sala* salaOrigem = personagem->getSalaAtual();
-				imprimirTexto("Sala atual: " + salaOrigem->getName() + "\n" + salaOrigem->getTextoInicial() + "\nSalas anexas:");
-				for (int i = 0; i < salaOrigem->getSalaAnexaCount(); i++)
-					imprimirTexto(salaOrigem->getSalaAnexaNome(i));
+			personagem->verSala(getPessoasNaSala(personagem->getSalaAtual()) );
+			if (personagem->getNome() == jogador.getNome()) {
+				advanceTime();
+			}
+			else {
+				if (personagem->getSalaAtual() == jogador.getSalaAtual())
+					imprimirTexto(personagem->getNome() + " entrou nesta sala.");
+			}
+			break;
 
-				imprimirTexto("Objetos na sala: ");
-				vector<Objeto> objetos = salaOrigem->getObjetos();
-				for (int i = 0; i < objetos.size(); i++) {
-					imprimirTexto(objetos[i].getName());
+		case personagem->mencionar:
+			for (int i = 0; i < personagens.size(); i++) {
+				if (personagens[i]->getNome() == personagem->getNotifyTargets()[0] 
+							&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
+					personagens[i]->executarReacao(personagem->getNotifyText(), personagem->getNome());
+					if (id == 0)
+						advanceTime();
+					break;
 				}
 			}
 			break;
+
+		case personagem->falar:
+			for (int i = 0; i < personagens.size(); i++) {
+				if	(personagens[i]->getNome() == personagem->getNotifyTargets()[0]
+							&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
+					personagens[i]->executarReacao(personagem->getNotifyText(), personagem->getNome());
+					if (id == 0)
+						advanceTime();
+					break;
+				}
+			}
+			break;
+
+
 		default:
 			return;
 		}
 		
-		// Player moved. Update everyone
-		if (id == 0) {
-			// TODO: create a separate function for this
-			jenna.takeAction();
-			imprimirTexto("Sala da Jenna: " + jenna.getSalaAtual()->getName());
-		}
 	}
+}
+
+
+void Jogo::advanceTime() {
+	// TODO: create a separate function for this
+	if (jenna.getSalaAtual() != jogador.getSalaAtual())
+		jenna.takeAction();
 }
 
 
@@ -89,6 +111,17 @@ void Jogo::gerarMapa() {
 	}
 
 	mapa = Mapa(salas, this);
+}
+
+
+vector<string> Jogo::getPessoasNaSala(Sala* sala) {
+	vector<string> retorno;
+	for (int i = 0; i < personagens.size(); i++) {
+		if (personagens[i]->getSalaAtual() == sala)
+			retorno.push_back(personagens[i]->getNome());
+	}
+
+	return retorno;
 }
 
 

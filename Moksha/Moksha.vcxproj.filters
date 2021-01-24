@@ -63,10 +63,10 @@
     <ClCompile Include="mapa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dictionary.cpp">
+    <ClCompile Include="jogador.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="jogador.cpp">
+    <ClCompile Include="npc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

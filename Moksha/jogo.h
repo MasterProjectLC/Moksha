@@ -17,7 +17,7 @@ private:
 	//vector<Objeto> objetos;
 	Jogador jogador;
 	Jenna jenna;
-	Personagem* personagens[13];
+	vector<Personagem*> personagens;
 
 	string erroSemObjeto;
 	string erroSemAcao;
@@ -28,6 +28,7 @@ private:
 	void gerarMapa();
 	Sala* moverSala(Sala *salaOrigem, string salaDestino);
 	Mapa mapa;
+	vector<string> getPessoasNaSala(Sala* sala);
 
 	class No;
 
@@ -35,6 +36,7 @@ public:
 	Jogo();
 
 	void update(int id) override;
+	void advanceTime();
 
 	enum { obter, imprimir };
 
