@@ -38,19 +38,7 @@ void Mapa::carregarSala(Sala *sala) {
 		for (int j = 0; j < objetoNomes.size(); j++) {
 			// Encontrado - Gerar objeto
 			if (objetoNomes[j].compare(fileObjeto.getValue("nome")) == 0) {
-				vector<vector<string>> objetoActions;
-				vector<vector<string>> objetoResponses;
-				vector<vector<string>> objetoCombos = fileObjeto.getKeys();
-
-				// Cada combo acao-resposta possivel
-				for (int i = 0; i < objetoCombos.size(); i++) {
-					if (objetoCombos[i][0] == "nome" || objetoCombos[i][0] == "acoes")
-						continue;
-					objetoActions.push_back(objetoCombos[i]);
-					objetoResponses.push_back(fileObjeto.getValues(objetoCombos[i][0]));
-				}
-
-				Objeto newObjeto = Objeto(fileObjeto.getValue("nome"), fileObjeto.getValues("acoes"), objetoActions, objetoResponses);
+				Objeto newObjeto = Objeto(fileObjeto);
 				newObjeto.add(observer, j);
 				sala->addObjeto(newObjeto);
 				break;

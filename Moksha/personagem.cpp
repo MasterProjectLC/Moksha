@@ -28,8 +28,8 @@ void Personagem::mention(string obj, vector<string> receivers) {
 	notify(mencionar);
 }
 
-void Personagem::say(string str, vector<string> receivers) {
-	notifyText = str;
+void Personagem::say(string topico, string str, vector<string> receivers) {
+	notifyText = topico + "|" + str;
 	notifyTargets = receivers;
 	notify(falar);
 }

@@ -31,11 +31,12 @@ public:
 	void move(string str);
 	void move(Sala sala);
 	void mention(string obj, vector<string> receivers);
-	void say(string str, vector<string> receivers);
+	void say(string topico, string str, vector<string> receivers);
 
 	string getNotifyText() { return notifyText; }
 	vector<string> getNotifyTargets() { return notifyTargets; }
 
-	virtual void executarReacao(string topico, string remetente) {};
+	virtual void executarReacao(string topico, string frase, string remetente) {};
 	virtual void verSala(vector<string> pessoasNaSala) {};
+	virtual void verPessoaEntrando(string nomePessoa) {};
 };

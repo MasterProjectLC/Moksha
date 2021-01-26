@@ -16,7 +16,9 @@ void Jogador::receberArgs(vector<string> args) {
 
 	if (args.size() == 3) {
 		// Mencionar
-		if (args.at(0) == "mencionar") {
+		if (args.at(0) == "mencionar" && (!mindTheory.count(args.at(2)) || 
+						mindTheory.at(args.at(2)).find(args.at(1)) == mindTheory.at(args.at(2)).end())
+		   ) {
 			mention(args.at(1), vector<string>(1, args.at(2)));
 			return;
 		}
@@ -54,8 +56,8 @@ void Jogador::receberArgs(vector<string> args) {
 }
 
 
-void Jogador::executarReacao(string topico, string remetente) {
-	printText(remetente + ": " + topico);
+void Jogador::executarReacao(string topico, string frase, string remetente) {
+	printText(remetente + ": " + frase);
 	addToMind(topico, remetente);
 }
 
@@ -94,14 +96,20 @@ bool Jogador::isAcaoValida(string acao) {
 }
 
 
+void Jogador::verPessoaEntrando(string nomePessoa) {
+	printText(nomePessoa + " entrou na sala.");
+}
+
+
 void Jogador::addToMind(string topic, string character) {
 	// Add to stuff I know they know
-	/*
-	if (mindTheory.hasKey(character)) {
-		mindTheory.getValue(character).append(topic);
+	if (mindTheory.count(character)) {
+		for (int i = 0; i < mindTheory.at(character).size(); i++)
+			mindTheory.at(character).insert(topic);
 	}
 	else {
-		mindTheory.addPair(vector<string>(1, character), vector<string>(1, topic));
+		string s[] = { topic };
+		mindTheory.insert(pair<string, set<string>>(character, set<string>()));
+		mindTheory[character].insert(topic);
 	}
-	*/
 }

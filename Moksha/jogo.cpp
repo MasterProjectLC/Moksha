@@ -57,7 +57,7 @@ void Jogo::update(int id) {
 			for (int i = 0; i < personagens.size(); i++) {
 				if (personagens[i]->getNome() == personagem->getNotifyTargets()[0] 
 							&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
-					personagens[i]->executarReacao(personagem->getNotifyText(), personagem->getNome());
+					personagens[i]->executarReacao(personagem->getNotifyText(), "", personagem->getNome());
 					if (id == 0)
 						advanceTime();
 					break;
@@ -69,7 +69,8 @@ void Jogo::update(int id) {
 			for (int i = 0; i < personagens.size(); i++) {
 				if	(personagens[i]->getNome() == personagem->getNotifyTargets()[0]
 							&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
-					personagens[i]->executarReacao(personagem->getNotifyText(), personagem->getNome());
+					vector<string> args = splitString(personagem->getNotifyText(), '|');
+					personagens[i]->executarReacao(args[0], args[1], personagem->getNome());
 					if (id == 0)
 						advanceTime();
 					break;

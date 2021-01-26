@@ -1,53 +1,42 @@
 #pragma once
+#include <map>
+#include <set>
 #include <vector>
 #include <string>
 #include "stringLib.h"
+#include <stdexcept>
 
 using namespace std;
 
 template <typename T>
 class Dictionary {
 protected:
-	vector<vector<string>> keys;
-	vector<T> values;
-public:
-	Dictionary() {};
+	map<set<string>, T> dictionary;
 
-	vector<vector<string>> getKeys() { return keys; }
+public:
+	void addPair(set<string> key, T value) {
+		dictionary.insert(pair<set<string>, T>(key, value));
+	}
+
+	virtual string getValue(string key) {}
+
 
 	T getValues(string key) {
-		for (int i = 0; i < keys.size(); i++)
-			for (int j = 0; j < keys[i].size(); j++)
-				if (keys[i][j].compare(key) == 0 && i < values.size())
-					return values[i];
+		for (typename map<set<string>, T>::iterator it = dictionary.begin(); it != dictionary.end(); it++)
+			if (it->first.count(key))
+				return it->second;
 
-		vector<string> a;
-		return a;
+		throw invalid_argument("No value with that key");
 	}
-
-
-	void addPair(vector<string> key, T value) {
-		keys.push_back(key);
-		values.push_back(value);
-	}
-
-
-	void setValue(string key, T value) {
-		for (int i = 0; i < keys.size(); i++)
-			for (int j = 0; j < keys[i].size(); j++)
-				if (keys[i][j].compare(key) == 0) {
-					values[i] = value;
-					break;
-				}
-	}
-
 
 	bool hasKey(string key) {
-		for (int i = 0; i < keys.size(); i++)
-			for (int j = 0; j < keys[i].size(); j++)
-				if (keys[i][j].compare(key) == 0)
-					return true;
+		for (typename map<set<string>, T>::iterator it = dictionary.begin(); it != dictionary.end(); it++)
+			if (it->first.count(key))
+				return true;
 		return false;
 	}
+};
 
+string Dictionary<vector<string>>::getValue(string key) {
+	return *getValues(key).begin();
 };

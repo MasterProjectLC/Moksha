@@ -16,6 +16,22 @@ vector<string> splitString(string str, char delim) {
 	return retorno;
 }
 
+set<string> splitStringSet(string str, char delim) {
+	set<string> retorno;
+
+	size_t current, previous = 0;
+	current = str.find(delim);
+	while (current != string::npos) {
+		retorno.insert(str.substr(previous, current - previous));
+		previous = current + 1;
+		current = str.find(delim, previous);
+
+	}
+	retorno.insert(str.substr(previous, current - previous));
+
+	return retorno;
+}
+
 string concatStrings(vector<string> args, int inicio) {
 	string r = args.at(inicio);
 	for (int i = inicio + 1; i < args.size(); i++) {

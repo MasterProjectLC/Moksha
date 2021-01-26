@@ -2,6 +2,7 @@
 #include "personagem.h"
 #include "mapa.h"
 #include "fileManager.h"
+#include "dictionary.h"
 
 using namespace std;
 
@@ -11,8 +12,7 @@ protected:
 	queue<Sala*> caminho;
 	Mapa* mapa;
 
-	vector<string> topicos;
-	vector<vector<string>> reacoes;
+	Dictionary<vector<string>> dict;
 
 	void descobrirCaminho() {
 		caminho = mapa->optimalPath(salaAtual, salaAlvo);
@@ -22,7 +22,7 @@ public:
 	NPC() {};
 	NPC(Mapa* m, string nome);
 
-	void executarReacao(string topico, string remetente);
+	void executarReacao(string topico, string frase, string remetente);
 
 	void setSalaAlvo(Sala* nova) { salaAlvo = nova; descobrirCaminho(); }
 };
