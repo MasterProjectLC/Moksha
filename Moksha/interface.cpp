@@ -403,8 +403,9 @@ void Interface::setMenu(boolean menu) {
 
 void Interface::setItens(vector<string> itens) { 
 	for (int i = 0; i < itens.size(); i++) {
-		if (i >= this->itens[0].size())
+		if (i >= this->itens[0].size()) {
 			this->itens[0].push_back(itens[i]);
+		}
 	}
 
 	interfaceInventario(invPointer, titulosPointer, false);

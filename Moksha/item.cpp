@@ -1,19 +1,18 @@
 #include "item.h"
 
 Item::Item(string nome) : Conceito(nome) {
-	this->acoes = vector<string>();
+	this->acoes = set<string>();
 }
 
 
-Item::Item(string nome, vector<string> acoes) : Conceito(nome) {
+Item::Item(string nome, set<string> acoes) : Conceito(nome) {
+	this->acoes = acoes;
+}
+
+Item::Item(string nome, string descricao, set<string> acoes) : Conceito(nome, descricao) {
 	this->acoes = acoes;
 }
 
 bool Item::isAcaoValida(string acao) {
-	for (int i = 0; i < acoes.size(); i++) {
-		if (acoes[i].compare(acao) == 0) {
-			return true;
-		}
-	}
-	return false;
+	return acoes.count(acao) > 0;
 }

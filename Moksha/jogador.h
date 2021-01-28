@@ -12,18 +12,29 @@ private:
 	string erroSemObjeto;
 	string erroSemAcao;
 	string erroSemSala;
+	string erroSemItem;
+	string erroMente;
 	vector<string> acoesBasicas{ "obter", "mover", "examinar", "ver", "tocar", "mencionar" };
 
 	map<string, set<string>> mindTheory;
+
+	void mencionar(string topic, string person);
+	void mover(string location);
+	void interagir(string acao, string objeto);
+
+	void addToMind(string topic, string character);
+	bool isAcaoValida(string acao);
 
 public:
 	Jogador();
 	void receberArgs(vector<string> args);
 
-	bool isAcaoValida(string acao);
 	void verPessoaEntrando(string nomePessoa);
-	void addToMind(string topic, string character);
-
 	void executarReacao(string topico, string frase, string remetente);
-	void verSala(vector<string> pessoasNaSala);
+	void verSala(vector<Personagem*> pessoasNaSala);
+
+	void serAtacado(Personagem* atacante) {
+		printText(atacante->getNome() + " te atacou!");
+		Personagem::serAtacado(atacante);
+	};
 };

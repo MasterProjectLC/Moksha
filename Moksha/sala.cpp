@@ -12,12 +12,15 @@ void Sala::removeObjeto(Objeto objeto) {
 	for (int i = 0; i < objetos.size(); i++) {
 		if (found) {
 			objetos[i].setNotifyID(objetos[i].getNotifyID()-1);
+			objetos[i-1] = objetos[i];
+
 		} else if (objetos[i].getName().compare(objeto.getName()) == 0) {
-			objetos.erase(objetos.begin()+i);
 			found = true;
-			i--;
 		}
 	}
+
+	if (found)
+		objetos.resize(objetos.size()-1);
 }
 
 bool Sala::isSalaAnexa(string salaAnexaNome) {
@@ -42,10 +45,10 @@ bool Sala::possuiObjeto(string nome) {
 }
 
 #include <stdexcept>
-Objeto Sala::getObjeto(string nome) {
+Objeto* Sala::getObjeto(string nome) {
 	for (int i = 0; i < objetos.size(); i++) {
 		if (nome.compare(objetos[i].getName()) == 0)
-			return objetos[i];
+			return &objetos[i];
 	}
 
 	throw invalid_argument("There's no object with that name :(");

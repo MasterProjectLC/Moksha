@@ -1,0 +1,6 @@
+nome:
+Faca
+acoes:
+atacar
+descricao:
+Uma faca afiada.

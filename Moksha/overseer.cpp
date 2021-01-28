@@ -47,8 +47,8 @@ public:
 		else if (jogo.getNotifyID() == jogo.obter) {
 			vector<Item> inventario = jogo.getInventario();
 			vector<string> paraEnviar;
-			for (vector<Item>::iterator it = inventario.begin(); it != inventario.end(); it++)
-				paraEnviar.push_back((*it).getNome());
+			for (int i = 0; i < inventario.size(); i++)
+				paraEnviar.push_back(inventario[i].getNome());
 
 			interfacer.setItens(paraEnviar);
 

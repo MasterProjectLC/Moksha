@@ -34,8 +34,8 @@ public:
 	int getSalaAnexaCount() { return salasAnexasNomes.size(); }
 
 	bool possuiObjeto(string nome);
-	Objeto getObjeto(string nome);
-	Objeto getObjeto(int index) { return objetos[index]; }
+	Objeto* getObjeto(string nome);
+	Objeto* getObjeto(int index) { return &objetos[index]; }
 	vector<Objeto> getObjetos() { return objetos; }
 	vector<string> getObjetoNomes();
 

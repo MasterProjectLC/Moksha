@@ -19,10 +19,8 @@ protected:
 	};
 
 public:
-	NPC() {};
-	NPC(Mapa* m, string nome);
+	explicit NPC(Mapa* m, string nome, int genero, int forca, int destreza);
 
 	void executarReacao(string topico, string frase, string remetente);
-
 	void setSalaAlvo(Sala* nova) { salaAlvo = nova; descobrirCaminho(); }
 };

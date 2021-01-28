@@ -21,69 +21,86 @@ Jogo::Jogo() {
 void Jogo::update(int id) {
 	// Objeto
 	if (id < OBSERVER_OFFSET) {
-		Objeto objeto = getSalaAtual()->getObjeto(id);
-
-		// Obter
-		if (objeto.getNotifyID() == objeto.obter) {
-			addItem(objeto.getName());
-
-			Sala* sala = jogador.getSalaAtual();
-			sala->removeObjeto(objeto);
-		}
+		objetoOrdem(getSalaAtual()->getObjeto(id));
 	}
 
 	// Personagem
 	else {
-		id -= OBSERVER_OFFSET;
-		Personagem* personagem = personagens[id];
-
-		switch (personagem->getNotifyID()) {
-		case personagem->imprimir:
-			imprimirTexto(personagem->getNotifyText());
-			break;
-		case personagem->mover:
-			personagem->setSalaAtual(moverSala(personagem->getSalaAtual(), personagem->getNotifyText()));
-			personagem->verSala(getPessoasNaSala(personagem->getSalaAtual()) );
-			if (personagem->getNome() == jogador.getNome()) {
-				advanceTime();
-			}
-			else {
-				if (personagem->getSalaAtual() == jogador.getSalaAtual())
-					imprimirTexto(personagem->getNome() + " entrou nesta sala.");
-			}
-			break;
-
-		case personagem->mencionar:
-			for (int i = 0; i < personagens.size(); i++) {
-				if (personagens[i]->getNome() == personagem->getNotifyTargets()[0] 
-							&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
-					personagens[i]->executarReacao(personagem->getNotifyText(), "", personagem->getNome());
-					if (id == 0)
-						advanceTime();
-					break;
-				}
-			}
-			break;
-
-		case personagem->falar:
-			for (int i = 0; i < personagens.size(); i++) {
-				if	(personagens[i]->getNome() == personagem->getNotifyTargets()[0]
-							&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
-					vector<string> args = splitString(personagem->getNotifyText(), '|');
-					personagens[i]->executarReacao(args[0], args[1], personagem->getNome());
-					if (id == 0)
-						advanceTime();
-					break;
-				}
-			}
-			break;
-
-
-		default:
-			return;
-		}
-		
+		personagemOrdem(personagens[id - OBSERVER_OFFSET]);
 	}
+}
+
+void Jogo::objetoOrdem(Objeto* objeto) {
+	// Obter
+	switch(objeto->getNotifyID()) {
+	case objeto->obter:
+		vector<string> acoesVec = FileManager::readFromFile("files/itens/" + objeto->getName() + ".txt").getValues("acoes");
+		set<string> acoesSet = set<string>();
+		for (int i = 0; i < acoesVec.size(); i++) {
+			acoesSet.insert(acoesVec[i]);
+		}
+
+		findCharacter(objeto->getUser())->addItem(objeto->getName(), acoesSet);
+		notify(obter);
+
+		Sala* sala = jogador.getSalaAtual();
+		sala->removeObjeto(*objeto);
+		break;
+	}
+}
+
+void Jogo::personagemOrdem(Personagem* personagem) {
+	int id = personagem->getNotifyID();
+
+	switch (id) {
+	case personagem->imprimir:
+		imprimirTexto(personagem->getNotifyText());
+		break;
+
+	case personagem->mover:
+		personagem->setSalaAtual(moverSala(personagem->getSalaAtual(), personagem->getNotifyText()));
+		personagem->verSala(getPessoasNaSala(personagem->getSalaAtual()));
+		
+		// Pessoas dentro da sala veem pessoa entrando
+		for (int i = 0; i < personagens.size(); i++) {
+			if (personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
+				personagens[i]->verPessoaEntrando(personagem);
+			}
+		}
+
+		break;
+
+	case personagem->mencionar:
+		for (int i = 0; i < personagens.size(); i++) {
+			if (personagens[i]->getNome() == personagem->getNotifyTargets()[0]
+					&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
+				personagens[i]->executarReacao(personagem->getNotifyText(), "", personagem->getNome());
+				break;
+			}
+		}
+		break;
+
+	case personagem->falar:
+		for (int i = 0; i < personagens.size(); i++) {
+			if (personagens[i]->getNome() == personagem->getNotifyTargets()[0]
+					&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
+				vector<string> args = splitString(personagem->getNotifyText(), '|');
+				personagens[i]->executarReacao(args[0], args[1], personagem->getNome());
+				break;
+			}
+		}
+		break;
+
+	case personagem->atacar:
+		Personagem* vitima = findCharacter(personagem->getNotifyText());
+		if (vitima->getSalaAtual() == personagem->getSalaAtual())
+			vitima->serAtacado(personagem);
+		break;
+	}
+	
+	if (id != personagem->imprimir && personagem == &jogador)
+		advanceTime();
+
 }
 
 
@@ -115,11 +132,11 @@ void Jogo::gerarMapa() {
 }
 
 
-vector<string> Jogo::getPessoasNaSala(Sala* sala) {
-	vector<string> retorno;
+vector<Personagem*> Jogo::getPessoasNaSala(Sala* sala) {
+	vector<Personagem*> retorno;
 	for (int i = 0; i < personagens.size(); i++) {
 		if (personagens[i]->getSalaAtual() == sala)
-			retorno.push_back(personagens[i]->getNome());
+			retorno.push_back(personagens[i]);
 	}
 
 	return retorno;
@@ -127,17 +144,10 @@ vector<string> Jogo::getPessoasNaSala(Sala* sala) {
 
 
 // ACTIONS ----------------------------------
-
-void Jogo::addItem(string item) {
-	jogador.addItem(item);
-	notify(obter);
-}
-
 Sala* Jogo::moverSala(Sala* salaOrigem, string salaDestino) {
 	// Movimento
 	salaOrigem = mapa.getSala(salaDestino);
 	mapa.carregarSala(salaOrigem);
-
 	return salaOrigem;
 }
 
@@ -150,4 +160,16 @@ void Jogo::imprimirTexto(string texto) {
 
 vector<Item> Jogo::getInventario() {
 	return jogador.getInventario();
+}
+
+
+// HELPER FUNCTIONS ---------------------------------------------
+#include <stdexcept>
+Personagem* Jogo::findCharacter(string nome) {
+	for (int i = 0; i < personagens.size(); i++) {
+		if (personagens[i]->getNome() == nome)
+			return personagens[i];
+	}
+
+	throw invalid_argument("There's no character with that name :(");
 }

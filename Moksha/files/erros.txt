@@ -4,3 +4,7 @@ sem acao:
 Nao posso tomar esta acao com esse objeto.
 sem sala:
 Nao posso alcancar essa sala daqui.
+sem item:
+Nao sei o que e isso...
+teoria da mente:
+Acho que eu ja falei sobre isso.

@@ -9,6 +9,7 @@ class Objeto : public IObservable {
 private:
 	Dictionary<vector<string>> dict;
 	string name;
+	string user;
 	vector<string> validActions;
 
 public:
@@ -18,9 +19,8 @@ public:
 
 	// Getters
 	string getName() { return name; }
+	string getUser() { return user; }
 
-	//vector<vector<string>> getActions() { return dict.; };
 	vector<string> getResponses(string action);
-
-	void takeAction(string prompt);
+	void takeAction(string prompt, string user);
 };

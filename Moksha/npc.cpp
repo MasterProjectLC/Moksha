@@ -1,6 +1,6 @@
 #include "npc.h"
 
-NPC::NPC(Mapa* m, string name) { 
+NPC::NPC(Mapa* m, string name, int genero, int forca, int destreza) : Personagem(genero, forca, destreza) {
 	this->nome = name;
 	this->mapa = m;
 
@@ -10,5 +10,8 @@ NPC::NPC(Mapa* m, string name) {
 
 
 void NPC::executarReacao(string topico, string frase, string remetente) {
+	if (isInconsciente())
+		return;
+
 	say(topico, dict.getValue(topico), vector<string>(1, remetente));
 }

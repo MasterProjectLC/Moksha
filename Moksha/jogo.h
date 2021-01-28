@@ -23,20 +23,22 @@ private:
 	string erroSemAcao;
 	string erroSemSala;
 
-	void addItem(string item);
-
 	void gerarMapa();
 	Sala* moverSala(Sala *salaOrigem, string salaDestino);
 	Mapa mapa;
-	vector<string> getPessoasNaSala(Sala* sala);
+	vector<Personagem*> getPessoasNaSala(Sala* sala);
 
 	class No;
 
-public:
-	Jogo();
+	void objetoOrdem(Objeto* objeto);
+	void personagemOrdem(Personagem* personagem);
+	Personagem* findCharacter(string nome);
 
 	void update(int id) override;
 	void advanceTime();
+
+public:
+	Jogo();
 
 	enum { obter, imprimir };
 
