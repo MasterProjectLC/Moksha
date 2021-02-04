@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <JogoData FormatVersion="1">
-	<Jogo Time="7" Loop="1">
+	<Jogo Time="9" Loop="1">
 		<Personagens>
-			<Colt Sala="Corredor">
+			<Colt Sala="Cozinha">
 				<Inventario />
 			</Colt>
-			<Jenna Sala="Salao de Jantar" Alvo="Corredor">
+			<Jenna Sala="Corredor" Alvo="Corredor">
 				<Inventario />
 			</Jenna>
 		</Personagens>
