@@ -4,6 +4,7 @@
 #include <queue>
 #include <string>
 #include <stack>
+#include "fileManager.h"
 #include "sala.h"
 #include "dictionary.h"
 #include "IObserver.h"

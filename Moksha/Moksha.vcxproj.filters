@@ -69,6 +69,9 @@
     <ClCompile Include="npc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="libs\pugixml\src\pugixml.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json.hpp">
@@ -133,6 +136,12 @@
     </ClInclude>
     <ClInclude Include="jogador.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="saveModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\pugixml\src\pugixml.hpp">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

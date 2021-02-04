@@ -1,11 +1,21 @@
 #include "sala.h"
 
-Sala::Sala(string name, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes) {
-	this->name = name;
+Sala::Sala(string nome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes) {
+	this->nome = nome;
+	this->codinome = nome;
 	this->textoInicial = textoInicial;
 	this->salasAnexasNomes = salasAnexasNomes;
 	this->objetoNomes = objetoNomes;
 }
+
+Sala::Sala(string nome, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes) {
+	this->nome = nome;
+	this->codinome = codinome;
+	this->textoInicial = textoInicial;
+	this->salasAnexasNomes = salasAnexasNomes;
+	this->objetoNomes = objetoNomes;
+}
+
 
 void Sala::removeObjeto(Objeto objeto) {
 	bool found = false;

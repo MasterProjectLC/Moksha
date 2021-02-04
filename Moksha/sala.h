@@ -8,7 +8,8 @@ using namespace std;
 class Sala {
 	// Atributos
 private:
-	string name;
+	string nome;
+	string codinome;
 	string textoInicial;
 	vector<string> salasAnexasNomes;
 
@@ -19,14 +20,18 @@ public:
 	Sala() {};
 
 	// Setup
-	Sala(string name, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
+	Sala(string nome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
+	Sala(string nome, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
+	void setObjetoNomes(vector<string> objetoNomes) { this->objetoNomes = objetoNomes; }
+
 	void setupObjetos(vector<Objeto> objetos) { this->objetos = objetos; }
 	void addObjeto(Objeto objeto) { objetos.push_back(objeto); }
 	void removeObjeto(Objeto objeto);
-	void limparObjetos() { objetos.clear(); }
+	void limparObjetos() { objetos.clear(); objetoNomes.clear(); }
 
 	// Getters
-	string getName() { return name; }
+	string getName() { return nome; }
+	string getCodiname() { return codinome; }
 	string getTextoInicial() { return textoInicial; }
 
 	bool isSalaAnexa(string salaAnexaNome);

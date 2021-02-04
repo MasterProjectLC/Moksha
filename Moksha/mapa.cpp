@@ -1,7 +1,4 @@
 #include "mapa.h"
-#include <windows.h>
-#include <sstream>
-#include "fileManager.h"
 
 
 Mapa::Mapa(vector<Sala*> salasRecebidas, IObserver *observer) {
@@ -14,7 +11,7 @@ Mapa::Mapa(vector<Sala*> salasRecebidas, IObserver *observer) {
 	}
 
 	// Popular nós com anexasIndex
-	for (int i = 0; i < salas.size(); i++)
+	for (int i = 0; i < salas.size(); i++) {
 		// Colocar o index de cada sala anexa no Node
 		for (int j = 0; j < salas[i].getElemento()->getSalaAnexaCount(); j++)
 			for (int k = 0; k < salas.size(); k++)
@@ -22,12 +19,13 @@ Mapa::Mapa(vector<Sala*> salasRecebidas, IObserver *observer) {
 					salas[i].addAnexa(k);
 					break;
 				}
+
+		carregarSala(salasRecebidas[i]);
+	}
 };
 
 
 void Mapa::carregarSala(Sala *sala) {
-	sala->limparObjetos();
-
 	vector<string> objetoLista = FileManager::getFileList("files/objetos");
 	vector<string> objetoNomes = sala->getObjetoNomes();
 
@@ -144,5 +142,5 @@ Sala* Mapa::getSala(string name) {
 		if (salas[i].getElemento()->getName() == name)
 			return getSala(i);
 
-	throw invalid_argument("There's no object with that name :(");
+	throw invalid_argument("There's no room with that name :(");
 };

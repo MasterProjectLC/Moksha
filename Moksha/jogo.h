@@ -5,12 +5,18 @@
 #include "IObserver.h"
 #include "mapa.h"
 #include "fileManager.h"
+#include "libs/pugixml/src/pugixml.hpp"
+#include "saveModule.h"
 
 using namespace std;
+using namespace pugi;
 
 class Jogo : public IObservable, public IObserver {
 private:
 	const int OBSERVER_OFFSET = 500;
+
+	int time;
+	int loop;
 
 	string texto;
 
@@ -18,12 +24,12 @@ private:
 	Jogador jogador;
 	Jenna jenna;
 	vector<Personagem*> personagens;
+	vector<NPC*> npcs;
 
 	string erroSemObjeto;
 	string erroSemAcao;
 	string erroSemSala;
 
-	void gerarMapa();
 	Sala* moverSala(Sala *salaOrigem, string salaDestino);
 	Mapa mapa;
 	vector<Personagem*> getPessoasNaSala(Sala* sala);
@@ -36,6 +42,10 @@ private:
 
 	void update(int id) override;
 	void advanceTime();
+
+	void initializeGame();
+	bool loadGame();
+	void saveGame();
 
 public:
 	Jogo();
