@@ -3,21 +3,21 @@ Volte repetidamente no tempo e tente salvar todos a bordo do dirigível steampun
 
 ## Créditos
 ### Programação
-*Dan Isamu (MasterProject)
+* Dan Isamu (MasterProject)
 
 #### Ferramentas
-*Arseny Kapoulkine (zeux) - [pugixml](https://github.com/zeux/pugixml)
-*Abraham 'Bram' Stolk - [GPGOAP](https://github.com/stolk/GPGOAP)
+* Arseny Kapoulkine (zeux) - [pugixml](https://github.com/zeux/pugixml)
+* Abraham 'Bram' Stolk - [GPGOAP](https://github.com/stolk/GPGOAP)
 
 ### Narrativa
-*Ágata Drigo (Akatze)
-*Dan Isamu (MasterProject)
-*Leonardo Del Lama (Ruther)
-*Maurício Cândido (mew)
+* Ágata Drigo (Akatze)
+* Dan Isamu (MasterProject)
+* Leonardo Del Lama (Ruther)
+* Maurício Cândido (mew)
 
 ### Agradecimentos
-*André Mateus Bariani Trava
-*Anderson Pinheiro Garrote
-*Giovanni Marçon Rossi
-*Tommy Thompson (AI and Games)
-*Mark Brown (Game Maker's Toolkit)
+* André Mateus Bariani Trava
+* Anderson Pinheiro Garrote
+* Giovanni Marçon Rossi
+* Tommy Thompson (AI and Games)
+* Mark Brown (Game Maker's Toolkit)
