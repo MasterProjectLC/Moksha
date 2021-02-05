@@ -19,7 +19,7 @@ void Personagem::move(string str) {
 }
 
 void Personagem::move(Sala sala) {
-	move(sala.getName());
+	move(sala.getNome());
 }
 
 void Personagem::mention(string obj, vector<string> receivers) {

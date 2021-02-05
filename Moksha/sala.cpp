@@ -23,14 +23,17 @@ void Sala::removeObjeto(Objeto objeto) {
 		if (found) {
 			objetos[i].setNotifyID(objetos[i].getNotifyID()-1);
 			objetos[i-1] = objetos[i];
+			objetoNomes[i - 1] = objetoNomes[i];
 
 		} else if (objetos[i].getName().compare(objeto.getName()) == 0) {
 			found = true;
 		}
 	}
 
-	if (found)
-		objetos.resize(objetos.size()-1);
+	if (found) {
+		objetos.resize(objetos.size() - 1);
+		objetoNomes.resize(objetoNomes.size() - 1);
+	}
 }
 
 bool Sala::isSalaAnexa(string salaAnexaNome) {

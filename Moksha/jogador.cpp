@@ -55,6 +55,7 @@ void Jogador::interagir(string acao, string objeto) {
 		printText(erroSemObjeto);
 }
 
+
 void Jogador::receberArgs(vector<string> args) {
 	if (!isAcaoValida(args.at(0)))
 		return;
@@ -96,7 +97,7 @@ void Jogador::executarReacao(string topico, string frase, string remetente) {
 
 void Jogador::verSala(vector<Personagem*> pessoasNaSala) {
 	// Salas anexas
-	printText("Sala atual: " + getSalaAtual()->getName() + "\n" + getSalaAtual()->getTextoInicial() + "\nSalas anexas:");
+	printText("Sala atual: " + getSalaAtual()->getNome() + "\n" + getSalaAtual()->getTextoInicial() + "\nSalas anexas:");
 	for (int i = 0; i < getSalaAtual()->getSalaAnexaCount(); i++)
 		printText(getSalaAtual()->getSalaAnexaNome(i));
 

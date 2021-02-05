@@ -30,7 +30,7 @@ public:
 	void limparObjetos() { objetos.clear(); objetoNomes.clear(); }
 
 	// Getters
-	string getName() { return nome; }
+	string getNome() { return nome; }
 	string getCodiname() { return codinome; }
 	string getTextoInicial() { return textoInicial; }
 

@@ -47,11 +47,12 @@ private:
 	bool loadGame();
 	void saveGame();
 
+	void obterObjeto(string nome, Personagem* recebedor);
+
 public:
 	Jogo();
 
-	enum { obter, imprimir };
-
+	void setup();
 	Sala* getSalaAtual() { return jogador.getSalaAtual(); }
 	void receberArgs(vector<string> args);
 
@@ -59,4 +60,6 @@ public:
 
 	void imprimirTexto(string texto);
 	string getTexto() { return texto; }
+
+	enum { obter, imprimir };
 };

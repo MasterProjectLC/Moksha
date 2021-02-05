@@ -5,12 +5,14 @@
 
 class Overseer : public IObserver {
 private:
-	Jogo jogo = Jogo();
 	Interface interfacer = Interface(140, 40, 60, 30);
+	Jogo jogo = Jogo();
 public:
 	Overseer() {
 		interfacer.add(this, 0);
 		jogo.add(this, 1);
+
+		jogo.setup();
 	}
 
 

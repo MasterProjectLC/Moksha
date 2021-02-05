@@ -44,6 +44,15 @@ private:
 
 		void addAnexa(int novo) { anexasIndex.push_back(novo); };
 		vector<int> getAnexas() { return anexasIndex; };
+
+		bool isAnexa(int a) { 
+			for (int i = 0; i < anexasIndex.size(); i++) { 
+				if (anexasIndex[i] == a) {
+					return true;
+				}
+			}
+			return false;
+		}
 	};
 
 	// Atributos
@@ -63,4 +72,6 @@ public:
 	bool existeSala(string name);
 	Sala* getSala(int index);
 	Sala* getSala(string name);
+
+	void limparVisitado();
 };

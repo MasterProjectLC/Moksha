@@ -3,7 +3,7 @@
 Jenna::Jenna(Mapa* m) : NPC{m, "Jenna", F, 1, 1} {}
 
 void Jenna::takeAction() {
-	if (salaAtual->getName() != salaAlvo->getName() && !caminho.empty()) {
+	if (salaAtual->getNome() != salaAlvo->getNome() && !caminho.empty()) {
 		move(*caminho.front());
 		caminho.pop();
 	}
