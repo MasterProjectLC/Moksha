@@ -1,5 +1,5 @@
 #pragma once
-#include "libs/pugixml/src/pugixml.hpp"
+#include "../libs/pugixml/src/pugixml.hpp"
 #include <stdexcept>
 
 using namespace std;

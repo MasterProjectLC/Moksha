@@ -1,6 +1,7 @@
 #include "sala.h"
 
-Sala::Sala(string nome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes) {
+Sala::Sala(int index, string nome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes) {
+	this->index = index;
 	this->nome = nome;
 	this->codinome = nome;
 	this->textoInicial = textoInicial;
@@ -8,7 +9,8 @@ Sala::Sala(string nome, string textoInicial, vector<string> salasAnexasNomes, ve
 	this->objetoNomes = objetoNomes;
 }
 
-Sala::Sala(string nome, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes) {
+Sala::Sala(int index, string nome, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes) {
+	this->index = index;
 	this->nome = nome;
 	this->codinome = codinome;
 	this->textoInicial = textoInicial;

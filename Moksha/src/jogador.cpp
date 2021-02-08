@@ -84,6 +84,10 @@ void Jogador::receberArgs(vector<string> args) {
 			interagir(args.at(0), secondArg);
 		}
 	}
+
+	if (args.at(0) == "descansar") {
+		rest();
+	}
 }
 
 
@@ -104,8 +108,12 @@ void Jogador::verSala(vector<Personagem*> pessoasNaSala) {
 	// Objetos na sala
 	printText("Objetos na sala: ");
 	vector<Objeto> objetos = getSalaAtual()->getObjetos();
-	for (int i = 0; i < objetos.size(); i++) {
-		printText(objetos[i].getName());
+	if (objetos.size() == 0)
+		printText("Nao ha nenhum objeto aqui.");
+	else {
+		for (int i = 0; i < objetos.size(); i++) {
+			printText(objetos[i].getName());
+		}
 	}
 
 	// Pessoas na sala
@@ -119,8 +127,11 @@ void Jogador::verSala(vector<Personagem*> pessoasNaSala) {
 }
 
 
-void Jogador::verPessoaEntrando(string nomePessoa) {
-	printText(nomePessoa + " entrou na sala.");
+void Jogador::verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) {
+	if (entrando)
+		printText(pessoa->getNome() + " entrou na sala, vindo da/do " + outraSala);
+	else
+		printText(pessoa->getNome() + " saiu da sala, indo para a/o " + outraSala);
 }
 
 // HELPER FUNCTIONS ----------------------------------------------------

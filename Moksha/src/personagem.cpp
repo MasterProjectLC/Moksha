@@ -1,13 +1,5 @@
 #include "personagem.h"
 
-void Personagem::setSalaAtual(Sala *sala) { 
-	salaAtual = sala;
-}
-
-Sala* Personagem::getSalaAtual() {
-	return salaAtual; 
-}
-
 void Personagem::printText(string str) {
 	notifyText = str;
 	notify(imprimir);
@@ -42,4 +34,8 @@ void Personagem::say(string topico, string str, vector<string> receivers) {
 	notifyText = topico + "|" + str;
 	notifyTargets = receivers;
 	notify(falar);
+}
+
+void Personagem::rest() {
+	notify(descansar);
 }

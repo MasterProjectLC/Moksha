@@ -18,7 +18,9 @@ public:
 		dictionary.insert(pair<set<string>, T>(key, value));
 	}
 
-	virtual string getValue(string key) {}
+	virtual string getValue(string key) {
+		return "";
+	}
 
 
 	T getValues(string key) {

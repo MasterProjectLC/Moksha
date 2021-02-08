@@ -12,14 +12,15 @@
 using namespace std;
 
 class Mapa {
+
 private:
-	class Node {
+	class Node { // Classe utilizada pelos métodos de procura
 	private:
-		Sala *elemento;
-		int visitado;
-		vector<int> anexasIndex;
-		Node* paiIndex;
-		bool temPai_;
+		Sala *elemento; // Sala representada pelo node
+		int visitado; // Se node foi visitado pelo método de procura ou não
+		vector<int> anexasIndex; // Index das anexas
+		Node* paiIndex; // Index do node que originou este node
+		bool temPai_; // Se já foi explorado
 
 	public:
 		Node() {};
@@ -36,8 +37,12 @@ private:
 		bool temPai() { return temPai_; };
 		Node* getPai() { return paiIndex; }
 		void setPai(Node* v) {
-			paiIndex = v;
-			temPai_ = true;
+			if (v == this)
+				temPai_ = false;
+			else {
+				paiIndex = v;
+				temPai_ = true;
+			}
 		};
 
 		Sala* getElemento() { return elemento; };
@@ -56,19 +61,22 @@ private:
 	};
 
 	// Atributos
+	int MAX_OBJECT_COUNT = 100;
 	vector<Node> salas;
 	vector<Objeto> objetos;
 	IObserver* observer;
 
-	bool optimalPathHelper(queue<Node*> *salasExaminadas, bool isDireita, vector<Node*> *ponte);
+	void breadthSearchHelper(queue<Sala*> *retorno, stack<int> &st, int salaChecada);
 
 public:
 	Mapa() {};
 	Mapa(vector<Sala*> salasRecebidas, IObserver *observer);
 
 	void carregarSala(Sala *sala);
+	Objeto* getObjeto(int id);
 
 	queue<Sala*> optimalPath(Sala *_salaOrigem, Sala *_salaDestino);
+	queue<Sala*> breadthSearch(Sala *_salaOrigem);
 	bool existeSala(string name);
 	Sala* getSala(int index);
 	Sala* getSala(string name);

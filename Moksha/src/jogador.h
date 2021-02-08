@@ -14,7 +14,7 @@ private:
 	string erroSemSala;
 	string erroSemItem;
 	string erroMente;
-	vector<string> acoesBasicas{ "obter", "mover", "examinar", "ver", "tocar", "mencionar" };
+	vector<string> acoesBasicas{ "obter", "mover", "examinar", "ver", "tocar", "mencionar", "descansar" };
 
 	map<string, set<string>> mindTheory;
 
@@ -29,11 +29,11 @@ public:
 	Jogador();
 	void receberArgs(vector<string> args);
 
-	void verPessoaEntrando(string nomePessoa);
-	void executarReacao(string topico, string frase, string remetente);
-	void verSala(vector<Personagem*> pessoasNaSala);
+	void verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) override;
+	void executarReacao(string topico, string frase, string remetente) override;
+	void verSala(vector<Personagem*> pessoasNaSala) override;
 
-	void serAtacado(Personagem* atacante) {
+	void serAtacado(Personagem* atacante) override {
 		printText(atacante->getNome() + " te atacou!");
 		Personagem::serAtacado(atacante);
 	};

@@ -16,13 +16,16 @@ Jogo::Jogo() {
 void Jogo::setup() {
 	initializeGame();
 	loadGame();
+
+	for (int i = 0; i < npcs.size(); i++)
+		npcs[i]->setupPlanos();
 }
 
 
 void Jogo::update(int id) {
 	// Objeto
 	if (id < OBSERVER_OFFSET) {
-		objetoOrdem(getSalaAtual()->getObjeto(id));
+		objetoOrdem(mapa.getObjeto(id));
 	}
 
 	// Personagem
@@ -48,6 +51,7 @@ void Jogo::objetoOrdem(Objeto* objeto) {
 
 void Jogo::personagemOrdem(Personagem* personagem) {
 	int id = personagem->getNotifyID();
+	string antigaSala;
 
 	switch (id) {
 	case personagem->imprimir:
@@ -55,16 +59,19 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 		break;
 
 	case personagem->mover:
+		// Pessoas dentro da sala veem pessoa saindo
+		for (int i = 0; i < personagens.size(); i++)
+			if (personagens[i] != personagem && personagens[i]->getSalaAtual() == personagem->getSalaAtual())
+				personagens[i]->verPessoaMovendo(personagem, personagem->getNotifyText(), false);
+
+		antigaSala = personagem->getSalaAtual()->getNome();
 		personagem->setSalaAtual(moverSala(personagem->getSalaAtual(), personagem->getNotifyText()));
 		personagem->verSala(getPessoasNaSala(personagem->getSalaAtual()));
-		
-		// Pessoas dentro da sala veem pessoa entrando
-		for (int i = 0; i < personagens.size(); i++) {
-			if (personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
-				personagens[i]->verPessoaEntrando(personagem);
-			}
-		}
 
+		// Pessoas dentro da sala veem pessoa entrando
+		for (int i = 0; i < personagens.size(); i++)
+			if (personagens[i] != personagem && personagens[i]->getSalaAtual() == personagem->getSalaAtual())
+				personagens[i]->verPessoaMovendo(personagem, antigaSala, true);
 		break;
 
 	case personagem->mencionar:
@@ -88,6 +95,9 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 		}
 		break;
 
+	case personagem->descansar:
+		break;
+
 	case personagem->atacar:
 		Personagem* vitima = findCharacter(personagem->getNotifyText());
 		if (vitima->getSalaAtual() == personagem->getSalaAtual())
@@ -103,8 +113,7 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 
 void Jogo::advanceTime() {
 	// TODO: create a separate function for this
-	if (jenna.getSalaAtual() != jogador.getSalaAtual())
-		jenna.takeAction();
+	jenna.tomarAcao();
 	
 	time++;
 	saveGame();
@@ -145,7 +154,7 @@ void Jogo::initializeGame() {
 	for (int i = 0; i < salaLista.size(); i++) {
 		FileDict fileSala = FileManager::readFromFile(salaLista[i]);
 
-		Sala* sala = new Sala(fileSala.getValue("nome"), fileSala.getValue("texto"),
+		Sala* sala = new Sala(i, fileSala.getValue("nome"), fileSala.getValue("texto"),
 			fileSala.getValues("adjacentes"), fileSala.getValues("objetos"));
 		salas.push_back(sala);
 	}
@@ -158,10 +167,6 @@ void Jogo::initializeGame() {
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it, i++) {
 		string s = it->attribute("Sala").value();
 		personagens[i]->setSalaAtual(mapa.getSala(s));
-		if (i > 0) {
-			s = it->attribute("Alvo").value();
-			npcs[i - 1]->setSalaAlvo(mapa.getSala(s));
-		}
 	}
 }
 
@@ -189,7 +194,6 @@ bool Jogo::loadGame() {
 		for (xml_node_iterator ait = objetos.begin(); ait != objetos.end(); ++ait)
 			objetoNomes.push_back(ait->name());
 
-
 		estaSala->setObjetoNomes(objetoNomes);
 		mapa.carregarSala(estaSala);
 	}
@@ -200,10 +204,6 @@ bool Jogo::loadGame() {
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it, i++) {
 		string s = it->attribute("Sala").value();
 		personagens[i]->setSalaAtual(mapa.getSala(s));
-		if (i > 0) {
-			s = it->attribute("Alvo").value();
-			npcs[i - 1]->setSalaAlvo(mapa.getSala(s));
-		}
 
 		// Carregar inventário
 		xml_node inventario = it->child("Inventario");

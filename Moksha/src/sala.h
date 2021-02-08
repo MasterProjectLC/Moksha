@@ -12,6 +12,7 @@ private:
 	string codinome;
 	string textoInicial;
 	vector<string> salasAnexasNomes;
+	int index;
 
 	vector<string> objetoNomes;
 	vector<Objeto> objetos;
@@ -20,8 +21,8 @@ public:
 	Sala() {};
 
 	// Setup
-	Sala(string nome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
-	Sala(string nome, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
+	Sala(int index, string nome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
+	Sala(int index, string nome, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
 	void setObjetoNomes(vector<string> objetoNomes) { this->objetoNomes = objetoNomes; }
 
 	void setupObjetos(vector<Objeto> objetos) { this->objetos = objetos; }
@@ -31,8 +32,9 @@ public:
 
 	// Getters
 	string getNome() { return nome; }
-	string getCodiname() { return codinome; }
+	string getCodinome() { return codinome; }
 	string getTextoInicial() { return textoInicial; }
+	int getIndex() { return index; }
 
 	bool isSalaAnexa(string salaAnexaNome);
 	string getSalaAnexaNome(int i);

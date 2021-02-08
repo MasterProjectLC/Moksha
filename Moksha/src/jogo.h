@@ -5,7 +5,7 @@
 #include "IObserver.h"
 #include "mapa.h"
 #include "fileManager.h"
-#include "libs/pugixml/src/pugixml.hpp"
+#include "../libs/pugixml/src/pugixml.hpp"
 #include "saveModule.h"
 
 using namespace std;
