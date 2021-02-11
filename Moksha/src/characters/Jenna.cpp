@@ -1,43 +1,33 @@
 #include "Jenna.h"
 
 Jenna::Jenna(Mapa* m) : NPC{m, "Jenna", F, 1, 1} {
-	alvo = "Colt";
+	alvos.push_back("Ned");
 }
 
-void Jenna::setupPlanos() {
-	goap_actionplanner_clear(&ap); // initializes action planner
-
-	// describe repertoire of actions
+void Jenna::setupAcoesAdicional() {
 	goap_set_pst(&ap, "mover_cozinha", "na_cozinha", true);
 	goap_set_cost(&ap, "mover_cozinha", tamanhoCaminho(salaAtual, mapa->getSala("Cozinha")));
 
 	goap_set_pre(&ap, "pegar_faca", "na_cozinha", true);
 	goap_set_pst(&ap, "pegar_faca", "armado", true);
 
-	goap_set_pre(&ap, "seguir_jogador", "armado", true);
-	goap_set_pst(&ap, "seguir_jogador", "com_jogador", true);
-	goap_set_cost(&ap, "seguir_jogador", 2);
+	goap_set_pre(&ap, "procurar_alvo", "armado", true);
+	goap_set_pst(&ap, "procurar_alvo", "com_Ned", true);
+	goap_set_cost(&ap, "procurar_alvo", 2);
 
-	goap_set_pre(&ap, "matar", "com_jogador", true);
+	goap_set_pre(&ap, "matar", "com_Ned", true);
 	goap_set_pre(&ap, "matar", "armado", true);
-	goap_set_pst(&ap, "matar", "jogador_vivo", false);
+	goap_set_pst(&ap, "matar", "Ned_vivo", false);
+}
 
 
-	// describe current world state.
-	goap_worldstate_clear(&current);
+void Jenna::setupMundoAdicional() {
 	goap_worldstate_set(&ap, &current, "na_cozinha", salaAtual->getNome() == "Cozinha");
-	goap_worldstate_set(&ap, &current, "com_jogador", false);
-	goap_worldstate_set(&ap, &current, "armado", inventario.temItem("Faca"));
-	goap_worldstate_set(&ap, &current, "jogador_vivo", true);
+}
 
-	// describe goal
-	goap_worldstate_clear(&goal);
-	goap_worldstate_set(&ap, &goal, "jogador_vivo", false);
-	//goap_worldstate_set( &ap, &goal, "alive", true ); // add this to avoid suicide actions in the plan.
 
-	planCost = astar_plan(&ap, current, goal, plan, states, &plansz);
-	currentStep = -1;
-	avancarPlanos();
+void Jenna::setupObjetivosAdicional() {
+	goap_worldstate_set(&ap, &goal, "Ned_vivo", false);
 }
 
 
@@ -62,7 +52,7 @@ void Jenna::tomarAcao() {
 			avancarPlanos();
 	}
 
-	else if (acao == "seguir_jogador") {
+	else if (acao == "procurar_alvo") {
 		seguirCaminho();
 
 		if (caminho.size() == 0)
@@ -76,8 +66,8 @@ void Jenna::tomarAcao() {
 	}
 
 	else if (acao == "matar") {
-		attack(alvo);
-		goap_worldstate_set(&ap, &current, "jogadorVivo", false);
+		attack(alvos[0]);
+		goap_worldstate_set(&ap, &current, (alvos[0] + "_vivo").c_str(), false);
 		avancarPlanos();
 	}
 }
@@ -93,9 +83,9 @@ void Jenna::avancarPlanos() {
 		caminho = descobrirCaminho(mapa->getSala("Cozinha"));
 	}
 
-	else if (plan[currentStep] == "seguir_jogador") {
-		if (ultimoAvistamento.hasKey(alvo))
-			caminho = procurar(mapa->getSala(ultimoAvistamento.getValues(alvo)));
+	else if (plan[currentStep] == "procurar_alvo") {
+		if (ultimoAvistamento.hasKey(alvos[0]))
+			caminho = procurar(mapa->getSala(ultimoAvistamento.getValues(alvos[0])));
 		else
 			caminho = procurar();
 

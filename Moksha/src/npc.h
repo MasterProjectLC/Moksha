@@ -10,9 +10,11 @@ using namespace std;
 
 class NPC : public Personagem {
 protected:
-	string alvo;
+	int MAX_ALVOS = 6;
+	vector<string> alvos;
 	queue<Sala*> caminho;
 	Mapa* mapa;
+	string conversaAlvo;
 
 	actionplanner_t ap;
 	worldstate_t states[16];
@@ -34,17 +36,26 @@ protected:
 
 	void seguirCaminho();
 
+	virtual void setupMundoAdicional() {}
+	virtual void setupObjetivosAdicional() {}
+	virtual void setupAcoesAdicional() {}
 	virtual void updatePlanos() {}
 	virtual void avancarPlanos() {}
 	virtual void unlockPlanos() {}
 
+	int alvoIndex(string a);
+
 public:
 	explicit NPC(Mapa* m, string nome, int genero, int forca, int destreza);
+
+	bool temCondicao(string info) override;
 
 	void executarReacao(string topico, string frase, string remetente) override;
 	void verSala(vector<Personagem*> pessoasNaSala) override;
 	void verPessoaMovendo(Personagem * pessoa, string outraSala, bool entrando) override;
 	void setSalaAlvo(Sala* nova) { descobrirCaminho(nova); }
 
-	virtual void setupPlanos() {}
+	void iniciarConversa();
+
+	void setupPlanos();
 };

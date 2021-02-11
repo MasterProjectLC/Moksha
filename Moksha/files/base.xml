@@ -3,14 +3,26 @@
 <JogoData FormatVersion="1">
 	<Jogo Time="3" Loop="3">
 		<Personagens>
-			<Colt Sala="Corredor"> 
+			<Ned Sala="Lounge"> 
 				<Inventario>
 				</Inventario>
-			</Colt>
-			<Jenna Sala="Cozinha"> 
+			</Ned>
+			<Jenna Sala="Corredor"> 
 				<Inventario>
 				</Inventario>
 			</Jenna>
+            <Baxter Sala="Lounge"> 
+				<Inventario>
+				</Inventario>
+			</Baxter>
+            <Santos Sala="Lounge"> 
+				<Inventario>
+				</Inventario>
+			</Santos>
+            <Hilda Sala="Lounge"> 
+				<Inventario>
+				</Inventario>
+			</Hilda>
 		</Personagens>
 
 		<Mapa>

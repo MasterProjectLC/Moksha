@@ -6,10 +6,25 @@ Jogo::Jogo() {
 	jogador.add(this, OBSERVER_OFFSET);
 	personagens.push_back(&jogador);
 
-	jenna = Jenna(&mapa);
-	jenna.add(this, OBSERVER_OFFSET + 1);
-	personagens.push_back(&jenna);
-	npcs.push_back(&jenna);
+	Baxter* baxter = new Baxter(&mapa);
+	baxter->add(this, OBSERVER_OFFSET + 1);
+	personagens.push_back(baxter);
+	npcs.push_back(baxter);
+
+	Hilda* hilda = new Hilda(&mapa);
+	hilda->add(this, OBSERVER_OFFSET + 2);
+	personagens.push_back(hilda);
+	npcs.push_back(hilda);
+
+	Santos* santos = new Santos(&mapa);
+	santos->add(this, OBSERVER_OFFSET + 3);
+	personagens.push_back(santos);
+	npcs.push_back(santos);
+
+	Jenna* jenna = new Jenna(&mapa);
+	jenna->add(this, OBSERVER_OFFSET + 4);
+	personagens.push_back(jenna);
+	npcs.push_back(jenna);
 }
 
 
@@ -76,8 +91,7 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 
 	case personagem->mencionar:
 		for (int i = 0; i < personagens.size(); i++) {
-			if (personagens[i]->getNome() == personagem->getNotifyTargets()[0]
-					&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
+			if (personagem->getNotifyTargets().count(personagens[i]->getNome()) && personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
 				personagens[i]->executarReacao(personagem->getNotifyText(), "", personagem->getNome());
 				break;
 			}
@@ -86,13 +100,17 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 
 	case personagem->falar:
 		for (int i = 0; i < personagens.size(); i++) {
-			if (personagens[i]->getNome() == personagem->getNotifyTargets()[0]
-					&& personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
+			if (personagem->getNotifyTargets().count(personagens[i]->getNome()) && personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
 				vector<string> args = splitString(personagem->getNotifyText(), '|');
 				personagens[i]->executarReacao(args[0], args[1], personagem->getNome());
 				break;
 			}
 		}
+		break;
+
+	case personagem->conversar:
+		conversas.push_back(Conversa(personagem->getNotifyTargets(), personagem->getNotifyText(), personagem->getSalaAtual()->getNome()));
+		advanceConversas();
 		break;
 
 	case personagem->descansar:
@@ -112,11 +130,68 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 
 
 void Jogo::advanceTime() {
-	// TODO: create a separate function for this
-	jenna.tomarAcao();
+	// Conversas
+	advanceConversas();
+
+	// Personagens
+	for (int i = 0; i < npcs.size(); i++)
+		npcs[i]->tomarAcao();
 	
+	// Jogo
 	time++;
 	saveGame();
+}
+
+void Jogo::advanceConversas() {
+	// Iterar por cada conversa acontecendo
+	for (vector<Conversa>::iterator it = conversas.begin(); it != conversas.end(); it++) {
+		// Tentar até uma mensagem passar
+		while (1) {
+			// Se conversa acabou
+			if (it->noFim()) {
+				conversas.erase(it);
+				break;
+			}
+
+			// Avancar
+			bool valid = true;
+			xml_node conversa = it->proximaFala();
+
+			string n = conversa.name();
+			if (n == "Narrador") {	// Edge case: narrador
+				imprimirTexto(conversa.attribute("fala").value());
+				break;
+			}
+
+			Personagem* falante = findCharacter(conversa.name());
+
+			// Testar se válido
+			// O falante atual está na sala?
+			if (falante->getSalaAtual()->getNome() != it->getSala())
+				valid = false;
+
+			// O falante atual preenche as condicoes?
+			if (valid)
+				for (xml_node_iterator cit = conversa.begin(); cit != conversa.end(); ++cit) {
+					bool t1 = falante->temCondicao(cit->name());
+					string tt = cit->attribute("n").value();
+					bool t2 = (tt == "n");
+					if (cit->attribute("info").value() != "info" &&	t1 == t2) {
+						valid = false;
+						break;
+					}
+				}
+
+			// Enviar mensagem
+			if (valid) {
+				falante->say("", conversa.attribute("fala").value(), it->getParticipantes(conversa.name()));
+				break;
+			}
+		}
+
+		if (!conversas.size())
+			break;
+	}
 }
 
 
@@ -166,7 +241,8 @@ void Jogo::initializeGame() {
 	int i = 0;
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it, i++) {
 		string s = it->attribute("Sala").value();
-		personagens[i]->setSalaAtual(mapa.getSala(s));
+		Personagem* personagem = findCharacter(it->name());
+		personagem->setSalaAtual(mapa.getSala(s));
 	}
 }
 
@@ -200,15 +276,15 @@ bool Jogo::loadGame() {
 
 	// Gerar personagens
 	load_package = doc.child("JogoData").child("Jogo").child("Personagens");
-	int i = 0;
-	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it, i++) {
+	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
 		string s = it->attribute("Sala").value();
-		personagens[i]->setSalaAtual(mapa.getSala(s));
+		Personagem* personagem = findCharacter(it->name());
+		personagem->setSalaAtual(mapa.getSala(s));
 
 		// Carregar inventário
 		xml_node inventario = it->child("Inventario");
 		for (xml_node_iterator ait = inventario.begin(); ait != inventario.end(); ++ait) {
-			obterObjeto(ait->name(), personagens[i]);
+			obterObjeto(ait->name(), personagem);
 		}
 	}
 

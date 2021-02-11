@@ -145,7 +145,12 @@
     <ClCompile Include="libs\GPGOAP\astar.c" />
     <ClCompile Include="libs\GPGOAP\goap.c" />
     <ClCompile Include="libs\pugixml\src\pugixml.cpp" />
+    <ClCompile Include="src\characters\Baxter.cpp" />
+    <ClCompile Include="src\characters\Hilda.cpp" />
+    <ClCompile Include="src\characters\Jenna.cpp" />
+    <ClCompile Include="src\characters\Santos.cpp" />
     <ClCompile Include="src\conceito.cpp" />
+    <ClCompile Include="src\conversa.cpp" />
     <ClCompile Include="src\fileDict.cpp" />
     <ClCompile Include="src\graphics.cpp" />
     <ClCompile Include="src\input.cpp" />
@@ -154,7 +159,6 @@
     <ClCompile Include="src\IObservable.cpp" />
     <ClCompile Include="src\IObserver.cpp" />
     <ClCompile Include="src\item.cpp" />
-    <ClCompile Include="src\Jenna.cpp" />
     <ClCompile Include="src\jogador.cpp" />
     <ClCompile Include="src\jogo.cpp" />
     <ClCompile Include="src\mapa.cpp" />
@@ -169,7 +173,12 @@
     <ClInclude Include="libs\GPGOAP\astar.h" />
     <ClInclude Include="libs\GPGOAP\goap.h" />
     <ClInclude Include="libs\pugixml\src\pugixml.hpp" />
+    <ClInclude Include="src\characters\Baxter.h" />
+    <ClInclude Include="src\characters\Hilda.h" />
+    <ClInclude Include="src\characters\Jenna.h" />
+    <ClInclude Include="src\characters\Santos.h" />
     <ClInclude Include="src\conceito.h" />
+    <ClInclude Include="src\conversa.h" />
     <ClInclude Include="src\dictionary.h" />
     <ClInclude Include="src\fileDict.h" />
     <ClInclude Include="src\fileManager.h" />
@@ -180,7 +189,6 @@
     <ClInclude Include="src\IObservable.h" />
     <ClInclude Include="src\IObserver.h" />
     <ClInclude Include="src\item.h" />
-    <ClInclude Include="src\Jenna.h" />
     <ClInclude Include="src\jogador.h" />
     <ClInclude Include="src\jogo.h" />
     <ClInclude Include="src\mapa.h" />

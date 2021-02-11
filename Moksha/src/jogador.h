@@ -29,6 +29,8 @@ public:
 	Jogador();
 	void receberArgs(vector<string> args);
 
+	bool temCondicao(string info) override;
+
 	void verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) override;
 	void executarReacao(string topico, string frase, string remetente) override;
 	void verSala(vector<Personagem*> pessoasNaSala) override;

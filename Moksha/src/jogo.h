@@ -1,9 +1,13 @@
 #pragma once
-#include "Jenna.h"
+#include "characters/Jenna.h"
+#include "characters/Baxter.h"
+#include "characters/Santos.h"
+#include "characters/Hilda.h"
 #include "jogador.h"
 #include "IObservable.h"
 #include "IObserver.h"
 #include "mapa.h"
+#include "conversa.h"
 #include "fileManager.h"
 #include "../libs/pugixml/src/pugixml.hpp"
 #include "saveModule.h"
@@ -20,11 +24,10 @@ private:
 
 	string texto;
 
-	//vector<Objeto> objetos;
 	Jogador jogador;
-	Jenna jenna;
 	vector<Personagem*> personagens;
 	vector<NPC*> npcs;
+	vector<Conversa> conversas;
 
 	string erroSemObjeto;
 	string erroSemAcao;
@@ -42,6 +45,7 @@ private:
 
 	void update(int id) override;
 	void advanceTime();
+	void advanceConversas();
 
 	void initializeGame();
 	bool loadGame();

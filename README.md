@@ -16,8 +16,9 @@ Volte repetidamente no tempo e tente salvar todos a bordo do dirigível steampun
 * Maurício Cândido (mew)
 
 ### Agradecimentos
-* André Mateus Bariani Trava
 * Anderson Pinheiro Garrote
+* André Mateus Bariani Trava
 * Giovanni Marçon Rossi
-* Tommy Thompson (AI and Games)
 * Mark Brown (Game Maker's Toolkit)
+* Tommy Thompson (AI and Games)
+* Todo o time de Elsinore

@@ -10,7 +10,7 @@ class Personagem: public IObservable {
 protected:
 	string nome;
 	string notifyText;
-	vector<string> notifyTargets;
+	set<string> notifyTargets;
 	Dictionary<string> ultimoAvistamento;
 	set<Sala*> salasChecadas;
 
@@ -48,17 +48,20 @@ public:
 
 	virtual void tomarAcao() {}
 
-	enum { M, F, imprimir, mover, mencionar, falar, atacar, descansar };
+	enum { M, F, imprimir, mover, mencionar, falar, atacar, descansar, conversar };
 	void printText(string str);
 	void move(string str);
 	void move(Sala sala);
-	void mention(string obj, vector<string> receivers);
+	void mention(string obj, set<string> receivers);
 	void attack(string target);
-	void say(string topico, string str, vector<string> receivers);
+	void say(string topico, string str, set<string> receivers);
 	void rest();
+	void talk(string convo, set<string> participants);
 
 	string getNotifyText() { return notifyText; }
-	vector<string> getNotifyTargets() { return notifyTargets; }
+	set<string> getNotifyTargets() { return notifyTargets; }
+
+	virtual bool temCondicao(string info) { return false; }
 
 	virtual void executarReacao(string topico, string frase, string remetente) {};
 	virtual void verSala(vector<Personagem*> pessoasNaSala) {};

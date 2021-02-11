@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Characters">
+      <UniqueIdentifier>{7ce5a499-b719-455a-8e7f-859d3760af01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Characters">
+      <UniqueIdentifier>{f42459fc-a436-4765-a86d-9950d2f56bfb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="libs\pugixml\src\pugixml.cpp">
@@ -43,9 +49,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\item.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Jenna.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\jogador.cpp">
@@ -80,6 +83,21 @@
     </ClCompile>
     <ClCompile Include="libs\GPGOAP\astar.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\conversa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\characters\Jenna.cpp">
+      <Filter>Source Files\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\characters\Hilda.cpp">
+      <Filter>Source Files\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\characters\Santos.cpp">
+      <Filter>Source Files\Characters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\characters\Baxter.cpp">
+      <Filter>Source Files\Characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +137,6 @@
     <ClInclude Include="src\item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Jenna.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\jogador.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -151,6 +166,21 @@
     </ClInclude>
     <ClInclude Include="libs\GPGOAP\goap.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\conversa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\characters\Jenna.h">
+      <Filter>Header Files\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\characters\Baxter.h">
+      <Filter>Header Files\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\characters\Santos.h">
+      <Filter>Header Files\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\characters\Hilda.h">
+      <Filter>Header Files\Characters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

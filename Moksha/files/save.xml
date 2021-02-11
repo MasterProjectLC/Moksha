@@ -1,15 +1,22 @@
 <?xml version="1.0"?>
 <JogoData FormatVersion="1">
-	<Jogo Time="3" Loop="1">
+	<Jogo Time="39" Loop="1">
 		<Personagens>
-			<Colt Sala="Cozinha">
+			<Ned Sala="Lounge">
 				<Inventario />
-			</Colt>
-			<Jenna Sala="Cozinha">
-				<Inventario>
-					<Faca />
-				</Inventario>
+			</Ned>
+			<Jenna Sala="Corredor">
+				<Inventario />
 			</Jenna>
+			<Baxter Sala="Lounge">
+				<Inventario />
+			</Baxter>
+			<Santos Sala="Lounge">
+				<Inventario />
+			</Santos>
+			<Hilda Sala="Lounge">
+				<Inventario />
+			</Hilda>
 		</Personagens>
 		<Mapa>
 			<Corredor Nome="Corredor">
@@ -28,7 +35,9 @@
 				</Objetos>
 			</Lounge>
 			<Cozinha Nome="Cozinha">
-				<Objetos />
+				<Objetos>
+					<Faca />
+				</Objetos>
 			</Cozinha>
 			<Banheiro Nome="Banheiro">
 				<Objetos>

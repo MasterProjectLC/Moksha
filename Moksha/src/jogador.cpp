@@ -1,7 +1,7 @@
 #include "jogador.h"
 
 Jogador::Jogador() : Personagem(M, 2, 2) {
-	nome = "Colt";
+	nome = "Ned";
 
 	FileDict fileErros = FileManager::readFromFile("files/erros.txt");
 	erroSemObjeto = fileErros.getValues("sem objeto")[0];
@@ -25,7 +25,7 @@ void Jogador::mencionar(string topic, string person) {
 		return;
 	}
 
-	mention(topic, vector<string>(1, person));
+	mention(topic, set<string>({ person }));
 }
 
 void Jogador::mover(string location) {
@@ -135,6 +135,11 @@ void Jogador::verPessoaMovendo(Personagem* pessoa, string outraSala, bool entran
 }
 
 // HELPER FUNCTIONS ----------------------------------------------------
+
+bool Jogador::temCondicao(string info) {
+	return inventario.temConceito(info);
+}
+
 
 bool Jogador::isAcaoValida(string acao) {
 	for (int i = 0; i < acoesBasicas.size(); i++)
