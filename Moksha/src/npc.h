@@ -1,4 +1,5 @@
 #pragma once
+#include <queue>
 #include "personagem.h"
 #include "mapa.h"
 #include "fileManager.h"
@@ -8,6 +9,13 @@
 
 using namespace std;
 
+struct Goal {
+	worldstate_t goal;
+	int priority;
+};
+
+auto compare = [](Goal a, Goal b) -> bool { return a.priority < b.priority; };
+
 class NPC : public Personagem {
 protected:
 	int MAX_ALVOS = 6;
@@ -15,10 +23,13 @@ protected:
 	queue<Sala*> caminho;
 	Mapa* mapa;
 	string conversaAlvo;
+	string acaoAtual;
 
 	actionplanner_t ap;
 	worldstate_t states[16];
-	worldstate_t current, goal;
+	worldstate_t world;
+	Goal currentGoal;
+	priority_queue<Goal, vector<Goal>, decltype(compare)> goalList;
 	const char* plan[16]; // The planner will return the action plan in this array.
 	int plansz = 16; // Size of our return buffers
 	int planCost = 0;
@@ -35,12 +46,15 @@ protected:
 	};
 
 	void seguirCaminho();
+	virtual void tomarAcaoParticular(string acao) {}
 
 	virtual void setupMundoAdicional() {}
 	virtual void setupObjetivosAdicional() {}
 	virtual void setupAcoesAdicional() {}
-	virtual void updatePlanos() {}
-	virtual void avancarPlanos() {}
+	virtual void updatePlanosAdicional() {}
+	void updatePlanos();
+	virtual void avancarPlanosAdicional() {}
+	void avancarPlanos();
 	virtual void unlockPlanos() {}
 
 	int alvoIndex(string a);
@@ -50,12 +64,14 @@ public:
 
 	bool temCondicao(string info) override;
 
+	void decidirAcao();
+	void tomarAcao() override;
 	void executarReacao(string topico, string frase, string remetente) override;
 	void verSala(vector<Personagem*> pessoasNaSala) override;
 	void verPessoaMovendo(Personagem * pessoa, string outraSala, bool entrando) override;
 	void setSalaAlvo(Sala* nova) { descobrirCaminho(nova); }
 
-	void iniciarConversa();
-
 	void setupPlanos();
+
+	string getAcao() { return acaoAtual; }
 };

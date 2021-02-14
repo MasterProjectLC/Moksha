@@ -14,22 +14,24 @@ protected:
 	Dictionary<string> ultimoAvistamento;
 	set<Sala*> salasChecadas;
 
-	int forca;
-	int destreza;
-	bool inconsciente;
-	bool morto;
-	int genero;
+	int gender;
+	int strength;
+	int dexterity;
+	bool unconscious;
+	bool dead;
 	
 	Sala *salaAtual;
 	Inventario inventario;
 
+	bool inConversation;
+
 public:
-	Personagem(int genero, int forca, int destreza) {
-		this->genero = genero;
-		this->forca = forca;
-		this->destreza = destreza;
-		inconsciente = false;
-		morto = false;
+	Personagem(int gender, int strength, int dexterity) {
+		this->gender = gender;
+		this->strength = strength;
+		this->dexterity = dexterity;
+		unconscious = false;
+		dead = false;
 	}
 
 	string getNome() { return nome; }
@@ -40,11 +42,14 @@ public:
 
 	void setSalaAtual(Sala *sala) {	salaAtual = sala; }
 	Sala* getSalaAtual() { return salaAtual; }
-	int getGenero() { return genero; }
-	int getForca() { return forca; }
-	int getDestreza() { return destreza; }
-	bool isInconsciente() { return inconsciente || morto; }
-	bool isMorto() { return morto; }
+	int getGender() { return gender; }
+	int getStrength() { return strength; }
+	int getDexterity() { return dexterity; }
+	bool isUnconscious() { return unconscious || dead; }
+	bool isDead() { return dead; }
+
+	bool inConversation() {	return inConversation; }
+	void setInConversation(bool a) { inConversation = a; }
 
 	virtual void tomarAcao() {}
 
@@ -52,11 +57,11 @@ public:
 	void printText(string str);
 	void move(string str);
 	void move(Sala sala);
-	void mention(string obj, set<string> receivers);
+	virtual void mention(string obj, set<string> receivers);
 	void attack(string target);
 	void say(string topico, string str, set<string> receivers);
 	void rest();
-	void talk(string convo, set<string> participants);
+	void talk(string convo);
 
 	string getNotifyText() { return notifyText; }
 	set<string> getNotifyTargets() { return notifyTargets; }
@@ -67,7 +72,7 @@ public:
 	virtual void verSala(vector<Personagem*> pessoasNaSala) {};
 	virtual void verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) {};
 	virtual void serAtacado(Personagem* atacante) {
-		if (atacante->getForca() >= forca)
-			inconsciente = true;
+		if (atacante->getStrength() >= strength)
+			unconscious = true;
 	};
 };

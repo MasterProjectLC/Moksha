@@ -9,10 +9,10 @@ private:
 public:
 	Santos() : NPC{ NULL, "Santos", M, 3, 1 } {}
 	explicit Santos(Mapa* m);
-	void tomarAcao() override;
+	void tomarAcaoParticular(string acao) override;
+	void avancarPlanosAdicional() override;
 	void setupMundoAdicional() override;
 	void setupObjetivosAdicional() override;
+	void updatePlanosAdicional() override;
 	void setupAcoesAdicional() override;
-	void updatePlanos() override;
-	void avancarPlanos() override;
 };

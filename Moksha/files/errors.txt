@@ -1,0 +1,10 @@
+no object:
+Hm? I don't see that object in this room...
+no action:
+I can't take that action.
+no room:
+I can't reach that room from here.
+no item:
+I don't know what that is...
+mind theory:
+I think I already talked about that.

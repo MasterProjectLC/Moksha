@@ -1,0 +1,6 @@
+name:
+Knife
+actions:
+attack
+description:
+A sharp knife.

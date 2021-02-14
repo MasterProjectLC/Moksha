@@ -1,0 +1,8 @@
+name:
+Corridor
+text:
+A corridor, leading to nowhere. Truly a question for the philosophers.
+adjacent:
+Dining Hall|Lavatory
+objects:
+Clock

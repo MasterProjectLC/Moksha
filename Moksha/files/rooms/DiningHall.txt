@@ -1,0 +1,8 @@
+name:
+Dining Hall
+text:
+Wow, this is such an elegant room... I don't have any time to waste, though.
+adjacent:
+Corridor|Kitchen|Lounge
+objects:
+Table

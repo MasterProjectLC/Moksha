@@ -1,0 +1,8 @@
+name:
+Lavatory
+text:
+Such a stench of fish! It must be here where they wash their hands after a day of cooking.
+adjacent:
+Kitchen
+objects:
+Table

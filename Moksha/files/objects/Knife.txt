@@ -1,0 +1,8 @@
+name:
+Knife
+actions:
+examine|look|see|take|obtain
+examine,look,see:
+Huh, that's actually very sharp. I can see it being used as a weapon.
+take,obtain:
+Seems useful. I'll take it.

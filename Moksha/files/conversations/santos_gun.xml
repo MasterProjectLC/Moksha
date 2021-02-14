@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Baxter/>
+    <Hilda/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Santos line="Bax, mate, did you take my gun?">
+		<with_Baxter/>
+		<with_Hilda n="n"/>
+	</Santos>
+
+	<Santos line="Hilda! Reckon you know where my gun is?">
+		<with_Baxter n="n"/>
+		<with_Hilda/>
+	</Santos>
+
+	<Santos line="Ay, you two! Do any o' yous bludgers know where's my gun?">
+		<with_Baxter/>
+		<with_Hilda/>
+	</Santos>
+
+	<Baxter line="Your gun...? No, certainly not. Why do you ask? Are you looking for it?" emotion="confusion"/>
+
+	<Hilda line="...What? No, I don't. Why do you need it?" emotion="confusion"/>
+		<with_Baxter n="n"/>
+	</Hilda>
+
+	<Narrator line="For a moment, Santos remained silent."/>
+
+	<Santos line="I... Listen, I was bloody looking for some'ing else, alright? Important part is, MY GUN IS GONE. Someone took it!" emotion="rage">
+		<Santon_no_gun info="info"/>
+	</Santos>
+
+	<Hilda line="Fucking hell, by the seas, Santos! I can't go on a mad chase after your gun right now. You better take care of this, and fast - I don't want anyone touching down with a hole on the middle of the chest!"/>
+
+	<Baxter line="...Darn. I believe I know where it is. Let me deal with it, alright?"/>
+
+	<Santos line="Sure. Loads o' thanks, Bax.">
+		<with_Baxter/>
+	</Santos>
+</Conversation>

@@ -27,7 +27,7 @@ Mapa::Mapa(vector<Sala*> salasRecebidas, IObserver *observer) {
 
 
 void Mapa::carregarSala(Sala *sala) {
-	vector<string> objetoLista = FileManager::getFileList("files/objetos");
+	vector<string> objetoLista = FileManager::getFileList("files/objects");
 	vector<string> objetoNomes = sala->getObjetoNomes();
 
 	// Procurar objetos na lista
@@ -36,7 +36,7 @@ void Mapa::carregarSala(Sala *sala) {
 
 		for (int j = 0; j < objetoNomes.size(); j++) {
 			// Encontrado - Gerar objeto
-			if (objetoNomes[j].compare(fileObjeto.getValue("nome")) == 0) {
+			if (objetoNomes[j].compare(fileObjeto.getValue("name")) == 0) {
 				Objeto newObjeto = Objeto(fileObjeto);								// Gerar objeto
 				newObjeto.add(observer, j + sala->getIndex()*MAX_OBJECT_COUNT);		// Gerar id de callcard
 				sala->addObjeto(newObjeto);											// Adicionar objeto à sala

@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
-<JogoData FormatVersion="1">
-	<Jogo Time="3" Loop="3">
-		<Personagens>
-			<Ned Sala="Lounge"> 
-				<Inventario>
-				</Inventario>
-			</Ned>
-			<Jenna Sala="Corredor"> 
-				<Inventario>
-				</Inventario>
+<GameData FormatVersion="1">
+	<Game Time="3" Loop="3">
+		<Characters>
+			<Elliot Room="Lounge"> 
+				<Inventory>
+				</Inventory>
+			</Elliot>
+			<Jenna Room="Corridor"> 
+				<Inventory>
+				</Inventory>
 			</Jenna>
-            <Baxter Sala="Lounge"> 
-				<Inventario>
-				</Inventario>
+		    <Baxter Room="Lounge"> 
+				<Inventory>
+				</Inventory>
 			</Baxter>
-            <Santos Sala="Lounge"> 
-				<Inventario>
-				</Inventario>
+            <Santos Room="Lounge"> 
+				<Inventory>
+				</Inventory>
 			</Santos>
-            <Hilda Sala="Lounge"> 
-				<Inventario>
-				</Inventario>
+            <Hilda Room="Lounge"> 
+				<Inventory>
+				</Inventory>
 			</Hilda>
-		</Personagens>
+		</Characters>
 
-		<Mapa>
-			<Corredor Nome="Corredor">
-				<Objetos>
-					<Relogio/>
-				</Objetos>
-			</Corredor>
+		<Map>
+			<Corridor Name="Corridor">
+				<Objects>
+					<Clock/>
+				</Objects>
+			</Corridor>
 
-			<SalaoJantar Nome="Salao de Jantar">
-				<Objetos>
-					<Mesa/>
-				</Objetos>
-			</SalaoJantar>
+			<DiningHall Name="Dining Hall">
+				<Objects>
+					<Table/>
+				</Objects>
+			</DiningHall>
 
-            		<Lounge Nome="Lounge">
-				<Objetos>
-					<Mesa/>
-				</Objetos>
+            <Lounge Name="Lounge">
+				<Objects>
+					<Table/>
+				</Objects>
 			</Lounge>
 
-            		<Cozinha Nome="Cozinha">
-				<Objetos>
-					<Faca/>
-				</Objetos>
-			</Cozinha>
+            <Kitchen Name="Kitchen">
+				<Objects>
+					<Knife/>
+				</Objects>
+			</Kitchen>
 
-            		<Banheiro  Nome="Banheiro">
-				<Objetos>
-					<Mesa/>
-				</Objetos>
-			</Banheiro>
-		</Mapa>
+            <Lavatory Name="Lavatory">
+				<Objects>
+					<Table/>
+				</Objects>
+			</Lavatory>
+		</Map>
 
-	</Jogo>
-</JogoData>
+	</Game>
+</GameData>

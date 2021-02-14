@@ -9,6 +9,7 @@ using namespace pugi;
 
 class Conversa {
 private:
+	int convoStage;
 	xml_document conversa;
 	xml_node_iterator it;
 	set<string> participantes;
@@ -16,7 +17,8 @@ private:
 
 public:
 	Conversa() {}
-	Conversa(set<string> participantes, string conversa, string sala);
+	Conversa(string conversa, string sala);
+	Conversa(string conversa, string sala, int stage);
 
 	bool participa(string nome); // Se personagem citado participa da conversa ou não
 
@@ -27,4 +29,5 @@ public:
 	set<string> getParticipantes(string removido);
 
 	string getSala() { return sala; }
+	int getStage() { return convoStage; }
 };

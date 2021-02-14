@@ -1,8 +1,0 @@
-nome:
-Corredor
-texto:
-Um corredor sem saida. Uma pergunta para os filosofos.
-adjacentes:
-Salao de Jantar|Banheiro
-objetos:
-Relogio

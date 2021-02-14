@@ -1,0 +1,8 @@
+name:
+Kitchen
+text:
+The kitchen is, as always, empty. I don't even know why I came here.
+adjacent:
+Dining Hall|Lavatory
+objects:
+Knife

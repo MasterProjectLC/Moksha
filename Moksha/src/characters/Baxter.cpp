@@ -14,12 +14,12 @@ void Baxter::setupMundoAdicional() {
 
 
 void Baxter::setupObjetivosAdicional() {
-	goap_worldstate_set(&ap, &current, "com_Hilda", true);
-	goap_worldstate_set(&ap, &goal, "vivo", true);
+	goap_worldstate_set(&ap, &current, "with_Hilda", true);
+	goap_worldstate_set(&ap, &goal, "alive", true);
 }
 
 
-void Baxter::updatePlanos() {
+void Baxter::updatePlanosAdicional() {
 	// describe current world state.
 
 	planCost = astar_plan(&ap, current, goal, plan, states, &plansz);
@@ -28,11 +28,11 @@ void Baxter::updatePlanos() {
 }
 
 
-void Baxter::tomarAcao() {
+void Baxter::tomarAcaoParticular(string acao) {
 	
 }
 
 
-void Baxter::avancarPlanos() {
+void Baxter::avancarPlanosAdicional() {
 	
 }

@@ -1,5 +1,9 @@
 #include "stringLib.h"
 
+bool stringEqual(string str1, string str2) {
+	return str1.compare(0, str2.length() - 2, str2) == 0;
+}
+
 vector<string> splitString(string str, char delim) {
 	vector<string> retorno;
 	
@@ -11,8 +15,8 @@ vector<string> splitString(string str, char delim) {
 		current = str.find(delim, previous);
 
 	}
-	retorno.push_back(str.substr(previous, current - previous));
 
+	retorno.push_back(str.substr(previous, current - previous));
 	return retorno;
 }
 
@@ -27,8 +31,8 @@ set<string> splitStringSet(string str, char delim) {
 		current = str.find(delim, previous);
 
 	}
-	retorno.insert(str.substr(previous, current - previous));
 
+	retorno.insert(str.substr(previous, current - previous));
 	return retorno;
 }
 

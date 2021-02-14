@@ -20,10 +20,6 @@ void Personagem::mention(string obj, set<string> receivers) {
 		notifyTargets = receivers;
 		notify(mencionar);
 	}
-	else {
-		// TODO: deixar isso exclusivo do Jogador, e integrar com o sistema de arquivo
-		printText("Hm? Nao sei o que e isso...");
-	}
 }
 
 void Personagem::attack(string target) {
@@ -41,8 +37,7 @@ void Personagem::rest() {
 	notify(descansar);
 }
 
-void Personagem::talk(string convo, set<string> participants) {
+void Personagem::talk(string convo) {
 	notifyText = convo;
-	notifyTargets = participants;
 	notify(conversar);
 }

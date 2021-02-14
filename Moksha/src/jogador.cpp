@@ -1,18 +1,29 @@
 #include "jogador.h"
 
 Jogador::Jogador() : Personagem(M, 2, 2) {
-	nome = "Ned";
+	nome = "Elliot";
 
-	FileDict fileErros = FileManager::readFromFile("files/erros.txt");
-	erroSemObjeto = fileErros.getValues("sem objeto")[0];
-	erroSemAcao = fileErros.getValues("sem acao")[0];
-	erroSemSala = fileErros.getValues("sem sala")[0];
-	erroSemItem = fileErros.getValues("sem item")[0];
-	erroMente = fileErros.getValues("teoria da mente")[0];
+	FileDict fileErros = FileManager::readFromFile("files/errors.txt");
+	erroSemObjeto = fileErros.getValues("no object")[0];
+	erroSemAcao = fileErros.getValues("no action")[0];
+	erroSemSala = fileErros.getValues("no room")[0];
+	erroSemItem = fileErros.getValues("no item")[0];
+	erroMente = fileErros.getValues("mind theory")[0];
+
 };
 
 
 // ACOES -------------------------------------------------------------------------------------
+
+void Jogador::mention(string obj, set<string> receivers) {
+	if (inventario.temConceito(obj) || inventario.temItem(obj)) {
+		Personagem::mention(obj, receivers);
+	}
+	else {
+		printText(erroSemItem);
+	}
+}
+
 
 void Jogador::mencionar(string topic, string person) {
 	if (mindTheory.count(person) && mindTheory.at(person).find(topic) != mindTheory.at(person).end()) {
@@ -27,6 +38,7 @@ void Jogador::mencionar(string topic, string person) {
 
 	mention(topic, set<string>({ person }));
 }
+
 
 void Jogador::mover(string location) {
 	if (getSalaAtual()->isSalaAnexa(location))
@@ -55,14 +67,13 @@ void Jogador::interagir(string acao, string objeto) {
 		printText(erroSemObjeto);
 }
 
-
 void Jogador::receberArgs(vector<string> args) {
 	if (!isAcaoValida(args.at(0)))
 		return;
 
 	if (args.size() == 3) {
 		// Mencionar
-		if (args.at(0) == "mencionar") {
+		if (args.at(0) == "mention") {
 			mencionar(args.at(1), args.at(2));
 			return;
 		}
@@ -72,10 +83,10 @@ void Jogador::receberArgs(vector<string> args) {
 		string secondArg = concatStrings(args, 1);
 
 		// Mover para outra sala
-		if (args.at(0) == "mover") {
+		if (args.at(0) == "move") {
 			mover(secondArg);
 		}
-		else if (args.at(0) == "atacar") {
+		else if (args.at(0) == "attack") {
 			attack(secondArg);
 		}
 
@@ -85,7 +96,7 @@ void Jogador::receberArgs(vector<string> args) {
 		}
 	}
 
-	if (args.at(0) == "descansar") {
+	if (args.at(0) == "rest" || args.at(0) == "wait") {
 		rest();
 	}
 }
@@ -101,15 +112,15 @@ void Jogador::executarReacao(string topico, string frase, string remetente) {
 
 void Jogador::verSala(vector<Personagem*> pessoasNaSala) {
 	// Salas anexas
-	printText("Sala atual: " + getSalaAtual()->getNome() + "\n" + getSalaAtual()->getTextoInicial() + "\nSalas anexas:");
+	printText("Current room: " + getSalaAtual()->getNome() + "\n" + getSalaAtual()->getTextoInicial() + "\nAdjacent rooms:");
 	for (int i = 0; i < getSalaAtual()->getSalaAnexaCount(); i++)
 		printText(getSalaAtual()->getSalaAnexaNome(i));
 
 	// Objetos na sala
-	printText("Objetos na sala: ");
+	printText("Objects in the room: ");
 	vector<Objeto> objetos = getSalaAtual()->getObjetos();
 	if (objetos.size() == 0)
-		printText("Nao ha nenhum objeto aqui.");
+		printText("There's no object here.");
 	else {
 		for (int i = 0; i < objetos.size(); i++) {
 			printText(objetos[i].getName());
@@ -120,18 +131,18 @@ void Jogador::verSala(vector<Personagem*> pessoasNaSala) {
 	for (int i = 0; i < pessoasNaSala.size(); i++) {
 		if (pessoasNaSala[i]->getNome() != nome)
 			if (!pessoasNaSala[i]->isInconsciente())
-				printText(pessoasNaSala[i]->getNome() + " esta nesta sala.");
+				printText(pessoasNaSala[i]->getNome() + " is in the room.");
 			else
-				printText("Na sala, " + pessoasNaSala[i]->getNome() + " esta inconsciente!");
+				printText("Oh, " + pessoasNaSala[i]->getNome() + " is unconscious here!");
 	}
 }
 
 
 void Jogador::verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) {
 	if (entrando)
-		printText(pessoa->getNome() + " entrou na sala, vindo da/do " + outraSala);
+		printText(pessoa->getNome() + " entered the room, coming from the " + outraSala);
 	else
-		printText(pessoa->getNome() + " saiu da sala, indo para a/o " + outraSala);
+		printText(pessoa->getNome() + " left the room, going to the " + outraSala);
 }
 
 // HELPER FUNCTIONS ----------------------------------------------------

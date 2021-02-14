@@ -59,7 +59,7 @@ public:
 
 
 	int main() {
-		interfacer.printLinha("Bem-Vindo a Medusa, Sr. Colt. Deixe-me trazer seu jaleco...");
+		interfacer.printLinha("Welcome to Medusa, Mr. Elliot. Let me take your coat...");
 
 		while (1) {
 			interfacer.clocking();

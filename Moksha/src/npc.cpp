@@ -4,7 +4,7 @@ NPC::NPC(Mapa* m, string name, int genero, int forca, int destreza) : Personagem
 	this->nome = name;
 	this->mapa = m;
 
-	FileDict fileObjeto = FileManager::readFromFile("files/personagens/" + getNome() + ".txt");
+	FileDict fileObjeto = FileManager::readFromFile("files/characters/" + getNome() + ".txt");
 	this->dict = fileObjeto;
 }
 
@@ -50,10 +50,10 @@ void NPC::seguirCaminho() {
 	}
 }
 
-// ----------------------------------
+// REACÕES ----------------------------------
 
 void NPC::executarReacao(string topico, string frase, string remetente) {
-	if (isInconsciente())
+	if (isUnconscious())
 		return;
 
 	if (dict.hasKey(topico))
@@ -62,12 +62,12 @@ void NPC::executarReacao(string topico, string frase, string remetente) {
 
 
 void NPC::verSala(vector<Personagem*> pessoasNaSala) {
-	goap_worldstate_set(&ap, &current, "com_alvo", false);
+	goap_worldstate_set(&ap, &world, "with_target", false);
 
 	for (int i = 0; i < alvos.size(); i++) {
-		goap_worldstate_set(&ap, &current, ("com_" + alvos[i]).c_str(), false);
+		goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), false);
 		for (int i = 0; i < pessoasNaSala.size(); i++)
-			goap_worldstate_set(&ap, &current, ("com_" + alvos[i]).c_str(), true);
+			goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), true);
 		updatePlanos();
 		break;
 	}
@@ -84,60 +84,101 @@ void NPC::verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) 
 			ultimoAvistamento.addPair(set<string>(alvoVec, alvoVec+1), outraSala);
 		}
 
-		goap_worldstate_set(&ap, &current, ("com_" + alvos[idx]).c_str(), entrando);
+		goap_worldstate_set(&ap, &world, ("with_" + alvos[idx]).c_str(), entrando);
 		updatePlanos();
 	}
 }
 
 
-// PLANOS -------------------------------------------
+// PLANOS E AÇÕES -------------------------------------------
+
+void NPC::decidirAcao() {
+	if (currentStep >= plansz)
+		updatePlanos();
+
+	if (plansz > 0)
+		acaoAtual = plan[currentStep];
+	else
+		acaoAtual = "";
+}
+
+
+void NPC::tomarAcao() {
+	// Trancado em conversa
+	if (inConversation()) {
+		setInConversation(false);
+		return;
+	}
+
+	tomarAcaoParticular(acaoAtual);
+}
+
 
 void NPC::setupPlanos() {
 	goap_actionplanner_clear(&ap); // initializes action planner
-	vector<string> nomes = { "Ned", "Baxter", "Willow", "Hilda", "Santos",
-						"Magnus", "Tom", "Jenna", "Renard", "Liz",
-						"George", "Damian", "Amelie" };
+	vector<string> nomes = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
+								"Magnus", "Tom", "Jenna", "Renard", "Liz",
+								"George", "Damian", "Amelie" };
 
 	// describe repertoire of actions
 	setupAcoesAdicional();
-	goap_set_pst(&ap, "descansar", "descansado", true);	// Acao dummy para nao fazer nada caso objetivos estejam vazios
-	goap_set_cost(&ap, "descansar", 100);
 	for (int i = 0; i < nomes.size(); i++) {
-		goap_set_pst(&ap, ("procurar_" + nomes[i]).c_str(), ("com_" + nomes[i]).c_str(), true);
+		goap_set_pst(&ap, ("search_" + nomes[i]).c_str(), ("with_" + nomes[i]).c_str(), true);
 	}
 
 	// describe current world state.
-	goap_worldstate_clear(&current);
-	goap_worldstate_set(&ap, &current, "vivo", true);
-	goap_worldstate_set(&ap, &current, "descansado", false);
+	goap_worldstate_clear(&world);
+	goap_worldstate_set(&ap, &world, "alive", true);
 	for (int i = 0; i < nomes.size(); i++) {
-		goap_worldstate_set(&ap, &current, (nomes[i] + "_vivo").c_str(), true);
+		goap_worldstate_set(&ap, &world, (nomes[i] + "_alive").c_str(), true);
 		if (nomes[i] != nome)
-			goap_worldstate_set(&ap, &current, ("com_" + nomes[i]).c_str(), false);
+			goap_worldstate_set(&ap, &world, ("with_" + nomes[i]).c_str(), false);
 		else
-			goap_worldstate_set(&ap, &current, ("com_" + nomes[i]).c_str(), true);
+			goap_worldstate_set(&ap, &world, ("with_" + nomes[i]).c_str(), true);
 	}
 
-	goap_worldstate_set(&ap, &current, "armado", inventario.temItem("Faca"));
+	goap_worldstate_set(&ap, &world, "armed", inventario.temItem("Knife"));
 
 	setupMundoAdicional();
 
 	// describe goal
-	goap_worldstate_clear(&goal);
-	goap_worldstate_set(&ap, &goal, "descansado", true);
+	goap_worldstate_clear(&currentGoal.goal);
 	setupObjetivosAdicional();
+	goalList.push(currentGoal);
 
-	planCost = astar_plan(&ap, current, goal, plan, states, &plansz);
+	// calculate initial plan
+	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
 	currentStep = -1;
 	avancarPlanos();
 }
 
+
+void NPC::updatePlanos() {
+	// describe current world state.
+	updatePlanosAdicional();
+
+	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
+	currentStep = -1;
+	avancarPlanos();
+}
+
+
 bool NPC::temCondicao(string info) {
 	bool retorno;
-	if (!goap_worldstate_get(&ap, &current, info.c_str(), &retorno))
+	if (!goap_worldstate_get(&ap, &world, info.c_str(), &retorno))
 		return false;
 	return retorno;
 }
+
+void NPC::avancarPlanos() {
+	currentStep++;
+
+	if (currentStep >= plansz && plansz > 0)
+		updatePlanos();
+
+	avancarPlanosAdicional();
+}
+
 
 // HELPER ----------------------------------------
 

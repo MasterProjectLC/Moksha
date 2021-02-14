@@ -1,0 +1,10 @@
+name:
+Table
+actions:
+examine|look|see
+examine,look,see:
+What? It's just a table.
+touch:
+Hmm, the table is a bit cold. Did something happen here?
+take,obtain:
+The table is way too heavy.

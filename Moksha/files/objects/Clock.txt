@@ -1,0 +1,8 @@
+name:
+Clock
+actions:
+examine|look|see
+examine,look,see:
+The time is: 
+take,obtain:
+The clock is way too heavy.

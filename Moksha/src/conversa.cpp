@@ -1,10 +1,21 @@
 #include "conversa.h"
 
-Conversa::Conversa(set<string> participantes, string conversa, string sala) {
-	this->participantes = participantes;
+Conversa::Conversa(string conversa, string sala) {
+	convoStage = 0;
 	this->conversa.load_file( ("files/conversas/" + conversa + ".xml").c_str() );
 	it = this->conversa.child("Conversa").begin();
 	this->sala = sala;
+
+	// Inserir participantes
+	for (xml_node_iterator ait = this->conversa.child("Participants").begin(); ait != this->conversa.child("Participants").end(); ait++) {
+		this->participantes.insert(ait->name());
+	}
+}
+
+Conversa::Conversa(string conversa, string sala, int stage) : Conversa(conversa, sala) {
+	for (int i = 0; i < stage; i++) {
+		proximaFala();
+	}
 }
 
 bool Conversa::participa(string nome) {
@@ -12,6 +23,7 @@ bool Conversa::participa(string nome) {
 }
 
 xml_node Conversa::proximaFala() {
+	convoStage++;
 	return *(it++);
 }
 

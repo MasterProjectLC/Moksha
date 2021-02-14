@@ -1,8 +1,0 @@
-nome:
-Cozinha
-texto:
-A cozinha esta, como sempre, vazia. Nem sei porque vim aqui.
-adjacentes:
-Salao de Jantar|Banheiro
-objetos:
-Faca

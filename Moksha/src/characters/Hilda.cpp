@@ -14,12 +14,12 @@ void Hilda::setupMundoAdicional() {
 
 
 void Hilda::setupObjetivosAdicional() {
-	goap_worldstate_set(&ap, &current, "com_Baxter", true);
-	goap_worldstate_set(&ap, &goal, "vivo", true);
+	goap_worldstate_set(&ap, &current, "with_Baxter", true);
+	goap_worldstate_set(&ap, &goal, "alive", true);
 }
 
 
-void Hilda::updatePlanos() {
+void Hilda::updatePlanosAdicional() {
 	// describe current world state.
 
 	planCost = astar_plan(&ap, current, goal, plan, states, &plansz);
@@ -28,11 +28,11 @@ void Hilda::updatePlanos() {
 }
 
 
-void Hilda::tomarAcao() {
+void Hilda::tomarAcaoParticular(string acao) {
 
 }
 
 
-void Hilda::avancarPlanos() {
+void Hilda::avancarPlanosAdicional() {
 
 }

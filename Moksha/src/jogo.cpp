@@ -109,8 +109,7 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 		break;
 
 	case personagem->conversar:
-		conversas.push_back(Conversa(personagem->getNotifyTargets(), personagem->getNotifyText(), personagem->getSalaAtual()->getNome()));
-		advanceConversas();
+		conversas.push_back(Conversa(personagem->getNotifyText(), personagem->getSalaAtual()->getNome()));
 		break;
 
 	case personagem->descansar:
@@ -130,6 +129,14 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 
 
 void Jogo::advanceTime() {
+	// Personagens
+	for (int i = 0; i < npcs.size(); i++) {
+		npcs[i]->decidirAcao();
+		if (npcs[i]->getAcao() == "talk") {
+
+		}
+	}
+
 	// Conversas
 	advanceConversas();
 
@@ -158,8 +165,8 @@ void Jogo::advanceConversas() {
 			xml_node conversa = it->proximaFala();
 
 			string n = conversa.name();
-			if (n == "Narrador") {	// Edge case: narrador
-				imprimirTexto(conversa.attribute("fala").value());
+			if (n == "Narrator") {	// Edge case: narrador
+				imprimirTexto(conversa.attribute("line").value());
 				break;
 			}
 
@@ -171,12 +178,14 @@ void Jogo::advanceConversas() {
 				valid = false;
 
 			// O falante atual preenche as condicoes?
+			string info;
 			if (valid)
 				for (xml_node_iterator cit = conversa.begin(); cit != conversa.end(); ++cit) {
+					info = cit->attribute("info").value();
 					bool t1 = falante->temCondicao(cit->name());
-					string tt = cit->attribute("n").value();
-					bool t2 = (tt == "n");
-					if (cit->attribute("info").value() != "info" &&	t1 == t2) {
+					string nao = cit->attribute("n").value();
+					bool t2 = (nao == "n");
+					if (info != "info" && t1 == t2) {
 						valid = false;
 						break;
 					}
@@ -184,19 +193,23 @@ void Jogo::advanceConversas() {
 
 			// Enviar mensagem
 			if (valid) {
-				falante->say("", conversa.attribute("fala").value(), it->getParticipantes(conversa.name()));
+				falante->say( "", conversa.attribute("line").value(), it->getParticipantes(conversa.name()) );
 				break;
 			}
 		}
 
-		if (!conversas.size())
-			break;
+		// Lock every participant
+		for (set<string>::iterator ait = it->getParticipantes().begin(); ait != it->getParticipantes().end(); it++) {
+			findCharacter(*ait)->setInConversation(true);
+		}
+			
+		break;
 	}
 }
 
 
 void Jogo::obterObjeto(string nome, Personagem* recebedor) {
-	vector<string> acoesVec = FileManager::readFromFile("files/itens/" + nome + ".txt").getValues("acoes");
+	vector<string> acoesVec = FileManager::readFromFile("files/items/" + nome + ".txt").getValues("actions");
 	set<string> acoesSet = set<string>();
 	for (int i = 0; i < acoesVec.size(); i++) {
 		acoesSet.insert(acoesVec[i]);
@@ -223,24 +236,24 @@ void Jogo::initializeGame() {
 		throw invalid_argument("ERROR INITIALIZING GAME - BASE.XML COULD NOT BE FOUND");
 
 	// Gerar mapa
-	vector<string> salaLista = FileManager::getFileList("files/salas");
+	vector<string> salaLista = FileManager::getFileList("files/rooms");
 	vector<Sala*> salas;
 
 	for (int i = 0; i < salaLista.size(); i++) {
 		FileDict fileSala = FileManager::readFromFile(salaLista[i]);
 
-		Sala* sala = new Sala(i, fileSala.getValue("nome"), fileSala.getValue("texto"),
-			fileSala.getValues("adjacentes"), fileSala.getValues("objetos"));
+		Sala* sala = new Sala(i, fileSala.getValue("name"), fileSala.getValue("text"),
+			fileSala.getValues("adjacent"), fileSala.getValues("objects"));
 		salas.push_back(sala);
 	}
 
 	mapa = Mapa(salas, this);
 
 	// Gerar personagens
-	xml_node load_package = doc.child("JogoData").child("Jogo").child("Personagens");
+	xml_node load_package = doc.child("GameData").child("Game").child("Characters");
 	int i = 0;
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it, i++) {
-		string s = it->attribute("Sala").value();
+		string s = it->attribute("Room").value();
 		Personagem* personagem = findCharacter(it->name());
 		personagem->setSalaAtual(mapa.getSala(s));
 	}
@@ -253,19 +266,19 @@ bool Jogo::loadGame() {
 		return false;
 
 	// Gerar jogo
-	xml_node load_package = doc.child("JogoData").child("Jogo");
+	xml_node load_package = doc.child("GameData").child("Game");
 	time = load_package.attribute("Time").as_int();
 	loop = load_package.attribute("Loop").as_int();
 
 	// Gerar mapa
-	load_package = doc.child("JogoData").child("Jogo").child("Mapa");
+	load_package = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
-		Sala* estaSala = mapa.getSala(it->attribute("Nome").value());
+		Sala* estaSala = mapa.getSala(it->attribute("Name").value());
 		estaSala->limparObjetos();
 
 		// Carregar objetos
 		vector<string> objetoNomes;
-		xml_node objetos = it->child("Objetos");
+		xml_node objetos = it->child("Objects");
 
 		for (xml_node_iterator ait = objetos.begin(); ait != objetos.end(); ++ait)
 			objetoNomes.push_back(ait->name());
@@ -275,14 +288,14 @@ bool Jogo::loadGame() {
 	}
 
 	// Gerar personagens
-	load_package = doc.child("JogoData").child("Jogo").child("Personagens");
+	load_package = doc.child("GameData").child("Game").child("Characters");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
-		string s = it->attribute("Sala").value();
+		string s = it->attribute("Room").value();
 		Personagem* personagem = findCharacter(it->name());
 		personagem->setSalaAtual(mapa.getSala(s));
 
 		// Carregar inventário
-		xml_node inventario = it->child("Inventario");
+		xml_node inventario = it->child("Inventory");
 		for (xml_node_iterator ait = inventario.begin(); ait != inventario.end(); ++ait) {
 			obterObjeto(ait->name(), personagem);
 		}
@@ -296,19 +309,19 @@ void Jogo::saveGame() {
 	xml_document doc;
 	if (!doc.load_file("files/save.xml"))
 		doc.load_file("files/base.xml");
-	xml_node node = doc.child("JogoData").child("Jogo");
+	xml_node node = doc.child("GameData").child("Game");
 
 	// Salvar jogo
 	node.attribute("Time").set_value(to_string(time).c_str());
 	node.attribute("Loop").set_value(to_string(loop).c_str());
 
 	// Salvar mapa
-	node = doc.child("JogoData").child("Jogo").child("Mapa");
+	node = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
-		Sala* thisSala = mapa.getSala(it->attribute("Nome").value());
+		Sala* thisSala = mapa.getSala(it->attribute("Name").value());
 
 		// Salvar objetos
-		xml_node objetos = it->child("Objetos");
+		xml_node objetos = it->child("Objects");
 		objetos.remove_children();
 		for (int i = 0; i < thisSala->getObjetoNomes().size(); i++) {
 			objetos.append_child(thisSala->getObjetoNomes()[i].c_str());
@@ -316,13 +329,13 @@ void Jogo::saveGame() {
 	}
 
 	// Salvar personagens
-	node = doc.child("JogoData").child("Jogo").child("Personagens");
+	node = doc.child("GameData").child("Game").child("Characters");
 	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
 		Personagem* thisPersonagem = findCharacter(it->name());
-		it->attribute("Sala").set_value( thisPersonagem->getSalaAtual()->getNome().c_str() );
+		it->attribute("Room").set_value( thisPersonagem->getSalaAtual()->getNome().c_str() );
 
 		// Salvar inventario
-		xml_node inventario = it->child("Inventario");
+		xml_node inventario = it->child("Inventory");
 		inventario.remove_children();
 		for (int i = 0; i < thisPersonagem->getInventario().size(); i++) {
 			inventario.append_child(thisPersonagem->getInventario()[i].getNome().c_str());

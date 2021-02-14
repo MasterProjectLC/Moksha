@@ -14,10 +14,11 @@ private:
 	string erroSemSala;
 	string erroSemItem;
 	string erroMente;
-	vector<string> acoesBasicas{ "obter", "mover", "examinar", "ver", "tocar", "mencionar", "descansar" };
+	vector<string> acoesBasicas{ "obtain", "get", "move", "examine", "see", "look", "touch", "mention", "wait", "rest" };
 
 	map<string, set<string>> mindTheory;
 
+	void mention(string obj, set<string> receivers) override;
 	void mencionar(string topic, string person);
 	void mover(string location);
 	void interagir(string acao, string objeto);
