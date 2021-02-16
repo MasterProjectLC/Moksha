@@ -17,32 +17,30 @@ void Santos::setupAcoesAdicional() {
 
 
 void Santos::setupMundoAdicional() {
-	goap_worldstate_set(&ap, &current, "with_Baxter", true);
-	goap_worldstate_set(&ap, &current, "with_Hilda", true);
-	goap_worldstate_set(&ap, &current, "talk_no_gun", false);
+	goap_worldstate_set(&ap, &world, "with_Baxter", true);
+	goap_worldstate_set(&ap, &world, "with_Hilda", true);
+	goap_worldstate_set(&ap, &world, "talk_no_gun", false);
 }
 
 
 void Santos::setupObjetivosAdicional() {
-	goap_worldstate_set(&ap, &goal, "talk_no_gun", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "talk_no_gun", true);
 }
 
 
 void Santos::updatePlanosAdicional() {
-	planCost = astar_plan(&ap, current, goal, plan, states, &plansz);
+	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
 	currentStep = -1;
 	avancarPlanos();
 }
 
-
-void Santos::tomarAcaoParticular(string acao) {
+int Santos::decidirAcaoAdicional(string acao) {
 	if (acao == "talk_no_gun_Hilda" || acao == "talk_no_gun_Baxter") {
-		talk("santos_gun");
-		goap_worldstate_set(&ap, &current, "talk_no_gun", true);
-
-		if (caminho.size() == 0)
-			avancarPlanos();
+		actionArgs.push_back("santos_gun");
+		return conversar;
 	}
+	return descansar;
+
 }
 
 

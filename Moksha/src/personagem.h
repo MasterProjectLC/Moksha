@@ -3,6 +3,7 @@
 #include "inventario.h"
 #include "dictionary.h"
 #include "IObservable.h"
+#include "actionEnum.h"
 
 using namespace std;
 
@@ -19,11 +20,22 @@ protected:
 	int dexterity;
 	bool unconscious;
 	bool dead;
+	bool inConversation;
 	
 	Sala *salaAtual;
 	Inventario inventario;
 
-	bool inConversation;
+	vector<int> basicActions{ mover, descansar, mencionar, falar, conversar, interagir };
+	void takeAction(int action, vector<string> args);
+	virtual void move(string str);
+	void move(Sala sala);
+	virtual void mention(string obj, set<string> receivers);
+	virtual void mention(string obj, string receiver);
+	void attack(string target);
+	void say(string topico, string str, set<string> receivers);
+	void rest();
+	void talk(string convo);
+	virtual void interact(string action, string object);
 
 public:
 	Personagem(int gender, int strength, int dexterity) {
@@ -47,21 +59,14 @@ public:
 	int getDexterity() { return dexterity; }
 	bool isUnconscious() { return unconscious || dead; }
 	bool isDead() { return dead; }
-
 	bool inConversation() {	return inConversation; }
 	void setInConversation(bool a) { inConversation = a; }
 
-	virtual void tomarAcao() {}
+	bool isActionValid(int action);
 
-	enum { M, F, imprimir, mover, mencionar, falar, atacar, descansar, conversar };
+	virtual void takeAction() {}
+	void sayLine(string topico, string str, set<string> receivers) { say(topico, str, receivers); }
 	void printText(string str);
-	void move(string str);
-	void move(Sala sala);
-	virtual void mention(string obj, set<string> receivers);
-	void attack(string target);
-	void say(string topico, string str, set<string> receivers);
-	void rest();
-	void talk(string convo);
 
 	string getNotifyText() { return notifyText; }
 	set<string> getNotifyTargets() { return notifyTargets; }
@@ -75,4 +80,5 @@ public:
 		if (atacante->getStrength() >= strength)
 			unconscious = true;
 	};
+
 };

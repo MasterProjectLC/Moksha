@@ -14,17 +14,14 @@ private:
 	string erroSemSala;
 	string erroSemItem;
 	string erroMente;
-	vector<string> acoesBasicas{ "obtain", "get", "move", "examine", "see", "look", "touch", "mention", "wait", "rest" };
 
 	map<string, set<string>> mindTheory;
 
-	void mention(string obj, set<string> receivers) override;
-	void mencionar(string topic, string person);
-	void mover(string location);
-	void interagir(string acao, string objeto);
+	void mention(string obj, string receiver) override;
+	void move(string location) override;
+	void interact(string acao, string objeto) override;
 
 	void addToMind(string topic, string character);
-	bool isAcaoValida(string acao);
 
 public:
 	Jogador();

@@ -182,5 +182,8 @@
     <ClInclude Include="src\characters\Hilda.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
+    <ClInclude Include="src\actionEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -69,11 +69,11 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 	string antigaSala;
 
 	switch (id) {
-	case personagem->imprimir:
+	case imprimir:
 		imprimirTexto(personagem->getNotifyText());
 		break;
 
-	case personagem->mover:
+	case mover:
 		// Pessoas dentro da sala veem pessoa saindo
 		for (int i = 0; i < personagens.size(); i++)
 			if (personagens[i] != personagem && personagens[i]->getSalaAtual() == personagem->getSalaAtual())
@@ -89,7 +89,7 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 				personagens[i]->verPessoaMovendo(personagem, antigaSala, true);
 		break;
 
-	case personagem->mencionar:
+	case mencionar:
 		for (int i = 0; i < personagens.size(); i++) {
 			if (personagem->getNotifyTargets().count(personagens[i]->getNome()) && personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
 				personagens[i]->executarReacao(personagem->getNotifyText(), "", personagem->getNome());
@@ -98,7 +98,7 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 		}
 		break;
 
-	case personagem->falar:
+	case falar:
 		for (int i = 0; i < personagens.size(); i++) {
 			if (personagem->getNotifyTargets().count(personagens[i]->getNome()) && personagens[i]->getSalaAtual() == personagem->getSalaAtual()) {
 				vector<string> args = splitString(personagem->getNotifyText(), '|');
@@ -108,46 +108,50 @@ void Jogo::personagemOrdem(Personagem* personagem) {
 		}
 		break;
 
-	case personagem->conversar:
+	case conversar:
 		conversas.push_back(Conversa(personagem->getNotifyText(), personagem->getSalaAtual()->getNome()));
 		break;
 
-	case personagem->descansar:
+	case descansar:
 		break;
 
-	case personagem->atacar:
+	case atacar:
 		Personagem* vitima = findCharacter(personagem->getNotifyText());
 		if (vitima->getSalaAtual() == personagem->getSalaAtual())
 			vitima->serAtacado(personagem);
 		break;
 	}
 	
-	if (id != personagem->imprimir && personagem == &jogador)
+	if (id != imprimir && personagem == &jogador)
 		advanceTime();
 
 }
 
 
 void Jogo::advanceTime() {
-	// Personagens
-	for (int i = 0; i < npcs.size(); i++) {
-		npcs[i]->decidirAcao();
-		if (npcs[i]->getAcao() == "talk") {
-
-		}
-	}
+	// Decidir Ação
+	for (int i = 0; i < npcs.size(); i++)
+		npcs[i]->decideAction();
 
 	// Conversas
 	advanceConversas();
 
-	// Personagens
+	// Ordenar por prioridade
+	priority_queue<NPC*, vector<NPC*>, decltype(compare)> orderAction;
 	for (int i = 0; i < npcs.size(); i++)
-		npcs[i]->tomarAcao();
+		orderAction.push(npcs[i]);
+
+	// Tomar Ação
+	while (!orderAction.empty()) {
+		orderAction.top()->takeAction();
+		orderAction.pop();
+	}
 	
 	// Jogo
 	time++;
 	saveGame();
 }
+
 
 void Jogo::advanceConversas() {
 	// Iterar por cada conversa acontecendo
@@ -191,16 +195,15 @@ void Jogo::advanceConversas() {
 					}
 				}
 
-			// Enviar mensagem
+			// Mensagem válida!
 			if (valid) {
-				falante->say( "", conversa.attribute("line").value(), it->getParticipantes(conversa.name()) );
+				// Send message
+				falante->sayLine( "", conversa.attribute("line").value(), it->getParticipantes(conversa.name()) );
+				// Lock every participant
+				for (set<string>::iterator ait = it->getParticipantes().begin(); ait != it->getParticipantes().end(); it++)
+					findCharacter(*ait)->setInConversation(true);
 				break;
 			}
-		}
-
-		// Lock every participant
-		for (set<string>::iterator ait = it->getParticipantes().begin(); ait != it->getParticipantes().end(); it++) {
-			findCharacter(*ait)->setInConversation(true);
 		}
 			
 		break;

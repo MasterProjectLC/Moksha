@@ -173,6 +173,7 @@
     <ClInclude Include="libs\GPGOAP\astar.h" />
     <ClInclude Include="libs\GPGOAP\goap.h" />
     <ClInclude Include="libs\pugixml\src\pugixml.hpp" />
+    <ClInclude Include="src\actionEnum.h" />
     <ClInclude Include="src\characters\Baxter.h" />
     <ClInclude Include="src\characters\Hilda.h" />
     <ClInclude Include="src\characters\Jenna.h" />

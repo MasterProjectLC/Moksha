@@ -15,6 +15,8 @@
 using namespace std;
 using namespace pugi;
 
+auto compare = [](NPC* a, NPC* b) -> bool { return a->getAction() < b->getAction(); };
+
 class Jogo : public IObservable, public IObserver {
 private:
 	const int OBSERVER_OFFSET = 500;

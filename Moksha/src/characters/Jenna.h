@@ -9,7 +9,7 @@ private:
 public:
 	Jenna() : NPC{ NULL, "Jenna", F, 1, 1 } {}
 	explicit Jenna(Mapa* m);
-	void tomarAcaoParticular(string acao) override;
+	int decidirAcaoAdicional(string acao) override;
 	void avancarPlanosAdicional() override;
 	void setupMundoAdicional() override;
 	void setupObjetivosAdicional() override;

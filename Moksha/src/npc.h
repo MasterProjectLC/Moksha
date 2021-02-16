@@ -12,6 +12,7 @@ using namespace std;
 struct Goal {
 	worldstate_t goal;
 	int priority;
+	bool onetime;
 };
 
 auto compare = [](Goal a, Goal b) -> bool { return a.priority < b.priority; };
@@ -23,7 +24,9 @@ protected:
 	queue<Sala*> caminho;
 	Mapa* mapa;
 	string conversaAlvo;
-	string acaoAtual;
+
+	int currentAction;
+	vector<string> actionArgs;
 
 	actionplanner_t ap;
 	worldstate_t states[16];
@@ -45,9 +48,9 @@ protected:
 		return mapa->optimalPath(inicio, alvo).size();
 	};
 
-	void seguirCaminho();
-	virtual void tomarAcaoParticular(string acao) {}
+	string nextRoomInPath();
 
+	virtual int decidirAcaoAdicional(string acao) { return descansar; }
 	virtual void setupMundoAdicional() {}
 	virtual void setupObjetivosAdicional() {}
 	virtual void setupAcoesAdicional() {}
@@ -63,9 +66,9 @@ public:
 	explicit NPC(Mapa* m, string nome, int genero, int forca, int destreza);
 
 	bool temCondicao(string info) override;
+	void takeAction() override { Personagem::takeAction(currentAction, actionArgs); }
 
-	void decidirAcao();
-	void tomarAcao() override;
+	int decideAction();
 	void executarReacao(string topico, string frase, string remetente) override;
 	void verSala(vector<Personagem*> pessoasNaSala) override;
 	void verPessoaMovendo(Personagem * pessoa, string outraSala, bool entrando) override;
@@ -73,5 +76,5 @@ public:
 
 	void setupPlanos();
 
-	string getAcao() { return acaoAtual; }
+	int getAction() { return currentAction; }
 };

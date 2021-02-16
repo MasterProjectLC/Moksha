@@ -43,11 +43,14 @@ queue<Sala*> NPC::procurar(Sala* salaPista) {
 };
 
 
-void NPC::seguirCaminho() {
+string NPC::nextRoomInPath() {
+	string retorno = "";
 	if (!caminho.empty()) {
-		move(*caminho.front());
+		retorno = caminho.front()->getNome();
 		caminho.pop();
 	}
+
+	return retorno;
 }
 
 // REACÕES ----------------------------------
@@ -71,7 +74,6 @@ void NPC::verSala(vector<Personagem*> pessoasNaSala) {
 		updatePlanos();
 		break;
 	}
-
 };
 
 
@@ -92,25 +94,39 @@ void NPC::verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) 
 
 // PLANOS E AÇÕES -------------------------------------------
 
-void NPC::decidirAcao() {
-	if (currentStep >= plansz)
+int NPC::decideAction() {
+	// Atual é o topo e foi completado - retirar este e ir para o próximo topo
+	if (currentGoal.goal.values == (goalList.top().goal.values)) {
+		if (currentGoal.goal.values & world.values == currentGoal.goal.values || currentStep >= plansz) {
+			do {
+				// TODO - HackedQueue para iterar sobre priority queue
+				if (goalList.top().onetime)
+					goalList.pop();
+
+				currentGoal = goalList.top();
+				currentStep = 0;
+			} while (currentGoal.goal.values & world.values == currentGoal.goal.values || currentStep >= plansz);
+
+			updatePlanos();
+		}
+	
+	// Atual não é o topo - encontrar topo não-completado
+	} else {
+		do {
+			currentGoal = goalList.top();
+			currentStep = 0;
+		} while (currentGoal.goal.values & world.values == currentGoal.goal.values || currentStep >= plansz);
+
 		updatePlanos();
-
-	if (plansz > 0)
-		acaoAtual = plan[currentStep];
-	else
-		acaoAtual = "";
-}
-
-
-void NPC::tomarAcao() {
-	// Trancado em conversa
-	if (inConversation()) {
-		setInConversation(false);
-		return;
 	}
 
-	tomarAcaoParticular(acaoAtual);
+	if (plansz > 0) {
+		actionArgs.clear();
+		currentAction = decidirAcaoAdicional(plan[currentStep]);
+	} else
+		currentAction = descansar;
+
+	return currentAction;
 }
 
 

@@ -22,51 +22,41 @@ void Jenna::setupAcoesAdicional() {
 
 
 void Jenna::setupMundoAdicional() {
-	goap_worldstate_set(&ap, &current, "in_kitchen", salaAtual->getNome() == "Kitchen");
+	goap_worldstate_set(&ap, &world, "in_kitchen", salaAtual->getNome() == "Kitchen");
 }
 
 
 void Jenna::setupObjetivosAdicional() {
-	goap_worldstate_set(&ap, &goal, "Elliot_alive", false);
+	goap_worldstate_set(&ap, &currentGoal.goal, "Elliot_alive", false);
 }
 
 
 void Jenna::updatePlanosAdicional() {
 	// describe current world state.
-	goap_worldstate_set(&ap, &current, "in_kitchen", salaAtual->getNome() == "Kitchen");
-	goap_worldstate_set(&ap, &current, "armed", inventario.temItem("Knife"));
+	goap_worldstate_set(&ap, &world, "in_kitchen", salaAtual->getNome() == "Kitchen");
+	goap_worldstate_set(&ap, &world, "armed", inventario.temItem("Knife"));
 
-	planCost = astar_plan(&ap, current, goal, plan, states, &plansz);
+	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
 	currentStep = -1;
 	avancarPlanos();
 }
 
 
-void Jenna::tomarAcaoParticular(string acao) {
-	if (acao == "move_kitchen") {
-		seguirCaminho();
-
-		if (caminho.size() == 0)
-			avancarPlanos();
-	}
-
-	else if (acao == "search_target") {
-		seguirCaminho();
-
-		if (caminho.size() == 0)
-			avancarPlanos();
+int Jenna::decidirAcaoAdicional(string acao) {
+	if (acao == "move_kitchen" || acao == "search_target") {
+		actionArgs.push_back(nextRoomInPath());
+		return mover;
 	}
 
 	else if (acao == "take_knife") {
-		salaAtual->getObjeto("Knife")->takeAction("obtain", nome);
-		if (inventario.temItem("Knife"))
-			avancarPlanos();
+		actionArgs.push_back("take");
+		actionArgs.push_back("Knife");
+		return interagir;
 	}
 
 	else if (acao == "kill") {
-		attack(alvos[0]);
-		goap_worldstate_set(&ap, &current, (alvos[0] + "_alive").c_str(), false);
-		avancarPlanos();
+		actionArgs.push_back(alvos[0]);
+		return atacar;
 	}
 }
 

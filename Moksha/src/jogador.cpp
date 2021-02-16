@@ -15,17 +15,7 @@ Jogador::Jogador() : Personagem(M, 2, 2) {
 
 // ACOES -------------------------------------------------------------------------------------
 
-void Jogador::mention(string obj, set<string> receivers) {
-	if (inventario.temConceito(obj) || inventario.temItem(obj)) {
-		Personagem::mention(obj, receivers);
-	}
-	else {
-		printText(erroSemItem);
-	}
-}
-
-
-void Jogador::mencionar(string topic, string person) {
+void Jogador::mention(string topic, string person) {
 	if (mindTheory.count(person) && mindTheory.at(person).find(topic) != mindTheory.at(person).end()) {
 		printText(erroMente);
 		return;
@@ -36,11 +26,11 @@ void Jogador::mencionar(string topic, string person) {
 		return;
 	}
 
-	mention(topic, set<string>({ person }));
+	Personagem::mention(topic, set<string>({ person }));;
 }
 
 
-void Jogador::mover(string location) {
+void Jogador::move(string location) {
 	if (getSalaAtual()->isSalaAnexa(location))
 		move(location);
 	else
@@ -48,7 +38,7 @@ void Jogador::mover(string location) {
 }
 
 
-void Jogador::interagir(string acao, string objeto) {
+void Jogador::interact(string acao, string objeto) {
 	// Objetos
 	if (getSalaAtual()->possuiObjeto(objeto)) {
 		Objeto* objetoAqui = getSalaAtual()->getObjeto(objeto);
@@ -59,7 +49,7 @@ void Jogador::interagir(string acao, string objeto) {
 		else { printText(erroSemAcao); }
 
 		// Tomar ação
-		objetoAqui->takeAction(acao, nome);
+		interact(acao, objeto);
 	}
 
 	// Objeto não existe
@@ -67,38 +57,15 @@ void Jogador::interagir(string acao, string objeto) {
 		printText(erroSemObjeto);
 }
 
+
 void Jogador::receberArgs(vector<string> args) {
-	if (!isAcaoValida(args.at(0)))
-		return;
+	int action;
+	for (action = 2; action < stringEnum.size(); action++)
+		if (stringEnum[action] == args.at(0))
+			break;
+	args.erase(args.begin());
 
-	if (args.size() == 3) {
-		// Mencionar
-		if (args.at(0) == "mention") {
-			mencionar(args.at(1), args.at(2));
-			return;
-		}
-	}
-	
-	if (args.size() >= 2) {
-		string secondArg = concatStrings(args, 1);
-
-		// Mover para outra sala
-		if (args.at(0) == "move") {
-			mover(secondArg);
-		}
-		else if (args.at(0) == "attack") {
-			attack(secondArg);
-		}
-
-		else {
-			// Objetos
-			interagir(args.at(0), secondArg);
-		}
-	}
-
-	if (args.at(0) == "rest" || args.at(0) == "wait") {
-		rest();
-	}
+	takeAction(action, args);
 }
 
 
@@ -130,7 +97,7 @@ void Jogador::verSala(vector<Personagem*> pessoasNaSala) {
 	// Pessoas na sala
 	for (int i = 0; i < pessoasNaSala.size(); i++) {
 		if (pessoasNaSala[i]->getNome() != nome)
-			if (!pessoasNaSala[i]->isInconsciente())
+			if (!pessoasNaSala[i]->isUnconscious())
 				printText(pessoasNaSala[i]->getNome() + " is in the room.");
 			else
 				printText("Oh, " + pessoasNaSala[i]->getNome() + " is unconscious here!");
@@ -151,18 +118,6 @@ bool Jogador::temCondicao(string info) {
 	return inventario.temConceito(info);
 }
 
-
-bool Jogador::isAcaoValida(string acao) {
-	for (int i = 0; i < acoesBasicas.size(); i++)
-		if (acoesBasicas[i].compare(acao) == 0)
-			return true;
-
-	for (int i = 0; i < getInventario().size(); i++)
-		if (getInventario()[i].isAcaoValida(acao))
-			return true;
-
-	return false;
-}
 
 
 void Jogador::addToMind(string topic, string character) {

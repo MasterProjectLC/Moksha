@@ -9,7 +9,7 @@ private:
 public:
 	Hilda() : NPC{ NULL, "Hilda", M, 2, 1 } {}
 	explicit Hilda(Mapa* m);
-	void tomarAcaoParticular(string acao) override;
+	int decidirAcaoAdicional(string acao) override;
 	void avancarPlanosAdicional() override;
 	void setupMundoAdicional() override;
 	void setupObjetivosAdicional() override;
