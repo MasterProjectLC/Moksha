@@ -15,7 +15,7 @@
 using namespace std;
 using namespace pugi;
 
-auto compare = [](NPC* a, NPC* b) -> bool { return a->getAction() < b->getAction(); };
+static auto actionCompare = [](NPC* a, NPC* b) -> bool { return a->getAction() < b->getAction(); };
 
 class Jogo : public IObservable, public IObserver {
 private:
@@ -67,5 +67,5 @@ public:
 	void imprimirTexto(string texto);
 	string getTexto() { return texto; }
 
-	enum { obter, imprimir };
+	enum {_obter, _imprimir};
 };

@@ -20,12 +20,12 @@ protected:
 	int dexterity;
 	bool unconscious;
 	bool dead;
-	bool inConversation;
+	bool conversation;
 	
 	Sala *salaAtual;
 	Inventario inventario;
 
-	vector<int> basicActions{ mover, descansar, mencionar, falar, conversar, interagir };
+	set<int> basicActions;
 	void takeAction(int action, vector<string> args);
 	virtual void move(string str);
 	void move(Sala sala);
@@ -38,12 +38,16 @@ protected:
 	virtual void interact(string action, string object);
 
 public:
+	Personagem() {}
 	Personagem(int gender, int strength, int dexterity) {
 		this->gender = gender;
 		this->strength = strength;
 		this->dexterity = dexterity;
 		unconscious = false;
 		dead = false;
+		conversation = false;
+
+		basicActions = { mover, descansar, mencionar, falar, conversar, interagir };
 	}
 
 	string getNome() { return nome; }
@@ -59,8 +63,8 @@ public:
 	int getDexterity() { return dexterity; }
 	bool isUnconscious() { return unconscious || dead; }
 	bool isDead() { return dead; }
-	bool inConversation() {	return inConversation; }
-	void setInConversation(bool a) { inConversation = a; }
+	bool inConversation() {	return conversation; }
+	void setInConversation(bool a) { conversation = a; }
 
 	bool isActionValid(int action);
 
@@ -71,11 +75,11 @@ public:
 	string getNotifyText() { return notifyText; }
 	set<string> getNotifyTargets() { return notifyTargets; }
 
-	virtual bool temCondicao(string info) { return false; }
+	virtual bool hasCondition(string info) { return false; }
 
-	virtual void executarReacao(string topico, string frase, string remetente) {};
-	virtual void verSala(vector<Personagem*> pessoasNaSala) {};
-	virtual void verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) {};
+	virtual void executeReaction(string topico, string frase, string remetente) {}
+	virtual void checkRoom(vector<Personagem*> pessoasNaSala) {}
+	virtual void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {}
 	virtual void serAtacado(Personagem* atacante) {
 		if (atacante->getStrength() >= strength)
 			unconscious = true;

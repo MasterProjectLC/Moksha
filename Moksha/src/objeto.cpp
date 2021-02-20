@@ -14,7 +14,7 @@ void Objeto::takeAction(string prompt, string user) {
 	for (int i = 0; i < validActions.size(); i++) {
 		if (validActions[i].compare(prompt) == 0) {
 			this->user = user;
-			if (prompt == "obtain")
+			if (prompt == "obtain" || prompt == "take")
 				notify(obter);
 		}
 	}

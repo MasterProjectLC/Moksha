@@ -6,44 +6,41 @@ Jenna::Jenna(Mapa* m) : NPC{m, "Jenna", F, 1, 1} {
 
 void Jenna::setupAcoesAdicional() {
 	goap_set_pst(&ap, "move_kitchen", "in_kitchen", true);
-	goap_set_cost(&ap, "move_kitchen", tamanhoCaminho(salaAtual, mapa->getSala("Kitchen")));
 
 	goap_set_pre(&ap, "take_knife", "in_kitchen", true);
 	goap_set_pst(&ap, "take_knife", "armed", true);
 
-	goap_set_pre(&ap, "search_target", "armed", true);
-	goap_set_pst(&ap, "search_target", "with_Elliot", true);
-	goap_set_cost(&ap, "search_target", 2);
+	goap_set_pre(&ap, "search_Elliot", "armed", true);
+	//goap_set_cost(&ap, "search_Elliot", 5);
 
-	goap_set_pre(&ap, "kill", "with_Elliot", true);
 	goap_set_pre(&ap, "kill", "armed", true);
+	goap_set_pre(&ap, "kill", "with_Elliot", true);
 	goap_set_pst(&ap, "kill", "Elliot_alive", false);
 }
 
 
 void Jenna::setupMundoAdicional() {
-	goap_worldstate_set(&ap, &world, "in_kitchen", salaAtual->getNome() == "Kitchen");
+
 }
 
 
 void Jenna::setupObjetivosAdicional() {
 	goap_worldstate_set(&ap, &currentGoal.goal, "Elliot_alive", false);
+	goap_worldstate_set(&ap, &currentGoal.goal, "Jenna_alive", true);
 }
 
 
-void Jenna::updatePlanosAdicional() {
+void Jenna::updateWorldExtra() {
 	// describe current world state.
 	goap_worldstate_set(&ap, &world, "in_kitchen", salaAtual->getNome() == "Kitchen");
 	goap_worldstate_set(&ap, &world, "armed", inventario.temItem("Knife"));
 
-	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
-	currentStep = -1;
-	avancarPlanos();
+	goap_set_cost(&ap, "move_kitchen", tamanhoCaminho(salaAtual, mapa->getSala("Kitchen")));
 }
 
 
 int Jenna::decidirAcaoAdicional(string acao) {
-	if (acao == "move_kitchen" || acao == "search_target") {
+	if (acao == "move_kitchen" || acao.substr(0, 7).compare("search_") == 0) {
 		actionArgs.push_back(nextRoomInPath());
 		return mover;
 	}
@@ -58,19 +55,20 @@ int Jenna::decidirAcaoAdicional(string acao) {
 		actionArgs.push_back(alvos[0]);
 		return atacar;
 	}
+
+	return descansar;
 }
 
 
-void Jenna::avancarPlanosAdicional() {
-	if (plan[currentStep] == "move_kitchen") {
-		caminho = descobrirCaminho(mapa->getSala("Kitchen"));
-	}
+void Jenna::advancePlansExtra(string currentProcess) {
+	if (currentProcess == "move_kitchen")
+		path = findPath(mapa->getSala("Kitchen"));
 
-	else if (plan[currentStep] == "search_target") {
+	else if (currentProcess == "search_Elliot") {
 		if (ultimoAvistamento.hasKey(alvos[0]))
-			caminho = procurar(mapa->getSala(ultimoAvistamento.getValues(alvos[0])));
+			path = search(mapa->getSala(ultimoAvistamento.getValues(alvos[0])));
 		else
-			caminho = procurar();
+			path = search();
 
 	}
 }

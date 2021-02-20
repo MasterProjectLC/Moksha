@@ -10,24 +10,24 @@ using namespace pugi;
 class Conversa {
 private:
 	int convoStage;
-	xml_document conversa;
+	xml_document conversation;
 	xml_node_iterator it;
-	set<string> participantes;
-	string sala;
+	set<string> participants;
+	string room;
 
 public:
 	Conversa() {}
 	Conversa(string conversa, string sala);
 	Conversa(string conversa, string sala, int stage);
 
-	bool participa(string nome); // Se personagem citado participa da conversa ou não
+	bool participates(string nome); // Se personagem citado participa da conversa ou não
 
-	xml_node proximaFala();
-	bool noFim();
+	xml_node nextLine();
+	bool ended();
 
-	set<string> getParticipantes() { return set<string>(participantes.begin(), participantes.end()); }
-	set<string> getParticipantes(string removido);
+	set<string>* getParticipants() { return &participants; }
+	set<string> getParticipants(string removido);
 
-	string getSala() { return sala; }
+	string getRoom() { return room; }
 	int getStage() { return convoStage; }
 };

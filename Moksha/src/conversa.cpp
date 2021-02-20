@@ -1,42 +1,42 @@
 #include "conversa.h"
 
-Conversa::Conversa(string conversa, string sala) {
+Conversa::Conversa(string conversation, string room) {
 	convoStage = 0;
-	this->conversa.load_file( ("files/conversas/" + conversa + ".xml").c_str() );
-	it = this->conversa.child("Conversa").begin();
-	this->sala = sala;
+	this->conversation.load_file( ("files/conversations/" + conversation + ".xml").c_str() );
+	it = this->conversation.child("Conversation").begin();
+	this->room = room;
 
 	// Inserir participantes
-	for (xml_node_iterator ait = this->conversa.child("Participants").begin(); ait != this->conversa.child("Participants").end(); ait++) {
-		this->participantes.insert(ait->name());
+	for (xml_node_iterator ait = this->conversation.child("Participants").begin(); ait != this->conversation.child("Participants").end(); ait++) {
+		this->participants.insert(ait->name());
 	}
 }
 
-Conversa::Conversa(string conversa, string sala, int stage) : Conversa(conversa, sala) {
+Conversa::Conversa(string conversation, string room, int stage) : Conversa(conversation, room) {
 	for (int i = 0; i < stage; i++) {
-		proximaFala();
+		nextLine();
 	}
 }
 
-bool Conversa::participa(string nome) {
-	return participantes.count(nome) > 0;
+bool Conversa::participates(string nome) {
+	return participants.count(nome) > 0;
 }
 
-xml_node Conversa::proximaFala() {
+xml_node Conversa::nextLine() {
 	convoStage++;
 	return *(it++);
 }
 
-bool Conversa::noFim() {
-	return it == conversa.child("Conversa").end();
+bool Conversa::ended() {
+	return it == conversation.child("Conversation").end();
 }
 
 
-set<string> Conversa::getParticipantes(string removido) {
-	set<string> retorno = getParticipantes();
+set<string> Conversa::getParticipants(string removed) {
+	set<string> retorno = *getParticipants();
 	
 	for (set<string>::iterator it = retorno.begin(); it != retorno.end(); it++) {
-		if ((*it) == removido) {
+		if ((*it) == removed) {
 			retorno.erase(it);
 			break;
 		}

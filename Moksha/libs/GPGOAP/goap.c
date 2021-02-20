@@ -26,7 +26,8 @@ static int idx_for_atomname( actionplanner_t* ap, const char* atomname )
 {
 	int idx;
 	for ( idx=0; idx < ap->numatoms; ++idx )
-		if ( !strcmp( ap->atm_names[ idx ], atomname ) ) return idx;		// Atom found - returning it
+		if ( strcmp( ap->atm_names[ idx ], atomname ) == 0 ) 
+			return idx;														// Atom found - returning it
 
 	if ( idx < MAXATOMS )													// New atom - registering and returning it
 	{
@@ -94,11 +95,13 @@ bool goap_worldstate_set( actionplanner_t* ap, worldstate_t* ws, const char* ato
 
 bool goap_worldstate_get(actionplanner_t* ap, worldstate_t* ws, const char* atomname, bool* value)
 {
-	int idx = -1;
+	int idx;
 	for (idx = 0; idx < ap->numatoms; ++idx)
-		if (!strcmp(ap->atm_names[idx], atomname)) break;
+		if (strcmp(ap->atm_names[idx], atomname) == 0) 
+			break;
 
-	if (idx == -1) return false;
+	if (idx == ap->numatoms) 
+		return false;
 
 	*value = ((ws->values & (1LL << idx)) != 0LL);
 	return true;
@@ -112,6 +115,21 @@ extern bool goap_set_pre( actionplanner_t* ap, const char* actionname, const cha
 	const int atmidx = idx_for_atomname( ap, atomname );
 	if ( actidx == -1 || atmidx == -1 ) return false;
 	goap_worldstate_set( ap, ap->act_pre+actidx, atomname, value );
+	return true;
+}
+
+
+extern bool goap_get_pre(actionplanner_t* ap, const char* actionname, bfield_t* value)
+{
+	int idx;
+	for (idx = 0; idx < ap->numactions; ++idx)
+		if (strcmp(ap->act_names[idx], actionname) == 0)
+			break;
+
+	if (idx == ap->numactions)
+		return false;
+
+	*value = ap->act_pre + idx;
 	return true;
 }
 

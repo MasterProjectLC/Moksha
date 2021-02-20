@@ -1,6 +1,6 @@
 #include "npc.h"
 
-NPC::NPC(Mapa* m, string name, int genero, int forca, int destreza) : Personagem(genero, forca, destreza) {
+NPC::NPC(Mapa* m, string name, int gender, int forca, int destreza) : Personagem(gender, forca, destreza) {
 	this->nome = name;
 	this->mapa = m;
 
@@ -11,26 +11,26 @@ NPC::NPC(Mapa* m, string name, int genero, int forca, int destreza) : Personagem
 
 // PATHFINDING ---------------
 
-queue<Sala*> NPC::descobrirCaminho(Sala* salaAlvo) {
-	return descobrirCaminho(salaAtual, salaAlvo);
+queue<Sala*> NPC::findPath(Sala* salaAlvo) {
+	return findPath(salaAtual, salaAlvo);
 };
 
-queue<Sala*> NPC::descobrirCaminho(Sala* salaInicial, Sala* salaAlvo) {
+queue<Sala*> NPC::findPath(Sala* salaInicial, Sala* salaAlvo) {
 	return mapa->optimalPath(salaInicial, salaAlvo);
 };
 
-queue<Sala*> NPC::procurar() {
-	return procurar(salaAtual);
+queue<Sala*> NPC::search() {
+	return search(salaAtual);
 };
 
-queue<Sala*> NPC::procurar(Sala* salaPista) {
+queue<Sala*> NPC::search(Sala* salaPista) {
 	queue<Sala*> retorno;
 	retorno.push(salaAtual);
 	if (salaPista != salaAtual)
-		retorno = descobrirCaminho(salaPista);
+		retorno = findPath(salaPista);
 	queue<Sala*> procura = mapa->breadthSearch(salaPista);
 	while (!procura.empty()) {
-		queue<Sala*> caminho = descobrirCaminho(retorno.back(), procura.front());
+		queue<Sala*> caminho = findPath(retorno.back(), procura.front());
 		while (!caminho.empty()) {
 			retorno.push(caminho.front());
 			caminho.pop();
@@ -45,9 +45,12 @@ queue<Sala*> NPC::procurar(Sala* salaPista) {
 
 string NPC::nextRoomInPath() {
 	string retorno = "";
-	if (!caminho.empty()) {
-		retorno = caminho.front()->getNome();
-		caminho.pop();
+	if (path.empty())
+		advancePlansExtra(plan[currentStep]); // Refresh plans
+
+	if (!path.empty()) {
+		retorno = path.front()->getNome();
+		path.pop();
 	}
 
 	return retorno;
@@ -55,7 +58,7 @@ string NPC::nextRoomInPath() {
 
 // REACÕES ----------------------------------
 
-void NPC::executarReacao(string topico, string frase, string remetente) {
+void NPC::executeReaction(string topico, string frase, string remetente) {
 	if (isUnconscious())
 		return;
 
@@ -64,62 +67,153 @@ void NPC::executarReacao(string topico, string frase, string remetente) {
 }
 
 
-void NPC::verSala(vector<Personagem*> pessoasNaSala) {
-	goap_worldstate_set(&ap, &world, "with_target", false);
-
+void NPC::checkRoom(vector<Personagem*> pessoasNaSala) {
 	for (int i = 0; i < alvos.size(); i++) {
 		goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), false);
-		for (int i = 0; i < pessoasNaSala.size(); i++)
-			goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), true);
-		updatePlanos();
-		break;
+		for (int j = 0; j < pessoasNaSala.size(); j++) {
+			if (alvos[i] == pessoasNaSala[j]->getNome()) {
+				goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), true);
+				break;
+			}
+		}
 	}
+
+	updateWorld();
 };
 
 
-void NPC::verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) {
+void NPC::seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {
 	int idx = alvoIndex(pessoa->getNome());
 
 	if (idx != -1) {
 		if (!entrando) {
 			string alvoVec[1] = { alvos[idx] };
 			ultimoAvistamento.addPair(set<string>(alvoVec, alvoVec+1), outraSala);
+			// TODO: criar sistema de ultimo avistamento mais modular e sofisticado
 		}
-
 		goap_worldstate_set(&ap, &world, ("with_" + alvos[idx]).c_str(), entrando);
-		updatePlanos();
+		updateWorld();
 	}
 }
 
 
-// PLANOS E AÇÕES -------------------------------------------
+// PLANOS -------------------------------------------
+
+void NPC::setupPlans() {
+	goap_actionplanner_clear(&ap); // initializes action planner
+
+	// describe repertoire of actions
+	static vector<string> search_atoms = editVector("search_", nomes, "");
+	static vector<string> with_atoms = editVector("with_", nomes, "");
+	static vector<string> alive_atoms = editVector("", nomes, "_alive");
+	for (int i = 0; i < search_atoms.size(); i++)
+		if (nomes[i] != nome) {
+			goap_set_pre(&ap, search_atoms[i].c_str(), alive_atoms[i].c_str(), true);
+			goap_set_pst(&ap, search_atoms[i].c_str(), with_atoms[i].c_str(), true);
+		}
+	setupAcoesAdicional();
+
+	// describe current world state.
+	goap_worldstate_clear(&world);
+	for (int i = 0; i < alive_atoms.size(); i++) {
+		goap_worldstate_set(&ap, &world, alive_atoms[i].c_str(), true);
+		if (nomes[i] != nome)
+			goap_worldstate_set(&ap, &world, ("with_" + nomes[i]).c_str(), false);
+	}
+	goap_worldstate_set(&ap, &world, "armed", inventario.temItem("Knife"));
+	setupMundoAdicional();
+
+	// describe goal
+	goap_worldstate_clear(&currentGoal.goal);
+	setupObjetivosAdicional();
+	goalList = PriorityVector<Goal>(vector<Goal>(), goalCompare);
+	goalList.push(currentGoal);
+
+	// calculate initial plan
+	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
+	currentStep = -1;
+	updateWorld();
+	advancePlans();
+}
+
+
+void NPC::updateWorld() {
+	updateWorldExtra();
+
+	// Detect that current action is impossible
+	if (plansz > 0) {
+		bfield_t prereqs;
+		goap_get_pre(&ap, plan[currentStep], &prereqs);
+		if (prereqs & world.values != prereqs)
+			changePlans(true);
+	}
+}
+
+
+void NPC::advancePlans() {
+	currentStep++;
+
+	// The plan has come to its end
+	if (currentStep >= plansz && plansz > 0)
+		changePlans();
+
+	// Advance plans
+	if (plansz > 0)
+		advancePlansExtra(plan[currentStep]);
+}
+
+
+void NPC::changePlans(bool justUpdated) {
+	if (!justUpdated)
+		updateWorldExtra();
+
+	// Calculate a new plan
+	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
+	currentStep = -1;
+	advancePlans();
+}
+
+
+// AÇÕES ------------------------------------------------
 
 int NPC::decideAction() {
-	// Atual é o topo e foi completado - retirar este e ir para o próximo topo
-	if (currentGoal.goal.values == (goalList.top().goal.values)) {
-		if (currentGoal.goal.values & world.values == currentGoal.goal.values || currentStep >= plansz) {
+	// Check if current action was completed
+	bool a;
+	goap_worldstate_get(&ap, &world, "with_Elliot", &a);
+	if ( (world.values & ~states[currentStep].dontcare) == states[currentStep].values )
+		advancePlans();
+
+	// Current objective is top priority
+	if (currentGoal.goal.values == (goalList.highest()->goal.values)) {
+		bool a;
+		goap_worldstate_get(&ap, &world, "Elliot_alive", &a);
+		goap_worldstate_get(&ap, &world, "with_Elliot", &a);
+		// Current objective was completed - find next non-completed objective
+		vector<Goal>::iterator it = goalList.highest();
+		if ( ((world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values || currentStep >= plansz) && !goalList.empty() ) {
 			do {
-				// TODO - HackedQueue para iterar sobre priority queue
-				if (goalList.top().onetime)
-					goalList.pop();
+				if (it->onetime)
+					goalList.getVector().erase(it);
 
-				currentGoal = goalList.top();
+				goalList.descend(it);
+				currentGoal = *it;
 				currentStep = 0;
-			} while (currentGoal.goal.values & world.values == currentGoal.goal.values || currentStep >= plansz);
-
-			updatePlanos();
+			} while ( (world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values && it != goalList.lowest() );
+			changePlans();
 		}
 	
-	// Atual não é o topo - encontrar topo não-completado
+	// Current objective is not top priority - find next non-completed objective
 	} else {
-		do {
-			currentGoal = goalList.top();
+		vector<Goal>::iterator it = goalList.highest();
+		while ((world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values && it != goalList.lowest() ) {
+			goalList.descend(it);
+			currentGoal = *it;
 			currentStep = 0;
-		} while (currentGoal.goal.values & world.values == currentGoal.goal.values || currentStep >= plansz);
-
-		updatePlanos();
+		}
+		changePlans();
 	}
 
+	// Decidir ação
 	if (plansz > 0) {
 		actionArgs.clear();
 		currentAction = decidirAcaoAdicional(plan[currentStep]);
@@ -130,69 +224,11 @@ int NPC::decideAction() {
 }
 
 
-void NPC::setupPlanos() {
-	goap_actionplanner_clear(&ap); // initializes action planner
-	vector<string> nomes = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
-								"Magnus", "Tom", "Jenna", "Renard", "Liz",
-								"George", "Damian", "Amelie" };
-
-	// describe repertoire of actions
-	setupAcoesAdicional();
-	for (int i = 0; i < nomes.size(); i++) {
-		goap_set_pst(&ap, ("search_" + nomes[i]).c_str(), ("with_" + nomes[i]).c_str(), true);
-	}
-
-	// describe current world state.
-	goap_worldstate_clear(&world);
-	goap_worldstate_set(&ap, &world, "alive", true);
-	for (int i = 0; i < nomes.size(); i++) {
-		goap_worldstate_set(&ap, &world, (nomes[i] + "_alive").c_str(), true);
-		if (nomes[i] != nome)
-			goap_worldstate_set(&ap, &world, ("with_" + nomes[i]).c_str(), false);
-		else
-			goap_worldstate_set(&ap, &world, ("with_" + nomes[i]).c_str(), true);
-	}
-
-	goap_worldstate_set(&ap, &world, "armed", inventario.temItem("Knife"));
-
-	setupMundoAdicional();
-
-	// describe goal
-	goap_worldstate_clear(&currentGoal.goal);
-	setupObjetivosAdicional();
-	goalList.push(currentGoal);
-
-	// calculate initial plan
-	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
-	currentStep = -1;
-	avancarPlanos();
-}
-
-
-void NPC::updatePlanos() {
-	// describe current world state.
-	updatePlanosAdicional();
-
-	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
-	currentStep = -1;
-	avancarPlanos();
-}
-
-
-bool NPC::temCondicao(string info) {
+bool NPC::hasCondition(string info) {
 	bool retorno;
 	if (!goap_worldstate_get(&ap, &world, info.c_str(), &retorno))
 		return false;
 	return retorno;
-}
-
-void NPC::avancarPlanos() {
-	currentStep++;
-
-	if (currentStep >= plansz && plansz > 0)
-		updatePlanos();
-
-	avancarPlanosAdicional();
 }
 
 

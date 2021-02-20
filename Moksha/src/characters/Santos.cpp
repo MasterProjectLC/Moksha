@@ -6,8 +6,6 @@ Santos::Santos(Mapa* m) : NPC{ m, "Santos", F, 3, 2 } {
 }
 
 void Santos::setupAcoesAdicional() {
-
-
 	goap_set_pre(&ap, "talk_no_gun_Hilda", "with_Hilda", true);
 	goap_set_pst(&ap, "talk_no_gun_Hilda", "talk_no_gun", true);
 
@@ -25,18 +23,14 @@ void Santos::setupMundoAdicional() {
 
 void Santos::setupObjetivosAdicional() {
 	goap_worldstate_set(&ap, &currentGoal.goal, "talk_no_gun", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "Santos_alive", true);
 }
 
-
-void Santos::updatePlanosAdicional() {
-	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
-	currentStep = -1;
-	avancarPlanos();
-}
 
 int Santos::decidirAcaoAdicional(string acao) {
 	if (acao == "talk_no_gun_Hilda" || acao == "talk_no_gun_Baxter") {
 		actionArgs.push_back("santos_gun");
+		goap_worldstate_set(&ap, &world, "talk_no_gun", true);
 		return conversar;
 	}
 	return descansar;
@@ -44,9 +38,13 @@ int Santos::decidirAcaoAdicional(string acao) {
 }
 
 
-void Santos::avancarPlanosAdicional() {
-	if (plan[currentStep] == "move_kitchen") {
-		caminho = descobrirCaminho(mapa->getSala("Kitchen"));
+void Santos::advancePlansExtra(string currentProcess) {
+	if (currentProcess == "move_kitchen") {
+		path = findPath(mapa->getSala("Kitchen"));
 	}
+}
+
+
+void Santos::updateWorldExtra() {
 
 }

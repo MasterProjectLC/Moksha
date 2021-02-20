@@ -1,10 +1,10 @@
 #include "stringLib.h"
 
-bool stringEqual(string str1, string str2) {
+const bool stringEqual(string str1, string str2) {
 	return str1.compare(0, str2.length() - 2, str2) == 0;
 }
 
-vector<string> splitString(string str, char delim) {
+const vector<string> splitString(string str, char delim) {
 	vector<string> retorno;
 	
 	size_t current, previous = 0;
@@ -20,7 +20,7 @@ vector<string> splitString(string str, char delim) {
 	return retorno;
 }
 
-set<string> splitStringSet(string str, char delim) {
+const set<string> splitStringSet(string str, char delim) {
 	set<string> retorno;
 
 	size_t current, previous = 0;
@@ -36,10 +36,25 @@ set<string> splitStringSet(string str, char delim) {
 	return retorno;
 }
 
-string concatStrings(vector<string> args, int inicio) {
+const string concatStrings(vector<string> args, int inicio) {
 	string r = args.at(inicio);
 	for (int i = inicio + 1; i < args.size(); i++) {
 		r += " " + args.at(i);
 	}
 	return r;
+}
+
+
+const vector<string> editVector(string prefix, vector<string> vetor, string suffix) {
+	for (int i = 0; i < vetor.size(); i++)
+		vetor[i] = prefix + vetor[i] + suffix;
+
+	return vetor;
+}
+
+const vector<string*> editVector(string prefix, vector<string*> vetor, string suffix) {
+	for (int i = 0; i < vetor.size(); i++)
+		vetor[i] = &(prefix + *vetor[i] + suffix);
+
+	return vetor;
 }

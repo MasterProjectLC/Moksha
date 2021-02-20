@@ -4,6 +4,7 @@
     <Santos/>
     <Baxter/>
     <Hilda/>
+	<Elliot />
 </Participants>
 
 <Conversation FormatVersion="1">
@@ -24,7 +25,7 @@
 
 	<Baxter line="Your gun...? No, certainly not. Why do you ask? Are you looking for it?" emotion="confusion"/>
 
-	<Hilda line="...What? No, I don't. Why do you need it?" emotion="confusion"/>
+	<Hilda line="...What? No, I don't. Why do you need it?" emotion="confusion">
 		<with_Baxter n="n"/>
 	</Hilda>
 
@@ -36,7 +37,13 @@
 
 	<Hilda line="Fucking hell, by the seas, Santos! I can't go on a mad chase after your gun right now. You better take care of this, and fast - I don't want anyone touching down with a hole on the middle of the chest!"/>
 
-	<Baxter line="...Darn. I believe I know where it is. Let me deal with it, alright?"/>
+	<Baxter line="Wait, settle down, Hilda. I believe I know where it is. Let me deal with it, alright?">
+		<with_Hilda/>
+	</Baxter>
+
+	<Baxter line="...Darn. This might end in disaster. Look, I believe I know where it is. Let me deal with it, alright?">
+		<with_Hilda n="n"/>
+	</Baxter>
 
 	<Santos line="Sure. Loads o' thanks, Bax.">
 		<with_Baxter/>

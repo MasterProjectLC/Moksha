@@ -1,5 +1,7 @@
 #pragma once
 #include <queue>
+#include "goal.h"
+#include "priorityVector.h"
 #include "personagem.h"
 #include "mapa.h"
 #include "fileManager.h"
@@ -9,19 +11,15 @@
 
 using namespace std;
 
-struct Goal {
-	worldstate_t goal;
-	int priority;
-	bool onetime;
-};
-
-auto compare = [](Goal a, Goal b) -> bool { return a.priority < b.priority; };
-
 class NPC : public Personagem {
 protected:
+	const vector<string> nomes = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
+								"Magnus", "Tom", "Jenna", "Renard", "Liz",
+								"George", "Damian", "Amelie" };
+
 	int MAX_ALVOS = 6;
 	vector<string> alvos;
-	queue<Sala*> caminho;
+	queue<Sala*> path;
 	Mapa* mapa;
 	string conversaAlvo;
 
@@ -32,17 +30,17 @@ protected:
 	worldstate_t states[16];
 	worldstate_t world;
 	Goal currentGoal;
-	priority_queue<Goal, vector<Goal>, decltype(compare)> goalList;
+	PriorityVector<Goal> goalList;
 	const char* plan[16]; // The planner will return the action plan in this array.
 	int plansz = 16; // Size of our return buffers
 	int planCost = 0;
 	int currentStep = 0;
 	Dictionary<vector<string>> dict;
 
-	queue<Sala*> descobrirCaminho(Sala* salaInicial, Sala* salaAlvo);
-	queue<Sala*> descobrirCaminho(Sala* salaAlvo);
-	queue<Sala*> procurar();
-	queue<Sala*> procurar(Sala* salaPista);
+	queue<Sala*> findPath(Sala* salaInicial, Sala* salaAlvo);
+	queue<Sala*> findPath(Sala* salaAlvo);
+	queue<Sala*> search();
+	queue<Sala*> search(Sala* salaPista);
 
 	int tamanhoCaminho(Sala* inicio, Sala* alvo) {
 		return mapa->optimalPath(inicio, alvo).size();
@@ -54,27 +52,28 @@ protected:
 	virtual void setupMundoAdicional() {}
 	virtual void setupObjetivosAdicional() {}
 	virtual void setupAcoesAdicional() {}
-	virtual void updatePlanosAdicional() {}
-	void updatePlanos();
-	virtual void avancarPlanosAdicional() {}
-	void avancarPlanos();
-	virtual void unlockPlanos() {}
+	void updateWorld();
+	virtual void updateWorldExtra() {}
+	void advancePlans();
+	virtual void advancePlansExtra(string currentProcess) {}
+	void changePlans() { changePlans(false); };
+	void changePlans(bool justUpdated);
 
 	int alvoIndex(string a);
 
 public:
 	explicit NPC(Mapa* m, string nome, int genero, int forca, int destreza);
 
-	bool temCondicao(string info) override;
-	void takeAction() override { Personagem::takeAction(currentAction, actionArgs); }
+	bool hasCondition(string info) override;
+	void takeAction() override { Personagem::takeAction(currentAction, actionArgs); updateWorld(); }
 
 	int decideAction();
-	void executarReacao(string topico, string frase, string remetente) override;
-	void verSala(vector<Personagem*> pessoasNaSala) override;
-	void verPessoaMovendo(Personagem * pessoa, string outraSala, bool entrando) override;
-	void setSalaAlvo(Sala* nova) { descobrirCaminho(nova); }
+	void executeReaction(string topico, string frase, string remetente) override;
+	void checkRoom(vector<Personagem*> pessoasNaSala) override;
+	void seeCharMoving(Personagem * pessoa, string outraSala, bool entrando) override;
+	void setSalaAlvo(Sala* nova) { findPath(nova); }
 
-	void setupPlanos();
+	void setupPlans();
 
 	int getAction() { return currentAction; }
 };

@@ -42,11 +42,11 @@ public:
 
 
 	void jogoUpdate() {
-		if (jogo.getNotifyID() == jogo.imprimir) {
+		if (jogo.getNotifyID() == jogo._imprimir) {
 			interfacer.printLinha(jogo.getTexto());
 		}
 
-		else if (jogo.getNotifyID() == jogo.obter) {
+		else if (jogo.getNotifyID() == jogo._obter) {
 			vector<Item> inventario = jogo.getInventario();
 			vector<string> paraEnviar;
 			for (int i = 0; i < inventario.size(); i++)

@@ -183,6 +183,7 @@
     <ClInclude Include="src\dictionary.h" />
     <ClInclude Include="src\fileDict.h" />
     <ClInclude Include="src\fileManager.h" />
+    <ClInclude Include="src\goal.h" />
     <ClInclude Include="src\graphics.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\interface.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="src\npc.h" />
     <ClInclude Include="src\objeto.h" />
     <ClInclude Include="src\personagem.h" />
+    <ClInclude Include="src\priorityVector.h" />
     <ClInclude Include="src\sala.h" />
     <ClInclude Include="src\saveModule.h" />
   </ItemGroup>

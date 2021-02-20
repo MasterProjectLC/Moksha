@@ -10,9 +10,9 @@ public:
 	Hilda() : NPC{ NULL, "Hilda", M, 2, 1 } {}
 	explicit Hilda(Mapa* m);
 	int decidirAcaoAdicional(string acao) override;
-	void avancarPlanosAdicional() override;
+	void advancePlansExtra(string currentProcess) override;
 	void setupMundoAdicional() override;
 	void setupObjetivosAdicional() override;
-	void updatePlanosAdicional() override;
+	void updateWorldExtra() override;
 	void setupAcoesAdicional() override;
 };

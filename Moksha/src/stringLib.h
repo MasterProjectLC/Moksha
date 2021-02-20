@@ -8,7 +8,9 @@
 
 using namespace std;
 
-vector<string> splitString(string str, char delim = ' ');
-set<string> splitStringSet(string str, char delim = ' ');
-string concatStrings(vector<string> args, int inicio);
-bool stringEqual(string str1, string str2);
+const vector<string> splitString(string str, char delim = ' ');
+const set<string> splitStringSet(string str, char delim = ' ');
+const string concatStrings(vector<string> args, int inicio);
+const vector<string> editVector(string prefix, vector<string> vetor, string suffix);
+const vector<string*> editVector(string prefix, vector<string*> vetor, string suffix);
+const bool stringEqual(string str1, string str2);

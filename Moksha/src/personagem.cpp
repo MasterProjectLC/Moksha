@@ -24,12 +24,17 @@ void Personagem::takeAction(int action, vector<string> args) {
 			attack(zusammenArgs);
 			break;
 
-		case descansar:
-			rest();
+		case interagir:
+			if (args.size() >= 2)
+				interact(args.at(0), concatStrings(args, 1));
+			break;
+
+		case conversar:
+			talk(zusammenArgs);
 			break;
 
 		default:
-			interact(args.at(0), zusammenArgs);
+			rest();
 			break;
 	}
 }
@@ -87,9 +92,8 @@ void Personagem::interact(string action, string object) {
 }
 
 bool Personagem::isActionValid(int action) {
-	for (int i = 0; i < basicActions.size(); i++)
-		if (basicActions[i] == action)
-			return true;
+	if (basicActions.count(action) > 0)
+		return true;
 
 	for (int i = 0; i < getInventario().size(); i++)
 		if (getInventario()[i].isActionValid(action))

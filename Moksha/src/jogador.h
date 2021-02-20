@@ -27,14 +27,14 @@ public:
 	Jogador();
 	void receberArgs(vector<string> args);
 
-	bool temCondicao(string info) override;
+	bool hasCondition(string info) override;
 
-	void verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) override;
-	void executarReacao(string topico, string frase, string remetente) override;
-	void verSala(vector<Personagem*> pessoasNaSala) override;
+	void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) override;
+	void executeReaction(string topico, string frase, string remetente) override;
+	void checkRoom(vector<Personagem*> pessoasNaSala) override;
 
 	void serAtacado(Personagem* atacante) override {
-		printText(atacante->getNome() + " te atacou!");
+		printText(atacante->getNome() + " attacked you!");
 		Personagem::serAtacado(atacante);
 	};
 };

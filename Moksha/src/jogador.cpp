@@ -32,7 +32,7 @@ void Jogador::mention(string topic, string person) {
 
 void Jogador::move(string location) {
 	if (getSalaAtual()->isSalaAnexa(location))
-		move(location);
+		Personagem::move(location);
 	else
 		printText(erroSemSala);
 }
@@ -49,7 +49,7 @@ void Jogador::interact(string acao, string objeto) {
 		else { printText(erroSemAcao); }
 
 		// Tomar ação
-		interact(acao, objeto);
+		Personagem::interact(acao, objeto);
 	}
 
 	// Objeto não existe
@@ -60,24 +60,33 @@ void Jogador::interact(string acao, string objeto) {
 
 void Jogador::receberArgs(vector<string> args) {
 	int action;
-	for (action = 2; action < stringEnum.size(); action++)
-		if (stringEnum[action] == args.at(0))
-			break;
-	args.erase(args.begin());
+	if (args[0] == "move")
+		action = mover;
+	else if (args[0] == "wait" || args[0] == "rest")
+		action = descansar;
+	else if (args[0] == "mention")
+		action = mencionar;
+	else if (args[0] == "attack")
+		action = atacar;
+	else {
+		action = interagir;
+	}
 
+	if (action != interagir)
+		args.erase(args.begin());
 	takeAction(action, args);
 }
 
 
 // REACOES -----------------------------------------------------------------------
 
-void Jogador::executarReacao(string topico, string frase, string remetente) {
+void Jogador::executeReaction(string topico, string frase, string remetente) {
 	printText(remetente + ": " + frase);
 	addToMind(topico, remetente);
 }
 
 
-void Jogador::verSala(vector<Personagem*> pessoasNaSala) {
+void Jogador::checkRoom(vector<Personagem*> pessoasNaSala) {
 	// Salas anexas
 	printText("Current room: " + getSalaAtual()->getNome() + "\n" + getSalaAtual()->getTextoInicial() + "\nAdjacent rooms:");
 	for (int i = 0; i < getSalaAtual()->getSalaAnexaCount(); i++)
@@ -105,7 +114,7 @@ void Jogador::verSala(vector<Personagem*> pessoasNaSala) {
 }
 
 
-void Jogador::verPessoaMovendo(Personagem* pessoa, string outraSala, bool entrando) {
+void Jogador::seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {
 	if (entrando)
 		printText(pessoa->getNome() + " entered the room, coming from the " + outraSala);
 	else
@@ -114,7 +123,7 @@ void Jogador::verPessoaMovendo(Personagem* pessoa, string outraSala, bool entran
 
 // HELPER FUNCTIONS ----------------------------------------------------
 
-bool Jogador::temCondicao(string info) {
+bool Jogador::hasCondition(string info) {
 	return inventario.temConceito(info);
 }
 
