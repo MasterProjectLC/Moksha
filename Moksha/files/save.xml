@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<GameData FormatVersion="1">
+	<Game Time="6" Loop="1">
+		<Characters>
+			<Elliot Room="Dining Hall">
+				<Inventory />
+			</Elliot>
+			<Jenna Room="Dining Hall">
+				<Inventory>
+					<Knife />
+				</Inventory>
+			</Jenna>
+			<Baxter Room="Lounge">
+				<Inventory />
+			</Baxter>
+			<Santos Room="Lounge">
+				<Inventory />
+			</Santos>
+			<Hilda Room="Lounge">
+				<Inventory />
+			</Hilda>
+		</Characters>
+		<Map>
+			<Corridor Name="Corridor">
+				<Objects>
+					<Clock />
+				</Objects>
+			</Corridor>
+			<DiningHall Name="Dining Hall">
+				<Objects>
+					<Table />
+				</Objects>
+			</DiningHall>
+			<Lounge Name="Lounge">
+				<Objects>
+					<Table />
+				</Objects>
+			</Lounge>
+			<Kitchen Name="Kitchen">
+				<Objects />
+			</Kitchen>
+			<Lavatory Name="Lavatory">
+				<Objects>
+					<Table />
+				</Objects>
+			</Lavatory>
+		</Map>
+	</Game>
+</GameData>
