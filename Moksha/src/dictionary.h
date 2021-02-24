@@ -15,6 +15,9 @@ protected:
 
 public:
 	void addPair(set<string> key, T value) {
+		if (hasKey(*key.begin()))
+			dictionary.erase(key);
+
 		dictionary.insert(pair<set<string>, T>(key, value));
 	}
 

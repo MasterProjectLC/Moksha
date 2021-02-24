@@ -174,7 +174,7 @@ void Jogo::advanceConversas() {
 			xml_node conversation = it->nextLine();
 
 			string n = conversation.name();
-			if (n == "Narrator") {	// Edge case: narrator
+			if (n == "Narrator" && it->getParticipants()->count(jogador.getNome()) && jogador.getSalaAtual()->getNome() == it->getRoom() ) {	// Edge case: narrator
 				imprimirTexto(conversation.attribute("line").value());
 				break;
 			}

@@ -12,7 +12,6 @@ protected:
 	string nome;
 	string notifyText;
 	set<string> notifyTargets;
-	Dictionary<string> ultimoAvistamento;
 	set<Sala*> salasChecadas;
 
 	int gender;

@@ -37,6 +37,8 @@ protected:
 	int currentStep = 0;
 	Dictionary<vector<string>> dict;
 
+	Dictionary<string> lastSeen;
+
 	queue<Sala*> findPath(Sala* salaInicial, Sala* salaAlvo);
 	queue<Sala*> findPath(Sala* salaAlvo);
 	queue<Sala*> search();
@@ -53,6 +55,7 @@ protected:
 	virtual void setupObjetivosAdicional() {}
 	virtual void setupAcoesAdicional() {}
 	void updateWorld();
+	void updateLastSeen(string pursueTarget, string room);
 	virtual void updateWorldExtra() {}
 	void advancePlans();
 	virtual void advancePlansExtra(string currentProcess) {}
@@ -60,6 +63,7 @@ protected:
 	void changePlans(bool justUpdated);
 
 	int alvoIndex(string a);
+	bool isCurrentStateFulfilled();
 
 public:
 	explicit NPC(Mapa* m, string nome, int genero, int forca, int destreza);

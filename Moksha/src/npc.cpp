@@ -24,10 +24,13 @@ queue<Sala*> NPC::search() {
 };
 
 queue<Sala*> NPC::search(Sala* salaPista) {
+	// Path to the clue
 	queue<Sala*> retorno;
 	retorno.push(salaAtual);
 	if (salaPista != salaAtual)
 		retorno = findPath(salaPista);
+
+	// Start search
 	queue<Sala*> procura = mapa->breadthSearch(salaPista);
 	while (!procura.empty()) {
 		queue<Sala*> caminho = findPath(retorno.back(), procura.front());
@@ -38,7 +41,8 @@ queue<Sala*> NPC::search(Sala* salaPista) {
 		procura.pop();
 	}
 
-	retorno.pop();
+	if (retorno.front() == salaAtual)
+		retorno.pop();
 	return retorno;
 };
 
@@ -71,9 +75,13 @@ void NPC::checkRoom(vector<Personagem*> pessoasNaSala) {
 	for (int i = 0; i < alvos.size(); i++) {
 		goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), false);
 		for (int j = 0; j < pessoasNaSala.size(); j++) {
-			if (alvos[i] == pessoasNaSala[j]->getNome()) {
-				goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), true);
-				break;
+			string theirName = pessoasNaSala[j]->getNome();
+			if (theirName != nome) {
+				updateLastSeen(theirName, salaAtual->getNome());
+				if (alvos[i] == theirName) {
+					goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), true);
+					break;
+				}
 			}
 		}
 	}
@@ -82,16 +90,16 @@ void NPC::checkRoom(vector<Personagem*> pessoasNaSala) {
 };
 
 
-void NPC::seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {
-	int idx = alvoIndex(pessoa->getNome());
+void NPC::seeCharMoving(Personagem* person, string otherRoom, bool entering) {
+	int idx = alvoIndex(person->getNome());
 
 	if (idx != -1) {
-		if (!entrando) {
-			string alvoVec[1] = { alvos[idx] };
-			ultimoAvistamento.addPair(set<string>(alvoVec, alvoVec+1), outraSala);
-			// TODO: criar sistema de ultimo avistamento mais modular e sofisticado
-		}
-		goap_worldstate_set(&ap, &world, ("with_" + alvos[idx]).c_str(), entrando);
+		if (!entering)
+			updateLastSeen(person->getNome(), otherRoom);
+		else
+			updateLastSeen(person->getNome(), salaAtual->getNome());
+
+		goap_worldstate_set(&ap, &world, ("with_" + alvos[idx]).c_str(), entering);
 		updateWorld();
 	}
 }
@@ -149,6 +157,16 @@ void NPC::updateWorld() {
 	}
 }
 
+void NPC::updateLastSeen(string pursueTarget, string room) {
+	string alvoVec[1] = { pursueTarget };
+	lastSeen.addPair(set<string>(alvoVec, alvoVec + 1), room);
+
+	string currentProcess = plan[currentStep];
+	if (currentProcess.compare("search_" + pursueTarget) == 0) {
+		path = search(mapa->getSala( lastSeen.getValues(pursueTarget) ));
+	}
+}
+
 
 void NPC::advancePlans() {
 	currentStep++;
@@ -158,8 +176,19 @@ void NPC::advancePlans() {
 		changePlans();
 
 	// Advance plans
-	if (plansz > 0)
-		advancePlansExtra(plan[currentStep]);
+	if (plansz > 0) {
+		string currentProcess = plan[currentStep];
+
+		if (currentProcess.substr(0, 7).compare("search_") == 0) {
+			if (lastSeen.hasKey( currentProcess.substr(7, 10000) ))
+				path = search(mapa->getSala(lastSeen.getValues( currentProcess.substr(7, 10000) )));
+			else
+				path = search();
+
+		}
+
+		advancePlansExtra(currentProcess);
+	}
 }
 
 
@@ -178,16 +207,11 @@ void NPC::changePlans(bool justUpdated) {
 
 int NPC::decideAction() {
 	// Check if current action was completed
-	bool a;
-	goap_worldstate_get(&ap, &world, "with_Elliot", &a);
-	if ( (world.values & ~states[currentStep].dontcare) == states[currentStep].values )
+	if (isCurrentStateFulfilled())
 		advancePlans();
 
 	// Current objective is top priority
 	if (currentGoal.goal.values == (goalList.highest()->goal.values)) {
-		bool a;
-		goap_worldstate_get(&ap, &world, "Elliot_alive", &a);
-		goap_worldstate_get(&ap, &world, "with_Elliot", &a);
 		// Current objective was completed - find next non-completed objective
 		vector<Goal>::iterator it = goalList.highest();
 		if ( ((world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values || currentStep >= plansz) && !goalList.empty() ) {
@@ -241,4 +265,15 @@ int NPC::alvoIndex(string nome) {
 	}
 
 	return -1;
+}
+
+
+bool NPC::isCurrentStateFulfilled() {
+	bfield_t worldState = (world.values & ~states[currentStep].dontcare);
+	bfield_t objState = states[currentStep].values;
+	if (currentStep > 0)
+		objState = states[currentStep].values & ~states[currentStep-1].values;
+	bool fulfilled = ((worldState & objState) == objState);
+
+	return fulfilled;
 }

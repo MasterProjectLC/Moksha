@@ -63,12 +63,4 @@ int Jenna::decidirAcaoAdicional(string acao) {
 void Jenna::advancePlansExtra(string currentProcess) {
 	if (currentProcess == "move_kitchen")
 		path = findPath(mapa->getSala("Kitchen"));
-
-	else if (currentProcess == "search_Elliot") {
-		if (ultimoAvistamento.hasKey(alvos[0]))
-			path = search(mapa->getSala(ultimoAvistamento.getValues(alvos[0])));
-		else
-			path = search();
-
-	}
 }
