@@ -1,24 +1,24 @@
-Um jogo text-based de aventura escrito em C++.
-Volte repetidamente no tempo e tente salvar todos a bordo do dirigível steampunk "Medusa".
+A text-based adventure game written in C++.
+Repeatedly rewind in time and try to save everyone aboard the steampunk airship "Medusa".
 
-## Créditos
-### Programação
+## Credits
+### Programming
 * Dan Isamu (MasterProject)
 
-#### Ferramentas
+#### Tools
 * Arseny Kapoulkine (zeux) - [pugixml](https://github.com/zeux/pugixml)
 * Abraham 'Bram' Stolk - [GPGOAP](https://github.com/stolk/GPGOAP)
 
-### Narrativa
+### Writing/Narrative
 * Ágata Drigo (Akatze)
 * Dan Isamu (MasterProject)
 * Leonardo Del Lama (Ruther)
 * Maurício Cândido (mew)
 
-### Agradecimentos
+### Special Thanks
 * Anderson Pinheiro Garrote
 * André Mateus Bariani Trava
 * Giovanni Marçon Rossi
 * Mark Brown (Game Maker's Toolkit)
 * Tommy Thompson (AI and Games)
-* Todo o time de Elsinore
+* Golden Glitch Studios (Elsinore)
