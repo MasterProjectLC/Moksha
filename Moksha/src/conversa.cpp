@@ -1,6 +1,7 @@
 #include "conversa.h"
 
 Conversa::Conversa(string conversation, string room) {
+	name = conversation;
 	convoStage = 0;
 	this->conversation.load_file( ("files/conversations/" + conversation + ".xml").c_str() );
 	it = this->conversation.child("Conversation").begin();

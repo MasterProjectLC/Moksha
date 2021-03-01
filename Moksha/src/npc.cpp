@@ -111,11 +111,11 @@ void NPC::setupPlans() {
 	goap_actionplanner_clear(&ap); // initializes action planner
 
 	// describe repertoire of actions
-	static vector<string> search_atoms = editVector("search_", nomes, "");
-	static vector<string> with_atoms = editVector("with_", nomes, "");
-	static vector<string> alive_atoms = editVector("", nomes, "_alive");
+	static vector<string> search_atoms = editVector("search_", names, "");
+	static vector<string> with_atoms = editVector("with_", names, "");
+	static vector<string> alive_atoms = editVector("", names, "_alive");
 	for (int i = 0; i < search_atoms.size(); i++)
-		if (nomes[i] != nome) {
+		if (names[i] != nome) {
 			goap_set_pre(&ap, search_atoms[i].c_str(), alive_atoms[i].c_str(), true);
 			goap_set_pst(&ap, search_atoms[i].c_str(), with_atoms[i].c_str(), true);
 		}
@@ -125,8 +125,8 @@ void NPC::setupPlans() {
 	goap_worldstate_clear(&world);
 	for (int i = 0; i < alive_atoms.size(); i++) {
 		goap_worldstate_set(&ap, &world, alive_atoms[i].c_str(), true);
-		if (nomes[i] != nome)
-			goap_worldstate_set(&ap, &world, ("with_" + nomes[i]).c_str(), false);
+		if (names[i] != nome)
+			goap_worldstate_set(&ap, &world, ("with_" + names[i]).c_str(), false);
 	}
 	goap_worldstate_set(&ap, &world, "armed", inventario.temItem("Knife"));
 	setupMundoAdicional();
@@ -256,6 +256,11 @@ bool NPC::hasCondition(string info) {
 }
 
 
+void NPC::setCondition(string condition, bool update) {
+	goap_worldstate_set(&ap, &world, condition.c_str(), update);
+}
+
+
 // HELPER ----------------------------------------
 
 int NPC::alvoIndex(string nome) {
@@ -276,4 +281,20 @@ bool NPC::isCurrentStateFulfilled() {
 	bool fulfilled = ((worldState & objState) == objState);
 
 	return fulfilled;
+}
+
+// GETTER
+vector<string> NPC::getActionList() {
+	vector<string> retorno;
+	for (int i = 0; i < ap.numactions; i++)
+		retorno.push_back(ap.act_names[i]);
+	return retorno;
+}
+
+
+vector<string> NPC::getAtomList() {
+	vector<string> retorno;
+	for (int i = 0; i < ap.numatoms; i++)
+		retorno.push_back(ap.atm_names[i]);
+	return retorno;
 }

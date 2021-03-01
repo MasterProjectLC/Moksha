@@ -13,7 +13,7 @@ using namespace std;
 
 class NPC : public Personagem {
 protected:
-	const vector<string> nomes = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
+	const vector<string> names = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
 								"Magnus", "Tom", "Jenna", "Renard", "Liz",
 								"George", "Damian", "Amelie" };
 
@@ -68,6 +68,7 @@ protected:
 public:
 	explicit NPC(Mapa* m, string nome, int genero, int forca, int destreza);
 
+	void setCondition(string condition, bool update);
 	bool hasCondition(string info) override;
 	void takeAction() override { Personagem::takeAction(currentAction, actionArgs); updateWorld(); }
 
@@ -80,4 +81,7 @@ public:
 	void setupPlans();
 
 	int getAction() { return currentAction; }
+
+	vector<string> getActionList();
+	vector<string> getAtomList();
 };

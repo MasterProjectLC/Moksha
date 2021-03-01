@@ -6,13 +6,13 @@
 class Overseer : public IObserver {
 private:
 	Interface interfacer = Interface(140, 40, 60, 30);
-	Jogo jogo = Jogo();
+	Jogo game = Jogo();
 public:
 	Overseer() {
 		interfacer.add(this, 0);
-		jogo.add(this, 1);
+		game.add(this, 1);
 
-		jogo.setup();
+		game.setup();
 	}
 
 
@@ -35,19 +35,19 @@ public:
 	void interfaceUpdate() {
 		switch (interfacer.getNotifyID()) {
 		case this->interfacer.notifyArgs:
-			jogo.receberArgs(interfacer.getArgs());
+			game.receiveArgs(interfacer.getArgs());
 			break;
 		}
 	}
 
 
 	void jogoUpdate() {
-		if (jogo.getNotifyID() == jogo._imprimir) {
-			interfacer.printLinha(jogo.getTexto());
+		if (game.getNotifyID() == game._imprimir) {
+			interfacer.printLinha(game.getText());
 		}
 
-		else if (jogo.getNotifyID() == jogo._obter) {
-			vector<Item> inventario = jogo.getInventario();
+		else if (game.getNotifyID() == game._obter) {
+			vector<Item> inventario = game.getInventory();
 			vector<string> paraEnviar;
 			for (int i = 0; i < inventario.size(); i++)
 				paraEnviar.push_back(inventario[i].getNome());

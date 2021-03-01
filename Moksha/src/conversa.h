@@ -10,6 +10,7 @@ using namespace pugi;
 class Conversa {
 private:
 	int convoStage;
+	string name;
 	xml_document conversation;
 	xml_node_iterator it;
 	set<string> participants;
@@ -28,6 +29,7 @@ public:
 	set<string>* getParticipants() { return &participants; }
 	set<string> getParticipants(string removido);
 
+	string getName() { return name; }
 	string getRoom() { return room; }
 	int getStage() { return convoStage; }
 };

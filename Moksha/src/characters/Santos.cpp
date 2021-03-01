@@ -30,6 +30,8 @@ void Santos::setupObjetivosAdicional() {
 int Santos::decidirAcaoAdicional(string acao) {
 	if (acao == "talk_no_gun_Hilda" || acao == "talk_no_gun_Baxter") {
 		actionArgs.push_back("santos_gun");
+		bool a;
+		goap_worldstate_get(&ap, &world, "talk_no_gun", &a);
 		goap_worldstate_set(&ap, &world, "talk_no_gun", true);
 		return conversar;
 	}

@@ -1,23 +1,137 @@
 <?xml version="1.0"?>
 <GameData FormatVersion="1">
-	<Game Time="6" Loop="1">
+	<Game Time="4" Loop="1">
 		<Characters>
-			<Elliot Room="Dining Hall">
+			<Elliot Room="Lounge">
 				<Inventory />
 			</Elliot>
-			<Jenna Room="Dining Hall">
+			<Jenna Room="Kitchen">
 				<Inventory>
 					<Knife />
 				</Inventory>
+				<Atoms>
+					<Elliot_alive value="true" />
+					<with_Elliot value="false" />
+					<Baxter_alive value="true" />
+					<with_Baxter value="false" />
+					<Willow_alive value="true" />
+					<with_Willow value="false" />
+					<Hilda_alive value="true" />
+					<with_Hilda value="false" />
+					<Santos_alive value="true" />
+					<with_Santos value="false" />
+					<Magnus_alive value="true" />
+					<with_Magnus value="false" />
+					<Tom_alive value="true" />
+					<with_Tom value="false" />
+					<Renard_alive value="true" />
+					<with_Renard value="false" />
+					<Liz_alive value="true" />
+					<with_Liz value="false" />
+					<George_alive value="true" />
+					<with_George value="false" />
+					<Damian_alive value="true" />
+					<with_Damian value="false" />
+					<Amelie_alive value="true" />
+					<with_Amelie value="false" />
+					<in_kitchen value="true" />
+					<armed value="true" />
+					<Jenna_alive value="true" />
+				</Atoms>
 			</Jenna>
 			<Baxter Room="Lounge">
 				<Inventory />
+				<Atoms>
+					<Elliot_alive value="true" />
+					<with_Elliot value="false" />
+					<Willow_alive value="true" />
+					<with_Willow value="false" />
+					<Hilda_alive value="true" />
+					<with_Hilda value="true" />
+					<Santos_alive value="true" />
+					<with_Santos value="false" />
+					<Magnus_alive value="true" />
+					<with_Magnus value="false" />
+					<Tom_alive value="true" />
+					<with_Tom value="false" />
+					<Jenna_alive value="true" />
+					<with_Jenna value="false" />
+					<Renard_alive value="true" />
+					<with_Renard value="false" />
+					<Liz_alive value="true" />
+					<with_Liz value="false" />
+					<George_alive value="true" />
+					<with_George value="false" />
+					<Damian_alive value="true" />
+					<with_Damian value="false" />
+					<Amelie_alive value="true" />
+					<with_Amelie value="false" />
+					<Baxter_alive value="true" />
+					<armed value="false" />
+				</Atoms>
 			</Baxter>
 			<Santos Room="Lounge">
 				<Inventory />
+				<Atoms>
+					<Elliot_alive value="true" />
+					<with_Elliot value="false" />
+					<Baxter_alive value="true" />
+					<with_Baxter value="true" />
+					<Willow_alive value="true" />
+					<with_Willow value="false" />
+					<Hilda_alive value="true" />
+					<with_Hilda value="true" />
+					<Magnus_alive value="true" />
+					<with_Magnus value="false" />
+					<Tom_alive value="true" />
+					<with_Tom value="false" />
+					<Jenna_alive value="true" />
+					<with_Jenna value="false" />
+					<Renard_alive value="true" />
+					<with_Renard value="false" />
+					<Liz_alive value="true" />
+					<with_Liz value="false" />
+					<George_alive value="true" />
+					<with_George value="false" />
+					<Damian_alive value="true" />
+					<with_Damian value="false" />
+					<Amelie_alive value="true" />
+					<with_Amelie value="false" />
+					<talk_no_gun value="true" />
+					<Santos_alive value="true" />
+					<armed value="false" />
+				</Atoms>
 			</Santos>
 			<Hilda Room="Lounge">
 				<Inventory />
+				<Atoms>
+					<Elliot_alive value="true" />
+					<with_Elliot value="false" />
+					<Baxter_alive value="true" />
+					<with_Baxter value="true" />
+					<Willow_alive value="true" />
+					<with_Willow value="false" />
+					<Santos_alive value="true" />
+					<with_Santos value="false" />
+					<Magnus_alive value="true" />
+					<with_Magnus value="false" />
+					<Tom_alive value="true" />
+					<with_Tom value="false" />
+					<Jenna_alive value="true" />
+					<with_Jenna value="false" />
+					<Renard_alive value="true" />
+					<with_Renard value="false" />
+					<Liz_alive value="true" />
+					<with_Liz value="false" />
+					<George_alive value="true" />
+					<with_George value="false" />
+					<Damian_alive value="true" />
+					<with_Damian value="false" />
+					<Amelie_alive value="true" />
+					<with_Amelie value="false" />
+					<Hilda_alive value="true" />
+					<armed value="false" />
+				</Atoms>
 			</Hilda>
 		</Characters>
 		<Map>
@@ -45,5 +159,8 @@
 				</Objects>
 			</Lavatory>
 		</Map>
+		<Conversations>
+			<santos_gun stage="6" room="Lounge" />
+		</Conversations>
 	</Game>
 </GameData>

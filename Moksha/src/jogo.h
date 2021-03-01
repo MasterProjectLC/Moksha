@@ -26,46 +26,46 @@ private:
 
 	string texto;
 
-	Jogador jogador;
-	vector<Personagem*> personagens;
+	Jogador player;
+	vector<Personagem*> characters;
 	vector<NPC*> npcs;
-	vector<Conversa> conversas;
+	vector<Conversa> conversations;
 
 	string erroSemObjeto;
 	string erroSemAcao;
 	string erroSemSala;
 
-	Sala* moverSala(Sala *salaOrigem, string salaDestino);
+	Sala* moveRoom(Sala *salaOrigem, string salaDestino);
 	Mapa mapa;
-	vector<Personagem*> getPessoasNaSala(Sala* sala);
+	vector<Personagem*> getPeopleInRoom(Sala* room);
 
 	class No;
 
-	void objetoOrdem(Objeto* objeto);
-	void personagemOrdem(Personagem* personagem);
+	void objectAction(Objeto* objeto);
+	void characterAction(Personagem* personagem);
 	Personagem* findCharacter(string nome);
 
 	void update(int id) override;
 	void advanceTime();
-	void advanceConversas();
+	void advanceConversations();
 
 	void initializeGame();
 	bool loadGame();
 	void saveGame();
 
-	void obterObjeto(string nome, Personagem* recebedor);
+	void obtainObject(string nome, Personagem* recebedor);
 
 public:
 	Jogo();
 
 	void setup();
-	Sala* getSalaAtual() { return jogador.getSalaAtual(); }
-	void receberArgs(vector<string> args);
+	Sala* getSalaAtual() { return player.getSalaAtual(); }
+	void receiveArgs(vector<string> args);
 
-	vector<Item> getInventario();
+	vector<Item> getInventory();
 
-	void imprimirTexto(string texto);
-	string getTexto() { return texto; }
+	void printText(string texto);
+	string getText() { return texto; }
 
 	enum {_obter, _imprimir};
 };

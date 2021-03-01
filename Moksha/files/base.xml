@@ -4,24 +4,23 @@
 	<Game Time="3" Loop="3">
 		<Characters>
 			<Elliot Room="Lounge"> 
-				<Inventory>
-				</Inventory>
+				<Inventory/>
 			</Elliot>
 			<Jenna Room="Corridor"> 
-				<Inventory>
-				</Inventory>
+				<Inventory/>
+                <Atoms/>
 			</Jenna>
 		    <Baxter Room="Lounge"> 
-				<Inventory>
-				</Inventory>
+				<Inventory/>
+                <Atoms/>
 			</Baxter>
             <Santos Room="Lounge"> 
-				<Inventory>
-				</Inventory>
+				<Inventory/>
+                <Atoms/>
 			</Santos>
             <Hilda Room="Lounge"> 
-				<Inventory>
-				</Inventory>
+				<Inventory/>
+                <Atoms/>
 			</Hilda>
 		</Characters>
 
@@ -56,6 +55,6 @@
 				</Objects>
 			</Lavatory>
 		</Map>
-
+        <Conversations/>
 	</Game>
 </GameData>
