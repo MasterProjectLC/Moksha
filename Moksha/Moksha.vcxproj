@@ -163,7 +163,7 @@
     <ClCompile Include="src\jogo.cpp" />
     <ClCompile Include="src\mapa.cpp" />
     <ClCompile Include="src\npc.cpp" />
-    <ClCompile Include="src\objeto.cpp" />
+    <ClCompile Include="src\object.cpp" />
     <ClCompile Include="src\overseer.cpp" />
     <ClCompile Include="src\personagem.cpp" />
     <ClCompile Include="src\sala.cpp" />
@@ -195,7 +195,7 @@
     <ClInclude Include="src\jogo.h" />
     <ClInclude Include="src\mapa.h" />
     <ClInclude Include="src\npc.h" />
-    <ClInclude Include="src\objeto.h" />
+    <ClInclude Include="src\object.h" />
     <ClInclude Include="src\personagem.h" />
     <ClInclude Include="src\priorityVector.h" />
     <ClInclude Include="src\sala.h" />

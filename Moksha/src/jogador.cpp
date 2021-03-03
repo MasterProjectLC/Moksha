@@ -38,10 +38,10 @@ void Jogador::move(string location) {
 }
 
 
-void Jogador::interact(string acao, string objeto) {
+void Jogador::interact(string acao, string object) {
 	// Objetos
-	if (getSalaAtual()->possuiObjeto(objeto)) {
-		Objeto* objetoAqui = getSalaAtual()->getObjeto(objeto);
+	if (getSalaAtual()->hasObject(object)) {
+		Object* objetoAqui = getSalaAtual()->getObject(object);
 
 		// Imprimir resposta
 		vector<string> responses = objetoAqui->getResponses(acao);
@@ -49,7 +49,7 @@ void Jogador::interact(string acao, string objeto) {
 		else { printText(erroSemAcao); }
 
 		// Tomar ação
-		Personagem::interact(acao, objeto);
+		Personagem::interact(acao, object);
 	}
 
 	// Objeto não existe
@@ -94,12 +94,13 @@ void Jogador::checkRoom(vector<Personagem*> pessoasNaSala) {
 
 	// Objetos na sala
 	printText("Objects in the room: ");
-	vector<Objeto> objetos = getSalaAtual()->getObjetos();
-	if (objetos.size() == 0)
+	vector<Object> objects = getSalaAtual()->getObjects();
+	if (objects.size() == 0)
 		printText("There's no object here.");
 	else {
-		for (int i = 0; i < objetos.size(); i++) {
-			printText(objetos[i].getName());
+		for (int i = 0; i < objects.size(); i++) {
+			if (objects[i].isVisible())
+				printText(objects[i].getName());
 		}
 	}
 

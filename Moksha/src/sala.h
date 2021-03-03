@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "objeto.h"
+#include "object.h"
 
 using namespace std;
 
@@ -14,8 +14,8 @@ private:
 	vector<string> salasAnexasNomes;
 	int index;
 
-	vector<string> objetoNomes;
-	vector<Objeto> objetos;
+	vector<string> objectNames;
+	vector<Object> objects;
 
 public:
 	Sala() {};
@@ -23,12 +23,12 @@ public:
 	// Setup
 	Sala(int index, string nome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
 	Sala(int index, string nome, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
-	void setObjetoNomes(vector<string> objetoNomes) { this->objetoNomes = objetoNomes; }
+	void setObjectNames(vector<string> objetoNomes) { this->objectNames = objetoNomes; }
 
-	void setupObjetos(vector<Objeto> objetos) { this->objetos = objetos; }
-	void addObjeto(Objeto objeto) { objetos.push_back(objeto); }
-	void removeObjeto(Objeto objeto);
-	void limparObjetos() { objetos.clear(); objetoNomes.clear(); }
+	void setupObjects(vector<Object> objetos) { this->objects = objetos; }
+	void addObject(Object objeto) { objects.push_back(objeto); }
+	void removeObject(Object objeto);
+	void limparObjects() { objects.clear(); objectNames.clear(); }
 
 	// Getters
 	string getNome() { return nome; }
@@ -40,10 +40,10 @@ public:
 	string getSalaAnexaNome(int i);
 	int getSalaAnexaCount() { return salasAnexasNomes.size(); }
 
-	bool possuiObjeto(string nome);
-	Objeto* getObjeto(string nome);
-	Objeto* getObjeto(int index) { return &objetos[index]; }
-	vector<Objeto> getObjetos() { return objetos; }
-	vector<string> getObjetoNomes();
+	bool hasObject(string nome);
+	Object* getObject(string nome);
+	Object* getObject(int index) { return &objects[index]; }
+	vector<Object> getObjects() { return objects; }
+	vector<string> getObjectNames();
 
 };

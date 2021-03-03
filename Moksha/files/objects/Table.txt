@@ -1,5 +1,7 @@
 name:
 Table
+visible:
+true
 actions:
 examine|look|see
 examine,look,see:

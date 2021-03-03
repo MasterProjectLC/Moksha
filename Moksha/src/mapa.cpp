@@ -28,18 +28,18 @@ Mapa::Mapa(vector<Sala*> salasRecebidas, IObserver *observer) {
 
 void Mapa::carregarSala(Sala *sala) {
 	vector<string> objetoLista = FileManager::getFileList("files/objects");
-	vector<string> objetoNomes = sala->getObjetoNomes();
+	vector<string> objectNames = sala->getObjectNames();
 
 	// Procurar objetos na lista
 	for (int i = 0; i < objetoLista.size(); i++) {
-		FileDict fileObjeto = FileManager::readFromFile(objetoLista[i]);
+		FileDict fileObject = FileManager::readFromFile(objetoLista[i]);
 
-		for (int j = 0; j < objetoNomes.size(); j++) {
+		for (int j = 0; j < objectNames.size(); j++) {
 			// Encontrado - Gerar objeto
-			if (objetoNomes[j].compare(fileObjeto.getValue("name")) == 0) {
-				Objeto newObjeto = Objeto(fileObjeto);								// Gerar objeto
-				newObjeto.add(observer, j + sala->getIndex()*MAX_OBJECT_COUNT);		// Gerar id de callcard
-				sala->addObjeto(newObjeto);											// Adicionar objeto à sala
+			if (objectNames[j].compare(fileObject.getValue("name")) == 0) {
+				Object newObject = Object(fileObject);								// Gerar objeto
+				newObject.add(observer, j + sala->getIndex()*MAX_OBJECT_COUNT);		// Gerar id de callcard
+				sala->addObject(newObject);											// Adicionar objeto à sala
 				break;
 			}
 		}
@@ -47,8 +47,8 @@ void Mapa::carregarSala(Sala *sala) {
 }
 
 
-Objeto* Mapa::getObjeto(int id) {
-	return salas[id / MAX_OBJECT_COUNT].getElemento()->getObjeto(id % MAX_OBJECT_COUNT);
+Object* Mapa::getObject(int id) {
+	return salas[id / MAX_OBJECT_COUNT].getElemento()->getObject(id % MAX_OBJECT_COUNT);
 }
 
 // CAMINHOS E PATHFINDING -----------------------------------------------------------------------

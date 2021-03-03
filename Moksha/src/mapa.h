@@ -63,7 +63,7 @@ private:
 	// Atributos
 	int MAX_OBJECT_COUNT = 100;
 	vector<Node> salas;
-	vector<Objeto> objetos;
+	vector<Object> objects;
 	IObserver* observer;
 
 	void breadthSearchHelper(queue<Sala*> *retorno, stack<int> &st, int salaChecada);
@@ -73,7 +73,7 @@ public:
 	Mapa(vector<Sala*> salasRecebidas, IObserver *observer);
 
 	void carregarSala(Sala *sala);
-	Objeto* getObjeto(int id);
+	Object* getObject(int id);
 
 	queue<Sala*> optimalPath(Sala *_salaOrigem, Sala *_salaDestino);
 	queue<Sala*> breadthSearch(Sala *_salaOrigem);

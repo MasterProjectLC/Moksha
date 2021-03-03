@@ -1,5 +1,7 @@
 name:
 Knife
+visible:
+true
 actions:
 examine|look|see|take|obtain
 examine,look,see:

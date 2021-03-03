@@ -41,7 +41,7 @@ private:
 
 	class No;
 
-	void objectAction(Objeto* objeto);
+	void objectAction(Object* object);
 	void characterAction(Personagem* personagem);
 	Personagem* findCharacter(string nome);
 

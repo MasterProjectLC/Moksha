@@ -31,14 +31,14 @@ queue<Sala*> NPC::search(Sala* salaPista) {
 		retorno = findPath(salaPista);
 
 	// Start search
-	queue<Sala*> procura = mapa->breadthSearch(salaPista);
-	while (!procura.empty()) {
-		queue<Sala*> caminho = findPath(retorno.back(), procura.front());
+	queue<Sala*> search = mapa->breadthSearch(salaPista);
+	while (!search.empty()) {
+		queue<Sala*> caminho = findPath(retorno.back(), search.front());
 		while (!caminho.empty()) {
 			retorno.push(caminho.front());
 			caminho.pop();
 		}
-		procura.pop();
+		search.pop();
 	}
 
 	if (retorno.front() == salaAtual)

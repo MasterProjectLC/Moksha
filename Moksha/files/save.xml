@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <GameData FormatVersion="1">
-	<Game Time="4" Loop="1">
+	<Game Time="14" Loop="1">
 		<Characters>
-			<Elliot Room="Lounge">
+			<Elliot Room="Corridor">
 				<Inventory />
 			</Elliot>
-			<Jenna Room="Kitchen">
+			<Jenna Room="Corridor">
 				<Inventory>
 					<Knife />
 				</Inventory>
 				<Atoms>
 					<Elliot_alive value="true" />
-					<with_Elliot value="false" />
+					<with_Elliot value="true" />
 					<Baxter_alive value="true" />
 					<with_Baxter value="false" />
 					<Willow_alive value="true" />
@@ -34,7 +34,7 @@
 					<with_Damian value="false" />
 					<Amelie_alive value="true" />
 					<with_Amelie value="false" />
-					<in_kitchen value="true" />
+					<in_kitchen value="false" />
 					<armed value="true" />
 					<Jenna_alive value="true" />
 				</Atoms>
@@ -160,7 +160,7 @@
 			</Lavatory>
 		</Map>
 		<Conversations>
-			<santos_gun stage="6" room="Lounge" />
+			<santos_gun stage="11" room="Lounge" />
 		</Conversations>
 	</Game>
 </GameData>

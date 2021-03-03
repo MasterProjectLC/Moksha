@@ -87,8 +87,8 @@ void Personagem::talk(string convo) {
 }
 
 void Personagem::interact(string action, string object) {
-	if (getSalaAtual()->possuiObjeto(object))
-		getSalaAtual()->getObjeto(object)->takeAction(action, nome);
+	if (getSalaAtual()->hasObject(object))
+		getSalaAtual()->getObject(object)->takeAction(action, nome);
 }
 
 bool Personagem::isActionValid(int action) {

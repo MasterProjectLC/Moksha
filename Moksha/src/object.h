@@ -5,21 +5,23 @@
 
 using namespace std;
 
-class Objeto : public IObservable {
+class Object : public IObservable {
 private:
 	Dictionary<vector<string>> dict;
 	string name;
 	string user;
 	vector<string> validActions;
+	bool visible;
 
 public:
-	Objeto() {};
-	Objeto(Dictionary<vector<string>> dict);
+	Object() {};
+	Object(Dictionary<vector<string>> dict);
 	enum { obter };
 
 	// Getters
 	string getName() { return name; }
 	string getUser() { return user; }
+	bool isVisible() { return visible; }
 
 	vector<string> getResponses(string action);
 	void takeAction(string prompt, string user);

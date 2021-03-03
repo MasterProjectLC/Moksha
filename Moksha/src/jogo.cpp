@@ -85,16 +85,16 @@ bool Jogo::loadGame() {
 	load_package = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
 		Sala* estaSala = mapa.getSala(it->attribute("Name").value());
-		estaSala->limparObjetos();
+		estaSala->limparObjects();
 
 		// Load objects
-		vector<string> objetoNomes;
-		xml_node objetos = it->child("Objects");
+		vector<string> objectNames;
+		xml_node objects = it->child("Objects");
 
-		for (xml_node_iterator ait = objetos.begin(); ait != objetos.end(); ++ait)
-			objetoNomes.push_back(ait->name());
+		for (xml_node_iterator ait = objects.begin(); ait != objects.end(); ++ait)
+			objectNames.push_back(ait->name());
 
-		estaSala->setObjetoNomes(objetoNomes);
+		estaSala->setObjectNames(objectNames);
 		mapa.carregarSala(estaSala);
 	}
 
@@ -150,8 +150,8 @@ void Jogo::saveGame() {
 		// Save objects
 		xml_node objetos = it->child("Objects");
 		objetos.remove_children();
-		for (int i = 0; i < thisSala->getObjetoNomes().size(); i++) {
-			objetos.append_child(thisSala->getObjetoNomes()[i].c_str());
+		for (int i = 0; i < thisSala->getObjectNames().size(); i++) {
+			objetos.append_child(thisSala->getObjectNames()[i].c_str());
 		}
 	}
 
@@ -207,7 +207,7 @@ void Jogo::saveGame() {
 void Jogo::update(int id) {
 	// Objeto
 	if (id < OBSERVER_OFFSET) {
-		objectAction(mapa.getObjeto(id));
+		objectAction(mapa.getObject(id));
 	}
 
 	// Personagem
@@ -217,14 +217,14 @@ void Jogo::update(int id) {
 }
 
 
-void Jogo::objectAction(Objeto* objeto) {
+void Jogo::objectAction(Object* object) {
 	// Obtain
-	switch (objeto->getNotifyID()) {
-	case objeto->obter:
-		obtainObject(objeto->getName(), findCharacter(objeto->getUser()));				// Give object to character
-		findCharacter(objeto->getUser())->getSalaAtual()->removeObjeto(*objeto);		// Remove object from the room
+	switch (object->getNotifyID()) {
+	case object->obter:
+		obtainObject(object->getName(), findCharacter(object->getUser()));				// Give object to character
+		findCharacter(object->getUser())->getSalaAtual()->removeObject(*object);		// Remove object from the room
 
-		if (player.getNome() == objeto->getUser())										// Player char - edge case
+		if (player.getNome() == object->getUser())										// Player char - edge case
 			advanceTime();
 		break;
 	}
