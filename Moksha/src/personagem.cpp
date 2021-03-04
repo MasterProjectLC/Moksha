@@ -22,6 +22,7 @@ void Personagem::takeAction(int action, vector<string> args) {
 
 		case atacar:
 			attack(zusammenArgs);
+			status = "attacking " + zusammenArgs + "!";
 			break;
 
 		case interagir:
@@ -31,10 +32,12 @@ void Personagem::takeAction(int action, vector<string> args) {
 
 		case conversar:
 			talk(zusammenArgs);
+			status = "talking.";
 			break;
 
 		default:
 			rest();
+			status = "doing nothing.";
 			break;
 	}
 }

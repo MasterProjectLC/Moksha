@@ -1,7 +1,7 @@
 name:
 Clock
 visible:
-false
+true
 actions:
 examine|look|see
 examine,look,see:

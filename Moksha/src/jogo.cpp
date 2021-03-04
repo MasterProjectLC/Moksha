@@ -148,10 +148,10 @@ void Jogo::saveGame() {
 		Sala* thisSala = mapa.getSala(it->attribute("Name").value());
 
 		// Save objects
-		xml_node objetos = it->child("Objects");
-		objetos.remove_children();
+		xml_node objects = it->child("Objects");
+		objects.remove_children();
 		for (int i = 0; i < thisSala->getObjectNames().size(); i++) {
-			objetos.append_child(thisSala->getObjectNames()[i].c_str());
+			objects.append_child(thisSala->getObjectNames()[i].c_str());
 		}
 	}
 
@@ -241,16 +241,16 @@ void Jogo::characterAction(Personagem* personagem) {
 		break;
 
 	case mover:
-		// Pessoas dentro da sala veem pessoa saindo
+		// Characters see char leaving
 		for (int i = 0; i < characters.size(); i++)
 			if (characters[i] != personagem && characters[i]->getSalaAtual() == personagem->getSalaAtual())
 				characters[i]->seeCharMoving(personagem, personagem->getNotifyText(), false);
 
+		// Char enters the room
 		antigaSala = personagem->getSalaAtual()->getNome();
 		personagem->setSalaAtual(moveRoom(personagem->getSalaAtual(), personagem->getNotifyText()));
-		personagem->checkRoom(getPeopleInRoom(personagem->getSalaAtual()));
 
-		// Pessoas dentro da sala veem pessoa entrando
+		// Characters see char entering
 		for (int i = 0; i < characters.size(); i++)
 			if (characters[i] != personagem && characters[i]->getSalaAtual() == personagem->getSalaAtual())
 				characters[i]->seeCharMoving(personagem, antigaSala, true);
@@ -296,28 +296,34 @@ void Jogo::characterAction(Personagem* personagem) {
 
 
 void Jogo::advanceTime() {
-	// Decidir Ação
+	// Decide action
 	for (int i = 0; i < npcs.size(); i++) {
 		if (npcs[i]->decideAction() == conversar)
 			npcs[i]->takeAction();
 	}
 
-	// Conversas
+	// Conversations
 	advanceConversations();
 
-	// Ordenar por prioridade
+	// Order by priority
 	PriorityVector<NPC*> orderAction = PriorityVector<NPC*>(vector<NPC*>(), actionCompare);
 	for (int i = 0; i < npcs.size(); i++) {
 		if (npcs[i]->getAction() != conversar)
 			orderAction.push(npcs[i]);
 	}
 
-	// Tomar Ação
+	// Take action
 	player.setInConversation(false);
 	while (!orderAction.empty()) {
 		(*orderAction.highest())->takeAction();
 		orderAction.pop();
 	}
+
+	// Update the player's room status
+	player.updateRoom( getPeopleInRoom(player.getSalaAtual()) );
+	//for (int i = 0; i < characters.size(); i++)
+		//characters[i]->checkRoom( getPeopleInRoom(characters[i]->getSalaAtual())) ;
+
 
 	// Jogo
 	time++;

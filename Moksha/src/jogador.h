@@ -32,6 +32,7 @@ public:
 	void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) override;
 	void executeReaction(string topico, string frase, string remetente) override;
 	void checkRoom(vector<Personagem*> pessoasNaSala) override;
+	void updateRoom(vector<Personagem*> pessoasNaSala);
 
 	void serAtacado(Personagem* atacante) override {
 		printText(atacante->getNome() + " attacked you!");

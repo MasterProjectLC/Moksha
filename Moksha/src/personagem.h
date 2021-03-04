@@ -13,6 +13,7 @@ protected:
 	string notifyText;
 	set<string> notifyTargets;
 	set<Sala*> salasChecadas;
+	string status;
 
 	int gender;
 	int strength;
@@ -45,6 +46,7 @@ public:
 		unconscious = false;
 		dead = false;
 		conversation = false;
+		status = "doing nothing";
 
 		basicActions = { mover, descansar, mencionar, falar, conversar, interagir };
 	}
@@ -55,6 +57,8 @@ public:
 	void addConceito(string nome) { inventario.addConceito(nome); }
 	void addItem(string nome, set<string> acoes) { inventario.addItem(nome, acoes); }
 
+	string getStatus() { return status; }
+	void setStatus(string n) { status = n; }
 	void setSalaAtual(Sala *sala) {	salaAtual = sala; }
 	Sala* getSalaAtual() { return salaAtual; }
 	int getGender() { return gender; }
@@ -63,7 +67,7 @@ public:
 	bool isUnconscious() { return unconscious || dead; }
 	bool isDead() { return dead; }
 	bool inConversation() {	return conversation; }
-	void setInConversation(bool a) { conversation = a; }
+	void setInConversation(bool a) { conversation = a; if (a) { setStatus("talking."); }; }
 
 	bool isActionValid(int action);
 

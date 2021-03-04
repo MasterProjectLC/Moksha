@@ -86,7 +86,7 @@ void Jogador::executeReaction(string topico, string frase, string remetente) {
 }
 
 
-void Jogador::checkRoom(vector<Personagem*> pessoasNaSala) {
+void Jogador::checkRoom(vector<Personagem*> charsInRoom) {
 	// Salas anexas
 	printText("Current room: " + getSalaAtual()->getNome() + "\n" + getSalaAtual()->getTextoInicial() + "\nAdjacent rooms:");
 	for (int i = 0; i < getSalaAtual()->getSalaAnexaCount(); i++)
@@ -104,15 +104,20 @@ void Jogador::checkRoom(vector<Personagem*> pessoasNaSala) {
 		}
 	}
 
-	// Pessoas na sala
-	for (int i = 0; i < pessoasNaSala.size(); i++) {
-		if (pessoasNaSala[i]->getNome() != nome)
-			if (!pessoasNaSala[i]->isUnconscious())
-				printText(pessoasNaSala[i]->getNome() + " is in the room.");
+	updateRoom(charsInRoom);
+}
+
+void Jogador::updateRoom(vector<Personagem*> charsInRoom) {
+	// Characters in the room na sala
+	for (int i = 0; i < charsInRoom.size(); i++) {
+		if (charsInRoom[i]->getNome() != nome)
+			if (!charsInRoom[i]->isUnconscious())
+				printText(charsInRoom[i]->getNome() + " is in the room, " + charsInRoom[i]->getStatus());
 			else
-				printText("Oh, " + pessoasNaSala[i]->getNome() + " is unconscious here!");
+				printText("Oh, " + charsInRoom[i]->getNome() + " is unconscious here!");
 	}
 }
+
 
 
 void Jogador::seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {
