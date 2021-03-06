@@ -7,19 +7,20 @@
 using namespace std;
 using namespace pugi;
 
-class Conversa {
+class Conversation {
 private:
 	int convoStage;
 	string name;
 	xml_document conversation;
 	xml_node_iterator it;
 	set<string> participants;
+	set<string> listeners;
 	string room;
 
 public:
-	Conversa() {}
-	Conversa(string conversa, string sala);
-	Conversa(string conversa, string sala, int stage);
+	Conversation() {}
+	Conversation(string conversation, string room);
+	Conversation(string conversation, string room, int stage);
 
 	bool participates(string nome); // Se personagem citado participa da conversa ou não
 
@@ -28,6 +29,8 @@ public:
 
 	set<string>* getParticipants() { return &participants; }
 	set<string> getParticipants(string removido);
+	void addListener(string listener) { participants.insert(listener); listeners.insert(listener); }
+	void clearListeners();
 
 	string getName() { return name; }
 	string getRoom() { return room; }

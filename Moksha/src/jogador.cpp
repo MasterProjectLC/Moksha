@@ -1,7 +1,7 @@
 #include "jogador.h"
 
 Jogador::Jogador() : Personagem(M, 2, 2) {
-	nome = "Elliot";
+	name = "Elliot";
 
 	FileDict fileErros = FileManager::readFromFile("files/errors.txt");
 	erroSemObjeto = fileErros.getValues("no object")[0];
@@ -21,7 +21,7 @@ void Jogador::mention(string topic, string person) {
 		return;
 	}
 
-	if (!inventario.temConceito(topic) && !inventario.temItem(topic)) {
+	if (!inventory.hasConcept(topic) && !inventory.hasItem(topic)) {
 		printText(erroSemItem);
 		return;
 	}
@@ -68,6 +68,8 @@ void Jogador::receberArgs(vector<string> args) {
 		action = mencionar;
 	else if (args[0] == "attack")
 		action = atacar;
+	else if (args[0] == "listen" || args[0] == "overhear" || args[0] == "eavesdrop")
+		action = ouvir;
 	else {
 		action = interagir;
 	}
@@ -110,11 +112,11 @@ void Jogador::checkRoom(vector<Personagem*> charsInRoom) {
 void Jogador::updateRoom(vector<Personagem*> charsInRoom) {
 	// Characters in the room na sala
 	for (int i = 0; i < charsInRoom.size(); i++) {
-		if (charsInRoom[i]->getNome() != nome)
+		if (charsInRoom[i]->getName() != name)
 			if (!charsInRoom[i]->isUnconscious())
-				printText(charsInRoom[i]->getNome() + " is in the room, " + charsInRoom[i]->getStatus());
+				printText(charsInRoom[i]->getName() + " is in the room, " + charsInRoom[i]->getStatus());
 			else
-				printText("Oh, " + charsInRoom[i]->getNome() + " is unconscious here!");
+				printText("Oh, " + charsInRoom[i]->getName() + " is unconscious here!");
 	}
 }
 
@@ -122,15 +124,15 @@ void Jogador::updateRoom(vector<Personagem*> charsInRoom) {
 
 void Jogador::seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {
 	if (entrando)
-		printText(pessoa->getNome() + " entered the room, coming from the " + outraSala);
+		printText(pessoa->getName() + " entered the room, coming from the " + outraSala);
 	else
-		printText(pessoa->getNome() + " left the room, going to the " + outraSala);
+		printText(pessoa->getName() + " left the room, going to the " + outraSala);
 }
 
 // HELPER FUNCTIONS ----------------------------------------------------
 
 bool Jogador::hasCondition(string info) {
-	return inventario.temConceito(info);
+	return inventory.hasConcept(info);
 }
 
 

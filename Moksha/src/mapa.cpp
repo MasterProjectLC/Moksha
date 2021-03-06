@@ -26,20 +26,20 @@ Mapa::Mapa(vector<Sala*> salasRecebidas, IObserver *observer) {
 };
 
 
-void Mapa::carregarSala(Sala *sala) {
-	vector<string> objetoLista = FileManager::getFileList("files/objects");
-	vector<string> objectNames = sala->getObjectNames();
+void Mapa::carregarSala(Sala *room) {
+	vector<string> objectList = FileManager::getFileList("files/objects");
+	vector<string> objectNames = room->getObjectNames();
 
 	// Procurar objetos na lista
-	for (int i = 0; i < objetoLista.size(); i++) {
-		FileDict fileObject = FileManager::readFromFile(objetoLista[i]);
+	for (int i = 0; i < objectList.size(); i++) {
+		FileDict fileObject = FileManager::readFromFile(objectList[i]);
 
 		for (int j = 0; j < objectNames.size(); j++) {
 			// Encontrado - Gerar objeto
 			if (objectNames[j].compare(fileObject.getValue("name")) == 0) {
 				Object newObject = Object(fileObject);								// Gerar objeto
-				newObject.add(observer, j + sala->getIndex()*MAX_OBJECT_COUNT);		// Gerar id de callcard
-				sala->addObject(newObject);											// Adicionar objeto à sala
+				newObject.add(observer, j + room->getIndex()*MAX_OBJECT_COUNT);		// Gerar id de callcard
+				room->addObject(newObject);											// Adicionar objeto à sala
 				break;
 			}
 		}

@@ -1,6 +1,6 @@
 #pragma once
 #include "sala.h"
-#include "inventario.h"
+#include "inventory.h"
 #include "dictionary.h"
 #include "IObservable.h"
 #include "actionEnum.h"
@@ -9,7 +9,7 @@ using namespace std;
 
 class Personagem: public IObservable {
 protected:
-	string nome;
+	string name;
 	string notifyText;
 	set<string> notifyTargets;
 	set<Sala*> salasChecadas;
@@ -23,7 +23,7 @@ protected:
 	bool conversation;
 	
 	Sala *salaAtual;
-	Inventario inventario;
+	Inventory inventory;
 
 	set<int> basicActions;
 	void takeAction(int action, vector<string> args);
@@ -32,6 +32,7 @@ protected:
 	virtual void mention(string obj, set<string> receivers);
 	virtual void mention(string obj, string receiver);
 	void attack(string target);
+	void listen(string target);
 	void say(string topico, string str, set<string> receivers);
 	void rest();
 	void talk(string convo);
@@ -46,16 +47,16 @@ public:
 		unconscious = false;
 		dead = false;
 		conversation = false;
-		status = "doing nothing";
+		status = "doing nothing.";
 
 		basicActions = { mover, descansar, mencionar, falar, conversar, interagir };
 	}
 
-	string getNome() { return nome; }
+	string getName() { return name; }
 
-	vector<Item> getInventario() { return inventario.getItens(); }
-	void addConceito(string nome) { inventario.addConceito(nome); }
-	void addItem(string nome, set<string> acoes) { inventario.addItem(nome, acoes); }
+	vector<Item> getInventory() { return inventory.getItems(); }
+	void addConceito(string nome) { inventory.addConcept(nome); }
+	void addItem(string nome, set<string> acoes) { inventory.addItem(nome, acoes); }
 
 	string getStatus() { return status; }
 	void setStatus(string n) { status = n; }

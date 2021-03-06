@@ -7,7 +7,7 @@
 #include "IObservable.h"
 #include "IObserver.h"
 #include "mapa.h"
-#include "conversa.h"
+#include "conversation.h"
 #include "fileManager.h"
 #include "../libs/pugixml/src/pugixml.hpp"
 #include "saveModule.h"
@@ -29,7 +29,7 @@ private:
 	Jogador player;
 	vector<Personagem*> characters;
 	vector<NPC*> npcs;
-	vector<Conversa> conversations;
+	vector<Conversation> conversations;
 
 	string erroSemObjeto;
 	string erroSemAcao;

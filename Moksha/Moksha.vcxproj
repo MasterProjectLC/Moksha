@@ -150,12 +150,12 @@
     <ClCompile Include="src\characters\Jenna.cpp" />
     <ClCompile Include="src\characters\Santos.cpp" />
     <ClCompile Include="src\conceito.cpp" />
-    <ClCompile Include="src\conversa.cpp" />
+    <ClCompile Include="src\conversation.cpp" />
     <ClCompile Include="src\fileDict.cpp" />
     <ClCompile Include="src\graphics.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\interface.cpp" />
-    <ClCompile Include="src\inventario.cpp" />
+    <ClCompile Include="src\inventory.cpp" />
     <ClCompile Include="src\IObservable.cpp" />
     <ClCompile Include="src\IObserver.cpp" />
     <ClCompile Include="src\item.cpp" />
@@ -179,7 +179,7 @@
     <ClInclude Include="src\characters\Jenna.h" />
     <ClInclude Include="src\characters\Santos.h" />
     <ClInclude Include="src\conceito.h" />
-    <ClInclude Include="src\conversa.h" />
+    <ClInclude Include="src\conversation.h" />
     <ClInclude Include="src\dictionary.h" />
     <ClInclude Include="src\fileDict.h" />
     <ClInclude Include="src\fileManager.h" />
@@ -187,7 +187,7 @@
     <ClInclude Include="src\graphics.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\interface.h" />
-    <ClInclude Include="src\inventario.h" />
+    <ClInclude Include="src\inventory.h" />
     <ClInclude Include="src\IObservable.h" />
     <ClInclude Include="src\IObserver.h" />
     <ClInclude Include="src\item.h" />

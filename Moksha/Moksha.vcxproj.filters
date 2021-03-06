@@ -39,9 +39,6 @@
     <ClCompile Include="src\interface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\inventario.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\IObservable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -81,9 +78,6 @@
     <ClCompile Include="libs\GPGOAP\astar.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\conversa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\characters\Jenna.cpp">
       <Filter>Source Files\Characters</Filter>
     </ClCompile>
@@ -97,6 +91,12 @@
       <Filter>Source Files\Characters</Filter>
     </ClCompile>
     <ClCompile Include="src\object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\conversation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,9 +123,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\interface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\inventario.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\IObservable.h">
@@ -164,9 +161,6 @@
     <ClInclude Include="libs\GPGOAP\goap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\conversa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\characters\Jenna.h">
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
@@ -189,6 +183,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\conversation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\inventory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

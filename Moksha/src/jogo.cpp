@@ -125,7 +125,7 @@ bool Jogo::loadGame() {
 	// Load conversations
 	load_package = doc.child("GameData").child("Game").child("Conversations");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
-		conversations.push_back(Conversa( it->name(), it->attribute("room").value(), stoi(it->attribute("stage").value()) ));
+		conversations.push_back(Conversation( it->name(), it->attribute("room").value(), stoi(it->attribute("stage").value()) ));
 	}
 
 	return true;
@@ -164,7 +164,7 @@ void Jogo::saveGame() {
 		// Save inventory
 		xml_node inventario = it->child("Inventory");
 		inventario.remove_children();
-		vector<Item> itemList = thisCharacter->getInventario();
+		vector<Item> itemList = thisCharacter->getInventory();
 		for (int i = 0; i < itemList.size(); i++)
 			inventario.append_child(itemList[i].getNome().c_str());
 
@@ -221,45 +221,48 @@ void Jogo::objectAction(Object* object) {
 	// Obtain
 	switch (object->getNotifyID()) {
 	case object->obter:
-		obtainObject(object->getName(), findCharacter(object->getUser()));				// Give object to character
-		findCharacter(object->getUser())->getSalaAtual()->removeObject(*object);		// Remove object from the room
+		Personagem *character = findCharacter(object->getUser());
+		obtainObject(object->getName(), character);						// Give object to character
+		character->setStatus("obtaining " + object->getName() + ".");	// Update char's status
+		character->getSalaAtual()->removeObject(*object);				// Remove object from the room
 
-		if (player.getNome() == object->getUser())										// Player char - edge case
+		if (player.getName() == object->getUser())										// Player char - edge case
 			advanceTime();
 		break;
 	}
 }
 
 
-void Jogo::characterAction(Personagem* personagem) {
-	int id = personagem->getNotifyID();
+void Jogo::characterAction(Personagem* character) {
+	int id = character->getNotifyID();
 	string antigaSala;
 
 	switch (id) {
 	case imprimir:
-		printText(personagem->getNotifyText());
+		printText(character->getNotifyText());
 		break;
 
 	case mover:
 		// Characters see char leaving
 		for (int i = 0; i < characters.size(); i++)
-			if (characters[i] != personagem && characters[i]->getSalaAtual() == personagem->getSalaAtual())
-				characters[i]->seeCharMoving(personagem, personagem->getNotifyText(), false);
+			if (characters[i] != character && characters[i]->getSalaAtual() == character->getSalaAtual())
+				characters[i]->seeCharMoving(character, character->getNotifyText(), false);
 
 		// Char enters the room
-		antigaSala = personagem->getSalaAtual()->getNome();
-		personagem->setSalaAtual(moveRoom(personagem->getSalaAtual(), personagem->getNotifyText()));
+		antigaSala = character->getSalaAtual()->getNome();
+		character->setSalaAtual(moveRoom(character->getSalaAtual(), character->getNotifyText()));
+		character->checkRoom( getPeopleInRoom(player.getSalaAtual()) );
 
 		// Characters see char entering
 		for (int i = 0; i < characters.size(); i++)
-			if (characters[i] != personagem && characters[i]->getSalaAtual() == personagem->getSalaAtual())
-				characters[i]->seeCharMoving(personagem, antigaSala, true);
+			if (characters[i] != character && characters[i]->getSalaAtual() == character->getSalaAtual())
+				characters[i]->seeCharMoving(character, antigaSala, true);
 		break;
 
 	case mencionar:
 		for (int i = 0; i < characters.size(); i++) {
-			if (personagem->getNotifyTargets().count(characters[i]->getNome()) && characters[i]->getSalaAtual() == personagem->getSalaAtual()) {
-				characters[i]->executeReaction(personagem->getNotifyText(), "", personagem->getNome());
+			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getSalaAtual() == character->getSalaAtual()) {
+				characters[i]->executeReaction(character->getNotifyText(), "", character->getName());
 				break;
 			}
 		}
@@ -267,29 +270,37 @@ void Jogo::characterAction(Personagem* personagem) {
 
 	case falar:
 		for (int i = 0; i < characters.size(); i++) {
-			if (personagem->getNotifyTargets().count(characters[i]->getNome()) && characters[i]->getSalaAtual() == personagem->getSalaAtual()) {
-				vector<string> args = splitString(personagem->getNotifyText(), '|');
-				characters[i]->executeReaction(args[0], args[1], personagem->getNome());
+			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getSalaAtual() == character->getSalaAtual()) {
+				vector<string> args = splitString(character->getNotifyText(), '|');
+				characters[i]->executeReaction(args[0], args[1], character->getName());
 				break;
 			}
 		}
 		break;
 
 	case conversar:
-		conversations.push_back(Conversa(personagem->getNotifyText(), personagem->getSalaAtual()->getNome()));
+		conversations.push_back(Conversation(character->getNotifyText(), character->getSalaAtual()->getNome()));
+		break;
+
+	case ouvir:
+		for (int i = 0; i < conversations.size(); i++)
+			if (conversations[i].participates(character->getNotifyText())) {
+				conversations[i].addListener(character->getName());
+				break;
+			}
 		break;
 
 	case descansar:
 		break;
 
 	case atacar:
-		Personagem* vitima = findCharacter(personagem->getNotifyText());
-		if (vitima->getSalaAtual() == personagem->getSalaAtual())
-			vitima->serAtacado(personagem);
+		Personagem* vitima = findCharacter(character->getNotifyText());
+		if (vitima->getSalaAtual() == character->getSalaAtual())
+			vitima->serAtacado(character);
 		break;
 	}
 
-	if (id != imprimir && personagem == &player)
+	if (id != imprimir && character == &player)
 		advanceTime();
 
 }
@@ -298,7 +309,8 @@ void Jogo::characterAction(Personagem* personagem) {
 void Jogo::advanceTime() {
 	// Decide action
 	for (int i = 0; i < npcs.size(); i++) {
-		if (npcs[i]->decideAction() == conversar)
+		int action = npcs[i]->decideAction();
+		if (action == conversar || action == ouvir)
 			npcs[i]->takeAction();
 	}
 
@@ -308,7 +320,7 @@ void Jogo::advanceTime() {
 	// Order by priority
 	PriorityVector<NPC*> orderAction = PriorityVector<NPC*>(vector<NPC*>(), actionCompare);
 	for (int i = 0; i < npcs.size(); i++) {
-		if (npcs[i]->getAction() != conversar)
+		if (npcs[i]->getAction() != conversar && npcs[i]->getAction() != ouvir)
 			orderAction.push(npcs[i]);
 	}
 
@@ -321,8 +333,8 @@ void Jogo::advanceTime() {
 
 	// Update the player's room status
 	player.updateRoom( getPeopleInRoom(player.getSalaAtual()) );
-	//for (int i = 0; i < characters.size(); i++)
-		//characters[i]->checkRoom( getPeopleInRoom(characters[i]->getSalaAtual())) ;
+	for (int i = 0; i < npcs.size(); i++)
+		npcs[i]->checkRoom( getPeopleInRoom(npcs[i]->getSalaAtual())) ;
 
 
 	// Jogo
@@ -333,7 +345,7 @@ void Jogo::advanceTime() {
 
 void Jogo::advanceConversations() {
 	// Iterar por cada conversa acontecendo
-	for (vector<Conversa>::iterator it = conversations.begin(); it != conversations.end(); it++) {
+	for (vector<Conversation>::iterator it = conversations.begin(); it != conversations.end(); it++) {
 		// Tentar até uma mensagem passar
 		while (1) {
 			// Se conversa acabou
@@ -348,7 +360,7 @@ void Jogo::advanceConversations() {
 
 			string n = conversation.name();
 			if (n == "Narrator") {
-				if (it->getParticipants()->count(player.getNome()) && player.getSalaAtual()->getNome() == it->getRoom()) {	// Edge case: narrator
+				if (it->getParticipants()->count(player.getName()) && player.getSalaAtual()->getNome() == it->getRoom()) {	// Edge case: narrator
 					printText(conversation.attribute("line").value());
 				}
 				break;
@@ -382,6 +394,7 @@ void Jogo::advanceConversations() {
 				// Lock every participant
 				for (set<string>::iterator ait = it->getParticipants()->begin(); ait != it->getParticipants()->end(); ait++)
 					findCharacter(*ait)->setInConversation(true);
+				it->clearListeners();
 				break;
 			}
 		}
@@ -436,7 +449,7 @@ void Jogo::printText(string texto) {
 
 
 vector<Item> Jogo::getInventory() {
-	return player.getInventario();
+	return player.getInventory();
 }
 
 
@@ -444,7 +457,7 @@ vector<Item> Jogo::getInventory() {
 #include <stdexcept>
 Personagem* Jogo::findCharacter(string nome) {
 	for (int i = 0; i < characters.size(); i++) {
-		if (characters[i]->getNome() == nome)
+		if (characters[i]->getName() == nome)
 			return characters[i];
 	}
 

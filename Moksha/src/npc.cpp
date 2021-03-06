@@ -1,10 +1,10 @@
 #include "npc.h"
 
 NPC::NPC(Mapa* m, string name, int gender, int forca, int destreza) : Personagem(gender, forca, destreza) {
-	this->nome = name;
+	this->name = name;
 	this->mapa = m;
 
-	FileDict fileObjeto = FileManager::readFromFile("files/characters/" + getNome() + ".txt");
+	FileDict fileObjeto = FileManager::readFromFile("files/characters/" + getName() + ".txt");
 	this->dict = fileObjeto;
 }
 
@@ -75,8 +75,8 @@ void NPC::checkRoom(vector<Personagem*> pessoasNaSala) {
 	for (int i = 0; i < alvos.size(); i++) {
 		goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), false);
 		for (int j = 0; j < pessoasNaSala.size(); j++) {
-			string theirName = pessoasNaSala[j]->getNome();
-			if (theirName != nome) {
+			string theirName = pessoasNaSala[j]->getName();
+			if (theirName != name) {
 				updateLastSeen(theirName, salaAtual->getNome());
 				if (alvos[i] == theirName) {
 					goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), true);
@@ -91,13 +91,13 @@ void NPC::checkRoom(vector<Personagem*> pessoasNaSala) {
 
 
 void NPC::seeCharMoving(Personagem* person, string otherRoom, bool entering) {
-	int idx = alvoIndex(person->getNome());
+	int idx = alvoIndex(person->getName());
 
 	if (idx != -1) {
 		if (!entering)
-			updateLastSeen(person->getNome(), otherRoom);
+			updateLastSeen(person->getName(), otherRoom);
 		else
-			updateLastSeen(person->getNome(), salaAtual->getNome());
+			updateLastSeen(person->getName(), salaAtual->getNome());
 
 		goap_worldstate_set(&ap, &world, ("with_" + alvos[idx]).c_str(), entering);
 		updateWorld();
@@ -115,7 +115,7 @@ void NPC::setupPlans() {
 	static vector<string> with_atoms = editVector("with_", names, "");
 	static vector<string> alive_atoms = editVector("", names, "_alive");
 	for (int i = 0; i < search_atoms.size(); i++)
-		if (names[i] != nome) {
+		if (names[i] != name) {
 			goap_set_pre(&ap, search_atoms[i].c_str(), alive_atoms[i].c_str(), true);
 			goap_set_pst(&ap, search_atoms[i].c_str(), with_atoms[i].c_str(), true);
 		}
@@ -125,10 +125,10 @@ void NPC::setupPlans() {
 	goap_worldstate_clear(&world);
 	for (int i = 0; i < alive_atoms.size(); i++) {
 		goap_worldstate_set(&ap, &world, alive_atoms[i].c_str(), true);
-		if (names[i] != nome)
+		if (names[i] != name)
 			goap_worldstate_set(&ap, &world, ("with_" + names[i]).c_str(), false);
 	}
-	goap_worldstate_set(&ap, &world, "armed", inventario.temItem("Knife"));
+	goap_worldstate_set(&ap, &world, "armed", inventory.hasItem("Knife"));
 	setupMundoAdicional();
 
 	// describe goal
@@ -156,6 +156,7 @@ void NPC::updateWorld() {
 			changePlans(true);
 	}
 }
+
 
 void NPC::updateLastSeen(string pursueTarget, string room) {
 	string alvoVec[1] = { pursueTarget };
@@ -207,7 +208,7 @@ void NPC::changePlans(bool justUpdated) {
 
 int NPC::decideAction() {
 	// Check if current action was completed
-	if (isCurrentStateFulfilled())
+	while (isCurrentStateFulfilled() && plansz > 0)
 		advancePlans();
 
 	// Current objective is top priority
@@ -237,7 +238,7 @@ int NPC::decideAction() {
 		changePlans();
 	}
 
-	// Decidir ação
+	// Decide action
 	if (plansz > 0) {
 		actionArgs.clear();
 		currentAction = decidirAcaoAdicional(plan[currentStep]);
@@ -279,6 +280,10 @@ bool NPC::isCurrentStateFulfilled() {
 	if (currentStep > 0)
 		objState = states[currentStep].values & ~states[currentStep-1].values;
 	bool fulfilled = ((worldState & objState) == objState);
+	if (fulfilled && currentStep > 0) {
+		objState = states[currentStep].values | ~states[currentStep - 1].values;
+		fulfilled = fulfilled && ((worldState | objState) == objState);
+	}
 
 	return fulfilled;
 }

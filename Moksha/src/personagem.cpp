@@ -18,6 +18,7 @@ void Personagem::takeAction(int action, vector<string> args) {
 
 		case mover:
 			move(zusammenArgs);
+			status = "entering the room.";
 			break;
 
 		case atacar:
@@ -28,6 +29,11 @@ void Personagem::takeAction(int action, vector<string> args) {
 		case interagir:
 			if (args.size() >= 2)
 				interact(args.at(0), concatStrings(args, 1));
+			break;
+
+		case ouvir:
+			listen(zusammenArgs);
+			status = "eavesdropping " + zusammenArgs + ".";
 			break;
 
 		case conversar:
@@ -62,7 +68,7 @@ void Personagem::mention(string obj, string receiver) {
 }
 
 void Personagem::mention(string obj, set<string> receivers) {
-	if (inventario.temConceito(obj) || inventario.temItem(obj)) {
+	if (inventory.hasConcept(obj) || inventory.hasItem(obj)) {
 		notifyText = obj;
 		notifyTargets = receivers;
 		notify(mencionar);
@@ -72,6 +78,11 @@ void Personagem::mention(string obj, set<string> receivers) {
 void Personagem::attack(string target) {
 	notifyText = target;
 	notify(atacar);
+}
+
+void Personagem::listen(string target) {
+	notifyText = target;
+	notify(ouvir);
 }
 
 void Personagem::say(string topico, string str, set<string> receivers) {
@@ -91,15 +102,15 @@ void Personagem::talk(string convo) {
 
 void Personagem::interact(string action, string object) {
 	if (getSalaAtual()->hasObject(object))
-		getSalaAtual()->getObject(object)->takeAction(action, nome);
+		getSalaAtual()->getObject(object)->takeAction(action, name);
 }
 
 bool Personagem::isActionValid(int action) {
 	if (basicActions.count(action) > 0)
 		return true;
 
-	for (int i = 0; i < getInventario().size(); i++)
-		if (getInventario()[i].isActionValid(action))
+	for (int i = 0; i < getInventory().size(); i++)
+		if (getInventory()[i].isActionValid(action))
 			return true;
 
 	return false;
