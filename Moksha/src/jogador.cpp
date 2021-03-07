@@ -31,7 +31,7 @@ void Jogador::mention(string topic, string person) {
 
 
 void Jogador::move(string location) {
-	if (getSalaAtual()->isSalaAnexa(location))
+	if (getCurrentRoom()->isSalaAnexa(location))
 		Personagem::move(location);
 	else
 		printText(erroSemSala);
@@ -40,8 +40,8 @@ void Jogador::move(string location) {
 
 void Jogador::interact(string acao, string object) {
 	// Objetos
-	if (getSalaAtual()->hasObject(object)) {
-		Object* objetoAqui = getSalaAtual()->getObject(object);
+	if (getCurrentRoom()->hasObject(object)) {
+		Object* objetoAqui = getCurrentRoom()->getObject(object);
 
 		// Imprimir resposta
 		vector<string> responses = objetoAqui->getResponses(acao);
@@ -59,44 +59,47 @@ void Jogador::interact(string acao, string object) {
 
 
 void Jogador::receberArgs(vector<string> args) {
-	int action;
 	if (args[0] == "move")
-		action = mover;
+		currentAction = mover;
 	else if (args[0] == "wait" || args[0] == "rest")
-		action = descansar;
+		currentAction = descansar;
 	else if (args[0] == "mention")
-		action = mencionar;
+		currentAction = mencionar;
 	else if (args[0] == "attack")
-		action = atacar;
-	else if (args[0] == "listen" || args[0] == "overhear" || args[0] == "eavesdrop")
-		action = ouvir;
-	else {
-		action = interagir;
-	}
+		currentAction = atacar;
+	else if (args[0] == "listen" || args[0] == "overhear" || args[0] == "eavesdrop" || args[0] == "hear")
+		currentAction = ouvir;
+	else
+		currentAction = interagir;
 
-	if (action != interagir)
+	if (currentAction != interagir)
 		args.erase(args.begin());
-	takeAction(action, args);
+
+	actionArgs = args;
+	notify(avancar);
 }
 
 
 // REACOES -----------------------------------------------------------------------
 
-void Jogador::executeReaction(string topico, string frase, string remetente) {
-	printText(remetente + ": " + frase);
-	addToMind(topico, remetente);
+void Jogador::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
+	printText(sender + ": " + phrase);
+	if (topic != "" && !inventory.hasConcept(topic)) {
+		inventory.addConcept(topic);
+		addToMind(topic, sender);
+	}
 }
 
 
 void Jogador::checkRoom(vector<Personagem*> charsInRoom) {
 	// Salas anexas
-	printText("Current room: " + getSalaAtual()->getNome() + "\n" + getSalaAtual()->getTextoInicial() + "\nAdjacent rooms:");
-	for (int i = 0; i < getSalaAtual()->getSalaAnexaCount(); i++)
-		printText(getSalaAtual()->getSalaAnexaNome(i));
+	printText("Current room: " + getCurrentRoom()->getNome() + "\n" + getCurrentRoom()->getTextoInicial() + "\nAdjacent rooms:");
+	for (int i = 0; i < getCurrentRoom()->getSalaAnexaCount(); i++)
+		printText(getCurrentRoom()->getAdjacentRoomName(i));
 
 	// Objetos na sala
 	printText("Objects in the room: ");
-	vector<Object> objects = getSalaAtual()->getObjects();
+	vector<Object> objects = getCurrentRoom()->getObjects();
 	if (objects.size() == 0)
 		printText("There's no object here.");
 	else {

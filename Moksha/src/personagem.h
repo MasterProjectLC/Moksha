@@ -22,10 +22,13 @@ protected:
 	bool dead;
 	bool conversation;
 	
-	Sala *salaAtual;
+	Sala *currentRoom;
 	Inventory inventory;
 
 	set<int> basicActions;
+	int currentAction;
+	vector<string> actionArgs;
+
 	void takeAction(int action, vector<string> args);
 	virtual void move(string str);
 	void move(Sala sala);
@@ -53,6 +56,7 @@ public:
 	}
 
 	string getName() { return name; }
+	int getAction() { return currentAction; }
 
 	vector<Item> getInventory() { return inventory.getItems(); }
 	void addConceito(string nome) { inventory.addConcept(nome); }
@@ -60,8 +64,8 @@ public:
 
 	string getStatus() { return status; }
 	void setStatus(string n) { status = n; }
-	void setSalaAtual(Sala *sala) {	salaAtual = sala; }
-	Sala* getSalaAtual() { return salaAtual; }
+	void setCurrentRoom(Sala *room) { currentRoom = room; }
+	Sala* getCurrentRoom() { return currentRoom; }
 	int getGender() { return gender; }
 	int getStrength() { return strength; }
 	int getDexterity() { return dexterity; }
@@ -72,7 +76,7 @@ public:
 
 	bool isActionValid(int action);
 
-	virtual void takeAction() {}
+	virtual void takeAction() { takeAction(currentAction, actionArgs); }
 	void sayLine(string topico, string str, set<string> receivers) { say(topico, str, receivers); }
 	void printText(string str);
 
@@ -81,10 +85,10 @@ public:
 
 	virtual bool hasCondition(string info) { return false; }
 
-	virtual void executeReaction(string topico, string frase, string remetente) {}
+	virtual void executeReaction(string topico, string frase, string remetente, bool shouldRespond) {}
 	virtual void checkRoom(vector<Personagem*> pessoasNaSala) {}
 	virtual void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {}
-	virtual void serAtacado(Personagem* atacante) {
+	virtual void beAttacked(Personagem* atacante) {
 		if (atacante->getStrength() >= strength)
 			unconscious = true;
 	};

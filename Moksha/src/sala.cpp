@@ -46,7 +46,7 @@ bool Sala::isSalaAnexa(string salaAnexaNome) {
 }
 
 // GETTERS
-string Sala::getSalaAnexaNome(int i) {
+string Sala::getAdjacentRoomName(int i) {
 	return salasAnexasNomes[i];
 };
 

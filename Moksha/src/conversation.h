@@ -16,6 +16,7 @@ private:
 	set<string> participants;
 	set<string> listeners;
 	string room;
+	bool begun;
 
 public:
 	Conversation() {}

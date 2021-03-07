@@ -37,7 +37,7 @@ public:
 	int getIndex() { return index; }
 
 	bool isSalaAnexa(string salaAnexaNome);
-	string getSalaAnexaNome(int i);
+	string getAdjacentRoomName(int i);
 	int getSalaAnexaCount() { return salasAnexasNomes.size(); }
 
 	bool hasObject(string nome);

@@ -16,15 +16,13 @@ protected:
 	const vector<string> names = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
 								"Magnus", "Tom", "Jenna", "Renard", "Liz",
 								"George", "Damian", "Amelie" };
+	vector<string*> addedConditions;
 
 	int MAX_ALVOS = 6;
 	vector<string> alvos;
 	queue<Sala*> path;
 	Mapa* mapa;
 	string conversaAlvo;
-
-	int currentAction;
-	vector<string> actionArgs;
 
 	actionplanner_t ap;
 	worldstate_t states[16];
@@ -70,17 +68,15 @@ public:
 
 	void setCondition(string condition, bool update);
 	bool hasCondition(string info) override;
-	void takeAction() override { Personagem::takeAction(currentAction, actionArgs); updateWorld(); }
+	void takeAction() override { Personagem::takeAction(); updateWorld(); }
 
 	int decideAction();
-	void executeReaction(string topico, string frase, string remetente) override;
+	void executeReaction(string topico, string frase, string remetente, bool shouldRespond) override;
 	void checkRoom(vector<Personagem*> pessoasNaSala) override;
 	void seeCharMoving(Personagem * pessoa, string outraSala, bool entrando) override;
 	void setSalaAlvo(Sala* nova) { findPath(nova); }
 
 	void setupPlans();
-
-	int getAction() { return currentAction; }
 
 	vector<string> getActionList();
 	vector<string> getAtomList();

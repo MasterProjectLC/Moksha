@@ -16,7 +16,7 @@ Mapa::Mapa(vector<Sala*> salasRecebidas, IObserver *observer) {
 		// Colocar o index de cada sala anexa no Node
 		for (int j = 0; j < salas[i].getElemento()->getSalaAnexaCount(); j++)
 			for (int k = 0; k < salas.size(); k++)
-				if (salas[i].getElemento()->getSalaAnexaNome(j) == salas[k].getElemento()->getNome()) {
+				if (salas[i].getElemento()->getAdjacentRoomName(j) == salas[k].getElemento()->getNome()) {
 					salas[i].addAnexa(k);
 					break;
 				}

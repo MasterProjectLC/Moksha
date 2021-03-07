@@ -30,12 +30,12 @@ public:
 	bool hasCondition(string info) override;
 
 	void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) override;
-	void executeReaction(string topico, string frase, string remetente) override;
+	void executeReaction(string topico, string frase, string remetente, bool shouldRespond) override;
 	void checkRoom(vector<Personagem*> pessoasNaSala) override;
 	void updateRoom(vector<Personagem*> pessoasNaSala);
 
-	void serAtacado(Personagem* atacante) override {
+	void beAttacked(Personagem* atacante) override {
 		printText(atacante->getName() + " attacked you!");
-		Personagem::serAtacado(atacante);
+		Personagem::beAttacked(atacante);
 	};
 };

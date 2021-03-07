@@ -12,7 +12,7 @@ NPC::NPC(Mapa* m, string name, int gender, int forca, int destreza) : Personagem
 // PATHFINDING ---------------
 
 queue<Sala*> NPC::findPath(Sala* salaAlvo) {
-	return findPath(salaAtual, salaAlvo);
+	return findPath(currentRoom, salaAlvo);
 };
 
 queue<Sala*> NPC::findPath(Sala* salaInicial, Sala* salaAlvo) {
@@ -20,14 +20,14 @@ queue<Sala*> NPC::findPath(Sala* salaInicial, Sala* salaAlvo) {
 };
 
 queue<Sala*> NPC::search() {
-	return search(salaAtual);
+	return search(currentRoom);
 };
 
 queue<Sala*> NPC::search(Sala* salaPista) {
 	// Path to the clue
 	queue<Sala*> retorno;
-	retorno.push(salaAtual);
-	if (salaPista != salaAtual)
+	retorno.push(currentRoom);
+	if (salaPista != currentRoom)
 		retorno = findPath(salaPista);
 
 	// Start search
@@ -41,7 +41,7 @@ queue<Sala*> NPC::search(Sala* salaPista) {
 		search.pop();
 	}
 
-	if (retorno.front() == salaAtual)
+	if (retorno.front() == currentRoom)
 		retorno.pop();
 	return retorno;
 };
@@ -60,14 +60,22 @@ string NPC::nextRoomInPath() {
 	return retorno;
 }
 
-// REACÕES ----------------------------------
+// REACTIONS ----------------------------------
 
-void NPC::executeReaction(string topico, string frase, string remetente) {
+void NPC::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
 	if (isUnconscious())
 		return;
 
-	if (dict.hasKey(topico))
-		say(topico, dict.getValue(topico), set<string>({ remetente }));
+	if (topic != "")
+		setCondition(topic, true);
+	if (dict.hasKey(topic) && shouldRespond)
+		say(topic, dict.getValue(topic), set<string>({ sender }));
+}
+
+
+void NPC::setCondition(string condition, bool update) {
+	addedConditions.push_back(new string(condition));
+	goap_worldstate_set(&ap, &world, addedConditions.back()->c_str(), update);
 }
 
 
@@ -77,7 +85,7 @@ void NPC::checkRoom(vector<Personagem*> pessoasNaSala) {
 		for (int j = 0; j < pessoasNaSala.size(); j++) {
 			string theirName = pessoasNaSala[j]->getName();
 			if (theirName != name) {
-				updateLastSeen(theirName, salaAtual->getNome());
+				updateLastSeen(theirName, currentRoom->getNome());
 				if (alvos[i] == theirName) {
 					goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), true);
 					break;
@@ -97,7 +105,7 @@ void NPC::seeCharMoving(Personagem* person, string otherRoom, bool entering) {
 		if (!entering)
 			updateLastSeen(person->getName(), otherRoom);
 		else
-			updateLastSeen(person->getName(), salaAtual->getNome());
+			updateLastSeen(person->getName(), currentRoom->getNome());
 
 		goap_worldstate_set(&ap, &world, ("with_" + alvos[idx]).c_str(), entering);
 		updateWorld();
@@ -105,7 +113,7 @@ void NPC::seeCharMoving(Personagem* person, string otherRoom, bool entering) {
 }
 
 
-// PLANOS -------------------------------------------
+// PLANS -------------------------------------------
 
 void NPC::setupPlans() {
 	goap_actionplanner_clear(&ap); // initializes action planner
@@ -249,19 +257,6 @@ int NPC::decideAction() {
 }
 
 
-bool NPC::hasCondition(string info) {
-	bool retorno;
-	if (!goap_worldstate_get(&ap, &world, info.c_str(), &retorno))
-		return false;
-	return retorno;
-}
-
-
-void NPC::setCondition(string condition, bool update) {
-	goap_worldstate_set(&ap, &world, condition.c_str(), update);
-}
-
-
 // HELPER ----------------------------------------
 
 int NPC::alvoIndex(string nome) {
@@ -287,6 +282,15 @@ bool NPC::isCurrentStateFulfilled() {
 
 	return fulfilled;
 }
+
+
+bool NPC::hasCondition(string info) {
+	bool retorno;
+	if (!goap_worldstate_get(&ap, &world, info.c_str(), &retorno))
+		return false;
+	return retorno;
+}
+
 
 // GETTER
 vector<string> NPC::getActionList() {

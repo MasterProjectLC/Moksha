@@ -15,7 +15,7 @@
 using namespace std;
 using namespace pugi;
 
-static auto actionCompare = [](NPC* a, NPC* b) -> bool { return a->getAction() < b->getAction(); };
+static auto actionCompare = [](Personagem* a, Personagem* b) -> bool { return a->getAction() < b->getAction(); };
 
 class Jogo : public IObservable, public IObserver {
 private:
@@ -59,7 +59,6 @@ public:
 	Jogo();
 
 	void setup();
-	Sala* getSalaAtual() { return player.getSalaAtual(); }
 	void receiveArgs(vector<string> args);
 
 	vector<Item> getInventory();

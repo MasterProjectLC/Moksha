@@ -32,10 +32,10 @@ void Jenna::setupObjetivosAdicional() {
 
 void Jenna::updateWorldExtra() {
 	// describe current world state.
-	goap_worldstate_set(&ap, &world, "in_kitchen", salaAtual->getNome() == "Kitchen");
+	goap_worldstate_set(&ap, &world, "in_kitchen", currentRoom->getNome() == "Kitchen");
 	goap_worldstate_set(&ap, &world, "armed", inventory.hasItem("Knife"));
 
-	goap_set_cost(&ap, "move_kitchen", tamanhoCaminho(salaAtual, mapa->getSala("Kitchen")));
+	goap_set_cost(&ap, "move_kitchen", tamanhoCaminho(currentRoom, mapa->getSala("Kitchen")));
 }
 
 

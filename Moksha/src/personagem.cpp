@@ -101,8 +101,8 @@ void Personagem::talk(string convo) {
 }
 
 void Personagem::interact(string action, string object) {
-	if (getSalaAtual()->hasObject(object))
-		getSalaAtual()->getObject(object)->takeAction(action, name);
+	if (getCurrentRoom()->hasObject(object))
+		getCurrentRoom()->getObject(object)->takeAction(action, name);
 }
 
 bool Personagem::isActionValid(int action) {

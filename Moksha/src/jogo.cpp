@@ -66,7 +66,7 @@ void Jogo::initializeGame() {
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it, i++) {
 		string s = it->attribute("Room").value();
 		Personagem* personagem = findCharacter(it->name());
-		personagem->setSalaAtual(mapa.getSala(s));
+		personagem->setCurrentRoom(mapa.getSala(s));
 	}
 }
 
@@ -103,7 +103,7 @@ bool Jogo::loadGame() {
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
 		string s = it->attribute("Room").value();
 		Personagem* thisCharacter = findCharacter(it->name());
-		thisCharacter->setSalaAtual(mapa.getSala(s));
+		thisCharacter->setCurrentRoom(mapa.getSala(s));
 
 		// Load inventory
 		xml_node inventario = it->child("Inventory");
@@ -159,7 +159,7 @@ void Jogo::saveGame() {
 	node = doc.child("GameData").child("Game").child("Characters");
 	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
 		Personagem* thisCharacter = findCharacter(it->name());
-		it->attribute("Room").set_value(thisCharacter->getSalaAtual()->getNome().c_str() );
+		it->attribute("Room").set_value(thisCharacter->getCurrentRoom()->getNome().c_str() );
 
 		// Save inventory
 		xml_node inventario = it->child("Inventory");
@@ -224,9 +224,9 @@ void Jogo::objectAction(Object* object) {
 		Personagem *character = findCharacter(object->getUser());
 		obtainObject(object->getName(), character);						// Give object to character
 		character->setStatus("obtaining " + object->getName() + ".");	// Update char's status
-		character->getSalaAtual()->removeObject(*object);				// Remove object from the room
+		character->getCurrentRoom()->removeObject(*object);				// Remove object from the room
 
-		if (player.getName() == object->getUser())										// Player char - edge case
+		if (player.getName() == object->getUser())						// Player char - edge case
 			advanceTime();
 		break;
 	}
@@ -238,6 +238,10 @@ void Jogo::characterAction(Personagem* character) {
 	string antigaSala;
 
 	switch (id) {
+	case avancar:
+		advanceTime();
+		break;
+
 	case imprimir:
 		printText(character->getNotifyText());
 		break;
@@ -245,24 +249,24 @@ void Jogo::characterAction(Personagem* character) {
 	case mover:
 		// Characters see char leaving
 		for (int i = 0; i < characters.size(); i++)
-			if (characters[i] != character && characters[i]->getSalaAtual() == character->getSalaAtual())
+			if (characters[i] != character && characters[i]->getCurrentRoom() == character->getCurrentRoom())
 				characters[i]->seeCharMoving(character, character->getNotifyText(), false);
 
 		// Char enters the room
-		antigaSala = character->getSalaAtual()->getNome();
-		character->setSalaAtual(moveRoom(character->getSalaAtual(), character->getNotifyText()));
-		character->checkRoom( getPeopleInRoom(player.getSalaAtual()) );
+		antigaSala = character->getCurrentRoom()->getNome();
+		character->setCurrentRoom(moveRoom(character->getCurrentRoom(), character->getNotifyText()));
+		character->checkRoom( getPeopleInRoom(character->getCurrentRoom()) );
 
 		// Characters see char entering
 		for (int i = 0; i < characters.size(); i++)
-			if (characters[i] != character && characters[i]->getSalaAtual() == character->getSalaAtual())
+			if (characters[i] != character && characters[i]->getCurrentRoom() == character->getCurrentRoom())
 				characters[i]->seeCharMoving(character, antigaSala, true);
 		break;
 
 	case mencionar:
 		for (int i = 0; i < characters.size(); i++) {
-			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getSalaAtual() == character->getSalaAtual()) {
-				characters[i]->executeReaction(character->getNotifyText(), "", character->getName());
+			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getCurrentRoom() == character->getCurrentRoom()) {
+				characters[i]->executeReaction(character->getNotifyText(), "", character->getName(), true);
 				break;
 			}
 		}
@@ -270,16 +274,15 @@ void Jogo::characterAction(Personagem* character) {
 
 	case falar:
 		for (int i = 0; i < characters.size(); i++) {
-			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getSalaAtual() == character->getSalaAtual()) {
+			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getCurrentRoom() == character->getCurrentRoom()) {
 				vector<string> args = splitString(character->getNotifyText(), '|');
-				characters[i]->executeReaction(args[0], args[1], character->getName());
-				break;
+				characters[i]->executeReaction(args[0], args[1], character->getName(), false);
 			}
 		}
 		break;
 
 	case conversar:
-		conversations.push_back(Conversation(character->getNotifyText(), character->getSalaAtual()->getNome()));
+		conversations.push_back(Conversation(character->getNotifyText(), character->getCurrentRoom()->getNome()));
 		break;
 
 	case ouvir:
@@ -295,13 +298,10 @@ void Jogo::characterAction(Personagem* character) {
 
 	case atacar:
 		Personagem* vitima = findCharacter(character->getNotifyText());
-		if (vitima->getSalaAtual() == character->getSalaAtual())
-			vitima->serAtacado(character);
+		if (vitima->getCurrentRoom() == character->getCurrentRoom())
+			vitima->beAttacked(character);
 		break;
 	}
-
-	if (id != imprimir && character == &player)
-		advanceTime();
 
 }
 
@@ -310,31 +310,33 @@ void Jogo::advanceTime() {
 	// Decide action
 	for (int i = 0; i < npcs.size(); i++) {
 		int action = npcs[i]->decideAction();
-		if (action == conversar || action == ouvir)
+		if (action == conversar)
 			npcs[i]->takeAction();
 	}
+	if (player.getAction() == ouvir)
+		player.takeAction();
 
 	// Conversations
 	advanceConversations();
 
 	// Order by priority
-	PriorityVector<NPC*> orderAction = PriorityVector<NPC*>(vector<NPC*>(), actionCompare);
-	for (int i = 0; i < npcs.size(); i++) {
-		if (npcs[i]->getAction() != conversar && npcs[i]->getAction() != ouvir)
-			orderAction.push(npcs[i]);
+	PriorityVector<Personagem*> orderAction = PriorityVector<Personagem*>(vector<Personagem*>(), actionCompare);
+	for (int i = 0; i < characters.size(); i++) {
+		if (characters[i]->getAction() != conversar && characters[i]->getAction() != ouvir)
+			orderAction.push(characters[i]);
 	}
 
 	// Take action
-	player.setInConversation(false);
 	while (!orderAction.empty()) {
 		(*orderAction.highest())->takeAction();
 		orderAction.pop();
 	}
+	player.setInConversation(false);
 
 	// Update the player's room status
-	player.updateRoom( getPeopleInRoom(player.getSalaAtual()) );
+	player.updateRoom( getPeopleInRoom(player.getCurrentRoom()) );
 	for (int i = 0; i < npcs.size(); i++)
-		npcs[i]->checkRoom( getPeopleInRoom(npcs[i]->getSalaAtual())) ;
+		npcs[i]->checkRoom( getPeopleInRoom(npcs[i]->getCurrentRoom()) );
 
 
 	// Jogo
@@ -344,59 +346,57 @@ void Jogo::advanceTime() {
 
 
 void Jogo::advanceConversations() {
-	// Iterar por cada conversa acontecendo
+	// Iterate through each current convo
 	for (vector<Conversation>::iterator it = conversations.begin(); it != conversations.end(); it++) {
-		// Tentar até uma mensagem passar
+		// Try until a message shoots through
 		while (1) {
-			// Se conversa acabou
+			// If the convo is over
 			if (it->ended()) {
 				conversations.erase(it);
 				break;
 			}
 
-			// Avancar
-			bool valid = true;
+			// Advance
 			xml_node conversation = it->nextLine();
 
 			string n = conversation.name();
-			if (n == "Narrator") {
-				if (it->getParticipants()->count(player.getName()) && player.getSalaAtual()->getNome() == it->getRoom()) {	// Edge case: narrator
-					printText(conversation.attribute("line").value());
-				}
-				break;
-			}
+			if (n != "Narrator") {
+				Personagem* speaker = findCharacter(conversation.name());
 
-			Personagem* speaker = findCharacter(conversation.name());
+				// Test if valid
+				// Is the speaker in the room?
+				if (speaker->getCurrentRoom()->getNome() != it->getRoom())
+					continue;
 
-			// Testar se válido
-			// O falante atual está na sala?
-			if (speaker->getSalaAtual()->getNome() != it->getRoom())
-				valid = false;
-
-			// O falante atual preenche as condicoes?
-			string info;
-			if (valid)
+				// Does the speaker fulfill the necessary conditions?
+				string infoAtom = ""; bool valid = true;
 				for (xml_node_iterator cit = conversation.begin(); cit != conversation.end(); ++cit) {
-					info = cit->attribute("info").value();
+					string info = cit->attribute("info").value();
 					bool t1 = speaker->hasCondition(cit->name());
 					string nao = cit->attribute("n").value();
 					bool t2 = (nao == "n");
-					if (info != "info" && t1 == t2) {
+					if (info == "info")
+						infoAtom = cit->name();
+					else if (t1 == t2) {
 						valid = false;
 						break;
 					}
 				}
+				if (!valid) continue;
 
-			// Mensagem válida!
-			if (valid) {
 				// Send message
-				speaker->sayLine("", conversation.attribute("line").value(), it->getParticipants(conversation.name()));
-				// Lock every participant
-				for (set<string>::iterator ait = it->getParticipants()->begin(); ait != it->getParticipants()->end(); ait++)
-					findCharacter(*ait)->setInConversation(true);
-				it->clearListeners();
-				break;
+				speaker->sayLine( infoAtom, conversation.attribute("line").value(), it->getParticipants(conversation.name()) );
 			}
+			else if (it->getParticipants()->count(player.getName()) && player.getCurrentRoom()->getNome() == it->getRoom())
+				printText(conversation.attribute("line").value());
+			else
+				continue;
+
+			// Lock every participant
+			for (set<string>::iterator ait = it->getParticipants()->begin(); ait != it->getParticipants()->end(); ait++)
+				findCharacter(*ait)->setInConversation(true);
+			it->clearListeners();
+			break;
 		}
 
 		break;
@@ -414,7 +414,7 @@ void Jogo::receiveArgs(vector<string> args) {
 vector<Personagem*> Jogo::getPeopleInRoom(Sala* room) {
 	vector<Personagem*> retorno;
 	for (int i = 0; i < characters.size(); i++) {
-		if (characters[i]->getSalaAtual() == room)
+		if (characters[i]->getCurrentRoom() == room)
 			retorno.push_back(characters[i]);
 	}
 

@@ -2,6 +2,7 @@
 
 Conversation::Conversation(string conversation, string room) {
 	name = conversation;
+	begun = true;
 	convoStage = 0;
 	this->conversation.load_file( ("files/conversations/" + conversation + ".xml").c_str() );
 	it = this->conversation.child("Conversation").begin();
