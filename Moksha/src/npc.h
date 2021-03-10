@@ -16,10 +16,10 @@ protected:
 	const vector<string> names = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
 								"Magnus", "Tom", "Jenna", "Renard", "Liz",
 								"George", "Damian", "Amelie" };
-	vector<string*> addedConditions;
 
-	int MAX_ALVOS = 6;
-	vector<string> alvos;
+	set<string*> addedConditions;
+	set<string> trackablePeople;
+
 	queue<Sala*> path;
 	Mapa* mapa;
 	string conversaAlvo;
@@ -60,7 +60,6 @@ protected:
 	void changePlans() { changePlans(false); };
 	void changePlans(bool justUpdated);
 
-	int alvoIndex(string a);
 	bool isCurrentStateFulfilled();
 
 public:
@@ -69,11 +68,12 @@ public:
 	void setCondition(string condition, bool update);
 	bool hasCondition(string info) override;
 	void takeAction() override { Personagem::takeAction(); updateWorld(); }
+	void receiveEvent(vector<string> args) override;
 
 	int decideAction();
 	void executeReaction(string topico, string frase, string remetente, bool shouldRespond) override;
 	void checkRoom(vector<Personagem*> pessoasNaSala) override;
-	void seeCharMoving(Personagem * pessoa, string outraSala, bool entrando) override;
+	void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) override;
 	void setSalaAlvo(Sala* nova) { findPath(nova); }
 
 	void setupPlans();

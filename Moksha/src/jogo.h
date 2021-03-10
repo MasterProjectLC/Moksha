@@ -24,7 +24,7 @@ private:
 	int time;
 	int loop;
 
-	string texto;
+	string text;
 
 	Jogador player;
 	vector<Personagem*> characters;
@@ -44,6 +44,7 @@ private:
 	void objectAction(Object* object);
 	void characterAction(Personagem* personagem);
 	Personagem* findCharacter(string nome);
+	void broadcastEvent(Personagem* emitter, vector<string> args);
 
 	void update(int id) override;
 	void advanceTime();
@@ -53,7 +54,7 @@ private:
 	bool loadGame();
 	void saveGame();
 
-	void obtainObject(string nome, Personagem* recebedor);
+	void obtainObject(string name, Personagem* receiver);
 
 public:
 	Jogo();
@@ -61,10 +62,11 @@ public:
 	void setup();
 	void receiveArgs(vector<string> args);
 
-	vector<Item> getInventory();
+	vector<Item> getItems();
+	vector<Concept> getConcepts();
 
-	void printText(string texto);
-	string getText() { return texto; }
+	void printText(string text);
+	string getText() { return text; }
 
-	enum {_obter, _imprimir};
+	enum {_obter, _imprimir, _ouvir};
 };

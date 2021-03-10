@@ -47,13 +47,21 @@ public:
 		}
 
 		else if (game.getNotifyID() == game._obter) {
-			vector<Item> inventario = game.getInventory();
+			vector<Item> inventory = game.getItems();
 			vector<string> paraEnviar;
-			for (int i = 0; i < inventario.size(); i++)
-				paraEnviar.push_back(inventario[i].getNome());
+			for (int i = 0; i < inventory.size(); i++)
+				paraEnviar.push_back(inventory[i].getName());
 
-			interfacer.setItens(paraEnviar);
+			interfacer.setItems(paraEnviar, interfacer.item);
+		}
 
+		else if (game.getNotifyID() == game._ouvir) {
+			vector<Concept> inventory = game.getConcepts();
+			vector<string> paraEnviar;
+			for (int i = 0; i < inventory.size(); i++)
+				paraEnviar.push_back(inventory[i].getName());
+
+			interfacer.setItems(paraEnviar, interfacer.rumor);
 		}
 	}
 

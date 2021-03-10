@@ -1,11 +1,11 @@
 #include "npc.h"
 
-NPC::NPC(Mapa* m, string name, int gender, int forca, int destreza) : Personagem(gender, forca, destreza) {
+NPC::NPC(Mapa* m, string name, int gender, int strength, int dexterity) : Personagem(gender, strength, dexterity) {
 	this->name = name;
 	this->mapa = m;
 
-	FileDict fileObjeto = FileManager::readFromFile("files/characters/" + getName() + ".txt");
-	this->dict = fileObjeto;
+	FileDict fileObject = FileManager::readFromFile("files/characters/" + getName() + ".txt");
+	this->dict = fileObject;
 }
 
 
@@ -23,20 +23,20 @@ queue<Sala*> NPC::search() {
 	return search(currentRoom);
 };
 
-queue<Sala*> NPC::search(Sala* salaPista) {
+queue<Sala*> NPC::search(Sala* roomClue) {
 	// Path to the clue
 	queue<Sala*> retorno;
 	retorno.push(currentRoom);
-	if (salaPista != currentRoom)
-		retorno = findPath(salaPista);
+	if (roomClue != currentRoom)
+		retorno = findPath(roomClue);
 
 	// Start search
-	queue<Sala*> search = mapa->breadthSearch(salaPista);
+	queue<Sala*> search = mapa->breadthSearch(roomClue);
 	while (!search.empty()) {
-		queue<Sala*> caminho = findPath(retorno.back(), search.front());
-		while (!caminho.empty()) {
-			retorno.push(caminho.front());
-			caminho.pop();
+		queue<Sala*> path = findPath(retorno.back(), search.front());
+		while (!path.empty()) {
+			retorno.push(path.front());
+			path.pop();
 		}
 		search.pop();
 	}
@@ -53,7 +53,7 @@ string NPC::nextRoomInPath() {
 		advancePlansExtra(plan[currentStep]); // Refresh plans
 
 	if (!path.empty()) {
-		retorno = path.front()->getNome();
+		retorno = path.front()->getName();
 		path.pop();
 	}
 
@@ -74,22 +74,35 @@ void NPC::executeReaction(string topic, string phrase, string sender, bool shoul
 
 
 void NPC::setCondition(string condition, bool update) {
-	addedConditions.push_back(new string(condition));
-	goap_worldstate_set(&ap, &world, addedConditions.back()->c_str(), update);
+	if (!hasCondition(condition)) {
+		string *pointer = new string(condition);
+		addedConditions.insert(pointer);
+		goap_worldstate_set(&ap, &world, pointer->c_str(), update);
+	}
+	else
+		goap_worldstate_set(&ap, &world, condition.c_str(), update);
 }
 
 
-void NPC::checkRoom(vector<Personagem*> pessoasNaSala) {
-	for (int i = 0; i < alvos.size(); i++) {
-		goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), false);
-		for (int j = 0; j < pessoasNaSala.size(); j++) {
-			string theirName = pessoasNaSala[j]->getName();
-			if (theirName != name) {
-				updateLastSeen(theirName, currentRoom->getNome());
-				if (alvos[i] == theirName) {
-					goap_worldstate_set(&ap, &world, ("with_" + alvos[i]).c_str(), true);
-					break;
-				}
+void NPC::receiveEvent(vector<string> args) {
+	if (args[0] == "attack")
+		if (trackablePeople.count(args[1]) > 0)
+			setCondition(args[1] + "_dead", true);
+}
+
+
+void NPC::checkRoom(vector<Personagem*> peopleInRoom) {
+	// Run through tracked people
+	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++) {
+		string theirName = *it;
+		goap_worldstate_set(&ap, &world, ("with_" + theirName).c_str(), false);
+
+		// Check if they are in the room
+		for (int i = 0; i < peopleInRoom.size(); i++) {
+			if (theirName == peopleInRoom[i]->getName()) {
+				updateLastSeen(theirName, currentRoom->getName());
+				goap_worldstate_set(&ap, &world, ("with_" + theirName).c_str(), true);
+				break;
 			}
 		}
 	}
@@ -99,17 +112,16 @@ void NPC::checkRoom(vector<Personagem*> pessoasNaSala) {
 
 
 void NPC::seeCharMoving(Personagem* person, string otherRoom, bool entering) {
-	int idx = alvoIndex(person->getName());
+	if (trackablePeople.count(person->getName()) == 0)
+		return;
 
-	if (idx != -1) {
-		if (!entering)
-			updateLastSeen(person->getName(), otherRoom);
-		else
-			updateLastSeen(person->getName(), currentRoom->getNome());
+	if (!entering)
+		updateLastSeen(person->getName(), otherRoom);
+	else
+		updateLastSeen(person->getName(), currentRoom->getName());
 
-		goap_worldstate_set(&ap, &world, ("with_" + alvos[idx]).c_str(), entering);
-		updateWorld();
-	}
+	goap_worldstate_set(&ap, &world, ("with_" + person->getName()).c_str(), entering);
+	updateWorld();
 }
 
 
@@ -119,24 +131,12 @@ void NPC::setupPlans() {
 	goap_actionplanner_clear(&ap); // initializes action planner
 
 	// describe repertoire of actions
-	static vector<string> search_atoms = editVector("search_", names, "");
-	static vector<string> with_atoms = editVector("with_", names, "");
-	static vector<string> alive_atoms = editVector("", names, "_alive");
-	for (int i = 0; i < search_atoms.size(); i++)
-		if (names[i] != name) {
-			goap_set_pre(&ap, search_atoms[i].c_str(), alive_atoms[i].c_str(), true);
-			goap_set_pst(&ap, search_atoms[i].c_str(), with_atoms[i].c_str(), true);
-		}
 	setupAcoesAdicional();
 
 	// describe current world state.
 	goap_worldstate_clear(&world);
-	for (int i = 0; i < alive_atoms.size(); i++) {
-		goap_worldstate_set(&ap, &world, alive_atoms[i].c_str(), true);
-		if (names[i] != name)
-			goap_worldstate_set(&ap, &world, ("with_" + names[i]).c_str(), false);
-	}
-	goap_worldstate_set(&ap, &world, "armed", inventory.hasItem("Knife"));
+	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++)
+		setCondition("with_" + *it, false);
 	setupMundoAdicional();
 
 	// describe goal
@@ -170,9 +170,12 @@ void NPC::updateLastSeen(string pursueTarget, string room) {
 	string alvoVec[1] = { pursueTarget };
 	lastSeen.addPair(set<string>(alvoVec, alvoVec + 1), room);
 
+	if (plansz == 0)
+		return;
+
 	string currentProcess = plan[currentStep];
 	if (currentProcess.compare("search_" + pursueTarget) == 0) {
-		path = search(mapa->getSala( lastSeen.getValues(pursueTarget) ));
+		path = search(mapa->getRoom( lastSeen.getValues(pursueTarget) ));
 	}
 }
 
@@ -190,7 +193,7 @@ void NPC::advancePlans() {
 
 		if (currentProcess.substr(0, 7).compare("search_") == 0) {
 			if (lastSeen.hasKey( currentProcess.substr(7, 10000) ))
-				path = search(mapa->getSala(lastSeen.getValues( currentProcess.substr(7, 10000) )));
+				path = search(mapa->getRoom(lastSeen.getValues( currentProcess.substr(7, 10000) )));
 			else
 				path = search();
 
@@ -212,7 +215,7 @@ void NPC::changePlans(bool justUpdated) {
 }
 
 
-// AÇÕES ------------------------------------------------
+// ACTIONS ------------------------------------------------
 
 int NPC::decideAction() {
 	// Check if current action was completed
@@ -258,16 +261,7 @@ int NPC::decideAction() {
 
 
 // HELPER ----------------------------------------
-
-int NPC::alvoIndex(string nome) {
-	for (int i = 0; i < alvos.size(); i++) {
-		if (nome == alvos[i])
-			return i;
-	}
-
-	return -1;
-}
-
+#include <stdexcept>
 
 bool NPC::isCurrentStateFulfilled() {
 	bfield_t worldState = (world.values & ~states[currentStep].dontcare);

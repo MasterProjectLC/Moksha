@@ -8,9 +8,9 @@ using namespace std;
 class Sala {
 	// Atributos
 private:
-	string nome;
-	string codinome;
-	string textoInicial;
+	string name;
+	string codename;
+	string initialText;
 	vector<string> salasAnexasNomes;
 	int index;
 
@@ -21,8 +21,8 @@ public:
 	Sala() {};
 
 	// Setup
-	Sala(int index, string nome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
-	Sala(int index, string nome, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
+	Sala(int index, string name, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
+	Sala(int index, string name, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
 	void setObjectNames(vector<string> objetoNomes) { this->objectNames = objetoNomes; }
 
 	void setupObjects(vector<Object> objetos) { this->objects = objetos; }
@@ -31,17 +31,17 @@ public:
 	void limparObjects() { objects.clear(); objectNames.clear(); }
 
 	// Getters
-	string getNome() { return nome; }
-	string getCodinome() { return codinome; }
-	string getTextoInicial() { return textoInicial; }
+	string getName() { return name; }
+	string getCodename() { return codename; }
+	string getInitialText() { return initialText; }
 	int getIndex() { return index; }
 
 	bool isSalaAnexa(string salaAnexaNome);
 	string getAdjacentRoomName(int i);
 	int getSalaAnexaCount() { return salasAnexasNomes.size(); }
 
-	bool hasObject(string nome);
-	Object* getObject(string nome);
+	bool hasObject(string name);
+	Object* getObject(string name);
 	Object* getObject(int index) { return &objects[index]; }
 	vector<Object> getObjects() { return objects; }
 	vector<string> getObjectNames();

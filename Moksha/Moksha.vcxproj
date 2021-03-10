@@ -149,7 +149,7 @@
     <ClCompile Include="src\characters\Hilda.cpp" />
     <ClCompile Include="src\characters\Jenna.cpp" />
     <ClCompile Include="src\characters\Santos.cpp" />
-    <ClCompile Include="src\conceito.cpp" />
+    <ClCompile Include="src\concept.cpp" />
     <ClCompile Include="src\conversation.cpp" />
     <ClCompile Include="src\fileDict.cpp" />
     <ClCompile Include="src\graphics.cpp" />
@@ -178,7 +178,7 @@
     <ClInclude Include="src\characters\Hilda.h" />
     <ClInclude Include="src\characters\Jenna.h" />
     <ClInclude Include="src\characters\Santos.h" />
-    <ClInclude Include="src\conceito.h" />
+    <ClInclude Include="src\concept.h" />
     <ClInclude Include="src\conversation.h" />
     <ClInclude Include="src\dictionary.h" />
     <ClInclude Include="src\fileDict.h" />

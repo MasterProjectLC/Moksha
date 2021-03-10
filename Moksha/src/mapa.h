@@ -62,7 +62,7 @@ private:
 
 	// Atributos
 	int MAX_OBJECT_COUNT = 100;
-	vector<Node> salas;
+	vector<Node> rooms;
 	vector<Object> objects;
 	IObserver* observer;
 
@@ -77,9 +77,9 @@ public:
 
 	queue<Sala*> optimalPath(Sala *_salaOrigem, Sala *_salaDestino);
 	queue<Sala*> breadthSearch(Sala *_salaOrigem);
-	bool existeSala(string name);
-	Sala* getSala(int index);
-	Sala* getSala(string name);
+	bool hasRoom(string name);
+	Sala* getRoom(int index);
+	Sala* getRoom(string name);
 
 	void limparVisitado();
 };

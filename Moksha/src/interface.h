@@ -55,7 +55,7 @@ private:
 	// Inventario
 	vector<string> titulos;
 	vector<int> tituloPositions;
-	vector<list<string>> itens;
+	vector<list<string>> inventory;
 
 	// Pointers
 	int pointer;
@@ -95,7 +95,7 @@ public:
 	void clocking();
 	void printLinha(string nova);
 
-	enum {notifyArgs};
+	enum {notifyArgs, item, rumor, concept};
 
 	// Getters/Setters
 	vector<string> getArgs() { return args; }
@@ -104,6 +104,7 @@ public:
 
 	void setTab(boolean tab);
 	void setMenu(boolean menu);
-	void setItens(vector<string> itens);
+	void setItems(vector<string> items, int type);
+	void setConcepts(vector<string> concepts);
 
 };

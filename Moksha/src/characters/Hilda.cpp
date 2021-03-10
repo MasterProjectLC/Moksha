@@ -1,6 +1,7 @@
 #include "Hilda.h"
 
 Hilda::Hilda(Mapa* m) : NPC{ m, "Hilda", F, 2, 1 } {
+	trackablePeople.insert("Santos");
 }
 
 void Hilda::setupAcoesAdicional() {
@@ -9,13 +10,12 @@ void Hilda::setupAcoesAdicional() {
 
 
 void Hilda::setupMundoAdicional() {
-	goap_worldstate_set(&ap, &world, "with_Baxter", true);
+	goap_worldstate_set(&ap, &world, "with_Santos", true);
 }
 
 
 void Hilda::setupObjetivosAdicional() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "with_Baxter", true);
-	goap_worldstate_set(&ap, &currentGoal.goal, "Hilda_alive", true);
+
 }
 
 

@@ -66,7 +66,7 @@ void Jogo::initializeGame() {
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it, i++) {
 		string s = it->attribute("Room").value();
 		Personagem* personagem = findCharacter(it->name());
-		personagem->setCurrentRoom(mapa.getSala(s));
+		personagem->setCurrentRoom(mapa.getRoom(s));
 	}
 }
 
@@ -84,7 +84,7 @@ bool Jogo::loadGame() {
 	// Load map
 	load_package = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
-		Sala* estaSala = mapa.getSala(it->attribute("Name").value());
+		Sala* estaSala = mapa.getRoom(it->attribute("Name").value());
 		estaSala->limparObjects();
 
 		// Load objects
@@ -103,7 +103,7 @@ bool Jogo::loadGame() {
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
 		string s = it->attribute("Room").value();
 		Personagem* thisCharacter = findCharacter(it->name());
-		thisCharacter->setCurrentRoom(mapa.getSala(s));
+		thisCharacter->setCurrentRoom(mapa.getRoom(s));
 
 		// Load inventory
 		xml_node inventario = it->child("Inventory");
@@ -145,7 +145,7 @@ void Jogo::saveGame() {
 	// Save map
 	node = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
-		Sala* thisSala = mapa.getSala(it->attribute("Name").value());
+		Sala* thisSala = mapa.getRoom(it->attribute("Name").value());
 
 		// Save objects
 		xml_node objects = it->child("Objects");
@@ -159,14 +159,14 @@ void Jogo::saveGame() {
 	node = doc.child("GameData").child("Game").child("Characters");
 	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
 		Personagem* thisCharacter = findCharacter(it->name());
-		it->attribute("Room").set_value(thisCharacter->getCurrentRoom()->getNome().c_str() );
+		it->attribute("Room").set_value(thisCharacter->getCurrentRoom()->getName().c_str() );
 
 		// Save inventory
 		xml_node inventario = it->child("Inventory");
 		inventario.remove_children();
-		vector<Item> itemList = thisCharacter->getInventory();
+		vector<Item> itemList = thisCharacter->getItems();
 		for (int i = 0; i < itemList.size(); i++)
-			inventario.append_child(itemList[i].getNome().c_str());
+			inventario.append_child(itemList[i].getName().c_str());
 
 		// Save atoms
 		if (thisCharacter != &player) {
@@ -253,7 +253,7 @@ void Jogo::characterAction(Personagem* character) {
 				characters[i]->seeCharMoving(character, character->getNotifyText(), false);
 
 		// Char enters the room
-		antigaSala = character->getCurrentRoom()->getNome();
+		antigaSala = character->getCurrentRoom()->getName();
 		character->setCurrentRoom(moveRoom(character->getCurrentRoom(), character->getNotifyText()));
 		character->checkRoom( getPeopleInRoom(character->getCurrentRoom()) );
 
@@ -277,12 +277,14 @@ void Jogo::characterAction(Personagem* character) {
 			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getCurrentRoom() == character->getCurrentRoom()) {
 				vector<string> args = splitString(character->getNotifyText(), '|');
 				characters[i]->executeReaction(args[0], args[1], character->getName(), false);
+				if (characters[i] == &player && args[0] != "")
+					notify(_ouvir);
 			}
 		}
 		break;
 
 	case conversar:
-		conversations.push_back(Conversation(character->getNotifyText(), character->getCurrentRoom()->getNome()));
+		conversations.push_back(Conversation(character->getNotifyText(), character->getCurrentRoom()->getName()));
 		break;
 
 	case ouvir:
@@ -299,7 +301,12 @@ void Jogo::characterAction(Personagem* character) {
 	case atacar:
 		Personagem* vitima = findCharacter(character->getNotifyText());
 		if (vitima->getCurrentRoom() == character->getCurrentRoom())
-			vitima->beAttacked(character);
+			if (vitima->beAttacked(character))
+				broadcastEvent(character, vector<string>({"attack", vitima->getName()}));
+			else
+				broadcastEvent(vitima, vector<string>({ "attack", character->getName() }));
+
+
 		break;
 	}
 
@@ -365,7 +372,7 @@ void Jogo::advanceConversations() {
 
 				// Test if valid
 				// Is the speaker in the room?
-				if (speaker->getCurrentRoom()->getNome() != it->getRoom())
+				if (speaker->getCurrentRoom()->getName() != it->getRoom())
 					continue;
 
 				// Does the speaker fulfill the necessary conditions?
@@ -387,7 +394,7 @@ void Jogo::advanceConversations() {
 				// Send message
 				speaker->sayLine( infoAtom, conversation.attribute("line").value(), it->getParticipants(conversation.name()) );
 			}
-			else if (it->getParticipants()->count(player.getName()) && player.getCurrentRoom()->getNome() == it->getRoom())
+			else if (it->getParticipants()->count(player.getName()) && player.getCurrentRoom()->getName() == it->getRoom())
 				printText(conversation.attribute("line").value());
 			else
 				continue;
@@ -406,6 +413,15 @@ void Jogo::advanceConversations() {
 
 void Jogo::receiveArgs(vector<string> args) {
 	player.receberArgs(args);
+}
+
+
+void Jogo::broadcastEvent(Personagem* emitter, vector<string> args) {
+	vector<Personagem*> receivers = getPeopleInRoom(emitter->getCurrentRoom());
+	for (int i = 0; i < receivers.size(); i++)
+		if (receivers[i] != emitter)
+			receivers[i]->receiveEvent(args);
+
 }
 
 
@@ -437,19 +453,23 @@ void Jogo::obtainObject(string name, Personagem* receiver) {
 
 Sala* Jogo::moveRoom(Sala* origin, string destination) {
 	// Movement
-	origin = mapa.getSala(destination);
+	origin = mapa.getRoom(destination);
 	return origin;
 }
 
 
-void Jogo::printText(string texto) {
-	this->texto = texto;
+void Jogo::printText(string text) {
+	this->text = text;
 	notify(_imprimir);
 }
 
 
-vector<Item> Jogo::getInventory() {
-	return player.getInventory();
+vector<Item> Jogo::getItems() {
+	return player.getItems();
+}
+
+vector<Concept> Jogo::getConcepts() {
+	return player.getConcepts();
 }
 
 

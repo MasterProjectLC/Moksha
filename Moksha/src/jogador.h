@@ -34,8 +34,8 @@ public:
 	void checkRoom(vector<Personagem*> pessoasNaSala) override;
 	void updateRoom(vector<Personagem*> pessoasNaSala);
 
-	void beAttacked(Personagem* atacante) override {
+	bool beAttacked(Personagem* atacante) override {
 		printText(atacante->getName() + " attacked you!");
-		Personagem::beAttacked(atacante);
+		return Personagem::beAttacked(atacante);
 	};
 };

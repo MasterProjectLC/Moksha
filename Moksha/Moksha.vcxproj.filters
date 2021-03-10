@@ -24,9 +24,6 @@
     <ClCompile Include="libs\pugixml\src\pugixml.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\conceito.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\fileDict.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -99,13 +96,13 @@
     <ClCompile Include="src\inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\concept.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libs\pugixml\src\pugixml.hpp">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\conceito.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\dictionary.h">
       <Filter>Header Files</Filter>
@@ -189,6 +186,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\inventory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\concept.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,21 +1,21 @@
 #pragma once
 #include <vector>
 #include <set>
-#include "conceito.h"
+#include "concept.h"
 #include "actionEnum.h"
 
 using namespace std;
 
-class Item : public Conceito {
+class Item : public Concept {
 private:
-	set<string> acoes;
+	set<string> actionNames;
 	set<int> actions;
 
 public:
-	Item(string nome) : Item(nome, "", set<string>()) {};
-	Item(string nome, set<string> acoes) : Item(nome, "", acoes) {};
-	Item(string nome, string descricao, set<string> acoes);
+	Item(string name) : Item(name, "", set<string>()) {};
+	Item(string name, set<string> actions) : Item(name, "", actions) {};
+	Item(string name, string description, set<string> actions);
 
-	bool isAcaoValida(string acao);
+	bool isActionValid(string action);
 	bool isActionValid(int action);
 };

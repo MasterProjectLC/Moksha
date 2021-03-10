@@ -6,11 +6,11 @@ using namespace std;
 
 class Inventory {
 private:
-	vector<Conceito> inventory;
+	vector<Concept> concepts;
 	vector<Item> items;
 
 public:
-	vector<Conceito> getInventory() { return inventory; };
+	vector<Concept> getConcepts() { return concepts; };
 	vector<Item> getItems() { return items; };
 	void addConcept(string name);
 	void addItem(string name, set<string> actions);

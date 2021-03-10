@@ -20,7 +20,7 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 		int tituloOffset = titulos[k].size() / 2;
 		tituloPositions.push_back(tituloCenter - tituloOffset);
 
-		itens.push_back(list<string>());
+		inventory.push_back(list<string>());
 	}
 
 	this->textTab = false;
@@ -185,7 +185,7 @@ void Interface::interfaceInventario(int invP, int tituloP, bool paintItem) {
 
 	// Itens
 	int sobre = 1;
-	for (it = itens[titulosPointer].begin(); it != itens[titulosPointer].end(); it++, sobre++) {
+	for (it = inventory[titulosPointer].begin(); it != inventory[titulosPointer].end(); it++, sobre++) {
 		string s = *it;
 		sobre += s.size() / separator;
 		graphics.drawString(0, sobre, s);
@@ -196,10 +196,10 @@ void Interface::interfaceInventario(int invP, int tituloP, bool paintItem) {
 	if (0 < invP) {
 		graphics.paint(0, invPointer, separator, 'w');
 		graphics.paintBG(0, invPointer, separator, 'n');
-		if (invP <= itens[titulosPointer].size()) {
+		if (invP <= inventory[titulosPointer].size()) {
 			invPointer = invP;
 		}
-		if (paintItem && (invP <= itens[titulosPointer].size() || mudouItem)) {
+		if (paintItem && (invP <= inventory[titulosPointer].size() || mudouItem)) {
 			graphics.paint(0, invPointer, separator, 'n');
 			graphics.paintBG(0, invPointer, separator, 'w');
 		}
@@ -401,10 +401,10 @@ void Interface::setMenu(boolean menu) {
 	interfaceInventario(invPointer, titulosPointer, !menu);
 }
 
-void Interface::setItens(vector<string> itens) { 
-	for (int i = 0; i < itens.size(); i++) {
-		if (i >= this->itens[0].size()) {
-			this->itens[0].push_back(itens[i]);
+void Interface::setItems(vector<string> items, int type) { 
+	for (int i = 0; i < items.size(); i++) {
+		if (i >= inventory[type].size()) {
+			inventory[type].push_back(items[i]);
 		}
 	}
 

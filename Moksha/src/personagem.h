@@ -31,7 +31,7 @@ protected:
 
 	void takeAction(int action, vector<string> args);
 	virtual void move(string str);
-	void move(Sala sala);
+	void move(Sala* room);
 	virtual void mention(string obj, set<string> receivers);
 	virtual void mention(string obj, string receiver);
 	void attack(string target);
@@ -58,8 +58,9 @@ public:
 	string getName() { return name; }
 	int getAction() { return currentAction; }
 
-	vector<Item> getInventory() { return inventory.getItems(); }
-	void addConceito(string nome) { inventory.addConcept(nome); }
+	vector<Item> getItems() { return inventory.getItems(); }
+	vector<Concept> getConcepts() { return inventory.getConcepts(); }
+	void addConcept(string nome) { inventory.addConcept(nome); }
 	void addItem(string nome, set<string> acoes) { inventory.addItem(nome, acoes); }
 
 	string getStatus() { return status; }
@@ -85,12 +86,17 @@ public:
 
 	virtual bool hasCondition(string info) { return false; }
 
-	virtual void executeReaction(string topico, string frase, string remetente, bool shouldRespond) {}
+	virtual void receiveEvent(vector<string> args) {}
+	virtual void executeReaction(string topic, string phrase, string sender, bool shouldRespond) {}
 	virtual void checkRoom(vector<Personagem*> pessoasNaSala) {}
 	virtual void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {}
-	virtual void beAttacked(Personagem* atacante) {
+	virtual bool beAttacked(Personagem* atacante) {
 		if (atacante->getStrength() >= strength)
 			unconscious = true;
+		else
+			atacante->beAttacked(this);
+
+		return unconscious;
 	};
 
 };

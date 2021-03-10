@@ -8,16 +8,16 @@ Mapa::Mapa(vector<Sala*> salasRecebidas, IObserver *observer) {
 	// Gerar salas
 	for (int i = 0; i < salasRecebidas.size(); i++) {
 		Node novo = Node(salasRecebidas[i]);
-		salas.push_back(novo);
+		rooms.push_back(novo);
 	}
 
 	// Popular nós com anexasIndex
-	for (int i = 0; i < salas.size(); i++) {
+	for (int i = 0; i < rooms.size(); i++) {
 		// Colocar o index de cada sala anexa no Node
-		for (int j = 0; j < salas[i].getElemento()->getSalaAnexaCount(); j++)
-			for (int k = 0; k < salas.size(); k++)
-				if (salas[i].getElemento()->getAdjacentRoomName(j) == salas[k].getElemento()->getNome()) {
-					salas[i].addAnexa(k);
+		for (int j = 0; j < rooms[i].getElemento()->getSalaAnexaCount(); j++)
+			for (int k = 0; k < rooms.size(); k++)
+				if (rooms[i].getElemento()->getAdjacentRoomName(j) == rooms[k].getElemento()->getName()) {
+					rooms[i].addAnexa(k);
 					break;
 				}
 
@@ -48,7 +48,7 @@ void Mapa::carregarSala(Sala *room) {
 
 
 Object* Mapa::getObject(int id) {
-	return salas[id / MAX_OBJECT_COUNT].getElemento()->getObject(id % MAX_OBJECT_COUNT);
+	return rooms[id / MAX_OBJECT_COUNT].getElemento()->getObject(id % MAX_OBJECT_COUNT);
 }
 
 // CAMINHOS E PATHFINDING -----------------------------------------------------------------------
@@ -64,10 +64,10 @@ queue<Sala*> Mapa::optimalPath(Sala *_salaOrigem, Sala *_salaDestino) {
 	// Encontra node da sala de origem
 	queue<Node*> procura;
 	stack<Node*> reverser;
-	for (int i = 0; i < salas.size(); i++) {
-		if (salas[i].getElemento()->getNome() == _salaOrigem->getNome()) {
-			salas[i].setVisitado(1);
-			procura.push(&salas[i]);
+	for (int i = 0; i < rooms.size(); i++) {
+		if (rooms[i].getElemento()->getName() == _salaOrigem->getName()) {
+			rooms[i].setVisitado(1);
+			procura.push(&rooms[i]);
 			break;
 		}
 	}
@@ -77,14 +77,14 @@ queue<Sala*> Mapa::optimalPath(Sala *_salaOrigem, Sala *_salaDestino) {
 		Node* salaExaminada = procura.front();
 		for (int i = 0; i < salaExaminada->getAnexas().size(); i++) {
 			// Não examinada ainda - adicionar à lista de checagem e colocar node atual como pai
-			if (salas[salaExaminada->getAnexas()[i]].getVisitado() == 0) {
-				procura.push(&salas[salaExaminada->getAnexas()[i]]);			// Coloca na lista
-				salas[salaExaminada->getAnexas()[i]].setPai(salaExaminada);		// Seta o node atual como pai
-				salas[salaExaminada->getAnexas()[i]].setVisitado(1);			// Seta visitado para 1
+			if (rooms[salaExaminada->getAnexas()[i]].getVisitado() == 0) {
+				procura.push(&rooms[salaExaminada->getAnexas()[i]]);			// Coloca na lista
+				rooms[salaExaminada->getAnexas()[i]].setPai(salaExaminada);		// Seta o node atual como pai
+				rooms[salaExaminada->getAnexas()[i]].setVisitado(1);			// Seta visitado para 1
 
 				// Sala alvo encontrada!
-				if (salas[salaExaminada->getAnexas()[i]].getElemento() == _salaDestino) {
-					reverser.push(&salas[salaExaminada->getAnexas()[i]]);
+				if (rooms[salaExaminada->getAnexas()[i]].getElemento() == _salaDestino) {
+					reverser.push(&rooms[salaExaminada->getAnexas()[i]]);
 
 					// Construir caminho no reverso
 					while (reverser.top()->temPai())
@@ -112,8 +112,8 @@ queue<Sala*> Mapa::breadthSearch(Sala *salaOrigem) {
 	limparVisitado(); // Reseta visitado
 
 	// Procura pela salaOrigem no mapa de nós, e começa busca por ela
-	for (int i = 0; i < salas.size(); i++) {
-		if (salas[i].getElemento()->getNome() == salaOrigem->getNome()) {
+	for (int i = 0; i < rooms.size(); i++) {
+		if (rooms[i].getElemento()->getName() == salaOrigem->getName()) {
 			breadthSearchHelper(&retorno, st, i);
 			break;
 		}
@@ -128,15 +128,15 @@ void Mapa::breadthSearchHelper(queue<Sala*> *retorno, stack<int> &st, int salaCh
 	if (!st.empty())
 		st.pop(); // Retira da lista de processamento
 
-	if (salas[salaChecada].getVisitado() == 0) {
-		retorno->push(salas[salaChecada].getElemento()); // Adiciona à lista de retorno
+	if (rooms[salaChecada].getVisitado() == 0) {
+		retorno->push(rooms[salaChecada].getElemento()); // Adiciona à lista de retorno
 
 		// Seta como visitado
-		salas[salaChecada].setVisitado(1);
+		rooms[salaChecada].setVisitado(1);
 
 		// Coloca todos os nós vizinhos na lista de processamento
-		for (int i = 0; i < salas[salaChecada].getAnexas().size(); i++) {
-			st.push(salas[salaChecada].getAnexas()[i]);
+		for (int i = 0; i < rooms[salaChecada].getAnexas().size(); i++) {
+			st.push(rooms[salaChecada].getAnexas()[i]);
 		}
 	}
 
@@ -148,28 +148,28 @@ void Mapa::breadthSearchHelper(queue<Sala*> *retorno, stack<int> &st, int salaCh
 
 // GETTERS E HELPERS -----------------------------------------------------
 
-bool Mapa::existeSala(string name) {
-	for (int i = 0; i < salas.size(); i++)
-		if (salas[i].getElemento()->getNome() == name)
+bool Mapa::hasRoom(string name) {
+	for (int i = 0; i < rooms.size(); i++)
+		if (rooms[i].getElemento()->getName() == name)
 			return true;
 	return false;
 };
 
-Sala* Mapa::getSala(int index) { 
-	return salas[index].getElemento();
+Sala* Mapa::getRoom(int index) {
+	return rooms[index].getElemento();
 };
 
-Sala* Mapa::getSala(string name) {
-	for (int i = 0; i < salas.size(); i++)
-		if (salas[i].getElemento()->getNome() == name)
-			return getSala(i);
+Sala* Mapa::getRoom(string name) {
+	for (int i = 0; i < rooms.size(); i++)
+		if (rooms[i].getElemento()->getName() == name)
+			return getRoom(i);
 
 	throw invalid_argument("There's no room with that name :(");
 };
 
 void Mapa::limparVisitado() {
-	for (int i = 0; i < salas.size(); i++) {
-		salas[i].setVisitado(0);
-		salas[i].setPai(&salas[i]);
+	for (int i = 0; i < rooms.size(); i++) {
+		rooms[i].setVisitado(0);
+		rooms[i].setPai(&rooms[i]);
 	}
 }

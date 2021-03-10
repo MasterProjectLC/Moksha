@@ -1,7 +1,7 @@
 #include "inventory.h"
 
 void Inventory::addConcept(string nome) {
-	inventory.push_back(Conceito(nome));
+	concepts.push_back(Concept(nome));
 }
 
 void Inventory::addItem(string nome, set<string> acoes) {
@@ -12,9 +12,9 @@ void Inventory::addItem(string nome, string descricao, set<string> acoes) {
 	items.push_back(Item(nome, descricao, acoes));
 }
 
-bool Inventory::hasConcept(string nome) {
-	for (int i = 0; i < inventory.size(); i++) {
-		if (inventory[i].getNome() == nome) {
+bool Inventory::hasConcept(string name) {
+	for (int i = 0; i < concepts.size(); i++) {
+		if (concepts[i].getName() == name) {
 			return true;
 		}
 	}
@@ -24,7 +24,7 @@ bool Inventory::hasConcept(string nome) {
 
 bool Inventory::hasItem(string nome) {
 	for (int i = 0; i < items.size(); i++) {
-		if (items[i].getNome() == nome) {
+		if (items[i].getName() == nome) {
 			return true;
 		}
 	}

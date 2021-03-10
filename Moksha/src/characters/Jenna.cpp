@@ -1,7 +1,7 @@
 #include "Jenna.h"
 
 Jenna::Jenna(Mapa* m) : NPC{m, "Jenna", F, 1, 1} {
-	alvos.push_back("Elliot");
+	trackablePeople.insert("Elliot");
 }
 
 void Jenna::setupAcoesAdicional() {
@@ -11,31 +11,33 @@ void Jenna::setupAcoesAdicional() {
 	goap_set_pst(&ap, "take_knife", "armed", true);
 
 	goap_set_pre(&ap, "search_Elliot", "armed", true);
+	goap_set_pst(&ap, "search_Elliot", "with_Elliot", true);
 	//goap_set_cost(&ap, "search_Elliot", 5);
 
-	goap_set_pre(&ap, "kill", "armed", true);
-	goap_set_pre(&ap, "kill", "with_Elliot", true);
-	goap_set_pst(&ap, "kill", "Elliot_alive", false);
+	goap_set_pre(&ap, "kill_Elliot", "armed", true);
+	goap_set_pre(&ap, "kill_Elliot", "with_Elliot", true);
+	goap_set_pst(&ap, "kill_Elliot", "Elliot_dead", true);
 }
 
 
 void Jenna::setupMundoAdicional() {
-
+	goap_worldstate_set(&ap, &world, "with_Elliot", false);
+	goap_worldstate_set(&ap, &world, "Elliot_dead", false);
+	updateWorldExtra();
 }
 
 
 void Jenna::setupObjetivosAdicional() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "Elliot_alive", false);
-	goap_worldstate_set(&ap, &currentGoal.goal, "Jenna_alive", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "Elliot_dead", true);
 }
 
 
 void Jenna::updateWorldExtra() {
 	// describe current world state.
-	goap_worldstate_set(&ap, &world, "in_kitchen", currentRoom->getNome() == "Kitchen");
+	goap_worldstate_set(&ap, &world, "in_kitchen", currentRoom->getName() == "Kitchen");
 	goap_worldstate_set(&ap, &world, "armed", inventory.hasItem("Knife"));
 
-	goap_set_cost(&ap, "move_kitchen", tamanhoCaminho(currentRoom, mapa->getSala("Kitchen")));
+	goap_set_cost(&ap, "move_kitchen", tamanhoCaminho(currentRoom, mapa->getRoom("Kitchen")));
 }
 
 
@@ -51,8 +53,8 @@ int Jenna::decidirAcaoAdicional(string acao) {
 		return interagir;
 	}
 
-	else if (acao == "kill") {
-		actionArgs.push_back(alvos[0]);
+	else if (acao == "kill_Elliot") {
+		actionArgs.push_back("Elliot");
 		return atacar;
 	}
 
@@ -62,5 +64,5 @@ int Jenna::decidirAcaoAdicional(string acao) {
 
 void Jenna::advancePlansExtra(string currentProcess) {
 	if (currentProcess == "move_kitchen")
-		path = findPath(mapa->getSala("Kitchen"));
+		path = findPath(mapa->getRoom("Kitchen"));
 }

@@ -1,6 +1,7 @@
 #include "Baxter.h"
 
 Baxter::Baxter(Mapa* m) : NPC{ m, "Baxter", M, 1, 1 } {
+	trackablePeople.insert("Santos");
 }
 
 void Baxter::setupAcoesAdicional() {
@@ -9,13 +10,12 @@ void Baxter::setupAcoesAdicional() {
 
 
 void Baxter::setupMundoAdicional() {
-	goap_worldstate_set(&ap, &world, "with_Hilda", true);
+	goap_worldstate_set(&ap, &world, "with_Santos", true);
 }
 
 
 void Baxter::setupObjetivosAdicional() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "with_Hilda", true);
-	goap_worldstate_set(&ap, &currentGoal.goal, "Baxter_alive", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "with_Santos", true);
 }
 
 

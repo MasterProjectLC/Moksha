@@ -59,8 +59,8 @@ void Personagem::move(string str) {
 	notify(mover);
 }
 
-void Personagem::move(Sala sala) {
-	move(sala.getNome());
+void Personagem::move(Sala* room) {
+	move(room->getName());
 }
 
 void Personagem::mention(string obj, string receiver) {
@@ -109,8 +109,8 @@ bool Personagem::isActionValid(int action) {
 	if (basicActions.count(action) > 0)
 		return true;
 
-	for (int i = 0; i < getInventory().size(); i++)
-		if (getInventory()[i].isActionValid(action))
+	for (int i = 0; i < getItems().size(); i++)
+		if (getItems()[i].isActionValid(action))
 			return true;
 
 	return false;

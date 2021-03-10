@@ -1,25 +1,25 @@
 #include "sala.h"
 
-Sala::Sala(int index, string nome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objectNames) {
+Sala::Sala(int index, string name, string initialText, vector<string> salasAnexasNomes, vector<string> objectNames) {
 	this->index = index;
-	this->nome = nome;
-	this->codinome = nome;
-	this->textoInicial = textoInicial;
+	this->name = name;
+	this->codename = name;
+	this->initialText = initialText;
 	this->salasAnexasNomes = salasAnexasNomes;
 	this->objectNames = objectNames;
 }
 
-Sala::Sala(int index, string nome, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objectNames) {
+Sala::Sala(int index, string name, string codename, string initialText, vector<string> salasAnexasNomes, vector<string> objectNames) {
 	this->index = index;
-	this->nome = nome;
-	this->codinome = codinome;
-	this->textoInicial = textoInicial;
+	this->name = name;
+	this->codename = codename;
+	this->initialText = initialText;
 	this->salasAnexasNomes = salasAnexasNomes;
 	this->objectNames = objectNames;
 }
 
 
-void Sala::removeObject(Object objeto) {
+void Sala::removeObject(Object object) {
 	bool found = false;
 	for (int i = 0; i < objects.size(); i++) {
 		if (found) {
@@ -27,7 +27,7 @@ void Sala::removeObject(Object objeto) {
 			objects[i-1] = objects[i];
 			objectNames[i - 1] = objectNames[i];
 
-		} else if (objects[i].getName().compare(objeto.getName()) == 0) {
+		} else if (objects[i].getName().compare(object.getName()) == 0) {
 			found = true;
 		}
 	}
@@ -51,9 +51,9 @@ string Sala::getAdjacentRoomName(int i) {
 };
 
 
-bool Sala::hasObject(string nome) {
+bool Sala::hasObject(string name) {
 	for (int i = 0; i < objects.size(); i++) {
-		if (nome.compare(objects[i].getName()) == 0)
+		if (name.compare(objects[i].getName()) == 0)
 			return true;
 	}
 	return false;
@@ -61,9 +61,9 @@ bool Sala::hasObject(string nome) {
 
 
 #include <stdexcept>
-Object* Sala::getObject(string nome) {
+Object* Sala::getObject(string name) {
 	for (int i = 0; i < objects.size(); i++) {
-		if (nome.compare(objects[i].getName()) == 0)
+		if (name.compare(objects[i].getName()) == 0)
 			return &objects[i];
 	}
 

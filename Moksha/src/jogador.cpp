@@ -93,7 +93,7 @@ void Jogador::executeReaction(string topic, string phrase, string sender, bool s
 
 void Jogador::checkRoom(vector<Personagem*> charsInRoom) {
 	// Salas anexas
-	printText("Current room: " + getCurrentRoom()->getNome() + "\n" + getCurrentRoom()->getTextoInicial() + "\nAdjacent rooms:");
+	printText("Current room: " + getCurrentRoom()->getName() + "\n" + getCurrentRoom()->getInitialText() + "\nAdjacent rooms:");
 	for (int i = 0; i < getCurrentRoom()->getSalaAnexaCount(); i++)
 		printText(getCurrentRoom()->getAdjacentRoomName(i));
 
