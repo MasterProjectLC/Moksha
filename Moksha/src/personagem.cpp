@@ -18,12 +18,10 @@ void Personagem::takeAction(int action, vector<string> args) {
 
 		case mover:
 			move(zusammenArgs);
-			status = "entering the room.";
 			break;
 
 		case atacar:
 			attack(zusammenArgs);
-			status = "attacking " + zusammenArgs + "!";
 			break;
 
 		case interagir:
@@ -33,17 +31,22 @@ void Personagem::takeAction(int action, vector<string> args) {
 
 		case ouvir:
 			listen(zusammenArgs);
-			status = "eavesdropping " + zusammenArgs + ".";
+			break;
+
+		case checar:
+			check(zusammenArgs);
 			break;
 
 		case conversar:
 			talk(zusammenArgs);
-			status = "talking.";
+			break;
+
+		case acaoNula:
+			voidAction(zusammenArgs);
 			break;
 
 		default:
 			rest();
-			status = "doing nothing.";
 			break;
 	}
 }
@@ -60,6 +63,7 @@ void Personagem::move(string str) {
 }
 
 void Personagem::move(Sala* room) {
+	status = "entering the room.";
 	move(room->getName());
 }
 
@@ -76,28 +80,43 @@ void Personagem::mention(string obj, set<string> receivers) {
 }
 
 void Personagem::attack(string target) {
+	status = "attacking " + target + "!";
 	notifyText = target;
 	notify(atacar);
 }
 
 void Personagem::listen(string target) {
+	status = "eavesdropping " + target + ".";
 	notifyText = target;
 	notify(ouvir);
 }
 
-void Personagem::say(string topico, string str, set<string> receivers) {
-	notifyText = topico + "|" + str;
+void Personagem::check(string target) {
+	status = "checking " + target + ".";
+	notifyText = target;
+	notify(checar);
+}
+
+void Personagem::say(string topic, string str, set<string> receivers) {
+	notifyText = topic + "|" + str;
 	notifyTargets = receivers;
 	notify(falar);
 }
 
 void Personagem::rest() {
+	status = "doing nothing.";
 	notify(descansar);
 }
 
 void Personagem::talk(string convo) {
+	status = "talking.";
 	notifyText = convo;
 	notify(conversar);
+}
+
+void Personagem::voidAction(string actionStatus) {
+	status = actionStatus;
+	notify(descansar);
 }
 
 void Personagem::interact(string action, string object) {
@@ -114,4 +133,10 @@ bool Personagem::isActionValid(int action) {
 			return true;
 
 	return false;
+}
+
+bool Personagem::getStatusEffect(string key) { 
+	if (!statusEffects.hasKey(key))
+		return false;
+	return statusEffects.getValues(key); 
 }

@@ -1,7 +1,8 @@
 #include "npc.h"
 
-NPC::NPC(Mapa* m, string name, int gender, int strength, int dexterity) : Personagem(gender, strength, dexterity) {
+NPC::NPC(Mapa* m, string name, string description, int gender, int strength, int dexterity) : Personagem(gender, strength, dexterity) {
 	this->name = name;
+	this->description = new string(description);
 	this->mapa = m;
 
 	FileDict fileObject = FileManager::readFromFile("files/characters/" + getName() + ".txt");
@@ -15,8 +16,8 @@ queue<Sala*> NPC::findPath(Sala* salaAlvo) {
 	return findPath(currentRoom, salaAlvo);
 };
 
-queue<Sala*> NPC::findPath(Sala* salaInicial, Sala* salaAlvo) {
-	return mapa->optimalPath(salaInicial, salaAlvo);
+queue<Sala*> NPC::findPath(Sala* initialRoom, Sala* targetRoom) {
+	return mapa->optimalPath(initialRoom, targetRoom);
 };
 
 queue<Sala*> NPC::search() {
@@ -131,6 +132,9 @@ void NPC::setupPlans() {
 	goap_actionplanner_clear(&ap); // initializes action planner
 
 	// describe repertoire of actions
+	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++) {
+		setCondition("with_" + *it, false);
+	}
 	setupAcoesAdicional();
 
 	// describe current world state.
@@ -140,10 +144,13 @@ void NPC::setupPlans() {
 	setupMundoAdicional();
 
 	// describe goal
+	goalList = PriorityVector<Goal>(vector<Goal>(), goalCompare);
+
+	currentGoal = Goal(0, false);
 	goap_worldstate_clear(&currentGoal.goal);
 	setupObjetivosAdicional();
-	goalList = PriorityVector<Goal>(vector<Goal>(), goalCompare);
 	goalList.push(currentGoal);
+	goalList.sort();
 
 	// calculate initial plan
 	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
@@ -241,11 +248,11 @@ int NPC::decideAction() {
 	// Current objective is not top priority - find next non-completed objective
 	} else {
 		vector<Goal>::iterator it = goalList.highest();
-		while ((world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values && it != goalList.lowest() ) {
-			goalList.descend(it);
+		do {
 			currentGoal = *it;
 			currentStep = 0;
-		}
+			goalList.descend(it);
+		} while ((world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values && it != goalList.lowest());
 		changePlans();
 	}
 

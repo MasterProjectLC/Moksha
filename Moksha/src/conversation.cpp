@@ -20,8 +20,12 @@ Conversation::Conversation(string conversation, string room, int stage) : Conver
 	}
 }
 
-bool Conversation::participates(string nome) {
-	return participants.count(nome) > 0;
+bool Conversation::participates(string name) {
+	return participants.count(name) > 0;
+}
+
+bool Conversation::hasTag(string tag) {
+	return tags.count(tag) > 0;
 }
 
 xml_node Conversation::nextLine() {

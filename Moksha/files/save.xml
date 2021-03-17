@@ -1,43 +1,44 @@
 <?xml version="1.0"?>
 <GameData FormatVersion="1">
-	<Game Time="9" Loop="1">
+	<Game Time="4" Loop="1">
 		<Characters>
 			<Elliot Room="Lounge">
 				<Inventory />
+				<Rumors />
+				<Concepts />
 			</Elliot>
-			<Jenna Room="Lounge">
+			<Jenna Room="Kitchen">
 				<Inventory>
 					<Knife />
 				</Inventory>
 				<Atoms>
-					<in_kitchen value="false" />
+					<with_Elliot value="false" />
+					<with_Santos value="false" />
+					<in_kitchen value="true" />
 					<armed value="true" />
-					<with_Elliot value="true" />
 					<Elliot_dead value="false" />
+					<Santos_dead value="false" />
 				</Atoms>
 			</Jenna>
 			<Baxter Room="Lounge">
 				<Inventory />
 				<Atoms>
 					<with_Santos value="true" />
-					<Santos_no_gun value="true" />
 				</Atoms>
 			</Baxter>
 			<Santos Room="Lounge">
 				<Inventory />
 				<Atoms>
-					<with_Hilda value="true" />
-					<talk_no_gun value="true" />
 					<with_Baxter value="true" />
-					<with_Jenna value="true" />
-					<Jenna_dead value="true" />
+					<with_Hilda value="true" />
+					<with_Jenna value="false" />
+					<talk_no_gun value="true" />
 				</Atoms>
 			</Santos>
 			<Hilda Room="Lounge">
 				<Inventory />
 				<Atoms>
 					<with_Santos value="true" />
-					<Santos_no_gun value="true" />
 				</Atoms>
 			</Hilda>
 		</Characters>
@@ -67,7 +68,7 @@
 			</Lavatory>
 		</Map>
 		<Conversations>
-			<santos_gun stage="11" room="Lounge" />
+			<santos_gun stage="5" room="Lounge" />
 		</Conversations>
 	</Game>
 </GameData>

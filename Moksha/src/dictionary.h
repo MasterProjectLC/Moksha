@@ -25,7 +25,6 @@ public:
 		return "";
 	}
 
-
 	T getValues(string key) {
 		for (typename map<set<string>, T>::iterator it = dictionary.begin(); it != dictionary.end(); it++)
 			if (it->first.count(key))

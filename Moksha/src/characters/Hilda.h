@@ -7,7 +7,7 @@ class Hilda : public NPC {
 private:
 
 public:
-	Hilda() : NPC{ NULL, "Hilda", M, 2, 1 } {}
+	Hilda() : NPC{ NULL, "Hilda", "", F, 2, 1 } {}
 	explicit Hilda(Mapa* m);
 	int decidirAcaoAdicional(string acao) override;
 	void advancePlansExtra(string currentProcess) override;

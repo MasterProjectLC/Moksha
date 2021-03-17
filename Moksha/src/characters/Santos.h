@@ -7,7 +7,7 @@ class Santos : public NPC {
 private:
 
 public:
-	Santos() : NPC{ NULL, "Santos", M, 3, 1 } {}
+	Santos() : NPC{ NULL, "Santos", "", M, 3, 1 } {}
 	explicit Santos(Mapa* m);
 	int decidirAcaoAdicional(string acao) override;
 	void advancePlansExtra(string currentProcess) override;

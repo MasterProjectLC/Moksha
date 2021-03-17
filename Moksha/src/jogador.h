@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 #include <set>
-#include "personagem.h"
+#include "npc.h"
 #include "stringLib.h"
 #include "fileManager.h"
 
@@ -9,11 +9,11 @@ using namespace std;
 
 class Jogador : public Personagem {
 private:
-	string erroSemObjeto;
-	string erroSemAcao;
-	string erroSemSala;
-	string erroSemItem;
-	string erroMente;
+	string noObjectError;
+	string noActionError;
+	string noRoomError;
+	string noItemError;
+	string mindError;
 
 	map<string, set<string>> mindTheory;
 
@@ -31,6 +31,7 @@ public:
 
 	void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) override;
 	void executeReaction(string topico, string frase, string remetente, bool shouldRespond) override;
+	void receiveCheck(Personagem* checkTarget) override;
 	void checkRoom(vector<Personagem*> pessoasNaSala) override;
 	void updateRoom(vector<Personagem*> pessoasNaSala);
 

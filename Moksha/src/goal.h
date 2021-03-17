@@ -5,6 +5,12 @@ using namespace std;
 
 class Goal {
 public:
+	Goal() {}
+	Goal(int priority, bool onetime) {
+		this->priority = priority;
+		this->onetime = onetime;
+	}
+
 	worldstate_t goal;
 	int priority;
 	bool onetime;

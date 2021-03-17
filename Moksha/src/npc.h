@@ -13,11 +13,10 @@ using namespace std;
 
 class NPC : public Personagem {
 protected:
-	const vector<string> names = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
-								"Magnus", "Tom", "Jenna", "Renard", "Liz",
-								"George", "Damian", "Amelie" };
+	string* description;
 
 	set<string*> addedConditions;
+	set<string*> addedActions;
 	set<string> trackablePeople;
 
 	queue<Sala*> path;
@@ -63,7 +62,9 @@ protected:
 	bool isCurrentStateFulfilled();
 
 public:
-	explicit NPC(Mapa* m, string nome, int genero, int forca, int destreza);
+	explicit NPC(Mapa* m, string name, string description, int gender, int strength, int dexterity);
+
+	string* getDescription() { return description; }
 
 	void setCondition(string condition, bool update);
 	bool hasCondition(string info) override;
@@ -71,9 +72,9 @@ public:
 	void receiveEvent(vector<string> args) override;
 
 	int decideAction();
-	void executeReaction(string topico, string frase, string remetente, bool shouldRespond) override;
-	void checkRoom(vector<Personagem*> pessoasNaSala) override;
-	void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) override;
+	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
+	void checkRoom(vector<Personagem*> peopleInRoom) override;
+	void seeCharMoving(Personagem* character, string otherRoom, bool entering) override;
 	void setSalaAlvo(Sala* nova) { findPath(nova); }
 
 	void setupPlans();

@@ -2,9 +2,9 @@
 #include <iostream>
 
 Jogo::Jogo() {
-	player = Jogador();
-	player.add(this, OBSERVER_OFFSET);
-	characters.push_back(&player);
+	player = new Jogador();
+	player->add(this, OBSERVER_OFFSET);
+	characters.push_back(player);
 
 	Baxter* baxter = new Baxter(&mapa);
 	baxter->add(this, OBSERVER_OFFSET + 1);
@@ -101,9 +101,9 @@ bool Jogo::loadGame() {
 	// Load characters
 	load_package = doc.child("GameData").child("Game").child("Characters");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
-		string s = it->attribute("Room").value();
 		Personagem* thisCharacter = findCharacter(it->name());
-		thisCharacter->setCurrentRoom(mapa.getRoom(s));
+		string room = it->attribute("Room").value();
+		thisCharacter->setCurrentRoom(mapa.getRoom(room));
 
 		// Load inventory
 		xml_node inventario = it->child("Inventory");
@@ -112,21 +112,29 @@ bool Jogo::loadGame() {
 		}
 
 		// Load atoms
-		if (thisCharacter != &player) {
-			((NPC*)thisCharacter)->setupPlans();
+		if (thisCharacter != player) {
 			xml_node atoms = it->child("Atoms");
+			((NPC*)thisCharacter)->setupPlans();
 			for (xml_node_iterator ait = atoms.begin(); ait != atoms.end(); ++ait) {
 				string s = ait->attribute("value").value();
 				((NPC*)thisCharacter)->setCondition(ait->name(), (s == "true"));
 			}
 		}
+		// Load rumors and concepts
+		else {
+			xml_node rumors = it->child("Rumors");
+			for (xml_node_iterator ait = rumors.begin(); ait != rumors.end(); ++ait)
+				thisCharacter->addRumor(ait->name());
+			xml_node concepts = it->child("Concepts");
+			for (xml_node_iterator ait = concepts.begin(); ait != concepts.end(); ++ait)
+				thisCharacter->addConcept(ait->name());
+		}
 	}
 
 	// Load conversations
 	load_package = doc.child("GameData").child("Game").child("Conversations");
-	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
+	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it)
 		conversations.push_back(Conversation( it->name(), it->attribute("room").value(), stoi(it->attribute("stage").value()) ));
-	}
 
 	return true;
 }
@@ -169,7 +177,7 @@ void Jogo::saveGame() {
 			inventario.append_child(itemList[i].getName().c_str());
 
 		// Save atoms
-		if (thisCharacter != &player) {
+		if (thisCharacter != player) {
 			xml_node atoms = it->child("Atoms");
 			vector<string> atomList = ((NPC*)thisCharacter)->getAtomList();
 
@@ -181,6 +189,20 @@ void Jogo::saveGame() {
 				}
 				atoms.child(atomList[i].c_str()).attribute("value").set_value( thisCharacter->hasCondition(atomList[i]) );
 			}
+		}
+		else {
+			// Create and/or update each concept
+			xml_node rumors = it->child("Rumors");
+			vector<Concept> rumorList = thisCharacter->getRumors();
+			for (int i = 0; i < rumorList.size(); i++)
+				if (!rumors.child(rumorList[i].getName().c_str()))
+					rumors.append_child(rumorList[i].getName().c_str());
+
+			xml_node concepts = it->child("Concepts");
+			vector<Concept> conceptList = thisCharacter->getConcepts();
+			for (int i = 0; i < conceptList.size(); i++)
+				if (!concepts.child(conceptList[i].getName().c_str()))
+					concepts.append_child(conceptList[i].getName().c_str());
 		}
 	}
 
@@ -226,7 +248,7 @@ void Jogo::objectAction(Object* object) {
 		character->setStatus("obtaining " + object->getName() + ".");	// Update char's status
 		character->getCurrentRoom()->removeObject(*object);				// Remove object from the room
 
-		if (player.getName() == object->getUser())						// Player char - edge case
+		if (player->getName() == object->getUser())						// Player char - edge case
 			advanceTime();
 		break;
 	}
@@ -235,6 +257,7 @@ void Jogo::objectAction(Object* object) {
 
 void Jogo::characterAction(Personagem* character) {
 	int id = character->getNotifyID();
+	Personagem* target;
 	string antigaSala;
 
 	switch (id) {
@@ -277,7 +300,7 @@ void Jogo::characterAction(Personagem* character) {
 			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getCurrentRoom() == character->getCurrentRoom()) {
 				vector<string> args = splitString(character->getNotifyText(), '|');
 				characters[i]->executeReaction(args[0], args[1], character->getName(), false);
-				if (characters[i] == &player && args[0] != "")
+				if (characters[i] == player && args[0] != "")
 					notify(_ouvir);
 			}
 		}
@@ -295,16 +318,22 @@ void Jogo::characterAction(Personagem* character) {
 			}
 		break;
 
+	case checar:
+		target = findCharacter(character->getNotifyText());
+		if (target->getCurrentRoom() == character->getCurrentRoom())
+			character->receiveCheck(target);
+		break;
+
 	case descansar:
 		break;
 
 	case atacar:
-		Personagem* vitima = findCharacter(character->getNotifyText());
-		if (vitima->getCurrentRoom() == character->getCurrentRoom())
-			if (vitima->beAttacked(character))
-				broadcastEvent(character, vector<string>({"attack", vitima->getName()}));
+		target = findCharacter(character->getNotifyText());
+		if (target->getCurrentRoom() == character->getCurrentRoom())
+			if (target->beAttacked(character))
+				broadcastEvent(character, vector<string>({"attack", target->getName()}));
 			else
-				broadcastEvent(vitima, vector<string>({ "attack", character->getName() }));
+				broadcastEvent(target, vector<string>({ "attack", character->getName() }));
 
 
 		break;
@@ -320,8 +349,8 @@ void Jogo::advanceTime() {
 		if (action == conversar)
 			npcs[i]->takeAction();
 	}
-	if (player.getAction() == ouvir)
-		player.takeAction();
+	if (player->getAction() == ouvir)
+		player->takeAction();
 
 	// Conversations
 	advanceConversations();
@@ -338,10 +367,10 @@ void Jogo::advanceTime() {
 		(*orderAction.highest())->takeAction();
 		orderAction.pop();
 	}
-	player.setInConversation(false);
+	player->setInConversation(false);
 
 	// Update the player's room status
-	player.updateRoom( getPeopleInRoom(player.getCurrentRoom()) );
+	player->updateRoom( getPeopleInRoom(player->getCurrentRoom()) );
 	for (int i = 0; i < npcs.size(); i++)
 		npcs[i]->checkRoom( getPeopleInRoom(npcs[i]->getCurrentRoom()) );
 
@@ -378,13 +407,23 @@ void Jogo::advanceConversations() {
 				// Does the speaker fulfill the necessary conditions?
 				string infoAtom = ""; bool valid = true;
 				for (xml_node_iterator cit = conversation.begin(); cit != conversation.end(); ++cit) {
+					// Adding tags/infos
+					string addTag = cit->attribute("add_tag").value();
 					string info = cit->attribute("info").value();
-					bool t1 = speaker->hasCondition(cit->name());
+
+					// Check modifiers
+					string tag = cit->attribute("tag").value();
+					bool checkTag = (tag == "tag");
+
+					bool conditionMet = ( !checkTag && speaker->hasCondition(cit->name())) || (checkTag && it->hasTag(cit->name()) );
 					string nao = cit->attribute("n").value();
-					bool t2 = (nao == "n");
-					if (info == "info")
+					bool inverted = (nao == "n");
+
+					if (addTag == "add_tag")
+						it->addTag(cit->name());
+					else if (info == "info")
 						infoAtom = cit->name();
-					else if (t1 == t2) {
+					else if (conditionMet == inverted) {
 						valid = false;
 						break;
 					}
@@ -394,7 +433,7 @@ void Jogo::advanceConversations() {
 				// Send message
 				speaker->sayLine( infoAtom, conversation.attribute("line").value(), it->getParticipants(conversation.name()) );
 			}
-			else if (it->getParticipants()->count(player.getName()) && player.getCurrentRoom()->getName() == it->getRoom())
+			else if (it->getParticipants()->count(player->getName()) && player->getCurrentRoom()->getName() == it->getRoom())
 				printText(conversation.attribute("line").value());
 			else
 				continue;
@@ -412,7 +451,7 @@ void Jogo::advanceConversations() {
 
 
 void Jogo::receiveArgs(vector<string> args) {
-	player.receberArgs(args);
+	player->receberArgs(args);
 }
 
 
@@ -465,11 +504,11 @@ void Jogo::printText(string text) {
 
 
 vector<Item> Jogo::getItems() {
-	return player.getItems();
+	return player->getItems();
 }
 
 vector<Concept> Jogo::getConcepts() {
-	return player.getConcepts();
+	return player->getConcepts();
 }
 
 

@@ -1,6 +1,6 @@
 #include "Santos.h"
 
-Santos::Santos(Mapa* m) : NPC{ m, "Santos", F, 3, 2 } {
+Santos::Santos(Mapa* m) : NPC{ m, "Santos", "A big ass dude.", F, 3, 2 } {
 	trackablePeople.insert("Hilda");
 	trackablePeople.insert("Baxter");
 	trackablePeople.insert("Jenna");

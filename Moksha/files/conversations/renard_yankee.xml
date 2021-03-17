@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Jenna/>
+    <Renard/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Jenna line="So. You're here."/>
+	<Renard line="Oui, Mademoiselle. I deedn't expect to see sahmeone such ahs you heahr ahs well."/>
+    <Jenna line="Urgh, can you stop with the random french words? You don't need to remind me about your country - your accent already does the job."/>
+    <Jenna line="Anyway, how the hell did you get into this ship? As far as I know, you're just a tabloid reporter. How did you solve the questionnaire?"/>
+	<Renard line="Well, well, don't be so surprised, yankee girl. I'm a fast learnar. An uncultured swine such ahs you should know bettar."/>
+    <Jenna line="Bullshit. You got someone to solve it for you, didn't you? That test wasn't fucking easy, and I've been dealing with planes since I was 7."/>
+	<Renard line="Don't flettar yourself. I simply studied ahnd solved it. Treevial, when sahmeone's invested as I am."/>
+    <Jenna line="Hah. Hilarious, really. Alright then, Mr. Trivial. Here's an easy one: what's the buyonce force of hydrogen at sea level?"/>
+    <Narrator line="For a moment, Renard remained silent."/>
+	<Renard line="Urgh, pathetique. I ahv more relevant things to do than to answar inane questions frahm a yankee."/>
+    <Jenna line="I figured. Alright, Renard. Don't think I'm done with you yet."/>
+</Conversation>

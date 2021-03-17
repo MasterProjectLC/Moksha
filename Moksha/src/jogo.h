@@ -26,7 +26,7 @@ private:
 
 	string text;
 
-	Jogador player;
+	Jogador* player;
 	vector<Personagem*> characters;
 	vector<NPC*> npcs;
 	vector<Conversation> conversations;
@@ -42,7 +42,7 @@ private:
 	class No;
 
 	void objectAction(Object* object);
-	void characterAction(Personagem* personagem);
+	void characterAction(Personagem* character);
 	Personagem* findCharacter(string nome);
 	void broadcastEvent(Personagem* emitter, vector<string> args);
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Amelie/>
+    <Magnus/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Narrator line="Magnus softly knocks on Amelie's door, announcing his presence."/>
+    <Magnus line="Hey. Amelie, right?"/>
+    <Amelie line="Yes, currently I do go by that name. And you are... Magnus Flettner."/>
+    <Narrator line="A brief wave of astonishment ripples through Magnus' body. His attention shifts."/>
+    <Magnus line="...Huh. So you do know me from somewhere. When I passed by your room two days ago, I was sure we weren't complete strangers. When have we met before?"/>
+    <Amelie line="1872, University of Madras, I believe. 22 years ago. Back then, I still went by the name of Heemal, my indian name, before I moved to England."/>
+    <Narrator line="Magnus' face lights up."/>
+    <Magnus line="Oh. Oh, right, right... My memories begin to clear up. You taught... thermodynamics, yes?"/>
+    <Amelie line="Something along those lines. In any case, I do not lecture anymore."/>
+    <Magnus line="Really? I see, I see... what brought you here, then? By your demeanor and attire, you don't seem to be a journalist."/>
+    <Narrator line="For a moment, Amelie peers into Magnus' eyes, looking into his inner mind and studying his character."/>
+    <Amelie line=" ...I am here to investigate something. A disaster, I fear, might be upon us."/>
+    <Magnus line="A d-disaster, you say? Amelie, I assure you, this airship has gone through an array of rigorous tests to ensure..."/>
+    <Amelie line="I do not doubt your competence, Magnus. That is not the kind of disaster I mean. Indeed, there is no need for you to worry, as things currently stand."/>
+    <Magnus line="Is that so...? In that case, is there anything else I may do for you?"/>
+    <Amelie line="Hm... There is something, actually. It might sound a bit innocuous, but... is there someting about you which you have never told anyone? Not a deep secret, but merely a... curious observation?"/>
+    <Magnus line="W-What? How would that be of help to you?"/>
+    <Amelie line="It's complicated. If you do not wish to talk, I understand... But I assure you, it would help me greatly in the future."/>
+    <Magnus line="I... W-Well, indeed... I suppose you seem trustful enough. Okay, in order."/>
+    <Magnus line="So, let's see... Over the years... I've never really understood the concept of... Relationships. Marriages, romances, so weiter. Uh, sorry, et cetera."/>
+    <Magnus line="This 'pull' some people describe... to me, it sounds hollow. In fact, utterly hollow. I've never really talked about it in length, and given my profession... well, it never bothered me, either. "/>
+    <Magnus line="And so... it never came up. I never delved into this whole aspect of human nature. I don't keep it a secret, because, well... nobody really asks."/>
+    <Narrator line="Amelie smiles."/>
+    <Amelie line="I see. Magnus, thank you for telling that to me. That is all I require for now. "/>
+    <Magnus line="Alright. Thank you, too, for the conversation. Goodbye."/>
+</Conversation>

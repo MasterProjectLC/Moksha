@@ -5,6 +5,8 @@
 		<Characters>
 			<Elliot Room="Lounge"> 
 				<Inventory/>
+                <Rumors/>
+                <Concepts/>
 			</Elliot>
 			<Jenna Room="Corridor"> 
 				<Inventory/>

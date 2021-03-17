@@ -1,6 +1,6 @@
 #include "Hilda.h"
 
-Hilda::Hilda(Mapa* m) : NPC{ m, "Hilda", F, 2, 1 } {
+Hilda::Hilda(Mapa* m) : NPC{ m, "Hilda", "B U F F L A D Y", F, 2, 1 } {
 	trackablePeople.insert("Santos");
 }
 

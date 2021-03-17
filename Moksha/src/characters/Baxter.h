@@ -7,7 +7,7 @@ class Baxter : public NPC {
 private:
 
 public:
-	Baxter() : NPC{ NULL, "Baxter", M, 0, 0 } {}
+	Baxter() : NPC{ NULL, "Baxter", "", M, 0, 0 } {}
 	explicit Baxter(Mapa* m);
 	int decidirAcaoAdicional(string acao) override;
 	void advancePlansExtra(string currentProcess) override;

@@ -4,11 +4,11 @@ Jogador::Jogador() : Personagem(M, 2, 2) {
 	name = "Elliot";
 
 	FileDict fileErros = FileManager::readFromFile("files/errors.txt");
-	erroSemObjeto = fileErros.getValues("no object")[0];
-	erroSemAcao = fileErros.getValues("no action")[0];
-	erroSemSala = fileErros.getValues("no room")[0];
-	erroSemItem = fileErros.getValues("no item")[0];
-	erroMente = fileErros.getValues("mind theory")[0];
+	noObjectError = fileErros.getValues("no object")[0];
+	noActionError = fileErros.getValues("no action")[0];
+	noRoomError = fileErros.getValues("no room")[0];
+	noItemError = fileErros.getValues("no item")[0];
+	mindError = fileErros.getValues("mind theory")[0];
 
 };
 
@@ -17,12 +17,12 @@ Jogador::Jogador() : Personagem(M, 2, 2) {
 
 void Jogador::mention(string topic, string person) {
 	if (mindTheory.count(person) && mindTheory.at(person).find(topic) != mindTheory.at(person).end()) {
-		printText(erroMente);
+		printText(mindError);
 		return;
 	}
 
 	if (!inventory.hasConcept(topic) && !inventory.hasItem(topic)) {
-		printText(erroSemItem);
+		printText(noItemError);
 		return;
 	}
 
@@ -34,7 +34,7 @@ void Jogador::move(string location) {
 	if (getCurrentRoom()->isSalaAnexa(location))
 		Personagem::move(location);
 	else
-		printText(erroSemSala);
+		printText(noRoomError);
 }
 
 
@@ -46,7 +46,7 @@ void Jogador::interact(string acao, string object) {
 		// Imprimir resposta
 		vector<string> responses = objetoAqui->getResponses(acao);
 		if (responses.size() > 0) { printText(responses[0]); }
-		else { printText(erroSemAcao); }
+		else { printText(noActionError); }
 
 		// Tomar ação
 		Personagem::interact(acao, object);
@@ -54,7 +54,7 @@ void Jogador::interact(string acao, string object) {
 
 	// Objeto não existe
 	else
-		printText(erroSemObjeto);
+		printText(noObjectError);
 }
 
 
@@ -65,10 +65,12 @@ void Jogador::receberArgs(vector<string> args) {
 		currentAction = descansar;
 	else if (args[0] == "mention")
 		currentAction = mencionar;
-	else if (args[0] == "attack")
+	else if (args[0] == "attack" && args.size() > 1 && names.count(args[1]) > 0)
 		currentAction = atacar;
-	else if (args[0] == "listen" || args[0] == "overhear" || args[0] == "eavesdrop" || args[0] == "hear")
+	else if ((args[0] == "listen" || args[0] == "overhear" || args[0] == "eavesdrop" || args[0] == "hear") && args.size() > 1 && names.count(args[1]) > 0)
 		currentAction = ouvir;
+	else if ((args[0] == "see" || args[0] == "check" || args[0] == "look") && args.size() > 1 && names.count(args[1]) > 0)
+		currentAction = checar;
 	else
 		currentAction = interagir;
 
@@ -91,6 +93,11 @@ void Jogador::executeReaction(string topic, string phrase, string sender, bool s
 }
 
 
+void Jogador::receiveCheck(Personagem* checkTarget) {
+	printText( *((NPC*)checkTarget)->getDescription() );
+}
+
+
 void Jogador::checkRoom(vector<Personagem*> charsInRoom) {
 	// Salas anexas
 	printText("Current room: " + getCurrentRoom()->getName() + "\n" + getCurrentRoom()->getInitialText() + "\nAdjacent rooms:");
@@ -108,18 +115,18 @@ void Jogador::checkRoom(vector<Personagem*> charsInRoom) {
 				printText(objects[i].getName());
 		}
 	}
-
-	updateRoom(charsInRoom);
 }
 
 void Jogador::updateRoom(vector<Personagem*> charsInRoom) {
 	// Characters in the room na sala
 	for (int i = 0; i < charsInRoom.size(); i++) {
 		if (charsInRoom[i]->getName() != name)
-			if (!charsInRoom[i]->isUnconscious())
-				printText(charsInRoom[i]->getName() + " is in the room, " + charsInRoom[i]->getStatus());
-			else
+			if (charsInRoom[i]->isDead())
+				printText("Oh, what the...?! " + charsInRoom[i]->getName() + " is dead!");
+			else if (charsInRoom[i]->isUnconscious())
 				printText("Oh, " + charsInRoom[i]->getName() + " is unconscious here!");
+			else
+				printText(charsInRoom[i]->getName() + " is in the room, " + charsInRoom[i]->getStatus());
 	}
 }
 

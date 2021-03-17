@@ -15,6 +15,7 @@ private:
 	xml_node_iterator it;
 	set<string> participants;
 	set<string> listeners;
+	set<string> tags;
 	string room;
 	bool begun;
 
@@ -23,16 +24,18 @@ public:
 	Conversation(string conversation, string room);
 	Conversation(string conversation, string room, int stage);
 
-	bool participates(string nome); // Se personagem citado participa da conversa ou não
+	bool participates(string name); // If given character participates in the convo
+	bool hasTag(string tag);
 
 	xml_node nextLine();
 	bool ended();
 
-	set<string>* getParticipants() { return &participants; }
-	set<string> getParticipants(string removido);
+	void addTag(string tag) { tags.insert(tag); }
 	void addListener(string listener) { participants.insert(listener); listeners.insert(listener); }
 	void clearListeners();
 
+	set<string>* getParticipants() { return &participants; }
+	set<string> getParticipants(string removido);
 	string getName() { return name; }
 	string getRoom() { return room; }
 	int getStage() { return convoStage; }

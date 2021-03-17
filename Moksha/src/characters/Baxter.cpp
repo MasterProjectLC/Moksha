@@ -1,6 +1,6 @@
 #include "Baxter.h"
 
-Baxter::Baxter(Mapa* m) : NPC{ m, "Baxter", M, 1, 1 } {
+Baxter::Baxter(Mapa* m) : NPC{ m, "Baxter", "Posh bitch", M, 1, 1 } {
 	trackablePeople.insert("Santos");
 }
 
