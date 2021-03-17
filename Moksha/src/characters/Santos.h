@@ -8,11 +8,11 @@ private:
 
 public:
 	Santos() : NPC{ NULL, "Santos", "", M, 3, 1 } {}
-	explicit Santos(Mapa* m);
-	int decidirAcaoAdicional(string acao) override;
+	explicit Santos(Map* m);
+	int decideActionParticular(string action) override;
 	void advancePlansExtra(string currentProcess) override;
-	void setupMundoAdicional() override;
-	void setupObjetivosAdicional() override;
+	void setupWorldParticular() override;
+	void setupObjectivesParticular() override;
 	void updateWorldExtra() override;
-	void setupAcoesAdicional() override;
+	void setupActionsParticular() override;
 };

@@ -3,10 +3,10 @@
 #include "characters/Baxter.h"
 #include "characters/Santos.h"
 #include "characters/Hilda.h"
-#include "jogador.h"
+#include "player.h"
 #include "IObservable.h"
 #include "IObserver.h"
-#include "mapa.h"
+#include "map.h"
 #include "conversation.h"
 #include "fileManager.h"
 #include "../libs/pugixml/src/pugixml.hpp"
@@ -15,9 +15,9 @@
 using namespace std;
 using namespace pugi;
 
-static auto actionCompare = [](Personagem* a, Personagem* b) -> bool { return a->getAction() < b->getAction(); };
+static auto actionCompare = [](Character* a, Character* b) -> bool { return a->getAction() < b->getAction(); };
 
-class Jogo : public IObservable, public IObserver {
+class Game : public IObservable, public IObserver {
 private:
 	const int OBSERVER_OFFSET = 500;
 
@@ -26,25 +26,21 @@ private:
 
 	string text;
 
-	Jogador* player;
-	vector<Personagem*> characters;
+	Player* player;
+	vector<Character*> characters;
 	vector<NPC*> npcs;
 	vector<Conversation> conversations;
 
-	string erroSemObjeto;
-	string erroSemAcao;
-	string erroSemSala;
-
-	Sala* moveRoom(Sala *salaOrigem, string salaDestino);
-	Mapa mapa;
-	vector<Personagem*> getPeopleInRoom(Sala* room);
+	Room* moveRoom(Room *origin, string destination);
+	Map map;
+	vector<Character*> getPeopleInRoom(Room* room);
 
 	class No;
 
 	void objectAction(Object* object);
-	void characterAction(Personagem* character);
-	Personagem* findCharacter(string nome);
-	void broadcastEvent(Personagem* emitter, vector<string> args);
+	void characterAction(Character* character);
+	Character* findCharacter(string nome);
+	void broadcastEvent(Character* emitter, vector<string> args);
 
 	void update(int id) override;
 	void advanceTime();
@@ -54,10 +50,10 @@ private:
 	bool loadGame();
 	void saveGame();
 
-	void obtainObject(string name, Personagem* receiver);
+	void obtainObject(string name, Character* receiver);
 
 public:
-	Jogo();
+	Game();
 
 	void setup();
 	void receiveArgs(vector<string> args);

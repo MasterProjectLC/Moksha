@@ -8,11 +8,11 @@ private:
 
 public:
 	Hilda() : NPC{ NULL, "Hilda", "", F, 2, 1 } {}
-	explicit Hilda(Mapa* m);
-	int decidirAcaoAdicional(string acao) override;
+	explicit Hilda(Map* m);
+	int decideActionParticular(string action) override;
 	void advancePlansExtra(string currentProcess) override;
-	void setupMundoAdicional() override;
-	void setupObjetivosAdicional() override;
+	void setupWorldParticular() override;
+	void setupObjectivesParticular() override;
 	void updateWorldExtra() override;
-	void setupAcoesAdicional() override;
+	void setupActionsParticular() override;
 };

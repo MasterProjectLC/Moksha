@@ -1,11 +1,11 @@
 #include "Jenna.h"
 
-Jenna::Jenna(Mapa* m) : NPC{m, "Jenna", "My boss. She's a journalist in her 20s, with bro", F, 1, 1} {
+Jenna::Jenna(Map* m) : NPC{m, "Jenna", "My boss. She's a journalist in her 20s, with bro", F, 1, 1} {
 	trackablePeople.insert("Elliot");
 	trackablePeople.insert("Santos");
 }
 
-void Jenna::setupAcoesAdicional() {
+void Jenna::setupActionsParticular() {
 	goap_set_pst(&ap, "move_kitchen", "in_kitchen", true);
 
 	goap_set_pre(&ap, "take_knife", "in_kitchen", true);
@@ -31,7 +31,7 @@ void Jenna::setupAcoesAdicional() {
 }
 
 
-void Jenna::setupMundoAdicional() {
+void Jenna::setupWorldParticular() {
 	goap_worldstate_set(&ap, &world, "with_Elliot", false);
 	goap_worldstate_set(&ap, &world, "Elliot_dead", false);
 	goap_worldstate_set(&ap, &world, "with_Santos", false);
@@ -40,7 +40,7 @@ void Jenna::setupMundoAdicional() {
 }
 
 
-void Jenna::setupObjetivosAdicional() {
+void Jenna::setupObjectivesParticular() {
 	goap_worldstate_set(&ap, &currentGoal.goal, "Elliot_dead", true);
 
 	Goal killSantos = Goal(1, true);
@@ -55,16 +55,16 @@ void Jenna::updateWorldExtra() {
 	goap_worldstate_set(&ap, &world, "in_kitchen", currentRoom->getName() == "Kitchen");
 	goap_worldstate_set(&ap, &world, "armed", inventory.hasItem("Knife"));
 
-	goap_set_cost(&ap, "move_kitchen", tamanhoCaminho(currentRoom, mapa->getRoom("Kitchen")));
+	goap_set_cost(&ap, "move_kitchen", tamanhoCaminho(currentRoom, map->getRoom("Kitchen")));
 	if (lastSeen.hasKey("Elliot"))
-		goap_set_cost(&ap, "search_Elliot", tamanhoCaminho(currentRoom, mapa->getRoom( lastSeen.getValues("Elliot") )));
+		goap_set_cost(&ap, "search_Elliot", tamanhoCaminho(currentRoom, map->getRoom( lastSeen.getValues("Elliot") )));
 
 	if (lastSeen.hasKey("Santos"))
-		goap_set_cost(&ap, "search_Santos", tamanhoCaminho(currentRoom, mapa->getRoom( lastSeen.getValues("Santos") )));
+		goap_set_cost(&ap, "search_Santos", tamanhoCaminho(currentRoom, map->getRoom( lastSeen.getValues("Santos") )));
 }
 
 
-int Jenna::decidirAcaoAdicional(string acao) {
+int Jenna::decideActionParticular(string acao) {
 	if (acao == "move_kitchen" || acao.substr(0, 7).compare("search_") == 0) {
 		actionArgs.push_back(nextRoomInPath());
 		return mover;
@@ -87,5 +87,5 @@ int Jenna::decidirAcaoAdicional(string acao) {
 
 void Jenna::advancePlansExtra(string currentProcess) {
 	if (currentProcess == "move_kitchen")
-		path = findPath(mapa->getRoom("Kitchen"));
+		path = findPath(map->getRoom("Kitchen"));
 }

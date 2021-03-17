@@ -1,5 +1,5 @@
 #pragma once
-#include "sala.h"
+#include "room.h"
 #include "inventory.h"
 #include "dictionary.h"
 #include "IObservable.h"
@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class Personagem: public IObservable {
+class Character: public IObservable {
 protected:
 	const set<string> names = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
 								"Magnus", "Tom", "Jenna", "Renard", "Liz",
@@ -16,7 +16,7 @@ protected:
 	string name;
 	string notifyText;
 	set<string> notifyTargets;
-	set<Sala*> salasChecadas;
+	set<Room*> checkedRooms;
 	string status;
 
 	int gender;
@@ -27,7 +27,7 @@ protected:
 	bool dead;
 	bool conversation;
 	
-	Sala *currentRoom;
+	Room *currentRoom;
 	Inventory inventory;
 
 	set<int> basicActions;
@@ -36,7 +36,7 @@ protected:
 
 	void takeAction(int action, vector<string> args);
 	virtual void move(string str);
-	void move(Sala* room);
+	void move(Room* room);
 	virtual void mention(string obj, set<string> receivers);
 	virtual void mention(string obj, string receiver);
 	void attack(string target);
@@ -49,8 +49,8 @@ protected:
 	virtual void interact(string action, string object);
 
 public:
-	Personagem() {}
-	Personagem(int gender, int strength, int dexterity) {
+	Character() {}
+	Character(int gender, int strength, int dexterity) {
 		this->gender = gender;
 		this->strength = strength;
 		this->dexterity = dexterity;
@@ -74,8 +74,8 @@ public:
 
 	string getStatus() { return status; }
 	void setStatus(string n) { status = n; }
-	void setCurrentRoom(Sala *room) { currentRoom = room; }
-	Sala* getCurrentRoom() { return currentRoom; }
+	void setCurrentRoom(Room *room) { currentRoom = room; }
+	Room* getCurrentRoom() { return currentRoom; }
 	int getGender() { return gender; }
 	int getStrength() { return strength; }
 	int getDexterity() { return dexterity; }
@@ -97,11 +97,11 @@ public:
 	virtual bool hasCondition(string info) { return false; }
 
 	virtual void receiveEvent(vector<string> args) {}
-	virtual void receiveCheck(Personagem* checkTarget) {}
+	virtual void receiveCheck(Character* checkTarget) {}
 	virtual void executeReaction(string topic, string phrase, string sender, bool shouldRespond) {}
-	virtual void checkRoom(vector<Personagem*> pessoasNaSala) {}
-	virtual void seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {}
-	virtual bool beAttacked(Personagem* atacante) {
+	virtual void checkRoom(vector<Character*> pessoasNaSala) {}
+	virtual void seeCharMoving(Character* pessoa, string outraSala, bool entrando) {}
+	virtual bool beAttacked(Character* atacante) {
 		if (atacante->getStrength() >= strength)
 			unconscious = true;
 		else

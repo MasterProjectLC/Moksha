@@ -8,11 +8,11 @@ private:
 
 public:
 	Baxter() : NPC{ NULL, "Baxter", "", M, 0, 0 } {}
-	explicit Baxter(Mapa* m);
-	int decidirAcaoAdicional(string acao) override;
+	explicit Baxter(Map* m);
+	int decideActionParticular(string action) override;
 	void advancePlansExtra(string currentProcess) override;
-	void setupMundoAdicional() override;
-	void setupObjetivosAdicional() override;
+	void setupWorldParticular() override;
+	void setupObjectivesParticular() override;
 	void updateWorldExtra() override;
-	void setupAcoesAdicional() override;
+	void setupActionsParticular() override;
 };

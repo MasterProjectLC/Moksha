@@ -12,13 +12,13 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 	this->fps = fps;
 	this->clock = 0;
 
-	titulos.push_back("Itens");
-	titulos.push_back("Rumores");
-	titulos.push_back("Conceitos");
-	for (int k = 0; k < titulos.size(); k++) {
-		int tituloCenter = spread(separator, titulos.size() + 2, k * 2);
-		int tituloOffset = titulos[k].size() / 2;
-		tituloPositions.push_back(tituloCenter - tituloOffset);
+	titles.push_back("Itens");
+	titles.push_back("Rumores");
+	titles.push_back("Conceitos");
+	for (int k = 0; k < titles.size(); k++) {
+		int tituloCenter = spread(separator, titles.size() + 2, k * 2);
+		int tituloOffset = titles[k].size() / 2;
+		titlePositions.push_back(tituloCenter - tituloOffset);
 
 		inventory.push_back(list<string>());
 	}
@@ -29,8 +29,8 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 	graphics = Graphic(screenWidth, screenHeight, fps);
 	input.add(this, 0);
 
-	interfacePrincipal();
-	interfaceInventario(invPointer, titulosPointer);
+	mainInterface();
+	inventoryInterface(invPointer, titulosPointer);
 }
 
 
@@ -49,42 +49,42 @@ void Interface::setPointer(int n) {
 	pointer = n;
 	if (pointer < 0)
 		pointer = 0;
-	else if (pointer > linhaAtual.size())
-		pointer = linhaAtual.size();
-	interfaceUnderline(true);
+	else if (pointer > currentLine.size())
+		pointer = currentLine.size();
+	underlineInterface(true);
 }
 
 void Interface::setVPointer(int n) {
 	if (vPointer == 0 && n != 0)
-		linhaGuardada = linhaAtual.substr(0, linhaAtual.length());
+		savedLine = currentLine.substr(0, currentLine.length());
 
 	vPointer = n;
 	if (vPointer < 0)
 		vPointer = 0;
-	else if (vPointer > linhasEnviadas.size())
-		vPointer = linhasEnviadas.size();
+	else if (vPointer > sentLines.size())
+		vPointer = sentLines.size();
 
 	if (vPointer == 0)
-		linhaAtual = linhaGuardada.substr(0, linhaGuardada.length());
+		currentLine = savedLine.substr(0, savedLine.length());
 	else {
 		int i = 0;
-		for (it = linhasEnviadas.begin(); it != linhasEnviadas.end(); it++, i++) {
+		for (it = sentLines.begin(); it != sentLines.end(); it++, i++) {
 			if (i == vPointer-1) {
-				linhaAtual = *it;
+				currentLine = *it;
 				break;
 			}
 		}
 	}
 
-	setPointer(linhaAtual.size());
+	setPointer(currentLine.size());
 }
 
 void Interface::setInvPointer(int n) {
-	interfaceInventario(n, titulosPointer);
+	inventoryInterface(n, titulosPointer);
 }
 
 void Interface::setTitulosPointer(int n) {
-	interfaceInventario(invPointer, n);
+	inventoryInterface(invPointer, n);
 }
 
 void Interface::setMenuPointer(int n) {
@@ -99,24 +99,24 @@ void Interface::setMenuPointer(int n) {
 
 // DESIGN ----------------------------------------------------------------------
 
-void Interface::interfacePrincipal() {
-	interfaceTela();
-	interfaceConsole();
+void Interface::mainInterface() {
+	screenInterface();
+	consoleInterface();
 
 	if (menu)
-		interfaceMenu();
+		menuInterface();
 
 	// Update
 	graphics.update();
 }
 
-void Interface::interfaceTela() {
+void Interface::screenInterface() {
 	graphics.drawArea(separator + 1, 0, screenWidth, screenHeight, ' ');
 	//graphics.drawArea(screenWidth, 0, screenWidth+1, screenHeight, '\n');
 	graphics.drawArea(separator, 0, separator+1, screenHeight, '|');
 }
 
-void Interface::interfaceMenu() {
+void Interface::menuInterface() {
 	int menuWidth = screenWidth / 3;
 	int menuHeight = 2*screenHeight / 3;
 
@@ -163,24 +163,24 @@ void Interface::interfaceMenu() {
 	
 }
 
-void Interface::interfaceInventario(int invP, int tituloP, bool paintItem) {
+void Interface::inventoryInterface(int invP, int tituloP, bool paintItem) {
 	// Blank canvas
 	graphics.drawArea(0, 0, separator, screenHeight, ' ');
 
 	// Titulo
-	for (int k = 0; k < titulos.size(); k++) {
-		int tituloCenter = spread(separator, titulos.size()+2, k*2);
+	for (int k = 0; k < titles.size(); k++) {
+		int tituloCenter = spread(separator, titles.size()+2, k*2);
 
-		int tituloOffset = titulos[k].size() / 2;
-		graphics.drawString(tituloCenter - tituloOffset, 0, titulos[k]);
+		int tituloOffset = titles[k].size() / 2;
+		graphics.drawString(tituloCenter - tituloOffset, 0, titles[k]);
 	}
 
-	if (0 <= tituloP && tituloP < titulos.size()) {
-		graphics.paint(tituloPositions[titulosPointer], 0, titulos[titulosPointer].size(), 'w');
-		graphics.paintBG(tituloPositions[titulosPointer], 0, titulos[titulosPointer].size(), 'n');
+	if (0 <= tituloP && tituloP < titles.size()) {
+		graphics.paint(titlePositions[titulosPointer], 0, titles[titulosPointer].size(), 'w');
+		graphics.paintBG(titlePositions[titulosPointer], 0, titles[titulosPointer].size(), 'n');
 		titulosPointer = tituloP;
-		graphics.paint(tituloPositions[titulosPointer], 0, titulos[titulosPointer].size(), 'n');
-		graphics.paintBG(tituloPositions[titulosPointer], 0, titulos[titulosPointer].size(), 'w');
+		graphics.paint(titlePositions[titulosPointer], 0, titles[titulosPointer].size(), 'n');
+		graphics.paintBG(titlePositions[titulosPointer], 0, titles[titulosPointer].size(), 'w');
 	}
 
 	// Itens
@@ -207,26 +207,26 @@ void Interface::interfaceInventario(int invP, int tituloP, bool paintItem) {
 
 }
 
-void Interface::interfaceConsole() {
+void Interface::consoleInterface() {
 	// Linha Atual
-	string s = linhaAtual;
+	string s = currentLine;
 	graphics.drawString(separator + 1, screenHeight - 1, s);
 	graphics.paint(separator + 1, screenHeight - 1, s.size() + 1, 'c');
-	interfaceUnderline(underline);
+	underlineInterface(underline);
 
 	// Linhas
 	int sobre = 1;
-	for (it = linhas.begin(); it != linhas.end(); it++, sobre++) {
+	for (it = lines.begin(); it != lines.end(); it++, sobre++) {
 		s = *it;
 		sobre += s.size() / (screenWidth - separator);
 		graphics.drawString(separator + 1, screenHeight - sobre - 1, s);
 	}
 }
 
-void Interface::interfaceUnderline(bool n) {
+void Interface::underlineInterface(bool n) {
 	underline = n;
 	if (underline) {
-		if (pointer < linhaAtual.size()) {
+		if (pointer < currentLine.size()) {
 			graphics.paintBG(separator + pointer + 1, screenHeight - 1, 1, 'c');
 			graphics.paint(separator + pointer + 1, screenHeight - 1, 1, 'n');
 		}
@@ -234,7 +234,7 @@ void Interface::interfaceUnderline(bool n) {
 			graphics.draw(separator + pointer + 1, screenHeight - 1, '_');
 	}
 	else
-		if (pointer < linhaAtual.size()) {
+		if (pointer < currentLine.size()) {
 			graphics.paintBG(separator + pointer + 1, screenHeight - 1, 1, 'n');
 			graphics.paint(separator + pointer + 1, screenHeight - 1, 1, 'c');
 		}
@@ -253,7 +253,7 @@ void Interface::clocking() {
 
 	// Underline pointer
 	if (!textTab && this->clock % ULCOOLDOWN == 0) {
-		interfaceUnderline(!underline);
+		underlineInterface(!underline);
 		graphics.update();
 		(this->clock) = 0;
 	}
@@ -261,7 +261,7 @@ void Interface::clocking() {
 	// Menu progress
 	if (menu && this->clock % MENUANIMATION == 0) {
 		menuProgress++;
-		interfaceMenu();
+		menuInterface();
 		graphics.update();
 	}
 }
@@ -277,7 +277,7 @@ void Interface::update(int id) {
 	}
 
 	// Design & Draw
-	interfacePrincipal();
+	mainInterface();
 }
 
 void Interface::inputUpdate() {
@@ -297,14 +297,14 @@ void Interface::inputUpdate() {
 		space();
 
 	if (input.getInput(input.backspace))
-		removeLetra(true);
+		removeLetter(true);
 
 	if (input.getInput(input.deleter))
-		removeLetra(false);
+		removeLetter(false);
 
 	if (input.getInput(input.enter)) {
 		if (!menu) {
-			args = subirLinha();
+			args = riseLine();
 			setNotifyID(notifyArgs);
 			notify();
 		}
@@ -328,7 +328,7 @@ void Interface::inputUpdate() {
 		setMenu(!getMenu());
 
 	if (input.getInput(input.typing))
-		addLetra(input.getTyped());
+		addLetter(input.getTyped());
 }
 
 
@@ -378,7 +378,7 @@ void Interface::space() {
 	if (menu)
 		return;
 
-	addLetra(' ');
+	addLetter(' ');
 	underline = true;
 }
 
@@ -387,18 +387,18 @@ void Interface::setTab(boolean tab) {
 		return;
 
 	this->textTab = tab;
-	interfaceInventario(invPointer, titulosPointer, textTab);
+	inventoryInterface(invPointer, titulosPointer, textTab);
 }
 
 void Interface::setMenu(boolean menu) {
 	setMenuPointer(MENU_OPTIONS.size());
 	if (menu == false) {
-		interfaceMenu();
+		menuInterface();
 	}
 
 	this->menu = menu;
 	this->menuProgress = 0;
-	interfaceInventario(invPointer, titulosPointer, !menu);
+	inventoryInterface(invPointer, titulosPointer, !menu);
 }
 
 void Interface::setItems(vector<string> items, int type) { 
@@ -408,53 +408,53 @@ void Interface::setItems(vector<string> items, int type) {
 		}
 	}
 
-	interfaceInventario(invPointer, titulosPointer, false);
+	inventoryInterface(invPointer, titulosPointer, false);
 }
 
-void Interface::addLetra(char nova) {
+void Interface::addLetter(char nova) {
 	if (textTab || menu)
 		return;
 
-	linhaAtual = linhaAtual.substr(0, pointer) + nova + linhaAtual.substr(pointer, linhaAtual.length());
+	currentLine = currentLine.substr(0, pointer) + nova + currentLine.substr(pointer, currentLine.length());
 	setPointer(pointer + 1);
 }
 
-void Interface::removeLetra(bool before) {
+void Interface::removeLetter(bool before) {
 	if (textTab || menu)
 		return;
 
 	if (before && pointer > 0) {
-		linhaAtual = linhaAtual.substr(0, pointer-1) + linhaAtual.substr(pointer, linhaAtual.length());
+		currentLine = currentLine.substr(0, pointer-1) + currentLine.substr(pointer, currentLine.length());
 		setPointer(pointer - 1);
 	}
 
-	else if (pointer < linhaAtual.length()) {
-		linhaAtual = linhaAtual.substr(0, pointer) + linhaAtual.substr(pointer + 1, linhaAtual.length());
+	else if (pointer < currentLine.length()) {
+		currentLine = currentLine.substr(0, pointer) + currentLine.substr(pointer + 1, currentLine.length());
 	}
 
 	underline = true;
 }
 
 
-vector<string> Interface::subirLinha() {
-	vector<string> retorno = splitString(linhaAtual, ' ');
+vector<string> Interface::riseLine() {
+	vector<string> retorno = splitString(currentLine, ' ');
 
-	if (linhaAtual == "" || menu)
+	if (currentLine == "" || menu)
 		return retorno;
 
-	linhasEnviadas.push_front(linhaAtual);
-	if (linhasEnviadas.size() > screenHeight - 1)
-		linhasEnviadas.pop_back();
+	sentLines.push_front(currentLine);
+	if (sentLines.size() > screenHeight - 1)
+		sentLines.pop_back();
 
-	printLinha(linhaAtual);
-	linhaGuardada = "";
+	printLine(currentLine);
+	savedLine = "";
 	setVPointer(0);
 	setPointer(0);
 	return retorno;
 }
 
 
-void Interface::printLinha(string nova) {
+void Interface::printLine(string nova) {
 	vector<string> novaCortada = splitString(nova, '\n');
 	int consoleSize = screenWidth - separator - 1;
 
@@ -469,8 +469,8 @@ void Interface::printLinha(string nova) {
 		}
 	}
 	for (int i = 0; i < novaCortada.size(); i++) {
-		linhas.push_front(novaCortada[i]);
-		if (linhas.size() > screenHeight - 1)
-			linhas.pop_back();
+		lines.push_front(novaCortada[i]);
+		if (lines.size() > screenHeight - 1)
+			lines.pop_back();
 	}
 }

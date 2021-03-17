@@ -1,9 +1,9 @@
 #include "npc.h"
 
-NPC::NPC(Mapa* m, string name, string description, int gender, int strength, int dexterity) : Personagem(gender, strength, dexterity) {
+NPC::NPC(Map* m, string name, string description, int gender, int strength, int dexterity) : Character(gender, strength, dexterity) {
 	this->name = name;
 	this->description = new string(description);
-	this->mapa = m;
+	this->map = m;
 
 	FileDict fileObject = FileManager::readFromFile("files/characters/" + getName() + ".txt");
 	this->dict = fileObject;
@@ -12,29 +12,29 @@ NPC::NPC(Mapa* m, string name, string description, int gender, int strength, int
 
 // PATHFINDING ---------------
 
-queue<Sala*> NPC::findPath(Sala* salaAlvo) {
-	return findPath(currentRoom, salaAlvo);
+queue<Room*> NPC::findPath(Room* targetRoom) {
+	return findPath(currentRoom, targetRoom);
 };
 
-queue<Sala*> NPC::findPath(Sala* initialRoom, Sala* targetRoom) {
-	return mapa->optimalPath(initialRoom, targetRoom);
+queue<Room*> NPC::findPath(Room* initialRoom, Room* targetRoom) {
+	return map->optimalPath(initialRoom, targetRoom);
 };
 
-queue<Sala*> NPC::search() {
+queue<Room*> NPC::search() {
 	return search(currentRoom);
 };
 
-queue<Sala*> NPC::search(Sala* roomClue) {
+queue<Room*> NPC::search(Room* roomClue) {
 	// Path to the clue
-	queue<Sala*> retorno;
+	queue<Room*> retorno;
 	retorno.push(currentRoom);
 	if (roomClue != currentRoom)
 		retorno = findPath(roomClue);
 
 	// Start search
-	queue<Sala*> search = mapa->breadthSearch(roomClue);
+	queue<Room*> search = map->breadthSearch(roomClue);
 	while (!search.empty()) {
-		queue<Sala*> path = findPath(retorno.back(), search.front());
+		queue<Room*> path = findPath(retorno.back(), search.front());
 		while (!path.empty()) {
 			retorno.push(path.front());
 			path.pop();
@@ -92,7 +92,7 @@ void NPC::receiveEvent(vector<string> args) {
 }
 
 
-void NPC::checkRoom(vector<Personagem*> peopleInRoom) {
+void NPC::checkRoom(vector<Character*> peopleInRoom) {
 	// Run through tracked people
 	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++) {
 		string theirName = *it;
@@ -112,7 +112,7 @@ void NPC::checkRoom(vector<Personagem*> peopleInRoom) {
 };
 
 
-void NPC::seeCharMoving(Personagem* person, string otherRoom, bool entering) {
+void NPC::seeCharMoving(Character* person, string otherRoom, bool entering) {
 	if (trackablePeople.count(person->getName()) == 0)
 		return;
 
@@ -135,20 +135,20 @@ void NPC::setupPlans() {
 	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++) {
 		setCondition("with_" + *it, false);
 	}
-	setupAcoesAdicional();
+	setupActionsParticular();
 
 	// describe current world state.
 	goap_worldstate_clear(&world);
 	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++)
 		setCondition("with_" + *it, false);
-	setupMundoAdicional();
+	setupWorldParticular();
 
 	// describe goal
 	goalList = PriorityVector<Goal>(vector<Goal>(), goalCompare);
 
 	currentGoal = Goal(0, false);
 	goap_worldstate_clear(&currentGoal.goal);
-	setupObjetivosAdicional();
+	setupObjectivesParticular();
 	goalList.push(currentGoal);
 	goalList.sort();
 
@@ -182,7 +182,7 @@ void NPC::updateLastSeen(string pursueTarget, string room) {
 
 	string currentProcess = plan[currentStep];
 	if (currentProcess.compare("search_" + pursueTarget) == 0) {
-		path = search(mapa->getRoom( lastSeen.getValues(pursueTarget) ));
+		path = search(map->getRoom( lastSeen.getValues(pursueTarget) ));
 	}
 }
 
@@ -200,7 +200,7 @@ void NPC::advancePlans() {
 
 		if (currentProcess.substr(0, 7).compare("search_") == 0) {
 			if (lastSeen.hasKey( currentProcess.substr(7, 10000) ))
-				path = search(mapa->getRoom(lastSeen.getValues( currentProcess.substr(7, 10000) )));
+				path = search(map->getRoom(lastSeen.getValues( currentProcess.substr(7, 10000) )));
 			else
 				path = search();
 
@@ -259,7 +259,7 @@ int NPC::decideAction() {
 	// Decide action
 	if (plansz > 0) {
 		actionArgs.clear();
-		currentAction = decidirAcaoAdicional(plan[currentStep]);
+		currentAction = decideActionParticular(plan[currentStep]);
 	} else
 		currentAction = descansar;
 

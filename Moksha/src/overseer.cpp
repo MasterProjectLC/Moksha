@@ -1,12 +1,12 @@
 #include "interface.h"
-#include "jogo.h"
+#include "game.h"
 #include <conio.h>
 #include <ctype.h>
 
 class Overseer : public IObserver {
 private:
 	Interface interfacer = Interface(140, 40, 60, 30);
-	Jogo game = Jogo();
+	Game game = Game();
 public:
 	Overseer() {
 		interfacer.add(this, 0);
@@ -28,7 +28,7 @@ public:
 		}
 
 		// Design & Draw
-		interfacer.interfacePrincipal();
+		interfacer.mainInterface();
 	}
 
 
@@ -43,7 +43,7 @@ public:
 
 	void jogoUpdate() {
 		if (game.getNotifyID() == game._imprimir) {
-			interfacer.printLinha(game.getText());
+			interfacer.printLine(game.getText());
 		}
 
 		else if (game.getNotifyID() == game._obter) {
@@ -67,7 +67,7 @@ public:
 
 
 	int main() {
-		interfacer.printLinha("Welcome to Medusa, Mr. Elliot. Let me take your coat...");
+		interfacer.printLine("Welcome to Medusa, Mr. Elliot. Let me take your coat...");
 
 		while (1) {
 			interfacer.clocking();

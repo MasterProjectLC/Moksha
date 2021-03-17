@@ -42,19 +42,19 @@ private:
 	boolean underline = false;
 
 	// Console
-	string linhaAtual = "";
-	string linhaGuardada = "";
-	list<string> linhas;
-	list<string> linhasEnviadas;
+	string currentLine = "";
+	string savedLine = "";
+	list<string> lines;
+	list<string> sentLines;
 	list<string>::iterator it;
 
-	void addLetra(char nova);
-	void removeLetra(bool before);
-	vector<string> subirLinha();
+	void addLetter(char nova);
+	void removeLetter(bool before);
+	vector<string> riseLine();
 
 	// Inventario
-	vector<string> titulos;
-	vector<int> tituloPositions;
+	vector<string> titles;
+	vector<int> titlePositions;
 	vector<list<string>> inventory;
 
 	// Pointers
@@ -71,11 +71,11 @@ private:
 	void setMenuPointer(int n);
 
 	// Visual Interface
-	void interfaceTela();
-	void interfaceMenu();
-	void interfaceConsole();
-	void interfaceInventario(int invP, int tituloP, bool paintItem = true);
-	void interfaceUnderline(bool n);
+	void screenInterface();
+	void menuInterface();
+	void consoleInterface();
+	void inventoryInterface(int invP, int titleP, bool paintItem = true);
+	void underlineInterface(bool n);
 
 	// Input
 	void update(int id) override;
@@ -91,9 +91,9 @@ private:
 public:
 	Interface(int screenWidth, int screenHeight, int separator, int fps);
 
-	void interfacePrincipal();
+	void mainInterface();
 	void clocking();
-	void printLinha(string nova);
+	void printLine(string nova);
 
 	enum {notifyArgs, item, rumor, concept};
 

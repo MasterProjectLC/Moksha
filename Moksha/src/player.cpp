@@ -1,6 +1,6 @@
-#include "jogador.h"
+#include "player.h"
 
-Jogador::Jogador() : Personagem(M, 2, 2) {
+Player::Player() : Character(M, 2, 2) {
 	name = "Elliot";
 
 	FileDict fileErros = FileManager::readFromFile("files/errors.txt");
@@ -15,7 +15,7 @@ Jogador::Jogador() : Personagem(M, 2, 2) {
 
 // ACOES -------------------------------------------------------------------------------------
 
-void Jogador::mention(string topic, string person) {
+void Player::mention(string topic, string person) {
 	if (mindTheory.count(person) && mindTheory.at(person).find(topic) != mindTheory.at(person).end()) {
 		printText(mindError);
 		return;
@@ -26,19 +26,19 @@ void Jogador::mention(string topic, string person) {
 		return;
 	}
 
-	Personagem::mention(topic, set<string>({ person }));;
+	Character::mention(topic, set<string>({ person }));;
 }
 
 
-void Jogador::move(string location) {
-	if (getCurrentRoom()->isSalaAnexa(location))
-		Personagem::move(location);
+void Player::move(string location) {
+	if (getCurrentRoom()->isRoomAdjacent(location))
+		Character::move(location);
 	else
 		printText(noRoomError);
 }
 
 
-void Jogador::interact(string acao, string object) {
+void Player::interact(string acao, string object) {
 	// Objetos
 	if (getCurrentRoom()->hasObject(object)) {
 		Object* objetoAqui = getCurrentRoom()->getObject(object);
@@ -49,7 +49,7 @@ void Jogador::interact(string acao, string object) {
 		else { printText(noActionError); }
 
 		// Tomar ação
-		Personagem::interact(acao, object);
+		Character::interact(acao, object);
 	}
 
 	// Objeto não existe
@@ -58,7 +58,7 @@ void Jogador::interact(string acao, string object) {
 }
 
 
-void Jogador::receberArgs(vector<string> args) {
+void Player::receberArgs(vector<string> args) {
 	if (args[0] == "move")
 		currentAction = mover;
 	else if (args[0] == "wait" || args[0] == "rest")
@@ -84,7 +84,7 @@ void Jogador::receberArgs(vector<string> args) {
 
 // REACOES -----------------------------------------------------------------------
 
-void Jogador::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
+void Player::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
 	printText(sender + ": " + phrase);
 	if (topic != "" && !inventory.hasConcept(topic)) {
 		inventory.addConcept(topic);
@@ -93,15 +93,15 @@ void Jogador::executeReaction(string topic, string phrase, string sender, bool s
 }
 
 
-void Jogador::receiveCheck(Personagem* checkTarget) {
+void Player::receiveCheck(Character* checkTarget) {
 	printText( *((NPC*)checkTarget)->getDescription() );
 }
 
 
-void Jogador::checkRoom(vector<Personagem*> charsInRoom) {
+void Player::checkRoom(vector<Character*> charsInRoom) {
 	// Salas anexas
 	printText("Current room: " + getCurrentRoom()->getName() + "\n" + getCurrentRoom()->getInitialText() + "\nAdjacent rooms:");
-	for (int i = 0; i < getCurrentRoom()->getSalaAnexaCount(); i++)
+	for (int i = 0; i < getCurrentRoom()->getAdjacentRoomCount(); i++)
 		printText(getCurrentRoom()->getAdjacentRoomName(i));
 
 	// Objetos na sala
@@ -117,7 +117,7 @@ void Jogador::checkRoom(vector<Personagem*> charsInRoom) {
 	}
 }
 
-void Jogador::updateRoom(vector<Personagem*> charsInRoom) {
+void Player::updateRoom(vector<Character*> charsInRoom) {
 	// Characters in the room na sala
 	for (int i = 0; i < charsInRoom.size(); i++) {
 		if (charsInRoom[i]->getName() != name)
@@ -132,7 +132,7 @@ void Jogador::updateRoom(vector<Personagem*> charsInRoom) {
 
 
 
-void Jogador::seeCharMoving(Personagem* pessoa, string outraSala, bool entrando) {
+void Player::seeCharMoving(Character* pessoa, string outraSala, bool entrando) {
 	if (entrando)
 		printText(pessoa->getName() + " entered the room, coming from the " + outraSala);
 	else
@@ -141,13 +141,13 @@ void Jogador::seeCharMoving(Personagem* pessoa, string outraSala, bool entrando)
 
 // HELPER FUNCTIONS ----------------------------------------------------
 
-bool Jogador::hasCondition(string info) {
+bool Player::hasCondition(string info) {
 	return inventory.hasConcept(info);
 }
 
 
 
-void Jogador::addToMind(string topic, string character) {
+void Player::addToMind(string topic, string character) {
 	// Add to stuff I know they know
 	if (mindTheory.count(character)) {
 		for (int i = 0; i < mindTheory.at(character).size(); i++)

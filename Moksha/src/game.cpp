@@ -1,34 +1,34 @@
-#include "jogo.h"
+#include "game.h"
 #include <iostream>
 
-Jogo::Jogo() {
-	player = new Jogador();
+Game::Game() {
+	player = new Player();
 	player->add(this, OBSERVER_OFFSET);
 	characters.push_back(player);
 
-	Baxter* baxter = new Baxter(&mapa);
+	Baxter* baxter = new Baxter(&map);
 	baxter->add(this, OBSERVER_OFFSET + 1);
 	characters.push_back(baxter);
 	npcs.push_back(baxter);
 
-	Hilda* hilda = new Hilda(&mapa);
+	Hilda* hilda = new Hilda(&map);
 	hilda->add(this, OBSERVER_OFFSET + 2);
 	characters.push_back(hilda);
 	npcs.push_back(hilda);
 
-	Santos* santos = new Santos(&mapa);
+	Santos* santos = new Santos(&map);
 	santos->add(this, OBSERVER_OFFSET + 3);
 	characters.push_back(santos);
 	npcs.push_back(santos);
 
-	Jenna* jenna = new Jenna(&mapa);
+	Jenna* jenna = new Jenna(&map);
 	jenna->add(this, OBSERVER_OFFSET + 4);
 	characters.push_back(jenna);
 	npcs.push_back(jenna);
 }
 
 
-void Jogo::setup() {
+void Game::setup() {
 	initializeGame();
 	if (!loadGame()) 
 		for (int i = 0; i < npcs.size(); i++)
@@ -37,7 +37,7 @@ void Jogo::setup() {
 
 
 // SAVE/LOAD --------------------------------------
-void Jogo::initializeGame() {
+void Game::initializeGame() {
 	// Gerar jogo
 	time = 1;
 	loop = 1;
@@ -48,30 +48,30 @@ void Jogo::initializeGame() {
 
 	// Gerar mapa
 	vector<string> salaLista = FileManager::getFileList("files/rooms");
-	vector<Sala*> salas;
+	vector<Room*> rooms;
 
 	for (int i = 0; i < salaLista.size(); i++) {
 		FileDict fileSala = FileManager::readFromFile(salaLista[i]);
 
-		Sala* room = new Sala(i, fileSala.getValue("name"), fileSala.getValue("text"),
+		Room* room = new Room(i, fileSala.getValue("name"), fileSala.getValue("text"),
 			fileSala.getValues("adjacent"), fileSala.getValues("objects"));
-		salas.push_back(room);
+		rooms.push_back(room);
 	}
 
-	mapa = Mapa(salas, this);
+	map = Map(rooms, this);
 
 	// Generate characters
 	xml_node load_package = doc.child("GameData").child("Game").child("Characters");
 	int i = 0;
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it, i++) {
 		string s = it->attribute("Room").value();
-		Personagem* personagem = findCharacter(it->name());
-		personagem->setCurrentRoom(mapa.getRoom(s));
+		Character* character = findCharacter(it->name());
+		character->setCurrentRoom(map.getRoom(s));
 	}
 }
 
 
-bool Jogo::loadGame() {
+bool Game::loadGame() {
 	xml_document doc;
 	if (!doc.load_file("files/save.xml"))
 		return false;
@@ -84,8 +84,8 @@ bool Jogo::loadGame() {
 	// Load map
 	load_package = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
-		Sala* estaSala = mapa.getRoom(it->attribute("Name").value());
-		estaSala->limparObjects();
+		Room* thisRoom = map.getRoom(it->attribute("Name").value());
+		thisRoom->limparObjects();
 
 		// Load objects
 		vector<string> objectNames;
@@ -94,16 +94,16 @@ bool Jogo::loadGame() {
 		for (xml_node_iterator ait = objects.begin(); ait != objects.end(); ++ait)
 			objectNames.push_back(ait->name());
 
-		estaSala->setObjectNames(objectNames);
-		mapa.carregarSala(estaSala);
+		thisRoom->setObjectNames(objectNames);
+		map.loadRoom(thisRoom);
 	}
 
 	// Load characters
 	load_package = doc.child("GameData").child("Game").child("Characters");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
-		Personagem* thisCharacter = findCharacter(it->name());
+		Character* thisCharacter = findCharacter(it->name());
 		string room = it->attribute("Room").value();
-		thisCharacter->setCurrentRoom(mapa.getRoom(room));
+		thisCharacter->setCurrentRoom(map.getRoom(room));
 
 		// Load inventory
 		xml_node inventario = it->child("Inventory");
@@ -140,7 +140,7 @@ bool Jogo::loadGame() {
 }
 
 
-void Jogo::saveGame() {
+void Game::saveGame() {
 	xml_document doc;
 	if (!doc.load_file("files/save.xml"))
 		doc.load_file("files/base.xml");
@@ -153,20 +153,20 @@ void Jogo::saveGame() {
 	// Save map
 	node = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
-		Sala* thisSala = mapa.getRoom(it->attribute("Name").value());
+		Room* thisRoom = map.getRoom(it->attribute("Name").value());
 
 		// Save objects
 		xml_node objects = it->child("Objects");
 		objects.remove_children();
-		for (int i = 0; i < thisSala->getObjectNames().size(); i++) {
-			objects.append_child(thisSala->getObjectNames()[i].c_str());
+		for (int i = 0; i < thisRoom->getObjectNames().size(); i++) {
+			objects.append_child(thisRoom->getObjectNames()[i].c_str());
 		}
 	}
 
 	// Save characters
 	node = doc.child("GameData").child("Game").child("Characters");
 	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
-		Personagem* thisCharacter = findCharacter(it->name());
+		Character* thisCharacter = findCharacter(it->name());
 		it->attribute("Room").set_value(thisCharacter->getCurrentRoom()->getName().c_str() );
 
 		// Save inventory
@@ -226,10 +226,10 @@ void Jogo::saveGame() {
 
 
 // UPDATE --------------------------------------------------------
-void Jogo::update(int id) {
+void Game::update(int id) {
 	// Objeto
 	if (id < OBSERVER_OFFSET) {
-		objectAction(mapa.getObject(id));
+		objectAction(map.getObject(id));
 	}
 
 	// Personagem
@@ -239,11 +239,11 @@ void Jogo::update(int id) {
 }
 
 
-void Jogo::objectAction(Object* object) {
+void Game::objectAction(Object* object) {
 	// Obtain
 	switch (object->getNotifyID()) {
 	case object->obter:
-		Personagem *character = findCharacter(object->getUser());
+		Character *character = findCharacter(object->getUser());
 		obtainObject(object->getName(), character);						// Give object to character
 		character->setStatus("obtaining " + object->getName() + ".");	// Update char's status
 		character->getCurrentRoom()->removeObject(*object);				// Remove object from the room
@@ -255,9 +255,9 @@ void Jogo::objectAction(Object* object) {
 }
 
 
-void Jogo::characterAction(Personagem* character) {
+void Game::characterAction(Character* character) {
 	int id = character->getNotifyID();
-	Personagem* target;
+	Character* target;
 	string antigaSala;
 
 	switch (id) {
@@ -342,7 +342,7 @@ void Jogo::characterAction(Personagem* character) {
 }
 
 
-void Jogo::advanceTime() {
+void Game::advanceTime() {
 	// Decide action
 	for (int i = 0; i < npcs.size(); i++) {
 		int action = npcs[i]->decideAction();
@@ -356,7 +356,7 @@ void Jogo::advanceTime() {
 	advanceConversations();
 
 	// Order by priority
-	PriorityVector<Personagem*> orderAction = PriorityVector<Personagem*>(vector<Personagem*>(), actionCompare);
+	PriorityVector<Character*> orderAction = PriorityVector<Character*>(vector<Character*>(), actionCompare);
 	for (int i = 0; i < characters.size(); i++) {
 		if (characters[i]->getAction() != conversar && characters[i]->getAction() != ouvir)
 			orderAction.push(characters[i]);
@@ -381,7 +381,7 @@ void Jogo::advanceTime() {
 }
 
 
-void Jogo::advanceConversations() {
+void Game::advanceConversations() {
 	// Iterate through each current convo
 	for (vector<Conversation>::iterator it = conversations.begin(); it != conversations.end(); it++) {
 		// Try until a message shoots through
@@ -397,7 +397,7 @@ void Jogo::advanceConversations() {
 
 			string n = conversation.name();
 			if (n != "Narrator") {
-				Personagem* speaker = findCharacter(conversation.name());
+				Character* speaker = findCharacter(conversation.name());
 
 				// Test if valid
 				// Is the speaker in the room?
@@ -450,13 +450,13 @@ void Jogo::advanceConversations() {
 }
 
 
-void Jogo::receiveArgs(vector<string> args) {
+void Game::receiveArgs(vector<string> args) {
 	player->receberArgs(args);
 }
 
 
-void Jogo::broadcastEvent(Personagem* emitter, vector<string> args) {
-	vector<Personagem*> receivers = getPeopleInRoom(emitter->getCurrentRoom());
+void Game::broadcastEvent(Character* emitter, vector<string> args) {
+	vector<Character*> receivers = getPeopleInRoom(emitter->getCurrentRoom());
 	for (int i = 0; i < receivers.size(); i++)
 		if (receivers[i] != emitter)
 			receivers[i]->receiveEvent(args);
@@ -466,8 +466,8 @@ void Jogo::broadcastEvent(Personagem* emitter, vector<string> args) {
 
 // LIDAR COM MAPA ------------------------------------------
 
-vector<Personagem*> Jogo::getPeopleInRoom(Sala* room) {
-	vector<Personagem*> retorno;
+vector<Character*> Game::getPeopleInRoom(Room* room) {
+	vector<Character*> retorno;
 	for (int i = 0; i < characters.size(); i++) {
 		if (characters[i]->getCurrentRoom() == room)
 			retorno.push_back(characters[i]);
@@ -478,7 +478,7 @@ vector<Personagem*> Jogo::getPeopleInRoom(Sala* room) {
 
 
 // ACTIONS ----------------------------------
-void Jogo::obtainObject(string name, Personagem* receiver) {
+void Game::obtainObject(string name, Character* receiver) {
 	vector<string> actionVec = FileManager::readFromFile("files/items/" + name + ".txt").getValues("actions");
 	set<string> actionSet = set<string>();
 	for (int i = 0; i < actionVec.size(); i++) {
@@ -490,33 +490,33 @@ void Jogo::obtainObject(string name, Personagem* receiver) {
 }
 
 
-Sala* Jogo::moveRoom(Sala* origin, string destination) {
+Room* Game::moveRoom(Room* origin, string destination) {
 	// Movement
-	origin = mapa.getRoom(destination);
+	origin = map.getRoom(destination);
 	return origin;
 }
 
 
-void Jogo::printText(string text) {
+void Game::printText(string text) {
 	this->text = text;
 	notify(_imprimir);
 }
 
 
-vector<Item> Jogo::getItems() {
+vector<Item> Game::getItems() {
 	return player->getItems();
 }
 
-vector<Concept> Jogo::getConcepts() {
+vector<Concept> Game::getConcepts() {
 	return player->getConcepts();
 }
 
 
 // HELPER FUNCTIONS ---------------------------------------------
 #include <stdexcept>
-Personagem* Jogo::findCharacter(string nome) {
+Character* Game::findCharacter(string name) {
 	for (int i = 0; i < characters.size(); i++) {
-		if (characters[i]->getName() == nome)
+		if (characters[i]->getName() == name)
 			return characters[i];
 	}
 

@@ -1,25 +1,25 @@
 #include "Baxter.h"
 
-Baxter::Baxter(Mapa* m) : NPC{ m, "Baxter", "Posh bitch", M, 1, 1 } {
+Baxter::Baxter(Map* m) : NPC{ m, "Baxter", "Posh bitch", M, 1, 1 } {
 	trackablePeople.insert("Santos");
 }
 
-void Baxter::setupAcoesAdicional() {
+void Baxter::setupActionsParticular() {
 	
 }
 
 
-void Baxter::setupMundoAdicional() {
+void Baxter::setupWorldParticular() {
 	goap_worldstate_set(&ap, &world, "with_Santos", true);
 }
 
 
-void Baxter::setupObjetivosAdicional() {
+void Baxter::setupObjectivesParticular() {
 	goap_worldstate_set(&ap, &currentGoal.goal, "with_Santos", true);
 }
 
 
-int Baxter::decidirAcaoAdicional(string acao) {
+int Baxter::decideActionParticular(string action) {
 	return descansar;
 }
 

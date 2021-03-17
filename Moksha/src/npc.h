@@ -2,8 +2,8 @@
 #include <queue>
 #include "goal.h"
 #include "priorityVector.h"
-#include "personagem.h"
-#include "mapa.h"
+#include "character.h"
+#include "map.h"
 #include "fileManager.h"
 #include "dictionary.h"
 #include "../libs/GPGOAP/goap.h"
@@ -11,7 +11,7 @@
 
 using namespace std;
 
-class NPC : public Personagem {
+class NPC : public Character {
 protected:
 	string* description;
 
@@ -19,8 +19,8 @@ protected:
 	set<string*> addedActions;
 	set<string> trackablePeople;
 
-	queue<Sala*> path;
-	Mapa* mapa;
+	queue<Room*> path;
+	Map* map;
 	string conversaAlvo;
 
 	actionplanner_t ap;
@@ -36,21 +36,21 @@ protected:
 
 	Dictionary<string> lastSeen;
 
-	queue<Sala*> findPath(Sala* salaInicial, Sala* salaAlvo);
-	queue<Sala*> findPath(Sala* salaAlvo);
-	queue<Sala*> search();
-	queue<Sala*> search(Sala* salaPista);
+	queue<Room*> findPath(Room* salaInicial, Room* salaAlvo);
+	queue<Room*> findPath(Room* salaAlvo);
+	queue<Room*> search();
+	queue<Room*> search(Room* salaPista);
 
-	int tamanhoCaminho(Sala* inicio, Sala* alvo) {
-		return mapa->optimalPath(inicio, alvo).size();
+	int tamanhoCaminho(Room* inicio, Room* alvo) {
+		return map->optimalPath(inicio, alvo).size();
 	};
 
 	string nextRoomInPath();
 
-	virtual int decidirAcaoAdicional(string acao) { return descansar; }
-	virtual void setupMundoAdicional() {}
-	virtual void setupObjetivosAdicional() {}
-	virtual void setupAcoesAdicional() {}
+	virtual int decideActionParticular(string acao) { return descansar; }
+	virtual void setupWorldParticular() {}
+	virtual void setupObjectivesParticular() {}
+	virtual void setupActionsParticular() {}
 	void updateWorld();
 	void updateLastSeen(string pursueTarget, string room);
 	virtual void updateWorldExtra() {}
@@ -62,20 +62,20 @@ protected:
 	bool isCurrentStateFulfilled();
 
 public:
-	explicit NPC(Mapa* m, string name, string description, int gender, int strength, int dexterity);
+	explicit NPC(Map* m, string name, string description, int gender, int strength, int dexterity);
 
 	string* getDescription() { return description; }
 
 	void setCondition(string condition, bool update);
 	bool hasCondition(string info) override;
-	void takeAction() override { Personagem::takeAction(); updateWorld(); }
+	void takeAction() override { Character::takeAction(); updateWorld(); }
 	void receiveEvent(vector<string> args) override;
 
 	int decideAction();
 	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
-	void checkRoom(vector<Personagem*> peopleInRoom) override;
-	void seeCharMoving(Personagem* character, string otherRoom, bool entering) override;
-	void setSalaAlvo(Sala* nova) { findPath(nova); }
+	void checkRoom(vector<Character*> peopleInRoom) override;
+	void seeCharMoving(Character* character, string otherRoom, bool entering) override;
+	void setSalaAlvo(Room* nova) { findPath(nova); }
 
 	void setupPlans();
 

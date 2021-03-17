@@ -45,25 +45,10 @@
     <ClCompile Include="src\item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\jogador.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\jogo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mapa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\npc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\overseer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\personagem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\sala.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\stringLib.cpp">
@@ -99,6 +84,21 @@
     <ClCompile Include="src\concept.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\room.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libs\pugixml\src\pugixml.hpp">
@@ -131,25 +131,10 @@
     <ClInclude Include="src\item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\jogador.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\jogo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mapa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\npc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\sala.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\saveModule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\personagem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="libs\GPGOAP\astar.h">
@@ -189,6 +174,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\concept.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\room.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

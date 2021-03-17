@@ -1,6 +1,6 @@
-#include "personagem.h"
+#include "character.h"
 
-void Personagem::takeAction(int action, vector<string> args) {
+void Character::takeAction(int action, vector<string> args) {
 	// Trancado em conversa
 	if (inConversation()) {
 		setInConversation(false);
@@ -52,26 +52,26 @@ void Personagem::takeAction(int action, vector<string> args) {
 }
 
 
-void Personagem::printText(string str) {
+void Character::printText(string str) {
 	notifyText = str;
 	notify(imprimir);
 }
 
-void Personagem::move(string str) {
+void Character::move(string str) {
 	notifyText = str;
 	notify(mover);
 }
 
-void Personagem::move(Sala* room) {
+void Character::move(Room* room) {
 	status = "entering the room.";
 	move(room->getName());
 }
 
-void Personagem::mention(string obj, string receiver) {
+void Character::mention(string obj, string receiver) {
 	mention( obj, set<string>({ receiver }) );
 }
 
-void Personagem::mention(string obj, set<string> receivers) {
+void Character::mention(string obj, set<string> receivers) {
 	if (inventory.hasConcept(obj) || inventory.hasItem(obj)) {
 		notifyText = obj;
 		notifyTargets = receivers;
@@ -79,52 +79,52 @@ void Personagem::mention(string obj, set<string> receivers) {
 	}
 }
 
-void Personagem::attack(string target) {
+void Character::attack(string target) {
 	status = "attacking " + target + "!";
 	notifyText = target;
 	notify(atacar);
 }
 
-void Personagem::listen(string target) {
+void Character::listen(string target) {
 	status = "eavesdropping " + target + ".";
 	notifyText = target;
 	notify(ouvir);
 }
 
-void Personagem::check(string target) {
+void Character::check(string target) {
 	status = "checking " + target + ".";
 	notifyText = target;
 	notify(checar);
 }
 
-void Personagem::say(string topic, string str, set<string> receivers) {
+void Character::say(string topic, string str, set<string> receivers) {
 	notifyText = topic + "|" + str;
 	notifyTargets = receivers;
 	notify(falar);
 }
 
-void Personagem::rest() {
+void Character::rest() {
 	status = "doing nothing.";
 	notify(descansar);
 }
 
-void Personagem::talk(string convo) {
+void Character::talk(string convo) {
 	status = "talking.";
 	notifyText = convo;
 	notify(conversar);
 }
 
-void Personagem::voidAction(string actionStatus) {
+void Character::voidAction(string actionStatus) {
 	status = actionStatus;
 	notify(descansar);
 }
 
-void Personagem::interact(string action, string object) {
+void Character::interact(string action, string object) {
 	if (getCurrentRoom()->hasObject(object))
 		getCurrentRoom()->getObject(object)->takeAction(action, name);
 }
 
-bool Personagem::isActionValid(int action) {
+bool Character::isActionValid(int action) {
 	if (basicActions.count(action) > 0)
 		return true;
 
@@ -135,7 +135,7 @@ bool Personagem::isActionValid(int action) {
 	return false;
 }
 
-bool Personagem::getStatusEffect(string key) { 
+bool Character::getStatusEffect(string key) {
 	if (!statusEffects.hasKey(key))
 		return false;
 	return statusEffects.getValues(key); 

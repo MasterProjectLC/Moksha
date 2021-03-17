@@ -1,25 +1,25 @@
-#include "sala.h"
+#include "room.h"
 
-Sala::Sala(int index, string name, string initialText, vector<string> salasAnexasNomes, vector<string> objectNames) {
+Room::Room(int index, string name, string initialText, vector<string> adjacentRoomNames, vector<string> objectNames) {
 	this->index = index;
 	this->name = name;
 	this->codename = name;
 	this->initialText = initialText;
-	this->salasAnexasNomes = salasAnexasNomes;
+	this->adjacentRoomNames = adjacentRoomNames;
 	this->objectNames = objectNames;
 }
 
-Sala::Sala(int index, string name, string codename, string initialText, vector<string> salasAnexasNomes, vector<string> objectNames) {
+Room::Room(int index, string name, string codename, string initialText, vector<string> adjacentRoomNames, vector<string> objectNames) {
 	this->index = index;
 	this->name = name;
 	this->codename = codename;
 	this->initialText = initialText;
-	this->salasAnexasNomes = salasAnexasNomes;
+	this->adjacentRoomNames = adjacentRoomNames;
 	this->objectNames = objectNames;
 }
 
 
-void Sala::removeObject(Object object) {
+void Room::removeObject(Object object) {
 	bool found = false;
 	for (int i = 0; i < objects.size(); i++) {
 		if (found) {
@@ -38,20 +38,20 @@ void Sala::removeObject(Object object) {
 	}
 }
 
-bool Sala::isSalaAnexa(string salaAnexaNome) {
-	for (int i = 0; i < salasAnexasNomes.size(); i++)
-		if (salaAnexaNome == salasAnexasNomes[i])
+bool Room::isRoomAdjacent(string adjacentRoomName) {
+	for (int i = 0; i < adjacentRoomNames.size(); i++)
+		if (adjacentRoomName == adjacentRoomNames[i])
 			return true;
 	return false;
 }
 
 // GETTERS
-string Sala::getAdjacentRoomName(int i) {
-	return salasAnexasNomes[i];
+string Room::getAdjacentRoomName(int i) {
+	return adjacentRoomNames[i];
 };
 
 
-bool Sala::hasObject(string name) {
+bool Room::hasObject(string name) {
 	for (int i = 0; i < objects.size(); i++) {
 		if (name.compare(objects[i].getName()) == 0)
 			return true;
@@ -61,7 +61,7 @@ bool Sala::hasObject(string name) {
 
 
 #include <stdexcept>
-Object* Sala::getObject(string name) {
+Object* Room::getObject(string name) {
 	for (int i = 0; i < objects.size(); i++) {
 		if (name.compare(objects[i].getName()) == 0)
 			return &objects[i];
@@ -71,6 +71,6 @@ Object* Sala::getObject(string name) {
 }
 
 
-vector<string> Sala::getObjectNames() {
+vector<string> Room::getObjectNames() {
 	return objectNames;
 };

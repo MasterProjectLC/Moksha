@@ -5,29 +5,29 @@
 
 using namespace std;
 
-class Sala {
+class Room {
 	// Atributos
 private:
 	string name;
 	string codename;
 	string initialText;
-	vector<string> salasAnexasNomes;
+	vector<string> adjacentRoomNames;
 	int index;
 
 	vector<string> objectNames;
 	vector<Object> objects;
 
 public:
-	Sala() {};
+	Room() {};
 
 	// Setup
-	Sala(int index, string name, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
-	Sala(int index, string name, string codinome, string textoInicial, vector<string> salasAnexasNomes, vector<string> objetoNomes);
-	void setObjectNames(vector<string> objetoNomes) { this->objectNames = objetoNomes; }
+	Room(int index, string name, string initialText, vector<string> adjacentRoomNames, vector<string> objectNames);
+	Room(int index, string name, string codename, string initialText, vector<string> adjacentRoomNames, vector<string> objectNames);
+	void setObjectNames(vector<string> objectNames) { this->objectNames = objectNames; }
 
-	void setupObjects(vector<Object> objetos) { this->objects = objetos; }
-	void addObject(Object objeto) { objects.push_back(objeto); }
-	void removeObject(Object objeto);
+	void setupObjects(vector<Object> objects) { this->objects = objects; }
+	void addObject(Object object) { objects.push_back(object); }
+	void removeObject(Object object);
 	void limparObjects() { objects.clear(); objectNames.clear(); }
 
 	// Getters
@@ -36,9 +36,9 @@ public:
 	string getInitialText() { return initialText; }
 	int getIndex() { return index; }
 
-	bool isSalaAnexa(string salaAnexaNome);
+	bool isRoomAdjacent(string adjacentRoomName);
 	string getAdjacentRoomName(int i);
-	int getSalaAnexaCount() { return salasAnexasNomes.size(); }
+	int getAdjacentRoomCount() { return adjacentRoomNames.size(); }
 
 	bool hasObject(string name);
 	Object* getObject(string name);
