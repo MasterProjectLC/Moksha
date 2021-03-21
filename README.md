@@ -13,12 +13,11 @@ Repeatedly rewind in time and try to save everyone aboard the steampunk airship 
 * Ágata Drigo (Akatze)
 * Dan Isamu (MasterProject)
 * Leonardo Del Lama (Ruther)
-* Maurício Cândido (mew)
 
 ### Special Thanks
 * Anderson Pinheiro Garrote
 * André Mateus Bariani Trava
 * Giovanni Marçon Rossi
+* Golden Glitch Studios (Elsinore)
 * Mark Brown (Game Maker's Toolkit)
 * Tommy Thompson (AI and Games)
-* Golden Glitch Studios (Elsinore)

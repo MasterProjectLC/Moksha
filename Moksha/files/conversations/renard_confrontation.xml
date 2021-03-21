@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Baxter/>
+    <Renard/>
+    <Jenna/>
+    <Willow/>
+    <Paul/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Narrator line="With a loud thump, Baxter suddenly enters the room, slamming the door open and marching towards Renard."/>
+
+    <!-- Darren present -->
+    <Baxter line="You! Re- oh.">
+        <with_Paul/>
+        <Darren_present add_tag="add_tag"/>
+    </Baxter>
+    <Narrator line="Paul and Baxter immediately lock eyes. Somehow, the atmosphere turns dark.">
+        <Darren_present tag="tag"/>
+    </Narrator>
+    <Baxter line="Paul.">
+        <Darren_present tag="tag"/>
+    </Baxter>
+    <Paul line="Baxter."/>
+    <Narrator line="An uncomfortable moment of silence passes.">
+        <Darren_present tag="tag"/>
+    </Narrator>
+    <Willow line="Hmm, dear? Do you know him?">
+        <Darren_present tag="tag"/>
+    </Willow>
+    <Baxter line="I... I do, darling. Looking at him now... there's no mistaking it. He's... he's...">
+        <Darren_present tag="tag"/>
+    </Baxter>
+    <Narrator line="Baxter pauses. Flinches, even. He fears those next words.">
+        <Darren_present tag="tag"/>
+    </Narrator>
+    <Baxter line="...he's Darren Morgan.">
+        <Darren_present tag="tag"/>
+    </Baxter>
+    <Narrator line="Paul's smile darkens. A laughter soon echoes through the chamber.">
+        <Darren_present tag="tag"/>
+    </Narrator>
+     <Paul line="So, you've figured me good, alright. Sweet, mate! Let's all give ya a round o' applause!"/>
+     <Baxter line="Darren... so it really is you. What do you want here?!">
+        <Darren_present tag="tag"/>
+    </Baxter>
+     <Paul line="Oy, calm down, sweet poppy! No need to rush the proceedings. I'll be honest, things haven't gone exactly according to plan, but getting to face ya posh drum here might be even better!"/>
+     <Renard line="What are you talking about? Frahm what plan do you speak?">
+        <Darren_present tag="tag"/>
+    </Renard>
+     <Paul line="WILL YA SHUT YA GOB, MATE? This here is just between me and me good ol' chump Baxter. Innit, Bax? Aren't we chumps?"/>
+     <Baxter line="Darren, I... I swear to Jove, I don't have enough insults to describe you. Entering here uninvited, causing havoc inside my ship-">
+        <Darren_present tag="tag"/>
+    </Baxter>
+     <Paul line="Oh, I'm sorry, did I break your concentration? You were saying something about... not having enough insults to describe me, innit? Well, go on, then! Name a few!"/>
+    <Narrator line="Baxter stares at the gun, tense. Willow, meanwhile, struggles to contain her screams.">
+        <Darren_present tag="tag"/>
+    </Narrator> 
+    <Baxter line="You wouldn't dare to pull the trigger, Darren. Not here, in the middle of the airship, where you could get caught at any moment.">
+        <Darren_present tag="tag"/>
+    </Baxter>
+    <Narrator line="Paul smiles again.">
+        <Darren_present tag="tag"/>
+    </Narrator> 
+    <Paul line="That's where you're wrong, Bax, you slag. You see, not everyone is as meek and as coward as you - some, in fact, are even willing to put down their lives for a good cause."/>
+    <Paul line="After you booted me out o’ the project, I didn't know what to do with me life, you know? Walking through the streets o' Newington, all bleak on the inside. Until I heard 'bout your new voyage."/>
+    <Paul line="This, this right here - it is all I could dream about. Over, and over, and over again. And now, look at us. Look at me! And look at this gun."/>
+    <Narrator line="Baxter tenses up. He knows what's going to happen next.">
+        <Darren_present tag="tag"/>
+    </Narrator> 
+    <Baxter line="It doesn't have to end like this, Darren. I, I can still change the patents, rework your models. You don't have to shoot me like that. Not... not in front of my darling.">
+        <Darren_present tag="tag"/>
+    </Baxter>
+    <Willow line="B-Bax!">
+        <Darren_present tag="tag"/>
+    </Willow>
+    <Paul line="Oh, getting sentimental now, is it? Shoulda thought o' that before you stabbed me in the cadbury. Alright, I'm letting the missus look away. Do it now, girl, or do it never."/>
+    <Willow line="No, please, don't do it!">
+        <Darren_present tag="tag"/>
+    </Willow>
+    <Narrator line="It's too late. A gunshot rings. A man falls.">
+        <Darren_present tag="tag"/>
+    </Narrator> 
+    <Narrator line="And the rain starts to pour from her eyes.">
+        <Darren_present tag="tag"/>
+        <end/>
+    </Narrator> 
+
+    <!-- Darren escaped -->
+	<Baxter line="You! Renard!">
+        <with_Paul n="n"/>
+        <Darren_escaped add_tag="add_tag"/>
+    </Baxter>
+	<Narrator line="Instantly turning sycomphantically, the reporter clasps his hands together and smiles at the englishman.">
+        <Darren_escaped tag="tag"/>
+    </Narrator>
+    <Renard line="Oh, Monsieur. What a delight it is to... ">
+        <Darren_escaped tag="tag"/>
+    </Renard>
+    <Baxter line="Stop with the dilly-dallying, Claude. Something is off with your assistant. Who is he, actually?">
+        <Darren_escaped tag="tag"/>
+    </Baxter>
+    <Jenna line="Ooh, this is going to be good.">
+        <Darren_escaped tag="tag"/>
+    </Jenna>
+    <Willow line="Dear? Did something happen?">
+        <Darren_escaped tag="tag"/>
+    </Willow>
+    <Baxter line="Yes, it did, darling. Renard, I need you to answer me.">
+        <Darren_escaped tag="tag"/>
+    </Baxter>
+    <Narrator line="The entire room turns towards the frenchman.">
+        <Darren_escaped tag="tag"/>
+    </Narrator>
+    <Renard line="My assistant? Paul, you mean? He is merely a Londonar I hired to assist me...">
+        <Darren_escaped tag="tag"/>
+    </Renard>
+    <Baxter line="Just a Londoner, you say? That's rich. Did he, perhaps, solve the questionnaire for you?">
+        <Darren_escaped tag="tag"/>
+    </Baxter>
+    <Narrator line="Renard is taken aback. Jenna watches on, increasingly more amused.">
+        <Darren_escaped tag="tag"/>
+    </Narrator>
+    <Renard line="Pardón? How could you even insinuate that, monsieur? Of course not!">
+        <Darren_escaped tag="tag"/>
+    </Renard>
+    <Baxter line="Poppycock. You're not an educated fellow, Renard. How would someone such as you even acquire the knowledge to solve Magnus' intricate test? ">
+        <Darren_escaped tag="tag"/>
+    </Baxter>
+    <Renard line="I... I-I, well...">
+        <Darren_escaped tag="tag"/>
+    </Renard>
+    <Narrator line="Renard stumbles upon his words, cold sweat dripping from his forehead. Suddenly, a realization hits, and soon enough his composure returns. ">
+        <Darren_escaped tag="tag"/>
+    </Narrator>
+    <Renard line="W-Well, Monsieur Baxter. I'll tell you how: with this!">
+        <Darren_escaped tag="tag"/>
+    </Renard>
+    <Narrator line="The reporter dashes to a small leather bag and pulls out an enginnering textbook, grinning from ear to ear.">
+        <Darren_escaped tag="tag"/>
+    </Narrator>
+    <Renard line="I may not quite be the aeronaut you expected, but I do pride myself on being a dilligent researchar! Is that not what you wished, after all? Someone who would appreciate your construction?">
+        <Darren_escaped tag="tag"/>
+    </Renard>
+    
+    <!-- Jenna present -->
+    <Jenna line="Hah, what a load of fake crap! That's my uncle's textbook, ya dingus! The one I gifted him right before we embarked! Baxter, my guy, he's trying to con you right up in your face!">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present add_tag="add_tag"/>
+    </Jenna>
+    <Baxter line="Renard, I swear to Jove, if you don't tell the truth now, we're leaving you in India.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+    </Baxter>
+    <Willow line="Bax, dear, don't!">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+    </Willow>
+    <Renard line="A-alright, alright! Yes, I admit it - the assistant solved it. It, it wasn't me who contacted him, howevar! It was the other way around! He was the one who wanted to get into this airship!">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+        <Paul_is_darren info="info"/>
+    </Renard>
+    <Baxter line="THIS airship? Specifically?">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+    </Baxter>
+    <Baxter line="Oui! Yes! Just don't leave me in India!">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+    </Baxter>
+    <Narrator line="Baxter's expression darkens.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+    </Narrator>
+    <Baxter line="Darn. Good pissing grief. So it IS him.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+    </Baxter>
+    <Willow line="'him'? Who is 'him', dear?">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+    </Willow>
+    <Baxter line="I think...">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+    </Baxter>
+    <Narrator line="Baxter pauses. He fears those next words.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+    </Narrator>
+    <Baxter line="I think he is Darren.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_present tag="tag"/>
+        <end/>
+    </Baxter>
+
+    <!-- Jenna absent -->
+    <Baxter line="What?">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent add_tag="add_tag"/>
+    </Baxter>
+    <Narrator line="The millionare wrangles the book out of Renard's hands.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent tag="tag"/>
+    </Narrator>
+    <Baxter line="Good grief, this is all in English! How come you didn't acquire a french version?">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent tag="tag"/>
+    </Baxter>
+    <Renard line="Monsieur, if I were to pass your test, I would need to know the proper terms, would I not? Naturally I thought of that first before choosing it!">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent tag="tag"/>
+    </Renard>
+    <Baxter line="I... I see. Well, if that's the case, then...">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent tag="tag"/>
+    </Baxter>
+    <Narrator line="Baxter sighes.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent tag="tag"/>
+    </Narrator>
+    <Baxter line="...I suppose my suspicions were unfounded, after all. Alright, Claude, you may stay on the ship.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent tag="tag"/>
+    </Baxter>
+    <Renard line="Parfait! Fantastique! Thank you for your time, Monsieur Baxter, and pardón again for the incovenience.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent tag="tag"/>
+    </Renard>
+    <Baxter line="The same to you, Claude. In any case, I shall take my leave. Darling, goodbye.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent tag="tag"/>
+    </Baxter>
+    <Willow line="Goodbye, my dear.">
+        <Darren_escaped tag="tag"/>
+        <Jenna_absent tag="tag"/>
+    </Willow>
+</Conversation>

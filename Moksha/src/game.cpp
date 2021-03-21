@@ -227,12 +227,12 @@ void Game::saveGame() {
 
 // UPDATE --------------------------------------------------------
 void Game::update(int id) {
-	// Objeto
+	// Object
 	if (id < OBSERVER_OFFSET) {
 		objectAction(map.getObject(id));
 	}
 
-	// Personagem
+	// Character
 	else {
 		characterAction(characters[id - OBSERVER_OFFSET]);
 	}
@@ -387,6 +387,7 @@ void Game::advanceConversations() {
 		// Try until a message shoots through
 		while (1) {
 			// If the convo is over
+			bool endConvo = false;
 			if (it->ended()) {
 				conversations.erase(it);
 				break;
@@ -410,6 +411,7 @@ void Game::advanceConversations() {
 					// Adding tags/infos
 					string addTag = cit->attribute("add_tag").value();
 					string info = cit->attribute("info").value();
+					string end = cit->name();
 
 					// Check modifiers
 					string tag = cit->attribute("tag").value();
@@ -418,15 +420,17 @@ void Game::advanceConversations() {
 					bool conditionMet = ( !checkTag && speaker->hasCondition(cit->name())) || (checkTag && it->hasTag(cit->name()) );
 					string nao = cit->attribute("n").value();
 					bool inverted = (nao == "n");
-
-					if (addTag == "add_tag")
-						it->addTag(cit->name());
-					else if (info == "info")
-						infoAtom = cit->name();
-					else if (conditionMet == inverted) {
+				
+					if (conditionMet == inverted) {
 						valid = false;
 						break;
 					}
+					else if (addTag == "add_tag")
+						it->addTag(cit->name());
+					else if (info == "info")
+						infoAtom = cit->name();
+					else if (end == "end")
+						endConvo = true;
 				}
 				if (!valid) continue;
 
@@ -442,6 +446,10 @@ void Game::advanceConversations() {
 			for (set<string>::iterator ait = it->getParticipants()->begin(); ait != it->getParticipants()->end(); ait++)
 				findCharacter(*ait)->setInConversation(true);
 			it->clearListeners();
+
+			// End convo?
+			if (endConvo)
+				conversations.erase(it);
 			break;
 		}
 

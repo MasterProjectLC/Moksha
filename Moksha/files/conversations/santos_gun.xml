@@ -12,7 +12,7 @@
 		<with_Hilda n="n"/>
 	</Santos>
 
-	<Santos line="Hilda! Reckon you know where my gun is?">
+	<Santos line="Hilda, mate! Reckon you know where my gun is?">
 		<with_Baxter n="n"/>
 		<with_Hilda/>
 	</Santos>
