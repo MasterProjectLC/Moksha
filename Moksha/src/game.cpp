@@ -38,7 +38,7 @@ void Game::setup() {
 
 // SAVE/LOAD --------------------------------------
 void Game::initializeGame() {
-	// Gerar jogo
+	// Generate game
 	time = 1;
 	loop = 1;
 
@@ -46,15 +46,18 @@ void Game::initializeGame() {
 	if (!doc.load_file("files/base.xml"))
 		throw invalid_argument("ERROR INITIALIZING GAME - BASE.XML COULD NOT BE FOUND");
 
-	// Gerar mapa
-	vector<string> salaLista = FileManager::getFileList("files/rooms");
+	// Generate map
 	vector<Room*> rooms;
+	vector<string> roomList = FileManager::getFileList("files/rooms");
 
-	for (int i = 0; i < salaLista.size(); i++) {
-		FileDict fileSala = FileManager::readFromFile(salaLista[i]);
+	for (int i = 0; i < roomList.size(); i++) {
+		FileDict roomFile = FileManager::readFromFile(roomList[i]);
 
-		Room* room = new Room(i, fileSala.getValue("name"), fileSala.getValue("text"),
-			fileSala.getValues("adjacent"), fileSala.getValues("objects"));
+		Room* room;
+		if (roomFile.hasKey("codename"))
+			room = new Room(i, roomFile.getValue("name"), roomFile.getValue("codename"), roomFile.getValue("text"), roomFile.getValues("adjacent"));
+		else
+			room = new Room(i, roomFile.getValue("name"), roomFile.getValue("text"), roomFile.getValues("adjacent"));
 		rooms.push_back(room);
 	}
 
@@ -84,7 +87,7 @@ bool Game::loadGame() {
 	// Load map
 	load_package = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
-		Room* thisRoom = map.getRoom(it->attribute("Name").value());
+		Room* thisRoom = map.getRoom( it->name() );
 		thisRoom->limparObjects();
 
 		// Load objects

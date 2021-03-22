@@ -1,0 +1,8 @@
+name:
+Blakewell's Room
+codename:
+BlakewellRoom
+text:
+Baxter and Willow's room
+adjacent:
+Mezzanine

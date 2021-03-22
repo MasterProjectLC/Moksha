@@ -21,8 +21,8 @@ public:
 	Room() {};
 
 	// Setup
-	Room(int index, string name, string initialText, vector<string> adjacentRoomNames, vector<string> objectNames);
-	Room(int index, string name, string codename, string initialText, vector<string> adjacentRoomNames, vector<string> objectNames);
+	Room(int index, string name, string initialText, vector<string> adjacentRoomNames);
+	Room(int index, string name, string codename, string initialText, vector<string> adjacentRoomNames);
 	void setObjectNames(vector<string> objectNames) { this->objectNames = objectNames; }
 
 	void setupObjects(vector<Object> objects) { this->objects = objects; }

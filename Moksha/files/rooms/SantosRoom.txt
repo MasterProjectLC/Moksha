@@ -1,0 +1,8 @@
+name:
+Santos' Room
+codename:
+SantosRoom
+text:
+Santos' room is COOL wowow
+adjacent:
+Mezzanine

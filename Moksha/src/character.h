@@ -11,7 +11,7 @@ class Character: public IObservable {
 protected:
 	const set<string> names = { "Elliot", "Baxter", "Willow", "Hilda", "Santos",
 								"Magnus", "Tom", "Jenna", "Renard", "Liz",
-								"George", "Darren", "Amelie" };
+								"George", "Paul", "Amelie" };
 
 	string name;
 	string notifyText;

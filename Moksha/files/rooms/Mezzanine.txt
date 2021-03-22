@@ -1,0 +1,6 @@
+name:
+Mezzanine
+text:
+This mezzanine hangs around the Dining Hall, making it even more grandiose than it already is.
+adjacent:
+DiningHall|BlakewellRoom|SantosRoom|GardenLounge|Study

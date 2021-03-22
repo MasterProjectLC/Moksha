@@ -1,0 +1,12 @@
+name:
+Drawer
+visible:
+true
+actions:
+examine|look|see
+examine,look,see:
+It's Baxter's drawer.
+touch:
+Nothing special about this drawer.
+take,obtain:
+Hm??

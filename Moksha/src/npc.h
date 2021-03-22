@@ -13,6 +13,7 @@ using namespace std;
 
 class NPC : public Character {
 protected:
+	bool busy;
 	string* description;
 
 	set<string*> addedConditions;
@@ -41,7 +42,7 @@ protected:
 	queue<Room*> search();
 	queue<Room*> search(Room* salaPista);
 
-	int tamanhoCaminho(Room* inicio, Room* alvo) {
+	int pathSize(Room* inicio, Room* alvo) {
 		return map->optimalPath(inicio, alvo).size();
 	};
 
@@ -60,6 +61,7 @@ protected:
 	void changePlans(bool justUpdated);
 
 	bool isCurrentStateFulfilled();
+	void setBusy(bool novo) { busy = novo; }
 
 public:
 	explicit NPC(Map* m, string name, string description, int gender, int strength, int dexterity);

@@ -1,13 +1,13 @@
 #include "map.h"
 
-// GERAÇÃO E INICIALIZAÇÃO ----------------------------------------------------------
+// GENERATION AND INITIALIZATION ----------------------------------------------------------
 
-Map::Map(vector<Room*> salasRecebidas, IObserver *observer) {
+Map::Map(vector<Room*> receivedRooms, IObserver *observer) {
 	this->observer = observer;
 
 	// Gerar salas
-	for (int i = 0; i < salasRecebidas.size(); i++) {
-		Node novo = Node(salasRecebidas[i]);
+	for (int i = 0; i < receivedRooms.size(); i++) {
+		Node novo = Node(receivedRooms[i]);
 		rooms.push_back(novo);
 	}
 
@@ -21,7 +21,7 @@ Map::Map(vector<Room*> salasRecebidas, IObserver *observer) {
 					break;
 				}
 
-		loadRoom(salasRecebidas[i]);
+		loadRoom(receivedRooms[i]);
 	}
 };
 
@@ -72,7 +72,7 @@ queue<Room*> Map::optimalPath(Room *origin, Room *destination) {
 		}
 	}
 
-	// Iterar pelos nodes anexos à sala examinada
+	// Iterate through the adjacent nodes to the examined node
 	while (!procura.empty()) {
 		Node* checkedRoom = procura.front();
 		for (int i = 0; i < checkedRoom->getAdjacents().size(); i++) {
@@ -150,7 +150,7 @@ void Map::breadthSearchHelper(queue<Room*> *retorno, stack<int> &st, int salaChe
 
 bool Map::hasRoom(string name) {
 	for (int i = 0; i < rooms.size(); i++)
-		if (rooms[i].getElement()->getName() == name)
+		if (rooms[i].getElement()->getCodename() == name)
 			return true;
 	return false;
 };
@@ -161,7 +161,7 @@ Room* Map::getRoom(int index) {
 
 Room* Map::getRoom(string name) {
 	for (int i = 0; i < rooms.size(); i++)
-		if (rooms[i].getElement()->getName() == name)
+		if (rooms[i].getElement()->getCodename() == name)
 			return getRoom(i);
 
 	throw invalid_argument("There's no room with that name :(");

@@ -1,0 +1,6 @@
+name:
+Study
+text:
+A jungle of books surrounding a single, solitary table.
+adjacent:
+Mezzanine

@@ -55,12 +55,12 @@ void Jenna::updateWorldExtra() {
 	goap_worldstate_set(&ap, &world, "in_kitchen", currentRoom->getName() == "Kitchen");
 	goap_worldstate_set(&ap, &world, "armed", inventory.hasItem("Knife"));
 
-	goap_set_cost(&ap, "move_kitchen", tamanhoCaminho(currentRoom, map->getRoom("Kitchen")));
+	goap_set_cost(&ap, "move_kitchen", pathSize(currentRoom, map->getRoom("Kitchen")));
 	if (lastSeen.hasKey("Elliot"))
-		goap_set_cost(&ap, "search_Elliot", tamanhoCaminho(currentRoom, map->getRoom( lastSeen.getValues("Elliot") )));
+		goap_set_cost(&ap, "search_Elliot", pathSize(currentRoom, map->getRoom( lastSeen.getValues("Elliot") )));
 
 	if (lastSeen.hasKey("Santos"))
-		goap_set_cost(&ap, "search_Santos", tamanhoCaminho(currentRoom, map->getRoom( lastSeen.getValues("Santos") )));
+		goap_set_cost(&ap, "search_Santos", pathSize(currentRoom, map->getRoom( lastSeen.getValues("Santos") )));
 }
 
 

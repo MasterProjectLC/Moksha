@@ -1,0 +1,12 @@
+name:
+Balcony
+visible:
+true
+actions:
+examine|look|see
+examine,look,see:
+Huh, I can look down to the Dining Hall.
+touch:
+Nothing special about the balcony.
+take,obtain:
+Hm??

@@ -3,7 +3,7 @@
 <GameData FormatVersion="1">
 	<Game Time="3" Loop="3">
 		<Characters>
-			<Elliot Room="Lounge"> 
+			<Elliot Room="EntranceLounge"> 
 				<Inventory/>
                 <Rumors/>
                 <Concepts/>
@@ -12,50 +12,68 @@
 				<Inventory/>
                 <Atoms/>
 			</Jenna>
-		    <Baxter Room="Lounge"> 
+		    <Baxter Room="EntranceLounge"> 
 				<Inventory/>
                 <Atoms/>
 			</Baxter>
-            <Santos Room="Lounge"> 
+            <Santos Room="EntranceLounge"> 
 				<Inventory/>
                 <Atoms/>
 			</Santos>
-            <Hilda Room="Lounge"> 
+            <Hilda Room="EntranceLounge"> 
 				<Inventory/>
                 <Atoms/>
 			</Hilda>
 		</Characters>
 
 		<Map>
-			<Corridor Name="Corridor">
+			<Corridor>
 				<Objects>
 					<Clock/>
 				</Objects>
 			</Corridor>
 
-			<DiningHall Name="Dining Hall">
+			<DiningHall>
 				<Objects>
 					<Table/>
 				</Objects>
 			</DiningHall>
 
-            <Lounge Name="Lounge">
-				<Objects>
-					<Table/>
-				</Objects>
-			</Lounge>
+            <EntranceLounge>
+				<Objects/>
+			</EntranceLounge>
 
-            <Kitchen Name="Kitchen">
+            <Kitchen>
 				<Objects>
 					<Knife/>
 				</Objects>
 			</Kitchen>
 
-            <Lavatory Name="Lavatory">
+            <Lavatory>
+				<Objects/>
+			</Lavatory>
+
+            <SantosRoom>
+				<Objects>
+					<SantosDrawer/>
+				</Objects>
+			</SantosRoom>
+
+            <BlackwellRoom>
+				<Objects>
+					<BaxterDrawer/>
+				</Objects>
+			</BlackwellRoom>
+
+            <GardenLounge>
+				<Objects/>
+			</GardenLounge>
+
+            <Study>
 				<Objects>
 					<Table/>
 				</Objects>
-			</Lavatory>
+			</Study>
 		</Map>
         <Conversations/>
 	</Game>

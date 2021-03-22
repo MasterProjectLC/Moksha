@@ -1,21 +1,19 @@
 #include "room.h"
 
-Room::Room(int index, string name, string initialText, vector<string> adjacentRoomNames, vector<string> objectNames) {
+Room::Room(int index, string name, string initialText, vector<string> adjacentRoomNames) {
 	this->index = index;
 	this->name = name;
 	this->codename = name;
 	this->initialText = initialText;
 	this->adjacentRoomNames = adjacentRoomNames;
-	this->objectNames = objectNames;
 }
 
-Room::Room(int index, string name, string codename, string initialText, vector<string> adjacentRoomNames, vector<string> objectNames) {
+Room::Room(int index, string name, string codename, string initialText, vector<string> adjacentRoomNames) {
 	this->index = index;
 	this->name = name;
 	this->codename = codename;
 	this->initialText = initialText;
 	this->adjacentRoomNames = adjacentRoomNames;
-	this->objectNames = objectNames;
 }
 
 

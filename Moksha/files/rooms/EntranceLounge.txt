@@ -1,8 +1,8 @@
 name:
-Lounge
+Entrance Lounge
+codename:
+EntranceLounge
 text:
 Silence. At least it's somewhat relaxing. I could spend literal hours here, given different circumstances.
 adjacent:
-Dining Hall
-objects:
-Table
+DiningHall

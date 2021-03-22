@@ -4,6 +4,7 @@ NPC::NPC(Map* m, string name, string description, int gender, int strength, int 
 	this->name = name;
 	this->description = new string(description);
 	this->map = m;
+	busy = false;
 
 	FileDict fileObject = FileManager::readFromFile("files/characters/" + getName() + ".txt");
 	this->dict = fileObject;
@@ -54,7 +55,7 @@ string NPC::nextRoomInPath() {
 		advancePlansExtra(plan[currentStep]); // Refresh plans
 
 	if (!path.empty()) {
-		retorno = path.front()->getName();
+		retorno = path.front()->getCodename();
 		path.pop();
 	}
 
@@ -69,8 +70,8 @@ void NPC::executeReaction(string topic, string phrase, string sender, bool shoul
 
 	if (topic != "")
 		setCondition(topic, true);
-	if (dict.hasKey(topic) && shouldRespond)
-		say(topic, dict.getValue(topic), set<string>({ sender }));
+	if (dict.hasKey(topic) && shouldRespond && !busy && !inConversation())
+		talk(dict.getValue(topic));
 }
 
 
@@ -257,6 +258,7 @@ int NPC::decideAction() {
 	}
 
 	// Decide action
+	busy = false;
 	if (plansz > 0) {
 		actionArgs.clear();
 		currentAction = decideActionParticular(plan[currentStep]);
