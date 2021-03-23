@@ -1,0 +1,8 @@
+name:
+South Corridor
+codename:
+SouthCorridor
+text:
+The south corridor, leading to half of the guest quarters.
+adjacent:
+EntranceLounge|DiningHall|SouthBathroom|LizRoom|MagnusRoom|RenardRoom|GameRoom

@@ -1,0 +1,8 @@
+name:
+North Corridor
+codename:
+NorthCorridor
+text:
+The north corridor, leading to half of the guest quarters.
+adjacent:
+EntranceLounge|DiningHall|NorthBathroom|AmelieRoom|JennaRoom|GeorgeRoom|Bar

@@ -1,6 +1,11 @@
 #include "Jenna.h"
 
-Jenna::Jenna(Map* m) : NPC{m, "Jenna", "My boss. She's a journalist in her 20s, with bro", F, 1, 1} {
+Jenna::Jenna(Map* m) : NPC{m, "Jenna", 
+("Jenna Maybourne, George's niece, is an american 'innovation journalist', a title she coined herself. "
+"She's also my boss. Overall, I find her somewhat laidback and playful, simultaneously taking her job seriously and having fun along the way. "
+"Her connection to her father, who was a prominent aeronaut, sparked her interest for technological marvels and allowed her to learn a lot about airships.\n"
+"She's currently wearing a brown vest, a bowler hat and big, round googles. Her hair is shorter than most women."),
+F, 9, 10} {
 	trackablePeople.insert("Elliot");
 	trackablePeople.insert("Santos");
 }
@@ -55,29 +60,29 @@ void Jenna::updateWorldExtra() {
 	goap_worldstate_set(&ap, &world, "in_kitchen", currentRoom->getName() == "Kitchen");
 	goap_worldstate_set(&ap, &world, "armed", inventory.hasItem("Knife"));
 
-	goap_set_cost(&ap, "move_kitchen", pathSize(currentRoom, map->getRoom("Kitchen")));
+	goap_set_cost(&ap, "move_kitchen", pathSize(currentRoom, mapp->getRoom("Kitchen")));
 	if (lastSeen.hasKey("Elliot"))
-		goap_set_cost(&ap, "search_Elliot", pathSize(currentRoom, map->getRoom( lastSeen.getValues("Elliot") )));
+		goap_set_cost(&ap, "search_Elliot", pathSize(currentRoom, mapp->getRoom( lastSeen.getValues("Elliot") )));
 
 	if (lastSeen.hasKey("Santos"))
-		goap_set_cost(&ap, "search_Santos", pathSize(currentRoom, map->getRoom( lastSeen.getValues("Santos") )));
+		goap_set_cost(&ap, "search_Santos", pathSize(currentRoom, mapp->getRoom( lastSeen.getValues("Santos") )));
 }
 
 
-int Jenna::decideActionParticular(string acao) {
-	if (acao == "move_kitchen" || acao.substr(0, 7).compare("search_") == 0) {
+int Jenna::decideActionParticular(string action) {
+	if (action == "move_kitchen" || action.substr(0, 7).compare("search_") == 0) {
 		actionArgs.push_back(nextRoomInPath());
 		return mover;
 	}
 
-	else if (acao == "take_knife") {
+	else if (action == "take_knife") {
 		actionArgs.push_back("take");
 		actionArgs.push_back("Knife");
 		return interagir;
 	}
 
-	else if (acao.substr(0, 5).compare("kill_") == 0) {
-		actionArgs.push_back(acao.substr(5, 1000));
+	else if (action.substr(0, 5).compare("kill_") == 0) {
+		actionArgs.push_back(action.substr(5, 1000));
 		return atacar;
 	}
 
@@ -87,5 +92,5 @@ int Jenna::decideActionParticular(string acao) {
 
 void Jenna::advancePlansExtra(string currentProcess) {
 	if (currentProcess == "move_kitchen")
-		path = findPath(map->getRoom("Kitchen"));
+		path = findPath(mapp->getRoom("Kitchen"));
 }

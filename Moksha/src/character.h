@@ -1,5 +1,5 @@
 #pragma once
-#include "room.h"
+#include "map.h"
 #include "inventory.h"
 #include "dictionary.h"
 #include "IObservable.h"
@@ -27,6 +27,7 @@ protected:
 	bool dead;
 	bool conversation;
 	
+	Map* mapp;
 	Room *currentRoom;
 	Inventory inventory;
 
@@ -88,7 +89,7 @@ public:
 	bool isActionValid(int action);
 
 	virtual void takeAction() { takeAction(currentAction, actionArgs); }
-	void sayLine(string topico, string str, set<string> receivers) { say(topico, str, receivers); }
+	void sayLine(string topic, string str, set<string> receivers) { say(topic, str, receivers); }
 	void printText(string str);
 
 	string getNotifyText() { return notifyText; }
@@ -100,7 +101,7 @@ public:
 	virtual void receiveCheck(Character* checkTarget) {}
 	virtual void executeReaction(string topic, string phrase, string sender, bool shouldRespond) {}
 	virtual void checkRoom(vector<Character*> pessoasNaSala) {}
-	virtual void seeCharMoving(Character* pessoa, string outraSala, bool entrando) {}
+	virtual void seeCharMoving(Character* pessoa, Room* otherRoom, bool entrando) {}
 	virtual bool beAttacked(Character* atacante) {
 		if (atacante->getStrength() >= strength)
 			unconscious = true;

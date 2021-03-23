@@ -8,7 +8,7 @@
                 <Rumors/>
                 <Concepts/>
 			</Elliot>
-			<Jenna Room="Corridor"> 
+			<Jenna Room="NorthCorridor"> 
 				<Inventory/>
                 <Atoms/>
 			</Jenna>
@@ -24,14 +24,60 @@
 				<Inventory/>
                 <Atoms/>
 			</Hilda>
+            <Tom Room="EntranceLounge"> 
+				<Inventory/>
+                <Atoms/>
+			</Tom>
+            <George Room="EntranceLounge"> 
+				<Inventory/>
+                <Atoms/>
+			</George>
+            <Willow Room="EntranceLounge"> 
+				<Inventory/>
+                <Atoms/>
+			</Willow>
+            <Liz Room="EntranceLounge"> 
+				<Inventory/>
+                <Atoms/>
+			</Liz>
+            <Amelie Room="EntranceLounge"> 
+				<Inventory/>
+                <Atoms/>
+			</Amelie>
+            <Magnus Room="EntranceLounge"> 
+				<Inventory/>
+                <Atoms/>
+			</Magnus>
+            <Renard Room="EntranceLounge"> 
+				<Inventory/>
+                <Atoms/>
+			</Renard>
+            <Paul Room="EntranceLounge"> 
+				<Inventory/>
+                <Atoms/>
+			</Paul>
 		</Characters>
 
 		<Map>
-			<Corridor>
+			<NorthCorridor>
 				<Objects>
 					<Clock/>
 				</Objects>
-			</Corridor>
+			</NorthCorridor>
+
+            <SouthCorridor>
+				<Objects>
+					<Clock/>
+				</Objects>
+			</SouthCorridor>
+
+            <NorthBathroom>
+				<Objects/>
+			</NorthBathroom>
+
+            <SouthBathroom>
+				<Objects/>
+			</SouthBathroom>
 
 			<DiningHall>
 				<Objects>
@@ -42,6 +88,38 @@
             <EntranceLounge>
 				<Objects/>
 			</EntranceLounge>
+            
+            <AmelieRoom>
+				<Objects/>
+			</AmelieRoom>
+
+            <JennaRoom>
+				<Objects/>
+			</JennaRoom>
+
+            <GeorgeRoom>
+				<Objects/>
+			</GeorgeRoom>
+
+            <LizRoom>
+				<Objects/>
+			</LizRoom>
+
+            <MagnusRoom>
+				<Objects/>
+			</MagnusRoom>
+
+            <RenardRoom>
+				<Objects/>
+			</RenardRoom>
+
+            <ViewingDeck>
+				<Objects/>
+			</ViewingDeck>
+
+            <Bar>
+				<Objects/>
+			</Bar>
 
             <Kitchen>
 				<Objects>
@@ -53,17 +131,27 @@
 				<Objects/>
 			</Lavatory>
 
+            <GameRoom>
+				<Objects>
+					<Table/>
+				</Objects>
+			</GameRoom>
+
+            <Mezzanine>
+				<Objects/>
+			</Mezzanine>
+
             <SantosRoom>
 				<Objects>
 					<SantosDrawer/>
 				</Objects>
 			</SantosRoom>
 
-            <BlackwellRoom>
+            <BlakewellRoom>
 				<Objects>
 					<BaxterDrawer/>
 				</Objects>
-			</BlackwellRoom>
+			</BlakewellRoom>
 
             <GardenLounge>
 				<Objects/>

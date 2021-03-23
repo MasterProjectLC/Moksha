@@ -1,0 +1,8 @@
+name:
+Amelie's Room
+codename:
+AmelieRoom
+text:
+This is Amelie's room. A distinct aroma of incense fills the room with warmth and mysticism...
+adjacent:
+NorthCorridor|ViewingDeck

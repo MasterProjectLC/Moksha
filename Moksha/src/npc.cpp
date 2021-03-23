@@ -3,7 +3,7 @@
 NPC::NPC(Map* m, string name, string description, int gender, int strength, int dexterity) : Character(gender, strength, dexterity) {
 	this->name = name;
 	this->description = new string(description);
-	this->map = m;
+	this->mapp = m;
 	busy = false;
 
 	FileDict fileObject = FileManager::readFromFile("files/characters/" + getName() + ".txt");
@@ -18,7 +18,7 @@ queue<Room*> NPC::findPath(Room* targetRoom) {
 };
 
 queue<Room*> NPC::findPath(Room* initialRoom, Room* targetRoom) {
-	return map->optimalPath(initialRoom, targetRoom);
+	return mapp->optimalPath(initialRoom, targetRoom);
 };
 
 queue<Room*> NPC::search() {
@@ -33,7 +33,7 @@ queue<Room*> NPC::search(Room* roomClue) {
 		retorno = findPath(roomClue);
 
 	// Start search
-	queue<Room*> search = map->breadthSearch(roomClue);
+	queue<Room*> search = mapp->breadthSearch(roomClue);
 	while (!search.empty()) {
 		queue<Room*> path = findPath(retorno.back(), search.front());
 		while (!path.empty()) {
@@ -102,7 +102,7 @@ void NPC::checkRoom(vector<Character*> peopleInRoom) {
 		// Check if they are in the room
 		for (int i = 0; i < peopleInRoom.size(); i++) {
 			if (theirName == peopleInRoom[i]->getName()) {
-				updateLastSeen(theirName, currentRoom->getName());
+				updateLastSeen(theirName, currentRoom->getCodename());
 				goap_worldstate_set(&ap, &world, ("with_" + theirName).c_str(), true);
 				break;
 			}
@@ -113,14 +113,14 @@ void NPC::checkRoom(vector<Character*> peopleInRoom) {
 };
 
 
-void NPC::seeCharMoving(Character* person, string otherRoom, bool entering) {
+void NPC::seeCharMoving(Character* person, Room* otherRoom, bool entering) {
 	if (trackablePeople.count(person->getName()) == 0)
 		return;
 
 	if (!entering)
-		updateLastSeen(person->getName(), otherRoom);
+		updateLastSeen(person->getName(), otherRoom->getCodename());
 	else
-		updateLastSeen(person->getName(), currentRoom->getName());
+		updateLastSeen(person->getName(), currentRoom->getCodename());
 
 	goap_worldstate_set(&ap, &world, ("with_" + person->getName()).c_str(), entering);
 	updateWorld();
@@ -183,7 +183,7 @@ void NPC::updateLastSeen(string pursueTarget, string room) {
 
 	string currentProcess = plan[currentStep];
 	if (currentProcess.compare("search_" + pursueTarget) == 0) {
-		path = search(map->getRoom( lastSeen.getValues(pursueTarget) ));
+		path = search(mapp->getRoom( lastSeen.getValues(pursueTarget) ));
 	}
 }
 
@@ -201,7 +201,7 @@ void NPC::advancePlans() {
 
 		if (currentProcess.substr(0, 7).compare("search_") == 0) {
 			if (lastSeen.hasKey( currentProcess.substr(7, 10000) ))
-				path = search(map->getRoom(lastSeen.getValues( currentProcess.substr(7, 10000) )));
+				path = search(mapp->getRoom(lastSeen.getValues( currentProcess.substr(7, 10000) )));
 			else
 				path = search();
 

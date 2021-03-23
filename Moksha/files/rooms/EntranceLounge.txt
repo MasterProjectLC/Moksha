@@ -3,6 +3,6 @@ Entrance Lounge
 codename:
 EntranceLounge
 text:
-Silence. At least it's somewhat relaxing. I could spend literal hours here, given different circumstances.
+A relaxing lounge, inside which guests can rest and converse. It's one of the first rooms we saw when we entered - and one of the last we will see when we leave.
 adjacent:
-DiningHall
+DiningHall|NorthCorridor|SouthCorridor|ViewingDeck

@@ -16,7 +16,7 @@ Map::Map(vector<Room*> receivedRooms, IObserver *observer) {
 		// Colocar o index de cada sala anexa no Node
 		for (int j = 0; j < rooms[i].getElement()->getAdjacentRoomCount(); j++)
 			for (int k = 0; k < rooms.size(); k++)
-				if (rooms[i].getElement()->getAdjacentRoomName(j) == rooms[k].getElement()->getName()) {
+				if (rooms[i].getElement()->getAdjacentRoomCodename(j) == rooms[k].getElement()->getCodename()) {
 					rooms[i].addAdjacent(k);
 					break;
 				}
@@ -65,7 +65,7 @@ queue<Room*> Map::optimalPath(Room *origin, Room *destination) {
 	queue<Node*> procura;
 	stack<Node*> reverser;
 	for (int i = 0; i < rooms.size(); i++) {
-		if (rooms[i].getElement()->getName() == origin->getName()) {
+		if (rooms[i].getElement()->getCodename() == origin->getCodename()) {
 			rooms[i].setVisited(1);
 			procura.push(&rooms[i]);
 			break;
@@ -109,38 +109,38 @@ queue<Room*> Map::optimalPath(Room *origin, Room *destination) {
 queue<Room*> Map::breadthSearch(Room *origin) {
 	queue<Room*> retorno;
 	stack<int> st;
-	clearVisited(); // Reseta visitado
+	clearVisited(); // Resets visited
 
-	// Procura pela salaOrigem no mapa de nós, e começa busca por ela
+	// Searches for the origin node and begins the search from it
 	for (int i = 0; i < rooms.size(); i++) {
-		if (rooms[i].getElement()->getName() == origin->getName()) {
+		if (rooms[i].getElement()->getCodename() == origin->getCodename()) {
 			breadthSearchHelper(&retorno, st, i);
 			break;
 		}
 	}
 
-	retorno.pop(); // Remove a sala de origem da lista
+	retorno.pop(); // Removes the origin from the list
 	return retorno;
 }
 
 
-void Map::breadthSearchHelper(queue<Room*> *retorno, stack<int> &st, int salaChecada) {
+void Map::breadthSearchHelper(queue<Room*> *retorno, stack<int> &st, int checkedRoom) {
 	if (!st.empty())
-		st.pop(); // Retira da lista de processamento
+		st.pop(); // Removes from the processing list
 
-	if (rooms[salaChecada].getVisited() == 0) {
-		retorno->push(rooms[salaChecada].getElement()); // Adiciona à lista de retorno
+	if (rooms[checkedRoom].getVisited() == 0) {
+		retorno->push(rooms[checkedRoom].getElement()); // Adds to return list
 
-		// Seta como visitado
-		rooms[salaChecada].setVisited(1);
+		// Set to visited
+		rooms[checkedRoom].setVisited(1);
 
-		// Coloca todos os nós vizinhos na lista de processamento
-		for (int i = 0; i < rooms[salaChecada].getAdjacents().size(); i++) {
-			st.push(rooms[salaChecada].getAdjacents()[i]);
+		// Puts all adjacent nodes in the processing list
+		for (int i = 0; i < rooms[checkedRoom].getAdjacents().size(); i++) {
+			st.push(rooms[checkedRoom].getAdjacents()[i]);
 		}
 	}
 
-	// Continua processamento
+	// Continues processing
 	if (!st.empty())
 		breadthSearchHelper(retorno, st, st.top());
 }
@@ -148,9 +148,16 @@ void Map::breadthSearchHelper(queue<Room*> *retorno, stack<int> &st, int salaChe
 
 // GETTERS E HELPERS -----------------------------------------------------
 
-bool Map::hasRoom(string name) {
+bool Map::hasRoom(string codename) {
 	for (int i = 0; i < rooms.size(); i++)
-		if (rooms[i].getElement()->getCodename() == name)
+		if (rooms[i].getElement()->getCodename() == codename)
+			return true;
+	return false;
+};
+
+bool Map::hasRoomByName(string name) {
+	for (int i = 0; i < rooms.size(); i++)
+		if (rooms[i].getElement()->getName() == name)
 			return true;
 	return false;
 };
@@ -159,9 +166,17 @@ Room* Map::getRoom(int index) {
 	return rooms[index].getElement();
 };
 
-Room* Map::getRoom(string name) {
+Room* Map::getRoom(string codename) {
 	for (int i = 0; i < rooms.size(); i++)
-		if (rooms[i].getElement()->getCodename() == name)
+		if (rooms[i].getElement()->getCodename() == codename)
+			return getRoom(i);
+
+	throw invalid_argument("There's no room with that name :(");
+};
+
+Room* Map::getRoomByName(string name) {
+	for (int i = 0; i < rooms.size(); i++)
+		if (rooms[i].getElement()->getName() == name)
 			return getRoom(i);
 
 	throw invalid_argument("There's no room with that name :(");

@@ -10,6 +10,7 @@ using namespace std;
 class Player : public Character {
 private:
 	string noObjectError;
+	string noPersonError;
 	string noActionError;
 	string noRoomError;
 	string noItemError;
@@ -17,19 +18,20 @@ private:
 
 	map<string, set<string>> mindTheory;
 
-	void mention(string obj, string receiver) override;
-	void move(string location) override;
 	void interact(string action, string objeto) override;
+
+	bool characterCheck(vector<string> args);
 
 	void addToMind(string topic, string character);
 
 public:
-	Player();
-	void receberArgs(vector<string> args);
+	Player() {}
+	Player(Map* mapp);
+	void receiveArgs(vector<string> args);
 
 	bool hasCondition(string info) override;
 
-	void seeCharMoving(Character* person, string otherRoom, bool entering) override;
+	void seeCharMoving(Character* person, Room* otherRoom, bool entering) override;
 	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
 	void receiveCheck(Character* checkTarget) override;
 	void checkRoom(vector<Character*> peopleInRoom) override;

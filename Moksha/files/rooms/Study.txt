@@ -1,6 +1,6 @@
 name:
 Study
 text:
-A jungle of books surrounding a single, solitary table.
+The study - a jungle of books surrounding a single, solitary table. This is where Magnus passes most of his time.
 adjacent:
 Mezzanine

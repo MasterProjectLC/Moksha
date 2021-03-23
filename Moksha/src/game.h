@@ -1,8 +1,16 @@
 #pragma once
-#include "characters/Jenna.h"
 #include "characters/Baxter.h"
+#include "characters/Willow.h"
+#include "characters/Magnus.h"
 #include "characters/Santos.h"
+#include "characters/Jenna.h"
+#include "characters/Renard.h"
+#include "characters/Paul.h"
 #include "characters/Hilda.h"
+#include "characters/Tom.h"
+#include "characters/Liz.h"
+#include "characters/George.h"
+#include "characters/Amelie.h"
 #include "player.h"
 #include "IObservable.h"
 #include "IObserver.h"
@@ -19,7 +27,7 @@ static auto actionCompare = [](Character* a, Character* b) -> bool { return a->g
 
 class Game : public IObservable, public IObserver {
 private:
-	const int OBSERVER_OFFSET = 500;
+	const int OBSERVER_OFFSET = 2000;
 
 	int time;
 	int loop;

@@ -1,13 +1,15 @@
 #include "player.h"
 
-Player::Player() : Character(M, 2, 2) {
+Player::Player(Map* map) : Character(M, 5, 7) {
 	name = "Elliot";
+	this->mapp = map;
 
 	FileDict fileErros = FileManager::readFromFile("files/errors.txt");
 	noObjectError = fileErros.getValues("no object")[0];
 	noActionError = fileErros.getValues("no action")[0];
 	noRoomError = fileErros.getValues("no room")[0];
 	noItemError = fileErros.getValues("no item")[0];
+	noPersonError = fileErros.getValues("no person")[0];
 	mindError = fileErros.getValues("mind theory")[0];
 
 };
@@ -15,64 +17,107 @@ Player::Player() : Character(M, 2, 2) {
 
 // ACOES -------------------------------------------------------------------------------------
 
-void Player::mention(string topic, string person) {
-	if (mindTheory.count(person) && mindTheory.at(person).find(topic) != mindTheory.at(person).end()) {
-		printText(mindError);
-		return;
-	}
+void Player::interact(string action, string object) {
+	// TODO: Maybe delete all the checks? They're already in receiveArgs
 
-	if (!inventory.hasConcept(topic) && !inventory.hasItem(topic)) {
-		printText(noItemError);
-		return;
-	}
-
-	Character::mention(topic, set<string>({ person }));;
-}
-
-
-void Player::move(string location) {
-	if (getCurrentRoom()->isRoomAdjacent(location))
-		Character::move(location);
-	else
-		printText(noRoomError);
-}
-
-
-void Player::interact(string acao, string object) {
-	// Objetos
+	// Objects
 	if (getCurrentRoom()->hasObject(object)) {
-		Object* objetoAqui = getCurrentRoom()->getObject(object);
-
-		// Imprimir resposta
-		vector<string> responses = objetoAqui->getResponses(acao);
+		// Print answer
+		vector<string> responses = getCurrentRoom()->getObject(object)->getResponses(action);
 		if (responses.size() > 0) { printText(responses[0]); }
 		else { printText(noActionError); }
 
-		// Tomar ação
-		Character::interact(acao, object);
+		// Take action
+		Character::interact(action, object);
 	}
 
-	// Objeto não existe
+	// Object doesn't exist
 	else
 		printText(noObjectError);
 }
 
 
-void Player::receberArgs(vector<string> args) {
-	if (args[0] == "move")
-		currentAction = mover;
+bool Player::characterCheck(vector<string> args) {
+	if (args.size() > 1 && names.count(args[1]) > 0)
+		return true;
+	printText(noPersonError);
+	return false;
+}
+
+void Player::receiveArgs(vector<string> args) {
+	// TODO: FIX THIS GARBAGE CODE
+	if (args[0] == "move") {
+		// TODO: FIX THIS
+		string destinationName = concatStrings(args, 1);
+		// Room doesn't exist or isn't adjacent
+		if (mapp->hasRoomByName(destinationName) || !currentRoom->isRoomAdjacent(mapp->getRoomByName(destinationName)->getCodename()))
+			printText(noRoomError);
+
+		// Move
+		else {
+			actionArgs = vector<string>({ destinationName });
+			currentAction = mover;
+			notify(avancar);
+		}
+		return;
+	}
+
+	else if (args[0] == "mention")
+		if (!(args.size() > 2 && names.count(args[2]) > 0)) {
+			printText(noPersonError);
+			return;
+		}
+		else if (mindTheory.count(args[2]) && mindTheory.at(args[2]).find(args[1]) != mindTheory.at(args[2]).end()) {
+			printText(mindError);
+			return;
+		}
+		else if (!inventory.hasConcept(args[1]) && !inventory.hasItem(args[1])) {
+			printText(noItemError);
+			return;
+		}
+		else
+			currentAction = mencionar;
+
+	else if (args[0] == "attack")
+		if (characterCheck(args))
+			currentAction = atacar;
+		else
+			return;
+	else if ((args[0] == "listen" || args[0] == "overhear" || args[0] == "eavesdrop" || args[0] == "hear"))
+		if (characterCheck(args))
+			currentAction = ouvir;
+		else
+			return;
+	else if ((args[0] == "see" || args[0] == "check" || args[0] == "look"))
+		if (characterCheck(args))
+			currentAction = checar;
+		else
+			return;
+
 	else if (args[0] == "wait" || args[0] == "rest")
 		currentAction = descansar;
-	else if (args[0] == "mention")
-		currentAction = mencionar;
-	else if (args[0] == "attack" && args.size() > 1 && names.count(args[1]) > 0)
-		currentAction = atacar;
-	else if ((args[0] == "listen" || args[0] == "overhear" || args[0] == "eavesdrop" || args[0] == "hear") && args.size() > 1 && names.count(args[1]) > 0)
-		currentAction = ouvir;
-	else if ((args[0] == "see" || args[0] == "check" || args[0] == "look") && args.size() > 1 && names.count(args[1]) > 0)
-		currentAction = checar;
-	else
+
+	else {
+		// Not a valid action
+		if (args.size() < 2) {
+			printText(noActionError);
+			return;
+		}
+		string objectName = concatStrings(args, 1);
+
+		// Not an object
+		if ( !getCurrentRoom()->hasObject(objectName) ) {
+			printText(noObjectError);
+			return;
+		}
+		// This object doesn't support this action
+		if (getCurrentRoom()->getObject(objectName)->getResponses(args[0]).size() <= 0) {
+			printText(noActionError);
+			return;
+		}
+
 		currentAction = interagir;
+	}
 
 	if (currentAction != interagir)
 		args.erase(args.begin());
@@ -102,7 +147,7 @@ void Player::checkRoom(vector<Character*> charsInRoom) {
 	// Salas anexas
 	printText("Current room: " + getCurrentRoom()->getName() + "\n" + getCurrentRoom()->getInitialText() + "\nAdjacent rooms:");
 	for (int i = 0; i < getCurrentRoom()->getAdjacentRoomCount(); i++)
-		printText(getCurrentRoom()->getAdjacentRoomName(i));
+		printText(mapp->getRoom(getCurrentRoom()->getAdjacentRoomCodename(i))->getName());
 
 	// Objetos na sala
 	printText("Objects in the room: ");
@@ -132,11 +177,11 @@ void Player::updateRoom(vector<Character*> charsInRoom) {
 
 
 
-void Player::seeCharMoving(Character* pessoa, string outraSala, bool entrando) {
-	if (entrando)
-		printText(pessoa->getName() + " entered the room, coming from the " + outraSala);
+void Player::seeCharMoving(Character* person, Room* otherRoom, bool entering) {
+	if (entering)
+		printText(person->getName() + " entered the room, coming from the " + otherRoom->getName());
 	else
-		printText(pessoa->getName() + " left the room, going to the " + outraSala);
+		printText(person->getName() + " left the room, going to the " + otherRoom->getName());
 }
 
 // HELPER FUNCTIONS ----------------------------------------------------

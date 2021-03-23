@@ -3,6 +3,6 @@ Garden Lounge
 codename:
 GardenLounge
 text:
-Silence. At least it's somewhat relaxing. I could spend literal hours here, given different circumstances.
+A more discreet, to-the-side lounge. There are a number of pleasant flowers, plants and aquariums here, giving off the atmosphere of a more natural environment.
 adjacent:
 Mezzanine

@@ -3,6 +3,6 @@ Dining Hall
 codename:
 DiningHall
 text:
-Wow, this is such an elegant room... I don't have any time to waste, though.
+High ceiling, an expensive fountain, a large dining table and an actual grand piano. Everything about this room just screams ‘luxurious’. This is, by Baxter’s own words, the crown jewel of this airship.
 adjacent:
-Corridor|Kitchen|EntranceLounge|Mezzanine
+NorthCorridor|SouthCorridor|Bar|Kitchen|GameRoom|EntranceLounge|Mezzanine

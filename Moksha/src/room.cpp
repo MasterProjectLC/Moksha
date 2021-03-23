@@ -1,19 +1,19 @@
 #include "room.h"
 
-Room::Room(int index, string name, string initialText, vector<string> adjacentRoomNames) {
+Room::Room(int index, string name, string initialText, vector<string> adjacentRoomCodenames) {
 	this->index = index;
 	this->name = name;
 	this->codename = name;
 	this->initialText = initialText;
-	this->adjacentRoomNames = adjacentRoomNames;
+	this->adjacentRoomCodenames = adjacentRoomCodenames;
 }
 
-Room::Room(int index, string name, string codename, string initialText, vector<string> adjacentRoomNames) {
+Room::Room(int index, string name, string codename, string initialText, vector<string> adjacentRoomCodenames) {
 	this->index = index;
 	this->name = name;
 	this->codename = codename;
 	this->initialText = initialText;
-	this->adjacentRoomNames = adjacentRoomNames;
+	this->adjacentRoomCodenames = adjacentRoomCodenames;
 }
 
 
@@ -36,16 +36,16 @@ void Room::removeObject(Object object) {
 	}
 }
 
-bool Room::isRoomAdjacent(string adjacentRoomName) {
-	for (int i = 0; i < adjacentRoomNames.size(); i++)
-		if (adjacentRoomName == adjacentRoomNames[i])
+bool Room::isRoomAdjacent(string adjacentRoomCodename) {
+	for (int i = 0; i < adjacentRoomCodenames.size(); i++)
+		if (adjacentRoomCodename == adjacentRoomCodenames[i])
 			return true;
 	return false;
 }
 
 // GETTERS
-string Room::getAdjacentRoomName(int i) {
-	return adjacentRoomNames[i];
+string Room::getAdjacentRoomCodename(int i) {
+	return adjacentRoomCodenames[i];
 };
 
 

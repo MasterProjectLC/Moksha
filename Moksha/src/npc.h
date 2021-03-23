@@ -3,7 +3,6 @@
 #include "goal.h"
 #include "priorityVector.h"
 #include "character.h"
-#include "map.h"
 #include "fileManager.h"
 #include "dictionary.h"
 #include "../libs/GPGOAP/goap.h"
@@ -21,7 +20,6 @@ protected:
 	set<string> trackablePeople;
 
 	queue<Room*> path;
-	Map* map;
 	string conversaAlvo;
 
 	actionplanner_t ap;
@@ -43,7 +41,7 @@ protected:
 	queue<Room*> search(Room* salaPista);
 
 	int pathSize(Room* inicio, Room* alvo) {
-		return map->optimalPath(inicio, alvo).size();
+		return mapp->optimalPath(inicio, alvo).size();
 	};
 
 	string nextRoomInPath();
@@ -76,7 +74,7 @@ public:
 	int decideAction();
 	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
 	void checkRoom(vector<Character*> peopleInRoom) override;
-	void seeCharMoving(Character* character, string otherRoom, bool entering) override;
+	void seeCharMoving(Character* character, Room* otherRoom, bool entering) override;
 	void setSalaAlvo(Room* nova) { findPath(nova); }
 
 	void setupPlans();

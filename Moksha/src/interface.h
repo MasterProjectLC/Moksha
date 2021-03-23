@@ -20,7 +20,7 @@ private:
 	int const MENUANIMATION = 100;
 	int const CLOCKCD = ULCOOLDOWN;
 
-	vector<string> const MENU_OPTIONS = { "CONTINUAR", "OPCOES", "SAIR" };
+	vector<string> const MENU_OPTIONS = { "CONTINUE", "OPTIONS", "QUIT" };
 
 	Graphic graphics = Graphic(0, 0, 0);
 	Input input = Input();
@@ -61,7 +61,7 @@ private:
 	int pointer;
 	int vPointer;
 	int invPointer;
-	int titulosPointer;
+	int titlesPointer;
 	int menuPointer;
 
 	void setPointer(int n);
@@ -105,6 +105,6 @@ public:
 	void setTab(boolean tab);
 	void setMenu(boolean menu);
 	void setItems(vector<string> items, int type);
-	void setConcepts(vector<string> concepts);
+	void setConcepts(vector<string> concepts) { setItems(concepts, 2); }
 
 };

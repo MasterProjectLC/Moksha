@@ -1,0 +1,8 @@
+name:
+Liz's Room
+codename:
+LizRoom
+text:
+This is Liz's room - just as elegant as its guest. Of note, there's a large canvas hanging on one of the walls...
+adjacent:
+SouthCorridor|ViewingDeck

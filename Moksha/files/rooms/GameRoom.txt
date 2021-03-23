@@ -1,0 +1,8 @@
+name:
+Game Room
+codename:
+GameRoom
+text:
+Pool tables, card decks and a grand chessboard. Great woodwork all around.
+adjacent:
+Mezzanine

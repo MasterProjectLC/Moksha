@@ -1,0 +1,8 @@
+name:
+Magnus' Room
+codename:
+MagnusRoom
+text:
+This is Magnus' room. Tools, books and unfinished prototypes are scattered about on his desk... at least the rest of the room is quite tidy.
+adjacent:
+SouthCorridor|ViewingDeck

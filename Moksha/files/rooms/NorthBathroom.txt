@@ -1,0 +1,8 @@
+name:
+Bathroom
+codename:
+NorthBathroom
+text:
+It's a very pompous bathroom for an airship. It just goes to show how much weight it can withstand...
+adjacent:
+NorthCorridor

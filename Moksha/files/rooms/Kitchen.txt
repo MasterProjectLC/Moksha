@@ -1,6 +1,6 @@
 name:
 Kitchen
 text:
-The kitchen is, as always, empty. I don't even know why I came here.
+It's a very busy kitchen, chock full of ingredients, tools and equipment. In spite of that, it's still quite clean.
 adjacent:
-DiningHall|Lavatory
+DiningHall|Bar|Lavatory

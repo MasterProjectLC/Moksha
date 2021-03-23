@@ -64,7 +64,7 @@ void Character::move(string str) {
 
 void Character::move(Room* room) {
 	status = "entering the room.";
-	move(room->getName());
+	move(room->getCodename());
 }
 
 void Character::mention(string obj, string receiver) {

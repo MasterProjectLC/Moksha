@@ -1,6 +1,10 @@
 #include "Santos.h"
 
-Santos::Santos(Map* m) : NPC{ m, "Santos", "A big ass dude.", F, 3, 2 } {
+Santos::Santos(Map* m) : NPC{ m, "Santos", 
+("Albert Santos Wright is the loud, bold and extroverted half of the Blakewell and Wright Aviation Company. "
+"A skilled pilot and a fierce fighter, he's known for personally testing every model himself prior to launch.\n"
+"Santos is a strong englishman with a bulky body and an english moustache. Today, he's wearing a big, heavy fur coat and a pilot 'hat and googles' combo.")
+, F, 13, 12 } {
 	trackablePeople.insert("Hilda");
 	trackablePeople.insert("Baxter");
 	trackablePeople.insert("Jenna");

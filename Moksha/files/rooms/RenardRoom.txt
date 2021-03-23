@@ -1,0 +1,8 @@
+name:
+Renard's Room
+codename:
+RenardRoom
+text:
+This is Renard and Paul's room. While Renard seems to be remarkably organized, Paul is almost the opposite - clothes, notes and equipment are all thrown around.
+adjacent:
+SouthCorridor|ViewingDeck

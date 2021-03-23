@@ -50,7 +50,7 @@ void Input::input() {
 			if (c == 0xe0)
 				_getch();
 			
-			else if (isalnum(c)) {
+			else if (isalnum(c) || c == '\'') {
 				typed = c;
 				setInput(typing, true);
 			}

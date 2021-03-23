@@ -2,7 +2,7 @@
 #include <iostream>
 
 Game::Game() {
-	player = new Player();
+	player = new Player(&map);
 	player->add(this, OBSERVER_OFFSET);
 	characters.push_back(player);
 
@@ -11,20 +11,60 @@ Game::Game() {
 	characters.push_back(baxter);
 	npcs.push_back(baxter);
 
-	Hilda* hilda = new Hilda(&map);
-	hilda->add(this, OBSERVER_OFFSET + 2);
-	characters.push_back(hilda);
-	npcs.push_back(hilda);
+	Willow* willow = new Willow(&map);
+	willow->add(this, OBSERVER_OFFSET + 2);
+	characters.push_back(willow);
+	npcs.push_back(willow);
+
+	Magnus* magnus = new Magnus(&map);
+	magnus->add(this, OBSERVER_OFFSET + 3);
+	characters.push_back(magnus);
+	npcs.push_back(magnus);
 
 	Santos* santos = new Santos(&map);
-	santos->add(this, OBSERVER_OFFSET + 3);
+	santos->add(this, OBSERVER_OFFSET + 4);
 	characters.push_back(santos);
 	npcs.push_back(santos);
 
 	Jenna* jenna = new Jenna(&map);
-	jenna->add(this, OBSERVER_OFFSET + 4);
+	jenna->add(this, OBSERVER_OFFSET + 5);
 	characters.push_back(jenna);
 	npcs.push_back(jenna);
+
+	Renard* renard = new Renard(&map);
+	renard->add(this, OBSERVER_OFFSET + 6);
+	characters.push_back(renard);
+	npcs.push_back(renard);
+
+	Paul* paul = new Paul(&map);
+	paul->add(this, OBSERVER_OFFSET + 7);
+	characters.push_back(paul);
+	npcs.push_back(paul);
+
+	Hilda* hilda = new Hilda(&map);
+	hilda->add(this, OBSERVER_OFFSET + 8);
+	characters.push_back(hilda);
+	npcs.push_back(hilda);
+
+	Tom* tom = new Tom(&map);
+	tom->add(this, OBSERVER_OFFSET + 9);
+	characters.push_back(tom);
+	npcs.push_back(tom);
+
+	Liz* liz = new Liz(&map);
+	liz->add(this, OBSERVER_OFFSET + 10);
+	characters.push_back(liz);
+	npcs.push_back(liz);
+
+	George* george = new George(&map);
+	george->add(this, OBSERVER_OFFSET + 11);
+	characters.push_back(george);
+	npcs.push_back(george);
+
+	Amelie* amelie = new Amelie(&map);
+	amelie->add(this, OBSERVER_OFFSET + 12);
+	characters.push_back(amelie);
+	npcs.push_back(amelie);
 }
 
 
@@ -63,8 +103,24 @@ void Game::initializeGame() {
 
 	map = Map(rooms, this);
 
+	xml_node load_package = doc.child("GameData").child("Game").child("Map");
+	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
+		Room* thisRoom = map.getRoom(it->name());
+		thisRoom->clearObjects();
+
+		// Load objects
+		vector<string> objectNames;
+		xml_node objects = it->child("Objects");
+
+		for (xml_node_iterator ait = objects.begin(); ait != objects.end(); ++ait)
+			objectNames.push_back(ait->name());
+
+		thisRoom->setObjectNames(objectNames);
+		map.loadRoom(thisRoom);
+	}
+
 	// Generate characters
-	xml_node load_package = doc.child("GameData").child("Game").child("Characters");
+	load_package = doc.child("GameData").child("Game").child("Characters");
 	int i = 0;
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it, i++) {
 		string s = it->attribute("Room").value();
@@ -88,7 +144,7 @@ bool Game::loadGame() {
 	load_package = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it) {
 		Room* thisRoom = map.getRoom( it->name() );
-		thisRoom->limparObjects();
+		thisRoom->clearObjects();
 
 		// Load objects
 		vector<string> objectNames;
@@ -156,7 +212,7 @@ void Game::saveGame() {
 	// Save map
 	node = doc.child("GameData").child("Game").child("Map");
 	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
-		Room* thisRoom = map.getRoom(it->attribute("Name").value());
+		Room* thisRoom = map.getRoom(it->name());
 
 		// Save objects
 		xml_node objects = it->child("Objects");
@@ -170,14 +226,14 @@ void Game::saveGame() {
 	node = doc.child("GameData").child("Game").child("Characters");
 	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
 		Character* thisCharacter = findCharacter(it->name());
-		it->attribute("Room").set_value(thisCharacter->getCurrentRoom()->getName().c_str() );
+		it->attribute("Room").set_value(thisCharacter->getCurrentRoom()->getCodename().c_str() );
 
 		// Save inventory
-		xml_node inventario = it->child("Inventory");
-		inventario.remove_children();
+		xml_node inventory = it->child("Inventory");
+		inventory.remove_children();
 		vector<Item> itemList = thisCharacter->getItems();
 		for (int i = 0; i < itemList.size(); i++)
-			inventario.append_child(itemList[i].getName().c_str());
+			inventory.append_child(itemList[i].getName().c_str());
 
 		// Save atoms
 		if (thisCharacter != player) {
@@ -261,7 +317,7 @@ void Game::objectAction(Object* object) {
 void Game::characterAction(Character* character) {
 	int id = character->getNotifyID();
 	Character* target;
-	string antigaSala;
+	Room* oldRoom;
 
 	switch (id) {
 	case avancar:
@@ -276,17 +332,17 @@ void Game::characterAction(Character* character) {
 		// Characters see char leaving
 		for (int i = 0; i < characters.size(); i++)
 			if (characters[i] != character && characters[i]->getCurrentRoom() == character->getCurrentRoom())
-				characters[i]->seeCharMoving(character, character->getNotifyText(), false);
+				characters[i]->seeCharMoving(character, map.getRoom(character->getNotifyText()), false);
 
 		// Char enters the room
-		antigaSala = character->getCurrentRoom()->getName();
+		oldRoom = character->getCurrentRoom();
 		character->setCurrentRoom(moveRoom(character->getCurrentRoom(), character->getNotifyText()));
 		character->checkRoom( getPeopleInRoom(character->getCurrentRoom()) );
 
 		// Characters see char entering
 		for (int i = 0; i < characters.size(); i++)
 			if (characters[i] != character && characters[i]->getCurrentRoom() == character->getCurrentRoom())
-				characters[i]->seeCharMoving(character, antigaSala, true);
+				characters[i]->seeCharMoving(character, oldRoom, true);
 		break;
 
 	case mencionar:
@@ -310,7 +366,7 @@ void Game::characterAction(Character* character) {
 		break;
 
 	case conversar:
-		conversations.push_back(Conversation(character->getNotifyText(), character->getCurrentRoom()->getName()));
+		conversations.push_back(Conversation(character->getNotifyText(), character->getCurrentRoom()->getCodename()));
 		break;
 
 	case ouvir:
@@ -405,7 +461,7 @@ void Game::advanceConversations() {
 
 				// Test if valid
 				// Is the speaker in the room?
-				if (speaker->getCurrentRoom()->getName() != it->getRoom())
+				if (speaker->getCurrentRoom()->getCodename() != it->getRoom())
 					continue;
 
 				// Does the speaker fulfill the necessary conditions?
@@ -440,7 +496,7 @@ void Game::advanceConversations() {
 				// Send message
 				speaker->sayLine( infoAtom, conversation.attribute("line").value(), it->getParticipants(conversation.name()) );
 			}
-			else if (it->getParticipants()->count(player->getName()) && player->getCurrentRoom()->getName() == it->getRoom())
+			else if (it->getParticipants()->count(player->getName()) && player->getCurrentRoom()->getCodename() == it->getRoom())
 				printText(conversation.attribute("line").value());
 			else
 				continue;
@@ -462,7 +518,7 @@ void Game::advanceConversations() {
 
 
 void Game::receiveArgs(vector<string> args) {
-	player->receberArgs(args);
+	player->receiveArgs(args);
 }
 
 

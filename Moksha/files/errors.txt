@@ -6,5 +6,7 @@ no room:
 I can't reach that room from here.
 no item:
 I don't know what that is...
+no person:
+Wait, who?
 mind theory:
 I think I already talked about that.

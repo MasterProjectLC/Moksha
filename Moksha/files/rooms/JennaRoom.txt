@@ -1,0 +1,8 @@
+name:
+Jenna's Room
+codename:
+JennaRoom
+text:
+This is Jenna's room. As her assistant, I also sleep here.
+adjacent:
+NorthCorridor|ViewingDeck

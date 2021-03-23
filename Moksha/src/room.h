@@ -11,7 +11,7 @@ private:
 	string name;
 	string codename;
 	string initialText;
-	vector<string> adjacentRoomNames;
+	vector<string> adjacentRoomCodenames;
 	int index;
 
 	vector<string> objectNames;
@@ -28,7 +28,7 @@ public:
 	void setupObjects(vector<Object> objects) { this->objects = objects; }
 	void addObject(Object object) { objects.push_back(object); }
 	void removeObject(Object object);
-	void limparObjects() { objects.clear(); objectNames.clear(); }
+	void clearObjects() { objects.clear(); objectNames.clear(); }
 
 	// Getters
 	string getName() { return name; }
@@ -37,8 +37,8 @@ public:
 	int getIndex() { return index; }
 
 	bool isRoomAdjacent(string adjacentRoomName);
-	string getAdjacentRoomName(int i);
-	int getAdjacentRoomCount() { return adjacentRoomNames.size(); }
+	string getAdjacentRoomCodename(int i);
+	int getAdjacentRoomCount() { return adjacentRoomCodenames.size(); }
 
 	bool hasObject(string name);
 	Object* getObject(string name);
