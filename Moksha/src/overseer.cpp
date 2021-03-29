@@ -1,5 +1,6 @@
 #include "interface.h"
 #include "game.h"
+#include "saveModule.h"
 #include <conio.h>
 #include <ctype.h>
 
@@ -47,19 +48,19 @@ public:
 		}
 
 		else if (game.getNotifyID() == game._obter) {
-			vector<Item> inventory = game.getItems();
+			vector<Item*> inventory = game.getItems();
 			vector<string> paraEnviar;
 			for (int i = 0; i < inventory.size(); i++)
-				paraEnviar.push_back(inventory[i].getName());
+				paraEnviar.push_back(inventory[i]->getName());
 
 			interfacer.setItems(paraEnviar, interfacer.item);
 		}
 
 		else if (game.getNotifyID() == game._ouvir) {
-			vector<Concept> inventory = game.getConcepts();
+			vector<Concept*> inventory = game.getConcepts();
 			vector<string> paraEnviar;
 			for (int i = 0; i < inventory.size(); i++)
-				paraEnviar.push_back(inventory[i].getName());
+				paraEnviar.push_back(inventory[i]->getName());
 
 			interfacer.setItems(paraEnviar, interfacer.rumor);
 		}

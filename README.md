@@ -18,6 +18,7 @@ Repeatedly rewind in time and try to save everyone aboard the steampunk airship 
 * Anderson Pinheiro Garrote
 * André Mateus Bariani Trava
 * Giovanni Marçon Rossi
+* Christopher Okhravi (Design Patterns in OOP)
 * Golden Glitch Studios (Elsinore)
 * Mark Brown (Game Maker's Toolkit)
 * Tommy Thompson (AI and Games)

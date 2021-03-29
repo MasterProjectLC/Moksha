@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Jenna/>
+    <George/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Narrator line="Press Enter to continue."/>
+    <Narrator line="'Life calls the tune. We dance.'"/>
+    <Narrator line="A ray of sunshine strikes out between the grey clouds of those last evening hours. Down below, men and women rush around as the final launch of the Medusa, a state-of-the-art airship, approaches."/>
+    <Jenna line="Hoo, boy, what a marvel!"/>
+    <Narrator line="Jenna, a journalist from the 'States, looks at the dirigible from the landing deck. She is, coincidentally, your boss."/>
+    <Jenna line="So, Elliot, what do ya think? Isn't it something you've never seen before?"/>
+    <Narrator line="You look at the airship. Indeed, you've never seen something like this, especially not at this magnitude. Seeming almost like a submarine for the skies, the Medusa boasts a large balloon over its grandiose structure."/>
+    <Elliot line="Yes, boss. It... It does seem to be quite a marvel."/>
+    <Jenna line="Right? Elliot, my guy, you have no idea how excited I am for this! Not only is this great story material, it'll also make for an unforgettable trip! Blakewell and Wright are really going all out on this one."/>
+    <Narrator line="You and Jenna continue to admire the Medusa for a bit longer, watching the crew walk around carrying crates and wagons, until an old man approaches you two from the other side of the deck."/>
+    <George line="So, you did really end up acing that test, huh?"/>
+    <Narrator line="Jenna turns around, instantly recognizing his voice. He appears to be some sort of military man, judging by his outfit and the countless badges on his chest."/>
+    <Narrator line="You may check people and objects by typing 'check <something>'. To check the room in general, type 'check around'."/>
+    <Jenna line="Uncle! Yeah, I did! What are you doing here? I didn't see your name on the public guest list!"/>
+    <George line="That's because I was invited by Santos himself, dear. Well, I'm glad we two made it."/>
+    <Narrator line="The man then looks at you, noticing your presence for the first time."/>
+    <George line="Oh, and who are you? Did Jenna finally settle down for a partner?"/>
+    <Jenna line="Hah, you wish! That's just Elliot, my assistant for this trip."/>
+    <George line="Ah, I see! Nice to meet you, then, Elliot."/>
+    <Narrator line="He shakes your hand."/>
+    <Elliot line="Nice to meet you too, sir."/>
+    <Narrator line="A voice covered in static echoes out throughout the room, announcing that the launch shall begin shortly."/>
+    <George line="It seems we'll have to get to know each other better some other time, son. We should probably get down there already."/>
+    <Jenna line="Right! Elliot, can you carry the rest of my suitcases, please?"/>
+    <Elliot line="Sure, boss."/>
+    <Narrator line="To interact with objects, type a verb and the object with which you want to interact. For example, to take Jenna's suitcase, type 'take Jenna's suitcase'."/>
+    <Narrator line="To move from room to room, type 'move <destination>'."/>
+</Conversation>

@@ -1,0 +1,14 @@
+name:
+Suitcase stash
+codename:
+SuitcaseStash
+visible:
+true
+actions:
+examine|look|see
+examine,look,see:
+I should probably 'leave Jenna's suitcase' here.
+touch:
+Huh?
+take,obtain:
+...That's a bad idea.

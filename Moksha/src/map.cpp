@@ -28,7 +28,7 @@ Map::Map(vector<Room*> receivedRooms, IObserver *observer) {
 
 void Map::loadRoom(Room *room) {
 	vector<string> objectList = FileManager::getFileList("files/objects");
-	vector<string> objectNames = room->getObjectNames();
+	vector<string*> objectNames = room->getObjectNames();
 
 	// Procurar objetos na lista
 	for (int i = 0; i < objectList.size(); i++) {
@@ -36,10 +36,11 @@ void Map::loadRoom(Room *room) {
 
 		for (int j = 0; j < objectNames.size(); j++) {
 			// Encontrado - Gerar objeto
-			if (objectNames[j].compare(fileObject.getValue("name")) == 0) {
-				Object newObject = Object(fileObject);								// Gerar objeto
-				newObject.add(observer, j + room->getIndex()*MAX_OBJECT_COUNT);		// Gerar id de callcard
-				room->addObject(newObject);											// Adicionar objeto à sala
+			if ((fileObject.hasKey("codename") && (*objectNames[j]).compare(fileObject.getValue("codename")) == 0) ||
+				                                  (*objectNames[j]).compare(fileObject.getValue("name")) == 0) {
+				Object* newObject = new Object(fileObject);								// Generate object
+				newObject->add(observer, j + room->getIndex()*MAX_OBJECT_COUNT);		// Generate callcard id
+				room->addObject(newObject);												// Add object to room
 				break;
 			}
 		}

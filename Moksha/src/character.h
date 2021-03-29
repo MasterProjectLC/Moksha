@@ -25,6 +25,7 @@ protected:
 	Dictionary<bool> statusEffects;
 	bool unconscious;
 	bool dead;
+	bool busy;
 	bool conversation;
 	
 	Map* mapp;
@@ -43,11 +44,14 @@ protected:
 	void attack(string target);
 	void listen(string target);
 	void check(string target);
+	void scan();
 	void say(string topico, string str, set<string> receivers);
 	void rest();
 	void talk(string convo);
 	void voidAction(string actionStatus);
 	virtual void interact(string action, string object);
+
+	void setBusy(bool novo) { busy = novo; }
 
 public:
 	Character() {}
@@ -66,12 +70,12 @@ public:
 	string getName() { return name; }
 	int getAction() { return currentAction; }
 
-	vector<Item> getItems() { return inventory.getItems(); }
-	vector<Concept> getRumors() { return inventory.getRumors(); }
-	vector<Concept> getConcepts() { return inventory.getConcepts(); }
+	vector<Item*> getItems() { return inventory.getItems(); }
+	vector<Concept*> getRumors() { return inventory.getRumors(); }
+	vector<Concept*> getConcepts() { return inventory.getConcepts(); }
 	void addConcept(string name) { inventory.addConcept(name); }
 	void addRumor(string name) { inventory.addRumor(name); }
-	void addItem(string name, set<string> actions) { inventory.addItem(name, actions); }
+	void addItem(string name, set<string*> actions) { inventory.addItem(name, actions); }
 
 	string getStatus() { return status; }
 	void setStatus(string n) { status = n; }
@@ -82,6 +86,7 @@ public:
 	int getDexterity() { return dexterity; }
 	bool isUnconscious() { return unconscious || dead; }
 	bool isDead() { return dead; }
+	bool isBusy() { return busy; }
 	bool getStatusEffect(string key);
 	bool inConversation() {	return conversation; }
 	void setInConversation(bool a) { conversation = a; if (a) { setStatus("talking."); }; }
@@ -100,7 +105,7 @@ public:
 	virtual void receiveEvent(vector<string> args) {}
 	virtual void receiveCheck(Character* checkTarget) {}
 	virtual void executeReaction(string topic, string phrase, string sender, bool shouldRespond) {}
-	virtual void checkRoom(vector<Character*> pessoasNaSala) {}
+	virtual void checkRoom(vector<Character*> peopleInRoom) {}
 	virtual void seeCharMoving(Character* pessoa, Room* otherRoom, bool entrando) {}
 	virtual bool beAttacked(Character* atacante) {
 		if (atacante->getStrength() >= strength)

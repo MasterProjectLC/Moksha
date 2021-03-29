@@ -2,7 +2,7 @@
 
 Amelie::Amelie(Map* m) : NPC{ m, "Amelie", 
 ("Amelie is a mysterious guest aboard the airship. An old, frail woman in her 70s, from both her apparent ethnicity and traditional clothing, "
-"it’s safe to say that she’s some sort of indian religious figure - probably a monk. Her expression is distant, but her demeanor is gentle. "
+"it's safe to say that she’s some sort of indian religious figure - probably a monk. Her expression is distant, but her demeanor is gentle. "
 "Why is she here and what does she want?")
 , F, 0, 0 } {
 	trackablePeople.insert("Santos");

@@ -2,7 +2,7 @@
 
 Paul::Paul(Map* m) : NPC{ m, "Paul", 
 "Paul Davis is Renard's quiet assistant. While seemingly curious about the inner workings of the ship, he doesn't seem that interested in helping Renard.\n"
-"Paul has a rough ginger beard and some untamed hair.Right now, he wears a closed leather jacket and a discreet newsy cap.", 
+"Paul has a rough ginger beard and some untamed hair. Right now, he wears a closed leather jacket and a discreet newsy cap.", 
 M, 7, 9 } {
 	trackablePeople.insert("Santos");
 }

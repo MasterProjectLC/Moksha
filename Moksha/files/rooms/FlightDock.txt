@@ -1,0 +1,8 @@
+name:
+Flight Dock
+codename:
+FlightDock
+text:
+A small lobby to accommodate guests and crew before the launch.
+adjacent:
+Runway

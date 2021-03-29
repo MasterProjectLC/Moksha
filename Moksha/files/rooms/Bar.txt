@@ -1,6 +1,6 @@
 name:
 Bar
 text:
-An elegant, if relatively modest, bar. There’s a good variety of beverages here, from fine wines to strong whiskies.
+An elegant, if relatively modest, bar. There's a good variety of beverages here, from fine wines to strong whiskies.
 adjacent:
 DiningHall|Kitchen|NorthCorridor

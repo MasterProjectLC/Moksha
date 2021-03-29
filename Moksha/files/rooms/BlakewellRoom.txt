@@ -3,6 +3,6 @@ Blakewell's Room
 codename:
 BlakewellRoom
 text:
-Baxter and Willow's room
+This is Baxter and Willow's room. A pleasant perfume hangs over the room, complementing its elegant aesthetic.
 adjacent:
 Mezzanine

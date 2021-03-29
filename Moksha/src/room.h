@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include "dictionary.h"
 #include "object.h"
 
 using namespace std;
@@ -14,20 +15,22 @@ private:
 	vector<string> adjacentRoomCodenames;
 	int index;
 
-	vector<string> objectNames;
-	vector<Object> objects;
+	vector<string*> objectNames;
+	vector<Object*> objects;
+	Dictionary<string> translator;
 
 public:
 	Room() {};
+	~Room();
 
 	// Setup
 	Room(int index, string name, string initialText, vector<string> adjacentRoomNames);
 	Room(int index, string name, string codename, string initialText, vector<string> adjacentRoomNames);
-	void setObjectNames(vector<string> objectNames) { this->objectNames = objectNames; }
+	void setObjectNames(vector<string*> objectNames) { this->objectNames = objectNames; }
 
-	void setupObjects(vector<Object> objects) { this->objects = objects; }
-	void addObject(Object object) { objects.push_back(object); }
-	void removeObject(Object object);
+	void setupObjects(vector<Object*> objects) { this->objects = objects; }
+	void addObject(Object* object) { objects.push_back(object); }
+	void removeObject(Object* object);
 	void clearObjects() { objects.clear(); objectNames.clear(); }
 
 	// Getters
@@ -42,8 +45,8 @@ public:
 
 	bool hasObject(string name);
 	Object* getObject(string name);
-	Object* getObject(int index) { return &objects[index]; }
-	vector<Object> getObjects() { return objects; }
-	vector<string> getObjectNames();
+	Object* getObject(int index) { return objects[index]; }
+	vector<Object*> getObjects() { return objects; }
+	vector<string*> getObjectNames();
 
 };

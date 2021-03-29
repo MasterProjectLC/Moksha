@@ -46,12 +46,12 @@ void Jenna::setupWorldParticular() {
 
 
 void Jenna::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "Elliot_dead", true);
+	//goap_worldstate_set(&ap, &currentGoal.goal, "Elliot_dead", true);
 
-	Goal killSantos = Goal(1, true);
-	goap_worldstate_clear(&killSantos.goal);
-	goap_worldstate_set(&ap, &killSantos.goal, "Santos_dead", true);
-	goalList.push(killSantos);
+	//Goal killSantos = Goal(1, true);
+	//goap_worldstate_clear(&killSantos.goal);
+	//goap_worldstate_set(&ap, &killSantos.goal, "Santos_dead", true);
+	//goalList.push(killSantos);
 }
 
 

@@ -2,8 +2,8 @@
 
 Liz::Liz(Map* m) : NPC{ m, "Liz", 
 ("Liz Niedenberg is Willow’s sister and one of the last members of the austrian Niedenberg noble family. "
-"She’s a cunning and perceptive woman, and seems willing to do anything necessary to save her family’s honor.\n"
-"Her hair is long and straight, and her face is a bit more angular than Willow’s.Today, she’s wearing an elaborate red and white dress."),
+"She's a cunning and perceptive woman, and seems willing to do anything necessary to save her family's honor.\n"
+"Her hair is long and straight, and her face is a bit more angular than Willow's. Today, she's wearing an elaborate red and white dress."),
 F, 2, 2 } {
 	trackablePeople.insert("Santos");
 }

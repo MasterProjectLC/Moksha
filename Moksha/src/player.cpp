@@ -46,37 +46,48 @@ bool Player::characterCheck(vector<string> args) {
 
 void Player::receiveArgs(vector<string> args) {
 	// TODO: FIX THIS GARBAGE CODE
-	if (args[0] == "move") {
-		// TODO: FIX THIS
-		string destinationName = concatStrings(args, 1);
-		// Room doesn't exist or isn't adjacent
-		if (mapp->hasRoomByName(destinationName) || !currentRoom->isRoomAdjacent(mapp->getRoomByName(destinationName)->getCodename()))
-			printText(noRoomError);
+	if (args[0].length() <= 1 || args[0] == "wait" || args[0] == "rest")
+		currentAction = descansar;
 
-		// Move
-		else {
-			actionArgs = vector<string>({ destinationName });
-			currentAction = mover;
-			notify(avancar);
+	else if (args[0] == "move") {
+		string destination = concatStrings(args, 1);
+		// Room doesn't exist
+		if (!mapp->hasRoomByName(destination)) {
+			printText(noRoomError);
+			return;
 		}
+		// Room isn't adjacent
+		destination = mapp->getRoomByName(destination)->getCodename();
+		if (!currentRoom->isRoomAdjacent(destination)) {
+			printText(noRoomError);
+			return;
+		}
+		// Move
+		actionArgs = vector<string>({ destination });
+		currentAction = mover;
+		notify(avancar);
 		return;
 	}
 
 	else if (args[0] == "mention")
+		// Person doesn't exist
 		if (!(args.size() > 2 && names.count(args[2]) > 0)) {
 			printText(noPersonError);
 			return;
 		}
+		// Person already heard this
 		else if (mindTheory.count(args[2]) && mindTheory.at(args[2]).find(args[1]) != mindTheory.at(args[2]).end()) {
 			printText(mindError);
 			return;
 		}
+		// Don't have this info/item
 		else if (!inventory.hasConcept(args[1]) && !inventory.hasItem(args[1])) {
 			printText(noItemError);
 			return;
 		}
+		// Mention
 		else
-			currentAction = mencionar;
+			mention(concatStrings(args, 2), args[1]);
 
 	else if (args[0] == "attack")
 		if (characterCheck(args))
@@ -88,14 +99,17 @@ void Player::receiveArgs(vector<string> args) {
 			currentAction = ouvir;
 		else
 			return;
-	else if ((args[0] == "see" || args[0] == "check" || args[0] == "look"))
-		if (characterCheck(args))
-			currentAction = checar;
-		else
-			return;
-
-	else if (args[0] == "wait" || args[0] == "rest")
-		currentAction = descansar;
+	else if ((args[0] == "see" || args[0] == "check" || args[0] == "look")) {
+		if (args.size() <= 0 || args[1] == "around" || args[1] == "room" || (args.size() > 2 && args[2] == "room"))
+			scan();
+		else if (characterCheck(args))
+			check(concatStrings(args, 1));
+		return;
+	}
+	else if (args[0] == "scan") {
+		scan();
+		return;
+	}
 
 	else {
 		// Not a valid action
@@ -111,7 +125,7 @@ void Player::receiveArgs(vector<string> args) {
 			return;
 		}
 		// This object doesn't support this action
-		if (getCurrentRoom()->getObject(objectName)->getResponses(args[0]).size() <= 0) {
+		else if (getCurrentRoom()->getObject(objectName)->getResponses(args[0]).size() <= 0) {
 			printText(noActionError);
 			return;
 		}
@@ -130,7 +144,12 @@ void Player::receiveArgs(vector<string> args) {
 // REACOES -----------------------------------------------------------------------
 
 void Player::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
-	printText(sender + ": " + phrase);
+	if (topic == "busy")
+		printText(sender + " is busy.");
+	else if (sender != "")
+		printText(sender + ": " + phrase);
+	else if (phrase != "")
+		printText(phrase);
 	if (topic != "" && !inventory.hasConcept(topic)) {
 		inventory.addConcept(topic);
 		addToMind(topic, sender);
@@ -144,26 +163,27 @@ void Player::receiveCheck(Character* checkTarget) {
 
 
 void Player::checkRoom(vector<Character*> charsInRoom) {
-	// Salas anexas
+	// Adjacent rooms
 	printText("Current room: " + getCurrentRoom()->getName() + "\n" + getCurrentRoom()->getInitialText() + "\nAdjacent rooms:");
 	for (int i = 0; i < getCurrentRoom()->getAdjacentRoomCount(); i++)
 		printText(mapp->getRoom(getCurrentRoom()->getAdjacentRoomCodename(i))->getName());
 
-	// Objetos na sala
+	// Objects in the room
 	printText("Objects in the room: ");
-	vector<Object> objects = getCurrentRoom()->getObjects();
+	vector<Object*> objects = getCurrentRoom()->getObjects();
 	if (objects.size() == 0)
 		printText("There's no object here.");
 	else {
 		for (int i = 0; i < objects.size(); i++) {
-			if (objects[i].isVisible())
-				printText(objects[i].getName());
+			if (objects[i]->isVisible())
+				printText(objects[i]->getName());
 		}
 	}
+	updateRoom(charsInRoom);
 }
 
 void Player::updateRoom(vector<Character*> charsInRoom) {
-	// Characters in the room na sala
+	// Characters in the room
 	for (int i = 0; i < charsInRoom.size(); i++) {
 		if (charsInRoom[i]->getName() != name)
 			if (charsInRoom[i]->isDead())

@@ -16,16 +16,23 @@ Room::Room(int index, string name, string codename, string initialText, vector<s
 	this->adjacentRoomCodenames = adjacentRoomCodenames;
 }
 
+Room::~Room() {
+	for (int i = 0; i < objectNames.size(); i++)
+		delete objectNames[i];
+	for (int i = 0; i < objects.size(); i++)
+		delete objects[i];
+}
 
-void Room::removeObject(Object object) {
+
+void Room::removeObject(Object* object) {
 	bool found = false;
 	for (int i = 0; i < objects.size(); i++) {
 		if (found) {
-			objects[i].setNotifyID(objects[i].getNotifyID()-1);
+			objects[i]->setNotifyID(objects[i]->getNotifyID()-1);
 			objects[i-1] = objects[i];
 			objectNames[i - 1] = objectNames[i];
 
-		} else if (objects[i].getName().compare(object.getName()) == 0) {
+		} else if (objects[i]->getName().compare(object->getName()) == 0) {
 			found = true;
 		}
 	}
@@ -51,7 +58,7 @@ string Room::getAdjacentRoomCodename(int i) {
 
 bool Room::hasObject(string name) {
 	for (int i = 0; i < objects.size(); i++) {
-		if (name.compare(objects[i].getName()) == 0)
+		if (name.compare(objects[i]->getName()) == 0)
 			return true;
 	}
 	return false;
@@ -61,14 +68,14 @@ bool Room::hasObject(string name) {
 #include <stdexcept>
 Object* Room::getObject(string name) {
 	for (int i = 0; i < objects.size(); i++) {
-		if (name.compare(objects[i].getName()) == 0)
-			return &objects[i];
+		if (name.compare(objects[i]->getName()) == 0)
+			return objects[i];
 	}
 
 	throw invalid_argument("There's no object with that name :(");
 }
 
 
-vector<string> Room::getObjectNames() {
+vector<string*> Room::getObjectNames() {
 	return objectNames;
 };

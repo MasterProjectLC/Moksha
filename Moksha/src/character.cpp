@@ -13,7 +13,7 @@ void Character::takeAction(int action, vector<string> args) {
 
 	switch(action) {
 		case mencionar:
-			mention(args.at(1), set<string>({ args.at(2) }));
+			mention(concatStrings(args, 2), set<string>({ args.at(1) }));
 			break;
 
 		case mover:
@@ -97,6 +97,11 @@ void Character::check(string target) {
 	notify(checar);
 }
 
+void Character::scan() {
+	status = "checking the room.";
+	notify(sondar);
+}
+
 void Character::say(string topic, string str, set<string> receivers) {
 	notifyText = topic + "|" + str;
 	notifyTargets = receivers;
@@ -129,7 +134,7 @@ bool Character::isActionValid(int action) {
 		return true;
 
 	for (int i = 0; i < getItems().size(); i++)
-		if (getItems()[i].isActionValid(action))
+		if (getItems()[i]->isActionValid(action))
 			return true;
 
 	return false;

@@ -3,7 +3,7 @@
 Renard::Renard(Map* m) : NPC{ m, "Renard", 
 ("Claude Renard is a french scandal reporter and Jenna's rival. Paul is his assistant. "
 "While he doesn’t seem to care much for the sciences, even Jenna admits he has a good eye for art.\n"
-"Renard has a prominent french moustache and a stylish hairstyle.Currently, he wears a white bow tie, a dark green frock coat and a top hat."), 
+"Renard has a prominent french moustache and a stylish hairstyle .Currently, he wears a white bow tie, a dark green frock coat and a top hat."), 
 M, 3, 5 } {
 	trackablePeople.insert("Willow");
 }

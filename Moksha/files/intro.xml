@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<GameData FormatVersion="1">
+	<Game Time="1" Loop="1">
+		<Characters>
+			<Elliot Room="FlightDock"> 
+				<Inventory/>
+                <Rumors/>
+                <Concepts/>
+			</Elliot>
+			<Jenna Room="FlightDock"> 
+				<Inventory/>
+                <Atoms/>
+			</Jenna>
+            <George Room="FlightDock"> 
+				<Inventory/>
+                <Atoms/>
+			</George>
+		</Characters>
+
+		<Map>
+            <FlightDock>
+				<Objects>
+					<JennaSuitcase/>
+				</Objects>
+			</FlightDock>
+
+			<Runway>
+				<Objects>
+					<SuitcaseStash/>
+				</Objects>
+			</Runway>
+		</Map>
+        <Conversations>
+            <intro stage="0" room="FlightDock"/>
+        </Conversations>
+	</Game>
+</GameData>

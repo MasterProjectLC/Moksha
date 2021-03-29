@@ -12,7 +12,6 @@ using namespace std;
 
 class NPC : public Character {
 protected:
-	bool busy;
 	string* description;
 
 	set<string*> addedConditions;

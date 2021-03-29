@@ -35,7 +35,7 @@ public:
 	void clearListeners();
 
 	set<string>* getParticipants() { return &participants; }
-	set<string> getParticipants(string removido);
+	set<string> getParticipants(string removed);
 	string getName() { return name; }
 	string getRoom() { return room; }
 	int getStage() { return convoStage; }

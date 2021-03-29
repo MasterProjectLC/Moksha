@@ -1,0 +1,6 @@
+name:
+Runway
+text:
+A small runway surrounded by support towers and structures.
+adjacent:
+FlightDock

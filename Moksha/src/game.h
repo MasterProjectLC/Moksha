@@ -18,7 +18,6 @@
 #include "conversation.h"
 #include "fileManager.h"
 #include "../libs/pugixml/src/pugixml.hpp"
-#include "saveModule.h"
 
 using namespace std;
 using namespace pugi;
@@ -66,11 +65,11 @@ public:
 	void setup();
 	void receiveArgs(vector<string> args);
 
-	vector<Item> getItems();
-	vector<Concept> getConcepts();
+	vector<Item*> getItems();
+	vector<Concept*> getConcepts();
 
 	void printText(string text);
 	string getText() { return text; }
 
-	enum {_obter, _imprimir, _ouvir};
+	enum {_obter, _imprimir, _ouvir, _salvar, _carregar};
 };

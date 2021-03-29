@@ -1,0 +1,14 @@
+name:
+Jenna's suitcase
+codename:
+JennaSuitcase
+visible:
+true
+actions:
+examine|look|see|take|obtain
+examine,look,see:
+There's mostly just equipment here, like some of these newfangled cameras they invented recently.
+touch:
+It's just a suitcase.
+take,obtain:
+Got it.

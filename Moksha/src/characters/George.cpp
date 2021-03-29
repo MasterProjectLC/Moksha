@@ -1,9 +1,9 @@
 #include "George.h"
 
 George::George(Map* m) : NPC{ m, "George", 
-("George Maybourne, Jenna’s uncle, is an United States Aeronautical Division General and the one representing the organization during today’s voyage. "
-"He seems kind and respectful, though Jenna has already told me of his… drinking problems.\n"
-"He’s an old man with a grizzled beard and a large body, wearing a fully condecorated blue aeronautical uniform and a military hat."),
+("George Maybourne, Jenna's uncle, is an United States Aeronautical Division General and the one representing the organization during today's voyage. "
+"He seems kind and respectful, though Jenna has already told me of his... drinking problems.\n"
+"He's an old man with a grizzled beard and a large body, wearing a fully condecorated blue aeronautical uniform and a military hat."),
 M, 8, 13 } {
 	trackablePeople.insert("Jenna");
 }
@@ -21,7 +21,7 @@ void George::setupWorldParticular() {
 
 
 void George::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "with_Jenna", true);
+	//goap_worldstate_set(&ap, &currentGoal.goal, "with_Jenna", true);
 }
 
 

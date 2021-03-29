@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
 <GameData FormatVersion="1">
-	<Game Time="3" Loop="3">
+	<Game Time="1" Loop="1">
 		<Characters>
 			<Elliot Room="EntranceLounge"> 
 				<Inventory/>

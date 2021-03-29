@@ -403,8 +403,8 @@ void Interface::setMenu(boolean menu) {
 
 void Interface::setItems(vector<string> items, int type) { 
 	for (int i = 0; i < items.size(); i++) {
-		if (i >= inventory[type].size()) {
-			inventory[type].push_back(items[i]);
+		if (i >= inventory[type-1].size()) {
+			inventory[type-1].push_back(items[i]);
 		}
 	}
 

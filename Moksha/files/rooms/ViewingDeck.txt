@@ -3,6 +3,6 @@ Viewing Deck
 codename:
 ViewingDeck
 text:
-A viewing deck to which all guest quarters have access. From here, people can observe a great portion of the skies surrounding the airship. It seems it’s possible to open the glass windows to let the fresh air in, though I’m not sure if that’s completely safe...
+A viewing deck to which all guest quarters have access. From here, people can observe a great portion of the skies surrounding the airship. It seems it's possible to open the glass windows to let the fresh air in, though I'm not sure if that's completely safe...
 adjacent:
 EntranceLounge|LizRoom|MagnusRoom|RenardRoom|AmelieRoom|JennaRoom|GeorgeRoom

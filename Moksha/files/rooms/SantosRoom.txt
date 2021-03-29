@@ -3,6 +3,6 @@ Santos' Room
 codename:
 SantosRoom
 text:
-Santos' room is COOL wowow
+This is Santos' room. It’s got a very manly, rough atmosphere, what with its rugged carpet and pelts on the walls...
 adjacent:
 Mezzanine

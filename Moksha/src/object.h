@@ -9,6 +9,7 @@ class Object : public IObservable {
 private:
 	Dictionary<vector<string>> dict;
 	string name;
+	string codename;
 	string user;
 	vector<string> validActions;
 	bool visible;
@@ -20,6 +21,7 @@ public:
 
 	// Getters
 	string getName() { return name; }
+	string getCodename() { return codename; }
 	string getUser() { return user; }
 	bool isVisible() { return visible; }
 

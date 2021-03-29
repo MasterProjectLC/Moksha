@@ -1,0 +1,6 @@
+name:
+Jenna's suitcase
+actions:
+leave
+description:
+There's mostly just equipment in here.

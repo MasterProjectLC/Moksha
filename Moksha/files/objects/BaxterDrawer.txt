@@ -1,5 +1,7 @@
 name:
 Drawer
+codename:
+BaxterDrawer
 visible:
 true
 actions:
