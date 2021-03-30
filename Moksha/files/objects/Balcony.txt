@@ -3,8 +3,8 @@ Balcony
 visible:
 true
 actions:
-examine|look|see
-examine,look,see:
+examine|look|see|check
+examine,look,see,check:
 Huh, I can look down to the Dining Hall.
 touch:
 Nothing special about the balcony.

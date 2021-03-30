@@ -3,8 +3,8 @@ Knife
 visible:
 true
 actions:
-examine|look|see|take|obtain
-examine,look,see:
+examine|look|see|check|take|obtain
+examine,look,see,check:
 Huh, that's actually very sharp. I can see it being used as a weapon.
 take,obtain:
 Seems useful. I'll take it.

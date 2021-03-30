@@ -3,8 +3,8 @@ Table
 visible:
 true
 actions:
-examine|look|see
-examine,look,see:
+examine|look|see|check
+examine,look,see,check:
 What? It's just a table.
 touch:
 Hmm, the table is a bit cold. Did something happen here?

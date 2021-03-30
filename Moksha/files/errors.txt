@@ -1,5 +1,5 @@
 no object:
-Hm? I don't see that object in this room...
+Hm? I don't see that in this room...
 no action:
 I can't take that action.
 no room:

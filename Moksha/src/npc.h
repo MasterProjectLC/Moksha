@@ -17,6 +17,7 @@ protected:
 	set<string*> addedConditions;
 	set<string*> addedActions;
 	set<string> trackablePeople;
+	vector<string*> conditionNames;
 
 	queue<Room*> path;
 	string conversaAlvo;
@@ -57,11 +58,15 @@ protected:
 	void changePlans() { changePlans(false); };
 	void changePlans(bool justUpdated);
 
+	void addGoal(vector<string*> conditions, vector<bool> conditionStates);
+	void addGoal(string* condition, bool conditionState);
+
 	bool isCurrentStateFulfilled();
 	void setBusy(bool novo) { busy = novo; }
 
 public:
 	explicit NPC(Map* m, string name, string description, int gender, int strength, int dexterity);
+	~NPC();
 
 	string* getDescription() { return description; }
 

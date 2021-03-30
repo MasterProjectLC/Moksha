@@ -33,6 +33,10 @@ void Character::takeAction(int action, vector<string> args) {
 			listen(zusammenArgs);
 			break;
 
+		case deixar:
+			leave(zusammenArgs);
+			break;
+
 		case checar:
 			check(zusammenArgs);
 			break;
@@ -72,17 +76,21 @@ void Character::mention(string obj, string receiver) {
 }
 
 void Character::mention(string obj, set<string> receivers) {
-	if (inventory.hasConcept(obj) || inventory.hasItem(obj)) {
-		notifyText = obj;
-		notifyTargets = receivers;
-		notify(mencionar);
-	}
+	notifyText = obj;
+	notifyTargets = receivers;
+	notify(mencionar);
 }
 
 void Character::attack(string target) {
 	status = "attacking " + target + "!";
 	notifyText = target;
 	notify(atacar);
+}
+
+void Character::leave(string target) {
+	status = "leaving " + target + ".";
+	notifyText = target;
+	notify(deixar);
 }
 
 void Character::listen(string target) {

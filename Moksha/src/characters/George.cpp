@@ -9,39 +9,42 @@ M, 8, 13 } {
 }
 
 void George::setupActionsParticular() {
-	goap_set_pre(&ap, "search_Jenna", "Jenna_dead", false);
-	goap_set_pst(&ap, "search_Jenna", "with_Jenna", true);
+	goap_set_pst(&ap, "move_Runway", "in_Runway", true);
+	goap_set_pre(&ap, "wait_Runway", "in_Runway", true);
+	goap_set_pst(&ap, "wait_Runway", "waiting_Runway", true);
 }
 
 
 void George::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "with_Jenna", false);
-	goap_worldstate_set(&ap, &world, "Jenna_dead", false);
+	goap_worldstate_set(&ap, &world, "in_Runway", false);
+	goap_worldstate_set(&ap, &world, "waiting_Runway", false);
+	updateWorldExtra();
 }
 
 
 void George::setupObjectivesParticular() {
-	//goap_worldstate_set(&ap, &currentGoal.goal, "with_Jenna", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "waiting_Runway", true);
 }
 
 
 void George::updateWorldExtra() {
 	// describe current world state.
+	goap_worldstate_set(&ap, &world, "in_Runway", currentRoom->getName() == "Runway");
 	if (lastSeen.hasKey("Jenna"))
 		goap_set_cost(&ap, "search_Jenna", pathSize(currentRoom, mapp->getRoom(lastSeen.getValues("Jenna"))));
 }
 
 
 int George::decideActionParticular(string action) {
-	if (action.substr(0, 7).compare("search_") == 0) {
-		actionArgs.push_back(nextRoomInPath());
-		return mover;
+	if (action == "waiting_Runway") {
+		actionArgs.push_back("waiting.");
+		return acaoNula;
 	}
-
 	return descansar;
 }
 
 
 void George::advancePlansExtra(string currentProcess) {
-
+	if (currentProcess == "move_Runway")
+		path = findPath(mapp->getRoom("Runway"));
 }

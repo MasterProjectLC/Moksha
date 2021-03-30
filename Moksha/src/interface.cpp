@@ -456,7 +456,7 @@ vector<string> Interface::riseLine() {
 
 void Interface::printLine(string nova) {
 	vector<string> novaCortada = splitString(nova, '\n');
-	int consoleSize = screenWidth - separator - 1;
+	int consoleSize = screenWidth - separator - 2;
 
 	for (int i = 0; i < novaCortada.size(); i++) {
 		if (novaCortada[i].size() > consoleSize) {

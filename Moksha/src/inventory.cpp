@@ -12,19 +12,24 @@ Inventory::~Inventory() {
 }
 
 void Inventory::addConcept(string name) {
-	concepts.push_back(new Concept(name));
+	concepts.push_back(new Concept(name, ""));
 }
 
 void Inventory::addRumor(string name) {
-	rumors.push_back(new Concept(name));
+	rumors.push_back(new Concept(name, ""));
 }
 
-void Inventory::addItem(string name, set<string*> actions) {
-	items.push_back(new Item(name, actions));
+void Inventory::addItem(string name, string codename, string description, set<string> actions) {
+	items.push_back(new Item(name, codename, description, actions));
 }
 
-void Inventory::addItem(string name, string description, set<string*> actions) {
-	items.push_back(new Item(name, description, actions));
+void Inventory::removeItem(string codename) {
+	for (vector<Item*>::iterator it = items.begin(); it != items.end(); it++)
+		if ((*it)->getCodename() == codename) {
+			delete *it;
+			items.erase(it);
+			break;
+		}
 }
 
 bool Inventory::hasRumor(string name) {
@@ -47,4 +52,11 @@ bool Inventory::hasItem(string name) {
 		if (items[i]->getName() == name)
 			return true;
 	return false;
+}
+
+Item* Inventory::getItem(string name) {
+	for (int i = 0; i < items.size(); i++)
+		if (items[i]->getName() == name)
+			return items[i];
+	return NULL;
 }

@@ -42,6 +42,7 @@ protected:
 	virtual void mention(string obj, set<string> receivers);
 	virtual void mention(string obj, string receiver);
 	void attack(string target);
+	void leave(string target);
 	void listen(string target);
 	void check(string target);
 	void scan();
@@ -75,7 +76,8 @@ public:
 	vector<Concept*> getConcepts() { return inventory.getConcepts(); }
 	void addConcept(string name) { inventory.addConcept(name); }
 	void addRumor(string name) { inventory.addRumor(name); }
-	void addItem(string name, set<string*> actions) { inventory.addItem(name, actions); }
+	void addItem(string name, string codename, string description, set<string> actions) { inventory.addItem(name, codename, description, actions); }
+	void removeItem(string name) { inventory.removeItem(name); }
 
 	string getStatus() { return status; }
 	void setStatus(string n) { status = n; }
@@ -101,6 +103,8 @@ public:
 	set<string> getNotifyTargets() { return notifyTargets; }
 
 	virtual bool hasCondition(string info) { return false; }
+	bool hasItem(string item) { return inventory.getItem(item) != NULL; }
+	Item* getItem(string item) { return inventory.getItem(item); }
 
 	virtual void receiveEvent(vector<string> args) {}
 	virtual void receiveCheck(Character* checkTarget) {}

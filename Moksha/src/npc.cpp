@@ -1,4 +1,5 @@
 #include "npc.h"
+#include <stdexcept>
 
 NPC::NPC(Map* m, string name, string description, int gender, int strength, int dexterity) : Character(gender, strength, dexterity) {
 	this->name = name;
@@ -10,6 +11,20 @@ NPC::NPC(Map* m, string name, string description, int gender, int strength, int 
 	this->dict = fileObject;
 }
 
+
+NPC::~NPC() {
+	for (set<string*>::iterator it = addedConditions.begin(); it != addedConditions.end(); it++) {
+		delete *it;
+	}
+
+	for (set<string*>::iterator it = addedActions.begin(); it != addedActions.end(); it++) {
+		delete *it;
+	}
+
+	for (int i = 0; i < conditionNames.size(); i++) {
+		delete conditionNames[i];
+	}
+}
 
 // PATHFINDING ---------------
 
@@ -70,8 +85,11 @@ void NPC::executeReaction(string topic, string phrase, string sender, bool shoul
 
 	if (topic != "")
 		setCondition(topic, true);
-	if (dict.hasKey(topic) && shouldRespond && !busy && !inConversation())
+	// React to mentions
+	if (dict.hasKey(topic) && shouldRespond && !busy && !inConversation()) {
 		talk(dict.getValue(topic));
+		notify(avancar);
+	}
 }
 
 
@@ -161,6 +179,27 @@ void NPC::setupPlans() {
 }
 
 
+void NPC::addGoal(vector<string*> conditions, vector<bool> conditionStates) {
+	if (conditions.size() != conditionStates.size())
+		return;
+	Goal newgoal = Goal(1, true);
+	goap_worldstate_clear(&newgoal.goal);
+	for (int i = 0; i < conditions.size(); i++) {
+		goap_worldstate_set(&ap, &newgoal.goal, conditions[i]->c_str(), conditionStates[i]);
+		conditionNames.push_back(conditions[i]);
+	}
+	goalList.push(newgoal);
+}
+
+void NPC::addGoal(string* condition, bool conditionState) {
+	Goal newgoal = Goal(1, true);
+	goap_worldstate_clear(&newgoal.goal);
+	goap_worldstate_set(&ap, &newgoal.goal, condition->c_str(), conditionState);
+	conditionNames.push_back(condition);
+	goalList.push(newgoal);
+}
+
+
 void NPC::updateWorld() {
 	updateWorldExtra();
 
@@ -204,10 +243,11 @@ void NPC::advancePlans() {
 				path = search(mapp->getRoom(lastSeen.getValues( currentProcess.substr(7, 10000) )));
 			else
 				path = search();
-
 		}
-
-		advancePlansExtra(currentProcess);
+		else if (currentProcess.substr(0, 5).compare("move_") == 0) {
+			path = findPath(mapp->getRoom( currentProcess.substr(5, 10000) ));
+		} else
+			advancePlansExtra(currentProcess);
 	}
 }
 
@@ -261,7 +301,13 @@ int NPC::decideAction() {
 	busy = false;
 	if (plansz > 0) {
 		actionArgs.clear();
-		currentAction = decideActionParticular(plan[currentStep]);
+		string action = plan[currentStep];
+
+		if (!action.substr(0, 5).compare("move_") || !action.substr(0, 7).compare("search_")) {
+			actionArgs.push_back(nextRoomInPath());
+			currentAction = mover;
+		} else 
+			currentAction = decideActionParticular(action);
 	} else
 		currentAction = descansar;
 
@@ -270,7 +316,6 @@ int NPC::decideAction() {
 
 
 // HELPER ----------------------------------------
-#include <stdexcept>
 
 bool NPC::isCurrentStateFulfilled() {
 	bfield_t worldState = (world.values & ~states[currentStep].dontcare);

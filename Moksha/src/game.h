@@ -47,13 +47,14 @@ private:
 	void objectAction(Object* object);
 	void characterAction(Character* character);
 	Character* findCharacter(string nome);
+	void broadcastMessage(string topic, string str, string sender, set<string> receivers, Room* room);
 	void broadcastEvent(Character* emitter, vector<string> args);
 
 	void update(int id) override;
 	void advanceTime();
 	void advanceConversations();
 
-	void initializeGame();
+	bool initializeGame();
 	bool loadGame();
 	void saveGame();
 

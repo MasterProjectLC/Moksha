@@ -7,15 +7,18 @@ Game::Game() {
 
 
 void Game::setup() {
-	initializeGame();
+	bool saveExists = initializeGame();
 	if (!loadGame()) 
 		for (int i = 0; i < npcs.size(); i++)
 			npcs[i]->setupPlans();
+
+	if (!saveExists)
+		advanceTime();
 }
 
 
 // SAVE/LOAD --------------------------------------
-void Game::initializeGame() {
+bool Game::initializeGame() {
 	// Generate game
 	time = 1;
 	loop = 1;
@@ -36,7 +39,8 @@ void Game::initializeGame() {
 	npcs.push_back(george);
 
 	xml_document doc;
-	if (doc.load_file("files/save.xml")) { // TODO make a better check
+	bool retorno = doc.load_file("files/save.xml") && doc.child("GameData").child("Game").child("Characters").child("Baxter");
+	if (retorno) { // TODO make a better check
 		doc.load_file("files/base.xml");
 		Magnus* magnus = new Magnus(&map);
 		magnus->add(this, OBSERVER_OFFSET + 3);
@@ -138,6 +142,8 @@ void Game::initializeGame() {
 	load_package = doc.child("GameData").child("Game").child("Conversations");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it)
 		conversations.push_back(Conversation(it->name(), it->attribute("room").value(), stoi(it->attribute("stage").value())));
+
+	return retorno;
 }
 
 
@@ -370,13 +376,7 @@ void Game::characterAction(Character* character) {
 		break;
 
 	case falar:
-		for (int i = 0; i < characters.size(); i++) {
-			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getCurrentRoom() == character->getCurrentRoom()) {
-				characters[i]->executeReaction(args[0], args[1], character->getName(), false);
-				if (characters[i] == player && args[0] != "")
-					notify(_ouvir);
-			}
-		}
+		broadcastMessage(args[0], args[1], character->getName(), character->getNotifyTargets(), character->getCurrentRoom());
 		break;
 
 	case conversar:
@@ -412,6 +412,24 @@ void Game::characterAction(Character* character) {
 				broadcastEvent(character, vector<string>({ "attack", target->getName() }));
 			else
 				broadcastEvent(target, vector<string>({ "attack", character->getName() }));
+		break;
+
+	case deixar:
+		Item* item = character->getItem(character->getNotifyText());
+		string codename = item->getCodename();
+		if (item != NULL && item->isActionValid("leave")) {
+			FileDict fileDict = FileManager::readFromFile("files/objects/" + codename + ".txt");
+			character->getCurrentRoom()->addObject(new Object(fileDict));
+			character->removeItem(codename);
+			notify(_obter);
+
+			// TODO: maybe change this scripted thing later? It's not an often used action though, so it might not be worth it
+			if (codename == "JennaSuitcase") {
+				printText("Press Enter to continue.");
+				conversations.push_back(Conversation("intro2", "Runway"));
+			}
+		}
+		
 		break;
 	}
 
@@ -471,51 +489,52 @@ void Game::advanceConversations() {
 			// Advance
 			xml_node conversation = it->nextLine();
 
-			string n = conversation.name();
-			if (n != "Narrator") {
-				Character* speaker = findCharacter(conversation.name());
-
+			Character* speaker = NULL;
+			bool isNarrator = (string(conversation.name()) == "Narrator");
+			if (!isNarrator) {
+				speaker = findCharacter(conversation.name());
 				// Test if valid
 				// Is the speaker in the room?
-				if (speaker->getCurrentRoom()->getCodename() != it->getRoom())
+				if (!speaker || speaker->getCurrentRoom()->getCodename() != it->getRoom())
 					continue;
-
-				// Does the speaker fulfill the necessary conditions?
-				string infoAtom = ""; bool valid = true;
-				for (xml_node_iterator cit = conversation.begin(); cit != conversation.end(); ++cit) {
-					// Adding tags/infos
-					string addTag = cit->attribute("add_tag").value();
-					string info = cit->attribute("info").value();
-					string end = cit->name();
-
-					// Check modifiers
-					string tag = cit->attribute("tag").value();
-					bool checkTag = (tag == "tag");
-
-					bool conditionMet = ( !checkTag && speaker->hasCondition(cit->name())) || (checkTag && it->hasTag(cit->name()) );
-					string nao = cit->attribute("n").value();
-					bool inverted = (nao == "n");
-				
-					if (conditionMet == inverted) {
-						valid = false;
-						break;
-					}
-					else if (addTag == "add_tag")
-						it->addTag(cit->name());
-					else if (info == "info")
-						infoAtom = cit->name();
-					else if (end == "end")
-						endConvo = true;
-				}
-				if (!valid) continue;
-
-				// Send message
-				speaker->sayLine( infoAtom, conversation.attribute("line").value(), *(it->getParticipants()) );
 			}
-			else if (it->getParticipants()->count(player->getName()) && player->getCurrentRoom()->getCodename() == it->getRoom())
-				printText(conversation.attribute("line").value());
-			else
+
+			// Does the speaker fulfill the necessary conditions?
+			string infoAtom = ""; bool valid = true;
+			for (xml_node_iterator cit = conversation.begin(); cit != conversation.end(); ++cit) {
+				// Adding tags/infos
+				string addTag = cit->attribute("add_tag").value();
+				string info = cit->attribute("info").value();
+				string end = cit->name();
+
+				// Check modifiers
+				string tag = cit->attribute("tag").value();
+				bool checkTag = (tag == "tag");
+
+				bool conditionMet = ( !checkTag && (isNarrator || speaker->hasCondition(cit->name())) ) || ( checkTag && it->hasTag(cit->name()) );
+				string nao = cit->attribute("n").value();
+				bool inverted = (nao == "n");
+				
+				if (conditionMet == inverted) {
+					valid = false;
+					break;
+				}
+				else if (addTag == "add_tag")
+					it->addTag(cit->name());
+				else if (info == "info")
+					infoAtom = cit->name();
+				else if (end == "end")
+					endConvo = true;
+			}
+
+			if (!valid) 
 				continue;
+
+			// Send message
+			if (isNarrator)
+				broadcastMessage( infoAtom, conversation.attribute("line").value(), "", *(it->getParticipants()), map.getRoom(it->getRoom()) );
+			else
+				speaker->sayLine( infoAtom, conversation.attribute("line").value(), *(it->getParticipants()) );
 
 			// Lock every participant
 			for (set<string>::iterator ait = it->getParticipants()->begin(); ait != it->getParticipants()->end(); ait++)
@@ -537,6 +556,16 @@ void Game::receiveArgs(vector<string> args) {
 	player->receiveArgs(args);
 }
 
+
+void Game::broadcastMessage(string topic, string str, string sender, set<string> receivers, Room* room) {
+	for (int i = 0; i < characters.size(); i++) {
+		if (receivers.count(characters[i]->getName()) && characters[i]->getCurrentRoom() == room) {
+			characters[i]->executeReaction(topic, str, sender, false);
+			if (characters[i] == player && topic != "")
+				notify(_ouvir);
+		}
+	}
+}
 
 void Game::broadcastEvent(Character* emitter, vector<string> args) {
 	vector<Character*> receivers = getPeopleInRoom(emitter->getCurrentRoom());
@@ -563,11 +592,14 @@ vector<Character*> Game::getPeopleInRoom(Room* room) {
 void Game::obtainObject(string name, Character* receiver) {
 	FileDict filedict = FileManager::readFromFile("files/items/" + name + ".txt");
 	vector<string> actionVec = filedict.getValues("actions");
-	set<string*> actionSet = set<string*>();
+	set<string> actionSet = set<string>();
 	for (int i = 0; i < actionVec.size(); i++)
-		actionSet.insert( new string(actionVec[i]) );
+		actionSet.insert(actionVec[i]);
 
-	receiver->addItem(filedict.getValues("name")[0], actionSet);
+	if (filedict.hasKey("codename"))
+		receiver->addItem(filedict.getValues("name")[0], filedict.getValues("codename")[0], "", actionSet);
+	else
+		receiver->addItem(filedict.getValues("name")[0], filedict.getValues("name")[0], "", actionSet);
 
 	notify(_obter);
 }

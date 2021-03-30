@@ -68,8 +68,6 @@ public:
 
 
 	int main() {
-		interfacer.printLine("Welcome to Medusa, Mr. Elliot. Let me take your coat...");
-
 		while (1) {
 			interfacer.clocking();
 		}

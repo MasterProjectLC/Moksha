@@ -46,6 +46,8 @@ bool Player::characterCheck(vector<string> args) {
 
 void Player::receiveArgs(vector<string> args) {
 	// TODO: FIX THIS GARBAGE CODE
+	currentAction = mover;
+
 	if (args[0].length() <= 1 || args[0] == "wait" || args[0] == "rest")
 		currentAction = descansar;
 
@@ -71,7 +73,7 @@ void Player::receiveArgs(vector<string> args) {
 
 	else if (args[0] == "mention")
 		// Person doesn't exist
-		if (!(args.size() > 2 && names.count(args[2]) > 0)) {
+		if (!(args.size() > 2 && names.count(args[1]) > 0)) {
 			printText(noPersonError);
 			return;
 		}
@@ -81,37 +83,48 @@ void Player::receiveArgs(vector<string> args) {
 			return;
 		}
 		// Don't have this info/item
-		else if (!inventory.hasConcept(args[1]) && !inventory.hasItem(args[1])) {
+		else if (!( inventory.hasConcept(args[2]) || inventory.hasRumor(args[2]) || inventory.hasItem(args[2]) )) {
 			printText(noItemError);
 			return;
 		}
 		// Mention
-		else
+		else {
 			mention(concatStrings(args, 2), args[1]);
+			currentAction = descansar;
+			return;
+		}
 
 	else if (args[0] == "attack")
 		if (characterCheck(args))
 			currentAction = atacar;
 		else
 			return;
-	else if ((args[0] == "listen" || args[0] == "overhear" || args[0] == "eavesdrop" || args[0] == "hear"))
+	else if (args[0] == "leave" || args[0] == "put")
+		if (args.size() > 1 && inventory.hasItem( concatStrings(args, 1) ))
+			currentAction = deixar;
+		else
+			return;
+	else if (args[0] == "listen" || args[0] == "overhear" || args[0] == "eavesdrop" || args[0] == "hear") {
 		if (characterCheck(args))
 			currentAction = ouvir;
 		else
 			return;
-	else if ((args[0] == "see" || args[0] == "check" || args[0] == "look")) {
-		if (args.size() <= 0 || args[1] == "around" || args[1] == "room" || (args.size() > 2 && args[2] == "room"))
-			scan();
-		else if (characterCheck(args))
-			check(concatStrings(args, 1));
-		return;
+	}
+	else if (args[0] == "see" || args[0] == "check" || args[0] == "look") {
+		if (args.size() <= 0 || args[1] == "around" || args[1] == "room" || (args.size() > 2 && args[2] == "room")) {
+			scan();	return;
+		}
+		else if (names.count(args[1]) > 0) {
+			check(concatStrings(args, 1));	return;
+		}
+		
 	}
 	else if (args[0] == "scan") {
 		scan();
 		return;
 	}
 
-	else {
+	if (currentAction == mover) {	// Hasn't gotten an action yet
 		// Not a valid action
 		if (args.size() < 2) {
 			printText(noActionError);

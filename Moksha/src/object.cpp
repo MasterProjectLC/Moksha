@@ -12,7 +12,10 @@ Object::Object(Dictionary<vector<string>> dict) {
 }
 
 vector<string> Object::getResponses(string action) {
-	return dict.getValues(action);
+	if (dict.hasKey(action))
+		return dict.getValues(action);
+	else
+		return vector<string>();
 }
 
 void Object::takeAction(string prompt, string user) {

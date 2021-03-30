@@ -5,8 +5,8 @@ SantosDrawer
 visible:
 true
 actions:
-examine|look|see
-examine,look,see:
+examine|look|see|check
+examine,look,see,check:
 It's Santos' drawer.
 touch:
 Nothing special about this drawer.

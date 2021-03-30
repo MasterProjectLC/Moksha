@@ -5,8 +5,8 @@ SuitcaseStash
 visible:
 true
 actions:
-examine|look|see
-examine,look,see:
+examine|look|see|check
+examine,look,see,check:
 I should probably 'leave Jenna's suitcase' here.
 touch:
 Huh?

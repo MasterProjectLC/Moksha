@@ -1,5 +1,7 @@
 name:
 Jenna's suitcase
+codename:
+JennaSuitcase
 actions:
 leave
 description:
