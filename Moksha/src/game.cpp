@@ -2,7 +2,8 @@
 #include <iostream>
 
 Game::Game() {
-
+	time = 0;
+	loop = 0;
 }
 
 
@@ -13,7 +14,7 @@ void Game::setup() {
 		for (int i = 0; i < npcs.size(); i++)
 			npcs[i]->setupPlans();
 
-		conversations.push_back(Conversation("intro", "FlightDock", 0));
+		conversations.push_back(Conversation("intro", "FlightDock", false));
 		advanceTime();
 	}
 }
@@ -23,10 +24,10 @@ void Game::setup() {
 void Game::emitEvent(int id, vector<string> args) {
 	switch (id) {
 	case _evento_fim_conversa:
-		if (args[0] == "intro2")
-			conversations.push_back(Conversation("intro2", "Runway", 0));
-		else if (args[0] == "intro3")
+		if (args[0] == "jenna_rivalry") {
 			rewindGame();
+		}
+		break;
 	}
 }
 
@@ -164,7 +165,8 @@ bool Game::loadGame(string loadFile) {
 	// Load game
 	xml_node load_package = doc.child("GameData").child("Game");
 	time = load_package.attribute("Time").as_int();
-	loop = load_package.attribute("Loop").as_int();
+	if (loop == 0)
+		loop = load_package.attribute("Loop").as_int();
 
 	// Load map
 	load_package = doc.child("GameData").child("Game").child("Map");
@@ -219,15 +221,16 @@ bool Game::loadGame(string loadFile) {
 	// Load conversations
 	load_package = doc.child("GameData").child("Game").child("Conversations");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it)
-		conversations.push_back(Conversation( it->name(), it->attribute("room").value(), stoi(it->attribute("stage").value()) ));
+		conversations.push_back(Conversation( it->name(), it->attribute("room").value(), (strcmp(it->attribute("is_reaction").value(), "true") == 0),
+			stoi(it->attribute("stage").value())));
 
 	return true;
 }
 
 
-void Game::saveGame() {
+void Game::saveGame(string baseSave) {
 	xml_document doc;
-	if (!doc.load_file("files/save.xml"))
+	if (!doc.load_file( ("files/" + baseSave).c_str() ))
 		doc.load_file("files/intro.xml");
 	xml_node node = doc.child("GameData").child("Game");
 
@@ -300,8 +303,10 @@ void Game::saveGame() {
 		node.append_child(convoName.c_str());
 		node.child(convoName.c_str()).append_attribute("stage");
 		node.child(convoName.c_str()).append_attribute("room");
+		node.child(convoName.c_str()).append_attribute("is_reaction");
 		node.child(convoName.c_str()).attribute("stage").set_value(conversations[i].getStage());
 		node.child(convoName.c_str()).attribute("room").set_value(conversations[i].getRoom().c_str());
+		node.child(convoName.c_str()).attribute("is_reaction").set_value(conversations[i].getIsReaction());
 	}
 
 	doc.save_file("files/save.xml");
@@ -317,11 +322,62 @@ void Game::rewindGame() {
 
 	conversations.clear();
 	map.clearAllObjects();
-	int l = ++loop;
+	loop++;
+
+	if (findCharacter("Baxter") == NULL) {
+		Magnus* magnus = new Magnus(&map);
+		magnus->add(this, OBSERVER_OFFSET + 3);
+		characters.push_back(magnus);
+		npcs.push_back(magnus);
+
+		Santos* santos = new Santos(&map);
+		santos->add(this, OBSERVER_OFFSET + 4);
+		characters.push_back(santos);
+		npcs.push_back(santos);
+
+		Baxter* baxter = new Baxter(&map);
+		baxter->add(this, OBSERVER_OFFSET + 5);
+		characters.push_back(baxter);
+		npcs.push_back(baxter);
+
+		Renard* renard = new Renard(&map);
+		renard->add(this, OBSERVER_OFFSET + 6);
+		characters.push_back(renard);
+		npcs.push_back(renard);
+
+		Paul* paul = new Paul(&map);
+		paul->add(this, OBSERVER_OFFSET + 7);
+		characters.push_back(paul);
+		npcs.push_back(paul);
+
+		Hilda* hilda = new Hilda(&map);
+		hilda->add(this, OBSERVER_OFFSET + 8);
+		characters.push_back(hilda);
+		npcs.push_back(hilda);
+
+		Tom* tom = new Tom(&map);
+		tom->add(this, OBSERVER_OFFSET + 9);
+		characters.push_back(tom);
+		npcs.push_back(tom);
+
+		Liz* liz = new Liz(&map);
+		liz->add(this, OBSERVER_OFFSET + 10);
+		characters.push_back(liz);
+		npcs.push_back(liz);
+
+		Willow* willow = new Willow(&map);
+		willow->add(this, OBSERVER_OFFSET + 11);
+		characters.push_back(willow);
+		npcs.push_back(willow);
+
+		Amelie* amelie = new Amelie(&map);
+		amelie->add(this, OBSERVER_OFFSET + 12);
+		characters.push_back(amelie);
+		npcs.push_back(amelie);
+	}
 
 	loadGame("base.xml");
-	loop = l;
-	saveGame();
+	saveGame("base.xml");
 }
 
 // UPDATE --------------------------------------------------------
@@ -494,7 +550,7 @@ void Game::advanceTime() {
 
 	// Jogo
 	time++;
-	saveGame();
+	saveGame("save.xml");
 }
 
 
@@ -506,8 +562,9 @@ void Game::advanceConversations() {
 			// If the convo is over
 			bool endConvo = false;
 			if (it->ended()) {
-				emitEvent(_evento_fim_conversa, vector<string>({ it->getName() }));
+				string s = it->getName();
 				conversations.erase(it);
+				emitEvent(_evento_fim_conversa, vector<string>({ s }));
 				break;
 			}
 

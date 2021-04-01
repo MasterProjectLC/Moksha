@@ -2,11 +2,12 @@
 
 Conversation::Conversation(string conversation, string room) : Conversation(conversation, room, false) {}
 
-Conversation::Conversation(string conversation, string room, bool reaction) {
+Conversation::Conversation(string conversation, string room, bool isReaction) {
 	name = conversation;
 	begun = true;
 	convoStage = 0;
-	if (reaction)
+	this->isReaction = isReaction;
+	if (isReaction)
 		this->conversation.load_file(("files/reactions/" + conversation + ".xml").c_str());
 	else
 		this->conversation.load_file(("files/conversations/" + conversation + ".xml").c_str());
@@ -19,7 +20,7 @@ Conversation::Conversation(string conversation, string room, bool reaction) {
 	}
 }
 
-Conversation::Conversation(string conversation, string room, int stage) : Conversation(conversation, room) {
+Conversation::Conversation(string conversation, string room, bool isReaction, int stage) : Conversation(conversation, room, isReaction) {
 	for (int i = 0; i < stage; i++) {
 		nextLine();
 	}

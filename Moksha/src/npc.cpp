@@ -19,7 +19,9 @@ NPC::~NPC() {
 void NPC::clear() {
 	inventory.clear();
 	goalList.clear();
-	currentGoal = Goal();
+	//currentGoal = Goal();
+	checkedRooms.clear();
+	statusEffects.clear();
 
 	for (set<string*>::iterator it = addedConditions.begin(); it != addedConditions.end(); it++) {
 		delete *it;

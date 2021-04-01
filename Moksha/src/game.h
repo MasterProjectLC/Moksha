@@ -56,7 +56,7 @@ private:
 
 	void initializeGame();
 	bool loadGame(string loadFile);
-	void saveGame();
+	void saveGame(string baseSave);
 	void rewindGame();
 
 	void obtainObject(string name, Character* receiver);

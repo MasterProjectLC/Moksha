@@ -18,12 +18,13 @@ private:
 	set<string> tags;
 	string room;
 	bool begun;
+	bool isReaction;
 
 public:
 	Conversation() {}
 	Conversation(string conversation, string room);
 	Conversation(string conversation, string room, bool reaction);
-	Conversation(string conversation, string room, int stage);
+	Conversation(string conversation, string room, bool reaction, int stage);
 
 	bool participates(string name); // If given character participates in the convo
 	bool hasTag(string tag);
@@ -40,4 +41,5 @@ public:
 	string getName() { return name; }
 	string getRoom() { return room; }
 	int getStage() { return convoStage; }
+	bool getIsReaction() { return isReaction; }
 };
