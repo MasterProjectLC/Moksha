@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
 <GameData FormatVersion="1">
-	<Game Time="1" Loop="1">
+	<Game Time="0" Loop="1">
 		<Characters>
 			<Elliot Room="EntranceLounge"> 
 				<Inventory/>
                 <Rumors/>
                 <Concepts/>
+                <Mind/>
 			</Elliot>
 			<Jenna Room="NorthCorridor"> 
 				<Inventory/>

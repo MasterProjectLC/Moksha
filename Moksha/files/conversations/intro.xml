@@ -32,6 +32,5 @@
     <George line="It seems we'll have to get to know each other better some other time, son. We should probably get down there already."/>
     <Jenna line="Right! Elliot, can you carry the rest of my suitcases, please?"/>
     <Elliot line="Sure, boss."/>
-    <Narrator line="To interact with objects, type a verb and the object with which you want to interact. For example, to take Jenna's suitcase, type 'take Jenna's suitcase'."/>
-    <Narrator line="To move from room to room, type 'move <destination>'."/>
+    <Narrator line="To interact with objects, type a verb and the object with which you want to interact. For example, to take Jenna's suitcase, type 'take Jenna's suitcase'. To move from room to room, type 'move <destination>'."/>
 </Conversation>

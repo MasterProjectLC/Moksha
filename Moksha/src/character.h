@@ -14,7 +14,7 @@ protected:
 								"George", "Paul", "Amelie" };
 
 	string name;
-	string notifyText;
+	vector<string> notifyArgs;
 	set<string> notifyTargets;
 	set<Room*> checkedRooms;
 	string status;
@@ -49,6 +49,7 @@ protected:
 	void say(string topico, string str, set<string> receivers);
 	void rest();
 	void talk(string convo);
+	void talk(string convo, bool isReaction);
 	void voidAction(string actionStatus);
 	virtual void interact(string action, string object);
 
@@ -74,8 +75,7 @@ public:
 	vector<Item*> getItems() { return inventory.getItems(); }
 	vector<Concept*> getRumors() { return inventory.getRumors(); }
 	vector<Concept*> getConcepts() { return inventory.getConcepts(); }
-	void addConcept(string name) { inventory.addConcept(name); }
-	void addRumor(string name) { inventory.addRumor(name); }
+	void addAbstract(string name, string codename, string description, char type) { inventory.addAbstract(name, codename, description, type); }
 	void addItem(string name, string codename, string description, set<string> actions) { inventory.addItem(name, codename, description, actions); }
 	void removeItem(string name) { inventory.removeItem(name); }
 
@@ -99,7 +99,8 @@ public:
 	void sayLine(string topic, string str, set<string> receivers) { say(topic, str, receivers); }
 	void printText(string str);
 
-	string getNotifyText() { return notifyText; }
+	string getNotifyText() { return notifyArgs[0]; }
+	vector<string> getNotifyArgs() { return notifyArgs; }
 	set<string> getNotifyTargets() { return notifyTargets; }
 
 	virtual bool hasCondition(string info) { return false; }

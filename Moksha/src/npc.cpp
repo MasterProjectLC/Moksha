@@ -13,17 +13,32 @@ NPC::NPC(Map* m, string name, string description, int gender, int strength, int 
 
 
 NPC::~NPC() {
+	clear();
+}
+
+void NPC::clear() {
+	inventory.clear();
+	goalList.clear();
+	currentGoal = Goal();
+
 	for (set<string*>::iterator it = addedConditions.begin(); it != addedConditions.end(); it++) {
 		delete *it;
 	}
+	addedConditions.clear();
 
 	for (set<string*>::iterator it = addedActions.begin(); it != addedActions.end(); it++) {
 		delete *it;
 	}
+	addedActions.clear();
 
 	for (int i = 0; i < conditionNames.size(); i++) {
 		delete conditionNames[i];
 	}
+	conditionNames.clear();
+	trackablePeople.clear();
+	while (!path.empty())
+		path.pop();
+	lastSeen.clear();
 }
 
 // PATHFINDING ---------------
@@ -87,7 +102,7 @@ void NPC::executeReaction(string topic, string phrase, string sender, bool shoul
 		setCondition(topic, true);
 	// React to mentions
 	if (dict.hasKey(topic) && shouldRespond && !busy && !inConversation()) {
-		talk(dict.getValue(topic));
+		talk(dict.getValue(topic), true);
 		notify(avancar);
 	}
 }
@@ -303,7 +318,7 @@ int NPC::decideAction() {
 		actionArgs.clear();
 		string action = plan[currentStep];
 
-		if (!action.substr(0, 5).compare("move_") || !action.substr(0, 7).compare("search_")) {
+		if ( action.substr(0, 5).compare("move_") == 0 || action.substr(0, 7).compare("search_") == 0 ) {
 			actionArgs.push_back(nextRoomInPath());
 			currentAction = mover;
 		} else 

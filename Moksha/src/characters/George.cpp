@@ -35,16 +35,16 @@ void George::updateWorldExtra() {
 }
 
 
+void George::advancePlansExtra(string currentProcess) {
+	if (currentProcess == "move_Runway")
+		path = findPath(mapp->getRoom("Runway"));
+}
+
+
 int George::decideActionParticular(string action) {
-	if (action == "waiting_Runway") {
+	if (action == "wait_Runway") {
 		actionArgs.push_back("waiting.");
 		return acaoNula;
 	}
 	return descansar;
-}
-
-
-void George::advancePlansExtra(string currentProcess) {
-	if (currentProcess == "move_Runway")
-		path = findPath(mapp->getRoom("Runway"));
 }

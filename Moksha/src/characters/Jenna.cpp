@@ -32,23 +32,21 @@ void Jenna::setupObjectivesParticular() {
 
 void Jenna::updateWorldExtra() {
 	// describe current world state.
-	goap_worldstate_set(&ap, &world, "in_Runway", currentRoom->getName() == "Runway");
-}
-
-
-int Jenna::decideActionParticular(string action) {
-	if (action == "waiting_Runway") {
-		actionArgs.push_back("waiting.");
-		return acaoNula;
-	}
-
-
-	return descansar;
+	goap_worldstate_set(&ap, &world, "in_Runway", currentRoom->getCodename() == "Runway");
 }
 
 
 void Jenna::advancePlansExtra(string currentProcess) {
 	if (currentProcess == "move_Runway")
 		path = findPath(mapp->getRoom("Runway"));
-		
+}
+
+
+int Jenna::decideActionParticular(string action) {
+	if (action == "wait_Runway") {
+		actionArgs.push_back("waiting.");
+		return acaoNula;
+	}
+
+	return descansar;
 }

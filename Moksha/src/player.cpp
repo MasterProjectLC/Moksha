@@ -14,6 +14,11 @@ Player::Player(Map* map) : Character(M, 5, 7) {
 
 };
 
+void Player::rewind() {
+	inventory.clearItems();
+	mindTheory.clear();
+}
+
 
 // ACOES -------------------------------------------------------------------------------------
 
@@ -46,7 +51,7 @@ bool Player::characterCheck(vector<string> args) {
 
 void Player::receiveArgs(vector<string> args) {
 	// TODO: FIX THIS GARBAGE CODE
-	currentAction = mover;
+	currentAction = nulo;
 
 	if (args[0].length() <= 1 || args[0] == "wait" || args[0] == "rest")
 		currentAction = descansar;
@@ -71,28 +76,31 @@ void Player::receiveArgs(vector<string> args) {
 		return;
 	}
 
-	else if (args[0] == "mention")
+	else if (args[0] == "mention") {
 		// Person doesn't exist
 		if (!(args.size() > 2 && names.count(args[1]) > 0)) {
 			printText(noPersonError);
 			return;
 		}
+
+		string topic = concatStrings(args, 2);
 		// Person already heard this
-		else if (mindTheory.count(args[2]) && mindTheory.at(args[2]).find(args[1]) != mindTheory.at(args[2]).end()) {
+		if (mindTheory.count(topic) && mindTheory.at(topic).find(args[1]) != mindTheory.at(topic).end()) {
 			printText(mindError);
 			return;
 		}
+
+		Concept* info = inventory.getInfoByName(topic);
 		// Don't have this info/item
-		else if (!( inventory.hasConcept(args[2]) || inventory.hasRumor(args[2]) || inventory.hasItem(args[2]) )) {
+		if (info == NULL)
 			printText(noItemError);
-			return;
-		}
 		// Mention
 		else {
-			mention(concatStrings(args, 2), args[1]);
+			mention(info->getCodename(), args[1]);
 			currentAction = descansar;
-			return;
 		}
+		return;
+	}
 
 	else if (args[0] == "attack")
 		if (characterCheck(args))
@@ -124,7 +132,7 @@ void Player::receiveArgs(vector<string> args) {
 		return;
 	}
 
-	if (currentAction == mover) {	// Hasn't gotten an action yet
+	if (currentAction == nulo) {	// Hasn't gotten an action yet
 		// Not a valid action
 		if (args.size() < 2) {
 			printText(noActionError);
@@ -163,8 +171,8 @@ void Player::executeReaction(string topic, string phrase, string sender, bool sh
 		printText(sender + ": " + phrase);
 	else if (phrase != "")
 		printText(phrase);
-	if (topic != "" && !inventory.hasConcept(topic)) {
-		inventory.addConcept(topic);
+
+	if (topic != "") {
 		addToMind(topic, sender);
 	}
 }

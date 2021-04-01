@@ -54,11 +54,15 @@ private:
 	void advanceTime();
 	void advanceConversations();
 
-	bool initializeGame();
-	bool loadGame();
+	void initializeGame();
+	bool loadGame(string loadFile);
 	void saveGame();
+	void rewindGame();
 
 	void obtainObject(string name, Character* receiver);
+	void obtainAbstract(string name, Character* receiver);
+
+	void emitEvent(int id, vector<string> args);
 
 public:
 	Game();
@@ -72,5 +76,6 @@ public:
 	void printText(string text);
 	string getText() { return text; }
 
-	enum {_obter, _imprimir, _ouvir, _salvar, _carregar};
+	enum {_obter, _imprimir, _ouvir, _salvar, _carregar, 
+		_evento_fim_conversa};
 };

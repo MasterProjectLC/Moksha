@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Jenna/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Jenna line="Urgh, don't even get me started with that stuck-up asshole. Honestly, even saying he's a reporter is a stretch."/>
+    <Jenna line="I've met him a couple of times during some World's Fairs, or 'Exposition universelle' as that moron likes to call them, and he's always been the same ignorant, nationalistic and frivolous idiot."/>
+    <Jenna line="He's never there to capture the technological marvels at display - he just wants to sight-see or take pretty photos or some stupid shit like that. Please do me a favor and never bring him up again."/>
+    <Narrator line="Press Enter to continue."/>
+    <Narrator line="Some more guests are next - one seems to be another noblewoman from Austria, while the other is a female indian monk of some sort. Finally, it's your turn to board."/>
+    <Narrator line="You, Jenna and George walk the steps to the entrance lounge, taking in the architecture and the design of the Medusa. If it looked grand from the outside, it looks even grander from the inside."/>
+    <Narrator line="The only ones to board after you are Hilda Bernhard and her crew of workers, responsible for operating the engines. Most of them seem 30 or older, except notably a boy of 17.">
+        <the_crewboy info="info"/>
+    </Narrator>
+    <Narrator line="As soon as everyone is verified and present, the airship lifts off from the ground. The sound of gears and levers turning vibrates throughout the chamber, and soon the ground grows distant."/>
+    <Narrator line="The skies engulf the Medusa in blue and grey as the guests disperse to find their rooms. Crew rush to their stations, and an overwhelming sense of awe overcomes your body. The voyage has officially begun."/>
+    <Narrator line="There's no going back now."/>
+    <Narrator line="-------------------------"/>
+    <Narrator line="The first day goes exceptionally fast."/>
+    <Narrator line="Most of your morning is spent finding your quarters and setting up your equipment. You and Jenna share a room near the north corridor of the airship, with George's room to the left and the monk's room to the right."/>
+    <Narrator line="During the afternoon, you and Jenna rush around collecting statements and interviews from the two owners of the company, Baxter and Santos, taking photos and writing about the trip."/>
+    <Narrator line="As evening turns to night, you two finally get to rest and visit George by the bar, where he apparently has spent almost the entirety of his day. "/>
+    <Narrator line="You also do some light exploration around the airship, getting to know the main spots and obtaining a map layout from the captain. Jenna, meanwhile, begins to compile the interviews in her room."/>
+    <Narrator line="At around 10 PM, you decide to call it a day and go to sleep. The sound of distant chatter and revolving gears lulls your mind, and soon, you go adrift. The stars outside your window are the last light you see before drowsing off."/>
+</Conversation>

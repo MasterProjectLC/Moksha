@@ -83,5 +83,6 @@ public:
 	Room* getRoom(string codename);
 	Room* getRoomByName(string name);
 
+	void clearAllObjects() { objects.clear(); }
 	void clearVisited();
 };

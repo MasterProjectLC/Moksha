@@ -22,6 +22,7 @@ private:
 public:
 	Conversation() {}
 	Conversation(string conversation, string room);
+	Conversation(string conversation, string room, bool reaction);
 	Conversation(string conversation, string room, int stage);
 
 	bool participates(string name); // If given character participates in the convo

@@ -39,6 +39,10 @@ public:
 				return true;
 		return false;
 	}
+
+	void clear() {
+		dictionary.clear();
+	}
 };
 
 string Dictionary<vector<string>>::getValue(string key) {

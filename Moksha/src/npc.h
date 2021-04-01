@@ -82,6 +82,7 @@ public:
 	void setSalaAlvo(Room* nova) { findPath(nova); }
 
 	void setupPlans();
+	void clear();
 
 	vector<string> getActionList();
 	vector<string> getAtomList();

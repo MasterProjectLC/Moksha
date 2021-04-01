@@ -5,8 +5,8 @@
 #ifndef ENUM_H
 #define ENUM_H
 
-enum { M, F, imprimir, avancar, mover, descansar, acaoNula, ouvir, mencionar, falar, conversar, interagir, atacar, deixar, checar, sondar };
-static vector<string> stringEnum = vector<string>({ "M", "F", "print", "advance",
+enum { M, F, imprimir, avancar, nulo, mover, descansar, acaoNula, ouvir, mencionar, falar, conversar, interagir, atacar, deixar, checar, sondar };
+static vector<string> stringEnum = vector<string>({ "M", "F", "print", "advance", "null",
 										  "move", "rest", "", "listen", "mention", "say", "talk", "interact", "attack", "leave", "check", "scan" } );
 
 #endif

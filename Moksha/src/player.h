@@ -41,4 +41,6 @@ public:
 		printText(attacker->getName() + " attacked you!");
 		return Character::beAttacked(attacker);
 	};
+
+	void rewind();
 };

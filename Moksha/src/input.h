@@ -9,7 +9,7 @@ using namespace std;
 
 class Input : public IObservable {
 private:
-	int const MAX_HOLD = 10;
+	int const MAX_HOLD = 15;
 	bool inputs[100];
 	bool pressed[100];
 	int holding[100];

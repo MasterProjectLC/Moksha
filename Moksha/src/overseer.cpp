@@ -8,6 +8,7 @@ class Overseer : public IObserver {
 private:
 	Interface interfacer = Interface(140, 40, 60, 30);
 	Game game = Game();
+
 public:
 	Overseer() {
 		interfacer.add(this, 0);

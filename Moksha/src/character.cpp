@@ -57,12 +57,14 @@ void Character::takeAction(int action, vector<string> args) {
 
 
 void Character::printText(string str) {
-	notifyText = str;
+	notifyArgs.clear();
+	notifyArgs.push_back(str);
 	notify(imprimir);
 }
 
 void Character::move(string str) {
-	notifyText = str;
+	notifyArgs.clear();
+	notifyArgs.push_back(str);
 	notify(mover);
 }
 
@@ -76,32 +78,37 @@ void Character::mention(string obj, string receiver) {
 }
 
 void Character::mention(string obj, set<string> receivers) {
-	notifyText = obj;
+	notifyArgs.clear();
+	notifyArgs.push_back(obj);
 	notifyTargets = receivers;
 	notify(mencionar);
 }
 
 void Character::attack(string target) {
 	status = "attacking " + target + "!";
-	notifyText = target;
+	notifyArgs.clear();
+	notifyArgs.push_back(target);
 	notify(atacar);
 }
 
 void Character::leave(string target) {
 	status = "leaving " + target + ".";
-	notifyText = target;
+	notifyArgs.clear();
+	notifyArgs.push_back(target);
 	notify(deixar);
 }
 
 void Character::listen(string target) {
 	status = "eavesdropping " + target + ".";
-	notifyText = target;
+	notifyArgs.clear();
+	notifyArgs.push_back(target);
 	notify(ouvir);
 }
 
 void Character::check(string target) {
 	status = "checking " + target + ".";
-	notifyText = target;
+	notifyArgs.clear();
+	notifyArgs.push_back(target);
 	notify(checar);
 }
 
@@ -111,7 +118,9 @@ void Character::scan() {
 }
 
 void Character::say(string topic, string str, set<string> receivers) {
-	notifyText = topic + "|" + str;
+	notifyArgs.clear();
+	notifyArgs.push_back(topic);
+	notifyArgs.push_back(str);
 	notifyTargets = receivers;
 	notify(falar);
 }
@@ -122,8 +131,17 @@ void Character::rest() {
 }
 
 void Character::talk(string convo) {
+	talk(convo, false);
+}
+
+void Character::talk(string convo, bool isReaction) {
 	status = "talking.";
-	notifyText = convo;
+	notifyArgs.clear();
+	notifyArgs.push_back(convo);
+	if (isReaction)
+		notifyArgs.push_back("r");
+	else
+		notifyArgs.push_back("c");
 	notify(conversar);
 }
 

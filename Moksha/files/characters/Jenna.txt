@@ -1,2 +1,4 @@
-TheCrewboy:
+the_crewboy
 jenna_crewboy
+journalist_rivalry:
+jenna_rivalry

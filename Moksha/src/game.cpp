@@ -7,22 +7,34 @@ Game::Game() {
 
 
 void Game::setup() {
-	bool saveExists = initializeGame();
-	if (!loadGame()) 
+	initializeGame();
+	if (!loadGame("save.xml")) {
+		// Literally first boot
 		for (int i = 0; i < npcs.size(); i++)
 			npcs[i]->setupPlans();
 
-	if (!saveExists)
+		conversations.push_back(Conversation("intro", "FlightDock", 0));
 		advanceTime();
+	}
 }
 
 
+// EVENTS
+void Game::emitEvent(int id, vector<string> args) {
+	switch (id) {
+	case _evento_fim_conversa:
+		if (args[0] == "intro2")
+			conversations.push_back(Conversation("intro2", "Runway", 0));
+		else if (args[0] == "intro3")
+			rewindGame();
+	}
+}
+
 // SAVE/LOAD --------------------------------------
-bool Game::initializeGame() {
+void Game::initializeGame() {
 	// Generate game
 	time = 1;
 	loop = 1;
-
 
 	player = new Player(&map);
 	player->add(this, OBSERVER_OFFSET);
@@ -39,8 +51,7 @@ bool Game::initializeGame() {
 	npcs.push_back(george);
 
 	xml_document doc;
-	bool retorno = doc.load_file("files/save.xml") && doc.child("GameData").child("Game").child("Characters").child("Baxter");
-	if (retorno) { // TODO make a better check
+	if (doc.load_file("files/save.xml") && !doc.child("GameData").child("Game").child("Characters").child("Baxter").empty()) { // TODO make a better check
 		doc.load_file("files/base.xml");
 		Magnus* magnus = new Magnus(&map);
 		magnus->add(this, OBSERVER_OFFSET + 3);
@@ -142,14 +153,12 @@ bool Game::initializeGame() {
 	load_package = doc.child("GameData").child("Game").child("Conversations");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it)
 		conversations.push_back(Conversation(it->name(), it->attribute("room").value(), stoi(it->attribute("stage").value())));
-
-	return retorno;
 }
 
 
-bool Game::loadGame() {
+bool Game::loadGame(string loadFile) {
 	xml_document doc;
-	if (!doc.load_file("files/save.xml"))
+	if (!doc.load_file(("files/" + loadFile).c_str()))
 		return false;
 
 	// Load game
@@ -200,10 +209,10 @@ bool Game::loadGame() {
 		else {
 			xml_node rumors = it->child("Rumors");
 			for (xml_node_iterator ait = rumors.begin(); ait != rumors.end(); ++ait)
-				thisCharacter->addRumor(ait->name());
+				obtainAbstract(ait->name(), thisCharacter);
 			xml_node concepts = it->child("Concepts");
 			for (xml_node_iterator ait = concepts.begin(); ait != concepts.end(); ++ait)
-				thisCharacter->addConcept(ait->name());
+				obtainAbstract(ait->name(), thisCharacter);
 		}
 	}
 
@@ -250,7 +259,8 @@ void Game::saveGame() {
 		inventory.remove_children();
 		vector<Item*> itemList = thisCharacter->getItems();
 		for (int i = 0; i < itemList.size(); i++)
-			inventory.append_child(itemList[i]->getName().c_str());
+			if (!inventory.child(itemList[i]->getCodename().c_str()))
+				inventory.append_child(itemList[i]->getCodename().c_str());
 
 		// Save atoms
 		if (thisCharacter != player) {
@@ -271,28 +281,25 @@ void Game::saveGame() {
 			xml_node rumors = it->child("Rumors");
 			vector<Concept*> rumorList = thisCharacter->getRumors();
 			for (int i = 0; i < rumorList.size(); i++)
-				if (!rumors.child(rumorList[i]->getName().c_str()))
-					rumors.append_child(rumorList[i]->getName().c_str());
+				if (!rumors.child(rumorList[i]->getCodename().c_str()))
+					rumors.append_child(rumorList[i]->getCodename().c_str());
 
 			xml_node concepts = it->child("Concepts");
 			vector<Concept*> conceptList = thisCharacter->getConcepts();
 			for (int i = 0; i < conceptList.size(); i++)
-				if (!concepts.child(conceptList[i]->getName().c_str()))
-					concepts.append_child(conceptList[i]->getName().c_str());
+				if (!concepts.child(conceptList[i]->getCodename().c_str()))
+					concepts.append_child(conceptList[i]->getCodename().c_str());
 		}
 	}
 
 	// Save conversations
 	node = doc.child("GameData").child("Game").child("Conversations");
+	node.remove_children();
 	for (int i = 0; i < conversations.size(); i++) {
 		string convoName = conversations[i].getName();
-
-		if (!node.child(convoName.c_str())) {
-			node.append_child(convoName.c_str());
-			node.child(convoName.c_str()).append_attribute("stage");
-			node.child(convoName.c_str()).append_attribute("room");
-		}
-
+		node.append_child(convoName.c_str());
+		node.child(convoName.c_str()).append_attribute("stage");
+		node.child(convoName.c_str()).append_attribute("room");
 		node.child(convoName.c_str()).attribute("stage").set_value(conversations[i].getStage());
 		node.child(convoName.c_str()).attribute("room").set_value(conversations[i].getRoom().c_str());
 	}
@@ -300,6 +307,22 @@ void Game::saveGame() {
 	doc.save_file("files/save.xml");
 }
 
+
+void Game::rewindGame() {
+	// Clear NPCs
+	for (int i = 0; i < npcs.size(); i++) {
+		npcs.clear();
+	}
+	player->rewind();
+
+	conversations.clear();
+	map.clearAllObjects();
+	int l = ++loop;
+
+	loadGame("base.xml");
+	loop = l;
+	saveGame();
+}
 
 // UPDATE --------------------------------------------------------
 void Game::update(int id) {
@@ -330,7 +353,6 @@ void Game::objectAction(Object* object) {
 
 void Game::characterAction(Character* character) {
 	int id = character->getNotifyID();
-	vector<string> args = splitString(character->getNotifyText(), '|');
 	Character* target;
 	Room* oldRoom;
 
@@ -368,19 +390,22 @@ void Game::characterAction(Character* character) {
 			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getCurrentRoom() == character->getCurrentRoom()) {
 				if (characters[i]->isBusy())
 					character->executeReaction("busy", "", characters[i]->getName(), false);
-				else
+				else {
 					characters[i]->executeReaction(character->getNotifyText(), "", character->getName(), true);
+				}
 				break;
 			}
 		}
 		break;
 
 	case falar:
-		broadcastMessage(args[0], args[1], character->getName(), character->getNotifyTargets(), character->getCurrentRoom());
+		broadcastMessage(character->getNotifyArgs()[0], character->getNotifyArgs()[1], character->getName(), 
+						character->getNotifyTargets(), character->getCurrentRoom());
 		break;
 
 	case conversar:
-		conversations.push_back(Conversation(character->getNotifyText(), character->getCurrentRoom()->getCodename()));
+		conversations.push_back( Conversation(character->getNotifyText(), character->getCurrentRoom()->getCodename(),
+												character->getNotifyArgs()[1][0] == 'r') );
 		break;
 
 	case ouvir:
@@ -467,7 +492,6 @@ void Game::advanceTime() {
 	for (int i = 0; i < npcs.size(); i++)
 		npcs[i]->checkRoom( getPeopleInRoom(npcs[i]->getCurrentRoom()) );
 
-
 	// Jogo
 	time++;
 	saveGame();
@@ -482,6 +506,7 @@ void Game::advanceConversations() {
 			// If the convo is over
 			bool endConvo = false;
 			if (it->ended()) {
+				emitEvent(_evento_fim_conversa, vector<string>({ it->getName() }));
 				conversations.erase(it);
 				break;
 			}
@@ -561,8 +586,10 @@ void Game::broadcastMessage(string topic, string str, string sender, set<string>
 	for (int i = 0; i < characters.size(); i++) {
 		if (receivers.count(characters[i]->getName()) && characters[i]->getCurrentRoom() == room) {
 			characters[i]->executeReaction(topic, str, sender, false);
-			if (characters[i] == player && topic != "")
+			if (characters[i] == player && topic != "") {
+				obtainAbstract(topic, player);
 				notify(_ouvir);
+			}
 		}
 	}
 }
@@ -589,8 +616,8 @@ vector<Character*> Game::getPeopleInRoom(Room* room) {
 
 
 // ACTIONS ----------------------------------
-void Game::obtainObject(string name, Character* receiver) {
-	FileDict filedict = FileManager::readFromFile("files/items/" + name + ".txt");
+void Game::obtainObject(string codename, Character* receiver) {
+	FileDict filedict = FileManager::readFromFile("files/items/" + codename + ".txt");
 	vector<string> actionVec = filedict.getValues("actions");
 	set<string> actionSet = set<string>();
 	for (int i = 0; i < actionVec.size(); i++)
@@ -600,6 +627,18 @@ void Game::obtainObject(string name, Character* receiver) {
 		receiver->addItem(filedict.getValues("name")[0], filedict.getValues("codename")[0], "", actionSet);
 	else
 		receiver->addItem(filedict.getValues("name")[0], filedict.getValues("name")[0], "", actionSet);
+
+	notify(_obter);
+}
+
+
+void Game::obtainAbstract(string codename, Character* receiver) {
+	FileDict filedict = FileManager::readFromFile("files/abstract/" + codename + ".txt");
+
+	if (filedict.hasKey("codename"))
+		receiver->addAbstract(filedict.getValues("name")[0], filedict.getValues("codename")[0], filedict.getValues("description")[0], filedict.getValues("type")[0][0]);
+	else
+		receiver->addAbstract(filedict.getValues("name")[0], filedict.getValues("name")[0], filedict.getValues("description")[0], filedict.getValues("type")[0][0]);
 
 	notify(_obter);
 }

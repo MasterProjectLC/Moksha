@@ -1,14 +1,19 @@
 #include "conversation.h"
 
-Conversation::Conversation(string conversation, string room) {
+Conversation::Conversation(string conversation, string room) : Conversation(conversation, room, false) {}
+
+Conversation::Conversation(string conversation, string room, bool reaction) {
 	name = conversation;
 	begun = true;
 	convoStage = 0;
-	this->conversation.load_file( ("files/conversations/" + conversation + ".xml").c_str() );
+	if (reaction)
+		this->conversation.load_file(("files/reactions/" + conversation + ".xml").c_str());
+	else
+		this->conversation.load_file(("files/conversations/" + conversation + ".xml").c_str());
 	it = this->conversation.child("Conversation").begin();
 	this->room = room;
 
-	// Inserir participantes
+	// Insert participants
 	for (xml_node_iterator ait = this->conversation.child("Participants").begin(); ait != this->conversation.child("Participants").end(); ait++) {
 		this->participants.insert(ait->name());
 	}

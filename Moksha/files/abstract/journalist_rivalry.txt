@@ -1,0 +1,8 @@
+name:
+journalist rivalry
+codename:
+journalist_rivalry
+type:
+c
+description:
+Jenna and Renard don't see eye to eye. Why's that?
