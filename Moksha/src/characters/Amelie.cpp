@@ -9,30 +9,35 @@ Amelie::Amelie(Map* m) : NPC{ m, "Amelie",
 }
 
 void Amelie::setupActionsParticular() {
-	
+	addTrackableRoom("AmelieRoom");
+	goap_set_pre(&ap, "meditate", "in_AmelieRoom", true);
+	goap_set_pst(&ap, "meditate", "meditating", true);
 }
 
 
 void Amelie::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "with_Santos", true);
+	goap_worldstate_set(&ap, &world, "meditating", false);
 }
 
 
 void Amelie::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "with_Santos", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "meditating", true);
 }
 
+void Amelie::updateWorldExtra() {
+	
+}
 
 int Amelie::decideActionParticular(string action) {
+	if (action == "meditate") {
+		actionArgs.push_back("meditating.");
+		return acaoNula;
+	}
+
 	return descansar;
 }
 
 
-void Amelie::advancePlansExtra(string currentProcess) {
+void Amelie::updateProcessExtra(string currentProcess) {
 
-}
-
-
-void Amelie::updateWorldExtra() {
-	// describe current world state.
 }

@@ -1,0 +1,8 @@
+name:
+External Structure
+codename:
+ExternalStructure
+text:
+This is the closest one can get to 'outside'. From here, crude structures sprout out and give shape to the airship’s balloon, moving and manipulating air and pressure.
+adjacent:
+ControlRoom

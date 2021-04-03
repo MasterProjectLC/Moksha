@@ -9,7 +9,7 @@
                 <Concepts/>
                 <Mind/>
 			</Elliot>
-			<Jenna Room="NorthCorridor"> 
+			<Jenna Room="JennaRoom"> 
 				<Inventory/>
                 <Atoms/>
 			</Jenna>
@@ -25,41 +25,53 @@
 				<Inventory/>
                 <Atoms/>
 			</Hilda>
-            <Tom Room="EntranceLounge"> 
+            <Tom Room="NorthEngines"> 
 				<Inventory/>
                 <Atoms/>
 			</Tom>
-            <George Room="EntranceLounge"> 
+            <George Room="GeorgeRoom"> 
 				<Inventory/>
                 <Atoms/>
 			</George>
-            <Willow Room="EntranceLounge"> 
+            <Willow Room="BlakewellRoom"> 
 				<Inventory/>
                 <Atoms/>
 			</Willow>
-            <Liz Room="EntranceLounge"> 
+            <Liz Room="LizRoom"> 
 				<Inventory/>
                 <Atoms/>
 			</Liz>
-            <Amelie Room="EntranceLounge"> 
+            <Amelie Room="AmelieRoom"> 
 				<Inventory/>
                 <Atoms/>
 			</Amelie>
-            <Magnus Room="EntranceLounge"> 
+            <Magnus Room="MagnusRoom"> 
 				<Inventory/>
                 <Atoms/>
 			</Magnus>
-            <Renard Room="EntranceLounge"> 
+            <Renard Room="RenardRoom"> 
 				<Inventory/>
                 <Atoms/>
 			</Renard>
-            <Paul Room="EntranceLounge"> 
+            <Paul Room="RenardRoom"> 
 				<Inventory/>
                 <Atoms/>
 			</Paul>
 		</Characters>
 
 		<Map>
+            <ViewingLobby>
+				<Objects/>
+			</ViewingLobby>
+
+            <Deposit>
+				<Objects/>
+			</Deposit>
+
+            <CrewQuarters>
+				<Objects/>
+			</CrewQuarters>
+
 			<NorthCorridor>
 				<Objects>
 					<Clock/>
@@ -163,6 +175,42 @@
 					<Table/>
 				</Objects>
 			</Study>
+
+            <CrewCorridor>
+				<Objects/>
+			</CrewCorridor>
+
+            <Closet>
+				<Objects/>
+			</Closet>
+
+            <SouthEngines>
+				<Objects/>
+			</SouthEngines>
+
+            <NorthEngines>
+				<Objects/>
+			</NorthEngines>
+
+            <Navigation>
+				<Objects/>
+			</Navigation>
+
+            <SouthGenerator>
+				<Objects/>
+			</SouthGenerator>
+
+            <NorthGenerator>
+				<Objects/>
+			</NorthGenerator>
+
+            <ControlRoom>
+				<Objects/>
+			</ControlRoom>
+
+            <ExternalStructure>
+				<Objects/>
+			</ExternalStructure>
 		</Map>
         <Conversations/>
 	</Game>

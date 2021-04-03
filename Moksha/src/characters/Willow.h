@@ -10,7 +10,7 @@ public:
 	Willow() : NPC{ NULL, "Willow", "", F, 1, 1 } {}
 	explicit Willow(Map* m);
 	int decideActionParticular(string action) override;
-	void advancePlansExtra(string currentProcess) override;
+	void updateProcessExtra(string currentProcess) override;
 	void setupWorldParticular() override;
 	void setupObjectivesParticular() override;
 	void updateWorldExtra() override;

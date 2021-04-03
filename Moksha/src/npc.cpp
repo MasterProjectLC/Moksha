@@ -43,6 +43,16 @@ void NPC::clear() {
 	lastSeen.clear();
 }
 
+void NPC::addTrackableRoom(string room) {
+	string* novo = new string(room);
+	trackableRooms.insert(novo);
+	string* move_novo = new string("move_" + *novo);
+	string* in_novo = new string("in_" + *novo);
+	addedActions.insert(move_novo);
+	addedConditions.insert(in_novo);
+	goap_set_pst(&ap, move_novo->c_str(), in_novo->c_str(), true);
+}
+
 // PATHFINDING ---------------
 
 queue<Room*> NPC::findPath(Room* targetRoom) {
@@ -81,17 +91,16 @@ queue<Room*> NPC::search(Room* roomClue) {
 };
 
 
-string NPC::nextRoomInPath() {
-	string retorno = "";
+void NPC::advancePath() {
 	if (path.empty())
-		advancePlansExtra(plan[currentStep]); // Refresh plans
-
-	if (!path.empty()) {
-		retorno = path.front()->getCodename();
+		updateProcess(plan[currentStep]); // Refresh plans
+	else
 		path.pop();
-	}
+}
 
-	return retorno;
+void NPC::move(string room) {
+	Character::move(room);
+	advancePath();
 }
 
 // REACTIONS ----------------------------------
@@ -178,6 +187,7 @@ void NPC::setupPlans() {
 	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++)
 		setCondition("with_" + *it, false);
 	setupWorldParticular();
+	updateWorldVariables();
 
 	// describe goal
 	goalList = PriorityVector<Goal>(vector<Goal>(), goalCompare);
@@ -189,6 +199,7 @@ void NPC::setupPlans() {
 	goalList.sort();
 
 	// calculate initial plan
+	plansz = 16;
 	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
 	currentStep = -1;
 	updateWorld();
@@ -196,10 +207,10 @@ void NPC::setupPlans() {
 }
 
 
-void NPC::addGoal(vector<string*> conditions, vector<bool> conditionStates) {
+void NPC::addGoal(vector<string*> conditions, vector<bool> conditionStates, int priority) {
 	if (conditions.size() != conditionStates.size())
 		return;
-	Goal newgoal = Goal(1, true);
+	Goal newgoal = Goal(priority, true);
 	goap_worldstate_clear(&newgoal.goal);
 	for (int i = 0; i < conditions.size(); i++) {
 		goap_worldstate_set(&ap, &newgoal.goal, conditions[i]->c_str(), conditionStates[i]);
@@ -208,8 +219,8 @@ void NPC::addGoal(vector<string*> conditions, vector<bool> conditionStates) {
 	goalList.push(newgoal);
 }
 
-void NPC::addGoal(string* condition, bool conditionState) {
-	Goal newgoal = Goal(1, true);
+void NPC::addGoal(string* condition, bool conditionState, int priority) {
+	Goal newgoal = Goal(priority, true);
 	goap_worldstate_clear(&newgoal.goal);
 	goap_worldstate_set(&ap, &newgoal.goal, condition->c_str(), conditionState);
 	conditionNames.push_back(condition);
@@ -218,7 +229,7 @@ void NPC::addGoal(string* condition, bool conditionState) {
 
 
 void NPC::updateWorld() {
-	updateWorldExtra();
+	updateWorldVariables();
 
 	// Detect that current action is impossible
 	if (plansz > 0) {
@@ -227,6 +238,13 @@ void NPC::updateWorld() {
 		if (prereqs & world.values != prereqs)
 			changePlans(true);
 	}
+}
+
+void NPC::updateWorldVariables() {
+	for (set<string*>::iterator it = trackableRooms.begin(); it != trackableRooms.end(); it++)
+		goap_worldstate_set(&ap, &world, ("in_" + **it).c_str(), currentRoom->getCodename() == **it);
+
+	updateWorldExtra();
 }
 
 
@@ -253,19 +271,26 @@ void NPC::advancePlans() {
 
 	// Advance plans
 	if (plansz > 0) {
-		string currentProcess = plan[currentStep];
-
-		if (currentProcess.substr(0, 7).compare("search_") == 0) {
-			if (lastSeen.hasKey( currentProcess.substr(7, 10000) ))
-				path = search(mapp->getRoom(lastSeen.getValues( currentProcess.substr(7, 10000) )));
-			else
-				path = search();
-		}
-		else if (currentProcess.substr(0, 5).compare("move_") == 0) {
-			path = findPath(mapp->getRoom( currentProcess.substr(5, 10000) ));
-		} else
-			advancePlansExtra(currentProcess);
+		updateProcess(plan[currentStep]);
 	}
+}
+
+
+void NPC::updateProcess(string currentProcess) {
+	// Search - Setup path plan
+	if (currentProcess.substr(0, 7).compare("search_") == 0) {
+		if (lastSeen.hasKey(currentProcess.substr(7, 10000)))
+			path = search(mapp->getRoom(lastSeen.getValues(currentProcess.substr(7, 10000))));
+		else
+			path = search();
+	}
+	// Move - setup path plan
+	else if (currentProcess.substr(0, 5).compare("move_") == 0) {
+		path = findPath(mapp->getRoom(currentProcess.substr(5, 10000)));
+	}
+	// Other actions that require prior planning
+	else
+		updateProcessExtra(currentProcess);
 }
 
 
@@ -274,6 +299,7 @@ void NPC::changePlans(bool justUpdated) {
 		updateWorldExtra();
 
 	// Calculate a new plan
+	plansz = 16;
 	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
 	currentStep = -1;
 	advancePlans();
@@ -288,7 +314,8 @@ int NPC::decideAction() {
 		advancePlans();
 
 	// Current objective is top priority
-	if (currentGoal.goal.values == (goalList.highest()->goal.values)) {
+	goalList.sort();
+	if (currentGoal.goal.values == goalList.highest()->goal.values) {
 		// Current objective was completed - find next non-completed objective
 		vector<Goal>::iterator it = goalList.highest();
 		if ( ((world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values || currentStep >= plansz) && !goalList.empty() ) {
@@ -321,7 +348,7 @@ int NPC::decideAction() {
 		string action = plan[currentStep];
 
 		if ( action.substr(0, 5).compare("move_") == 0 || action.substr(0, 7).compare("search_") == 0 ) {
-			actionArgs.push_back(nextRoomInPath());
+			actionArgs.push_back(path.front()->getCodename());
 			currentAction = mover;
 		} else 
 			currentAction = decideActionParticular(action);

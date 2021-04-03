@@ -1,0 +1,6 @@
+name:
+Navigation
+text:
+A large window stands in front of the airship's yoke. From here, both Hilda and Santos can tune the Medusa's direction.
+adjacent:
+CrewCorridor

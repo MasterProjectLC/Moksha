@@ -31,7 +31,7 @@
 	<Narrator line="For a moment, Santos remained silent."/>
 
 	<Santos line="I... Listen, I was bloody looking for some'ing else, alright? Important part is, MY GUN IS GONE. Someone took it!" emotion="rage">
-		<Santos_no_gun info="info"/>
+		<santos_no_gun info="info"/>
 	</Santos>
 
 	<Hilda line="Fucking hell, by the seas, Santos! I can't go on a mad chase after your gun right now. You better take care of this, and fast - I don't want anyone touching down with a hole on the middle of the chest!"/>

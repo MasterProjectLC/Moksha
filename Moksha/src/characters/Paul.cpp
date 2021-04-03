@@ -8,30 +8,34 @@ M, 7, 9 } {
 }
 
 void Paul::setupActionsParticular() {
-	
+	addTrackableRoom("RenardRoom");
+	goap_set_pre(&ap, "plan", "in_RenardRoom", true);
+	goap_set_pst(&ap, "plan", "planning", true);
 }
 
 
 void Paul::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "with_Santos", true);
+	goap_worldstate_set(&ap, &world, "planning", false);
 }
 
 
 void Paul::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "with_Santos", true);
-}
-
-
-int Paul::decideActionParticular(string action) {
-	return descansar;
-}
-
-
-void Paul::advancePlansExtra(string currentProcess) {
-
+	goap_worldstate_set(&ap, &currentGoal.goal, "planning", true);
 }
 
 
 void Paul::updateWorldExtra() {
 	// describe current world state.
+}
+
+void Paul::updateProcessExtra(string currentProcess) {
+
+}
+
+int Paul::decideActionParticular(string action) {
+	if (action == "plan") {
+		actionArgs.push_back("planning.");
+		return acaoNula;
+	}
+	return descansar;
 }

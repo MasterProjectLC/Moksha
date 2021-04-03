@@ -9,30 +9,38 @@ M, 3, 5 } {
 }
 
 void Renard::setupActionsParticular() {
-	
+	addTrackableRoom("RenardRoom");
+	goap_set_pre(&ap, "write", "in_RenardRoom", true);
+	goap_set_pst(&ap, "write", "writing", true);
 }
 
 
 void Renard::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "with_Willow", true);
+	goap_worldstate_set(&ap, &world, "in_RenardRoom", true);
+	goap_worldstate_set(&ap, &world, "writing", false);
 }
 
 
 void Renard::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "with_Willow", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "writing", true);
 }
 
 
-int Renard::decideActionParticular(string action) {
-	return descansar;
-}
-
-
-void Renard::advancePlansExtra(string currentProcess) {
+void Renard::updateProcessExtra(string currentProcess) {
 
 }
 
 
 void Renard::updateWorldExtra() {
 	// describe current world state.
+}
+
+
+int Renard::decideActionParticular(string action) {
+	if (action == "write") {
+		actionArgs.push_back("writing.");
+		return acaoNula;
+	}
+
+	return descansar;
 }

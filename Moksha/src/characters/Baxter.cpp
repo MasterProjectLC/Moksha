@@ -10,42 +10,30 @@ Baxter::Baxter(Map* m) : NPC{ m, "Baxter",
 }
 
 void Baxter::setupActionsParticular() {
-	goap_set_pst(&ap, "move_Runway", "in_BlakewellRoom", true);
-	goap_set_pre(&ap, "wait_Runway", "in_BlakewellRoom", true);
-	goap_set_pst(&ap, "wait_Runway", "waiting_Runway", true);
+	addTrackableRoom("BlakewellRoom");
 }
 
 
 void Baxter::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "in_BlakewellRoom", false);
-	goap_worldstate_set(&ap, &world, "waiting_Runway", false);
-	updateWorldExtra();
+
 }
 
 
 void Baxter::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "waiting_Runway", true);
-	//addGoal(new string("in_Runway"), true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "in_BlakewellRoom", true);
 }
 
 
 void Baxter::updateWorldExtra() {
-	// describe current world state.
-	goap_worldstate_set(&ap, &world, "in_BlakewellRoom", currentRoom->getCodename() == "BlakewellRoom");
+
 }
 
 
-void Baxter::advancePlansExtra(string currentProcess) {
-	if (currentProcess == "move_BlakewellRoom")
-		path = findPath(mapp->getRoom("BlakewellRoom"));
+void Baxter::updateProcessExtra(string currentProcess) {
+
 }
 
 
 int Baxter::decideActionParticular(string action) {
-	if (action == "wait_Runway") {
-		actionArgs.push_back("waiting.");
-		return acaoNula;
-	}
-
 	return descansar;
 }

@@ -1,0 +1,8 @@
+name:
+South Engines
+codename:
+SouthEngines
+text:
+Valves, pistons and smoke. It's here where the workers spend most of their time adjusting the engines fine-tuned operations.
+adjacent:
+CrewCorridor|SouthGenerator

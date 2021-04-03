@@ -1,0 +1,8 @@
+name:
+Control Room
+codename:
+ControlRoom
+text:
+This is it. The grand prize. The heart of the machine. Countless buttons, levers and lights adorn the panel and walls in an intricate fashion, almost to the point of it becoming a puzzle.
+adjacent:
+NorthGenerator|SouthGenerator|ExternalStructure

@@ -15,8 +15,14 @@ void Game::setup() {
 			npcs[i]->setupPlans();
 
 		conversations.push_back(Conversation("intro", "FlightDock", false));
-		advanceTime();
+		advanceConversations();
 	}
+
+	if (findCharacter("Baxter") == NULL) {
+		((NPC*)findCharacter("Jenna"))->addGoal(new string("waiting_Runway"), true, 2);
+		((NPC*)findCharacter("George"))->addGoal(new string("waiting_Runway"), true, 2);
+	}
+
 }
 
 
@@ -34,8 +40,8 @@ void Game::emitEvent(int id, vector<string> args) {
 // SAVE/LOAD --------------------------------------
 void Game::initializeGame() {
 	// Generate game
-	time = 1;
-	loop = 1;
+	time = 0;
+	loop = 0;
 
 	player = new Player(&map);
 	player->add(this, OBSERVER_OFFSET);
@@ -597,16 +603,16 @@ void Game::advanceConversations() {
 				string nao = cit->attribute("n").value();
 				bool inverted = (nao == "n");
 				
-				if (conditionMet == inverted) {
-					valid = false;
-					break;
-				}
-				else if (addTag == "add_tag")
+				if (addTag == "add_tag")
 					it->addTag(cit->name());
 				else if (info == "info")
 					infoAtom = cit->name();
 				else if (end == "end")
 					endConvo = true;
+				else if (conditionMet != inverted) {
+					valid = false;
+					break;
+				}
 			}
 
 			if (!valid) 

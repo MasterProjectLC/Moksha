@@ -1,0 +1,6 @@
+name:
+Deposit
+text:
+A large, dark room where cargo and likewise large objects are stored. Nothing much to be said.
+adjacent:
+ViewingLobby|CrewQuarters

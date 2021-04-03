@@ -60,7 +60,7 @@ static void reconstruct_plan( actionplanner_t* ap, astarnode_t* goalnode, const 
 {
 	astarnode_t* curnode = goalnode;
 	int idx = *plansize - 1;
-	int numsteps=0;
+	int numsteps = 0;
 	while ( curnode && curnode->actionname )
 	{
 		if ( idx >= 0 )
@@ -135,13 +135,13 @@ int astar_plan
 	{
 		if ( numOpened == 0 ) { LOGI( "Did not find a path." ); return -1; }
 		// find the node with lowest rank
-		int lowestIdx=-1;
-		int lowestVal=INT_MAX;
-		for ( int i=0; i<numOpened; ++i )
+		int lowestIdx = -1;
+		int lowestVal = INT_MAX;
+		for ( int i = 0; i < numOpened; ++i )
 		{
-			if ( opened[ i ].f < lowestVal )
+			if ( opened[i].f < lowestVal )
 			{
-				lowestVal = opened[ i ].f;
+				lowestVal = opened[i].f;
 				lowestIdx = i;
 			}
 		}

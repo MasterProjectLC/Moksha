@@ -1,0 +1,8 @@
+name:
+North Generator
+codename:
+NorthGenerator
+text:
+Oof, the smoke is even denser here. I suppose this is where they power the engines and produce the hot air to lift the balloons.
+adjacent:
+ControlRoom|NorthEngines

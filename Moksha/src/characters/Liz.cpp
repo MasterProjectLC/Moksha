@@ -9,30 +9,38 @@ F, 2, 2 } {
 }
 
 void Liz::setupActionsParticular() {
-	
+	addTrackableRoom("LizRoom");
+	goap_set_pre(&ap, "paint", "in_LizRoom", true);
+	goap_set_pst(&ap, "paint", "painting", true);
 }
 
 
 void Liz::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "with_Santos", true);
+	goap_worldstate_set(&ap, &world, "in_LizRoom", true);
+	goap_worldstate_set(&ap, &world, "painting", false);
 }
 
 
 void Liz::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "with_Santos", true);
-}
-
-
-int Liz::decideActionParticular(string action) {
-	return descansar;
-}
-
-
-void Liz::advancePlansExtra(string currentProcess) {
-
+	goap_worldstate_set(&ap, &currentGoal.goal, "painting", true);
 }
 
 
 void Liz::updateWorldExtra() {
-	// describe current world state.
+	goap_worldstate_set(&ap, &world, "in_LizRoom", currentRoom->getCodename() == "LizRoom");
+}
+
+
+void Liz::updateProcessExtra(string currentProcess) {
+
+}
+
+
+int Liz::decideActionParticular(string action) {
+	if (action == "paint") {
+		actionArgs.push_back("painting.");
+		return acaoNula;
+	}
+
+	return descansar;
 }

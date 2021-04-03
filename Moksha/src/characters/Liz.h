@@ -10,7 +10,7 @@ public:
 	Liz() : NPC{ NULL, "Liz", "", F, 2, 2 } {}
 	explicit Liz(Map* m);
 	int decideActionParticular(string action) override;
-	void advancePlansExtra(string currentProcess) override;
+	void updateProcessExtra(string currentProcess) override;
 	void setupWorldParticular() override;
 	void setupObjectivesParticular() override;
 	void updateWorldExtra() override;

@@ -9,13 +9,15 @@ M, 8, 13 } {
 }
 
 void George::setupActionsParticular() {
-	goap_set_pst(&ap, "move_Runway", "in_Runway", true);
+	addTrackableRoom("Runway");
+	addTrackableRoom("ViewingDeck");
 	goap_set_pre(&ap, "wait_Runway", "in_Runway", true);
 	goap_set_pst(&ap, "wait_Runway", "waiting_Runway", true);
 }
 
 
 void George::setupWorldParticular() {
+	goap_worldstate_set(&ap, &world, "in_ViewingDeck", false);
 	goap_worldstate_set(&ap, &world, "in_Runway", false);
 	goap_worldstate_set(&ap, &world, "waiting_Runway", false);
 	updateWorldExtra();
@@ -23,21 +25,19 @@ void George::setupWorldParticular() {
 
 
 void George::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "waiting_Runway", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "in_ViewingDeck", true);
 }
 
 
 void George::updateWorldExtra() {
 	// describe current world state.
-	goap_worldstate_set(&ap, &world, "in_Runway", currentRoom->getName() == "Runway");
 	if (lastSeen.hasKey("Jenna"))
 		goap_set_cost(&ap, "search_Jenna", pathSize(currentRoom, mapp->getRoom(lastSeen.getValues("Jenna"))));
 }
 
 
-void George::advancePlansExtra(string currentProcess) {
-	if (currentProcess == "move_Runway")
-		path = findPath(mapp->getRoom("Runway"));
+void George::updateProcessExtra(string currentProcess) {
+
 }
 
 

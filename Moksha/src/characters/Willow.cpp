@@ -9,30 +9,36 @@ Willow::Willow(Map* m) : NPC{ m, "Willow",
 }
 
 void Willow::setupActionsParticular() {
-	
+	addTrackableRoom("BlakewellRoom");
+	goap_set_pre(&ap, "write", "in_BlakewellRoom", true);
+	goap_set_pst(&ap, "write", "writing", true);
 }
 
 
 void Willow::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "with_Baxter", true);
+	goap_worldstate_set(&ap, &world, "in_BlakewellRoom", true);
+	goap_worldstate_set(&ap, &world, "writing", false);
 }
 
 
 void Willow::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "with_Baxter", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "writing", true);
 }
-
-
-int Willow::decideActionParticular(string action) {
-	return descansar;
-}
-
-
-void Willow::advancePlansExtra(string currentProcess) {
-
-}
-
 
 void Willow::updateWorldExtra() {
 	// describe current world state.
+	
+}
+
+void Willow::updateProcessExtra(string currentProcess) {
+
+}
+
+int Willow::decideActionParticular(string action) {
+	if (action == "write") {
+		actionArgs.push_back("writing.");
+		return acaoNula;
+	}
+
+	return descansar;
 }

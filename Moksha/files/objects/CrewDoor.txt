@@ -1,0 +1,12 @@
+name:
+Crew Door
+codename:
+CrewDoor
+visible:
+true
+actions:
+examine|look|see|check|go|traverse
+examine,look,see,check:
+It reads 'Crew Only'.
+go,traverse:
+Let's see...

@@ -25,6 +25,6 @@ public:
 	bool empty() { return v.empty(); }
 	void push(T element) { v.push_back(element); push_heap(v.begin(), v.end(), comparison); }
 	T pop() { T retorno = v.back(); v.pop_back(); pop_heap(v.begin(), v.end(), comparison); return retorno; }
-	void sort() { sort_heap(v.begin(), v.end(), comparison); }
+	void sort() { make_heap(v.begin(), v.end(), comparison); sort_heap(v.begin(), v.end(), comparison); }
 	void clear() { v.clear(); }
 };

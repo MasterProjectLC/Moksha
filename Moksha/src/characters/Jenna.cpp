@@ -11,13 +11,15 @@ F, 9, 10} {
 }
 
 void Jenna::setupActionsParticular() {
-	goap_set_pst(&ap, "move_Runway", "in_Runway", true);
+	addTrackableRoom("Runway");
+	addTrackableRoom("ViewingDeck");
 	goap_set_pre(&ap, "wait_Runway", "in_Runway", true);
 	goap_set_pst(&ap, "wait_Runway", "waiting_Runway", true);
 }
 
 
 void Jenna::setupWorldParticular() {
+	goap_worldstate_set(&ap, &world, "in_ViewingDeck", false);
 	goap_worldstate_set(&ap, &world, "in_Runway", false);
 	goap_worldstate_set(&ap, &world, "waiting_Runway", false);
 	updateWorldExtra();
@@ -25,20 +27,17 @@ void Jenna::setupWorldParticular() {
 
 
 void Jenna::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "waiting_Runway", true);
-	//addGoal(new string("in_Runway"), true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "in_ViewingDeck", true);
 }
 
 
 void Jenna::updateWorldExtra() {
-	// describe current world state.
-	goap_worldstate_set(&ap, &world, "in_Runway", currentRoom->getCodename() == "Runway");
+
 }
 
 
-void Jenna::advancePlansExtra(string currentProcess) {
-	if (currentProcess == "move_Runway")
-		path = findPath(mapp->getRoom("Runway"));
+void Jenna::updateProcessExtra(string currentProcess) {
+
 }
 
 

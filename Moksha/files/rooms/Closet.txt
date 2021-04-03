@@ -1,0 +1,6 @@
+name:
+Closet
+text:
+Just an old, dusty closet with equipment and tools. Wait, is there a secret passage in here?
+adjacent:
+CrewCorridor

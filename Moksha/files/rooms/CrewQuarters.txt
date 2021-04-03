@@ -1,0 +1,6 @@
+name:
+CrewQuarters
+text:
+Cramped, dark and hot. Yeah, the crew doesn’t really live in luxury here. The base is always the one to get hit the hardest...
+adjacent:
+Deposit

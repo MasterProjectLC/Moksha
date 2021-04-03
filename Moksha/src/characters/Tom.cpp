@@ -9,30 +9,37 @@ M, 10, 11 } {
 }
 
 void Tom::setupActionsParticular() {
-	
+	addTrackableRoom("ControlRoom");
+	addTrackableRoom("NorthEngines");
+	goap_set_pre(&ap, "work", "in_NorthEngines", true);
+	goap_set_pst(&ap, "work", "working", true);
 }
 
 
 void Tom::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "with_Santos", true);
+	goap_worldstate_set(&ap, &world, "in_ControlRoom", false);
+	goap_worldstate_set(&ap, &world, "in_NorthEngines", true);
+	goap_worldstate_set(&ap, &world, "working", false);
 }
 
 
 void Tom::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "with_Santos", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "working", true);
 }
-
-
-int Tom::decideActionParticular(string action) {
-	return descansar;
-}
-
-
-void Tom::advancePlansExtra(string currentProcess) {
-
-}
-
 
 void Tom::updateWorldExtra() {
 	// describe current world state.
+}
+
+void Tom::updateProcessExtra(string currentProcess) {
+
+}
+
+int Tom::decideActionParticular(string action) {
+	if (action == "work") {
+		actionArgs.push_back("working.");
+		return acaoNula;
+	}
+	
+	return descansar;
 }

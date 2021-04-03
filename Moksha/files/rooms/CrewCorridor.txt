@@ -1,0 +1,8 @@
+name:
+Crew Corridor
+codename:
+CrewCorridor
+text:
+So, here I am - the crew corridor. From this point forward, all I'll find will be back rooms and engines.
+adjacent:
+Navigation|NorthEngines|SouthEngines|Closet

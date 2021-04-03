@@ -17,6 +17,7 @@ protected:
 	set<string*> addedConditions;
 	set<string*> addedActions;
 	set<string> trackablePeople;
+	set<string*> trackableRooms;
 	vector<string*> conditionNames;
 
 	queue<Room*> path;
@@ -44,22 +45,24 @@ protected:
 		return mapp->optimalPath(inicio, alvo).size();
 	};
 
-	string nextRoomInPath();
+	void addTrackableRoom(string room);
+
+	void advancePath();
+	void move(string room) override;
 
 	virtual int decideActionParticular(string acao) { return descansar; }
 	virtual void setupWorldParticular() {}
 	virtual void setupObjectivesParticular() {}
 	virtual void setupActionsParticular() {}
 	void updateWorld();
+	void updateWorldVariables();
 	void updateLastSeen(string pursueTarget, string room);
 	virtual void updateWorldExtra() {}
 	void advancePlans();
-	virtual void advancePlansExtra(string currentProcess) {}
+	void updateProcess(string currentProcess);
+	virtual void updateProcessExtra(string currentProcess) {}
 	void changePlans() { changePlans(false); };
 	void changePlans(bool justUpdated);
-
-	void addGoal(vector<string*> conditions, vector<bool> conditionStates);
-	void addGoal(string* condition, bool conditionState);
 
 	bool isCurrentStateFulfilled();
 	void setBusy(bool novo) { busy = novo; }
@@ -80,6 +83,9 @@ public:
 	void checkRoom(vector<Character*> peopleInRoom) override;
 	void seeCharMoving(Character* character, Room* otherRoom, bool entering) override;
 	void setSalaAlvo(Room* nova) { findPath(nova); }
+
+	void addGoal(vector<string*> conditions, vector<bool> conditionStates, int priority);
+	void addGoal(string* condition, bool conditionState, int priority);
 
 	void setupPlans();
 	void clear();

@@ -1,0 +1,8 @@
+name:
+Santos lost his gun
+codename:
+santos_no_gun
+type:
+r
+description:
+Somehow, Santos lost his gun. This might end in disaster...

@@ -52,58 +52,58 @@ Object* Map::getObject(int id) {
 	return rooms[id / MAX_OBJECT_COUNT].getElement()->getObject(id % MAX_OBJECT_COUNT);
 }
 
-// CAMINHOS E PATHFINDING -----------------------------------------------------------------------
+// PATHFINDING -----------------------------------------------------------------------
 
 queue<Room*> Map::optimalPath(Room *origin, Room *destination) {
-	queue<Room*> caminho;
+	queue<Room*> path;
 	clearVisited();
 
 	// Edge case
 	if (origin == destination)
-		return caminho;
+		return path;
 
-	// Encontra node da sala de origem
-	queue<Node*> procura;
+	// Find origin node
+	queue<Node*> searching;
 	stack<Node*> reverser;
 	for (int i = 0; i < rooms.size(); i++) {
 		if (rooms[i].getElement()->getCodename() == origin->getCodename()) {
 			rooms[i].setVisited(1);
-			procura.push(&rooms[i]);
+			searching.push(&rooms[i]);
 			break;
 		}
 	}
 
 	// Iterate through the adjacent nodes to the examined node
-	while (!procura.empty()) {
-		Node* checkedRoom = procura.front();
+	while (!searching.empty()) {
+		Node* checkedRoom = searching.front();
 		for (int i = 0; i < checkedRoom->getAdjacents().size(); i++) {
-			// Não examinada ainda - adicionar à lista de checagem e colocar node atual como pai
+			// Not examined yet - add to the search list and set the current node as its parent
 			if (rooms[checkedRoom->getAdjacents()[i]].getVisited() == 0) {
-				procura.push(&rooms[checkedRoom->getAdjacents()[i]]);			// Coloca na lista
-				rooms[checkedRoom->getAdjacents()[i]].setParent(checkedRoom);		// Seta o node atual como pai
-				rooms[checkedRoom->getAdjacents()[i]].setVisited(1);			// Seta visitado para 1
+				searching.push(&rooms[checkedRoom->getAdjacents()[i]]);			// Pushes it to the list
+				rooms[checkedRoom->getAdjacents()[i]].setParent(checkedRoom);		// Sets the current node as the parent
+				rooms[checkedRoom->getAdjacents()[i]].setVisited(1);			// Sets visited to 1
 
-				// Sala alvo encontrada!
+				// Target room found!
 				if (rooms[checkedRoom->getAdjacents()[i]].getElement() == destination) {
 					reverser.push(&rooms[checkedRoom->getAdjacents()[i]]);
 
-					// Construir caminho no reverso
+					// Build reverse path
 					while (reverser.top()->hasParent())
 						reverser.push(reverser.top()->getParent());
 					while (!reverser.empty()) {
-						caminho.push(reverser.top()->getElement());
+						path.push(reverser.top()->getElement());
 						reverser.pop();
 					}
 
-					caminho.pop();	// Retira o primeiro da lista (a própria origem)
-					return caminho;
+					path.pop();	// Removes the first node from the list (the origin itself)
+					return path;
 				}
 			}
 		}
-		procura.pop();
+		searching.pop();
 	}
 
-	return caminho;
+	return path;
 };
 
 
