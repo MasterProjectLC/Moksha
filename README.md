@@ -3,7 +3,7 @@ Repeatedly rewind in time and try to save everyone aboard the steampunk airship 
 
 ## Credits
 ### Programming
-* Dan Isamu (MasterProject)
+* Dan Isamu (MisterProject)
 
 #### Tools
 * Arseny Kapoulkine (zeux) - [pugixml](https://github.com/zeux/pugixml)
@@ -11,7 +11,7 @@ Repeatedly rewind in time and try to save everyone aboard the steampunk airship 
 
 ### Writing/Narrative
 * Ágata Drigo (Akatze)
-* Dan Isamu (MasterProject)
+* Dan Isamu (MisterProject)
 * Leonardo Del Lama (Ruther)
 
 ### Special Thanks
