@@ -3,11 +3,21 @@
 #include "saveModule.h"
 #include <conio.h>
 #include <ctype.h>
+# pragma comment(lib, "secur32.lib")
+# pragma comment(lib, "winmm.lib")
+# pragma comment(lib, "dmoguids.lib")
+# pragma comment(lib, "wmcodecdspuuid.lib")
+# pragma comment(lib, "msdmo.lib")
+# pragma comment(lib, "Strmiids.lib")
+#include <timeapi.h>
 
 class Overseer : public IObserver {
 private:
 	Interface interfacer = Interface(140, 40, 60, 30);
 	Game game = Game();
+	int time = 0;
+	const int FPS = 60;
+	const int frameDelay = 1000 / FPS;
 
 public:
 	Overseer() {
@@ -70,7 +80,11 @@ public:
 
 	int main() {
 		while (1) {
+			time = (int)timeGetTime();
 			interfacer.clocking();
+			time = (int)timeGetTime() - time;
+			if (frameDelay > time)
+				Sleep(frameDelay - time);
 		}
 
 		return 0;

@@ -5,6 +5,7 @@ Input::Input() {
 	inputs[100] = { false };
 	pressed[100] = { false };
 	holding[100] = { 0 };
+	notHolding = 0;
 	updated = false;
 }
 
@@ -14,13 +15,11 @@ bool Input::getInput(int index) {
 
 void Input::setInput(int index, bool value) {
 	inputs[index] = value;
-	updated = value;
+	updated = true;
 }
 
 bool isKeyPressed(int key) {
-	if (GetAsyncKeyState(key) & 0x8000)
-		return true;
-	return false;
+	return GetAsyncKeyState(key) & 0x8000;
 }
 
 char Input::getTyped() {
@@ -29,7 +28,7 @@ char Input::getTyped() {
 
 void Input::input() {
 	updated = false;
-	
+
 	// Handle pressing
 	if (_kbhit()) {
 		// Single input
@@ -54,14 +53,24 @@ void Input::input() {
 				typed = c;
 				setInput(typing, true);
 			}
-		}
 
+			notHolding++;
+			if (notHolding == MAX_WAIT) {
+				for (int i = begin + 1; i != end; i++)
+					holding[i] = 0;
+			}
+		}
+		else
+			notHolding = 0;
 	}
 	else {
-		for (int i = begin + 1; i != end; i++) {
-			holding[i] = 0;
+		notHolding++;
+		if (notHolding == MAX_WAIT) {
+			for (int i = begin + 1; i != end; i++)
+				holding[i] = 0;
 		}
 	}
+
 
 	if (!updated)
 		return;
