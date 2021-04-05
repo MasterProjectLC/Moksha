@@ -462,7 +462,7 @@ void Interface::printLine(string nova) {
 		if (novaCortada[i].size() > consoleSize) {
 			string strInteira = novaCortada[i];
 			novaCortada.emplace(novaCortada.begin() + i + 1, 
-								novaCortada[i].substr(min(consoleSize, novaCortada[i].find_last_of(' ', consoleSize)+1), string::npos));
+								novaCortada[i].substr(min(consoleSize+1, novaCortada[i].find_last_of(' ', consoleSize)+1), string::npos));
 			novaCortada.emplace(novaCortada.begin() + i + 1, 
 								novaCortada[i].substr(0, min(consoleSize, novaCortada[i].find_last_of(' ', consoleSize))));
 			novaCortada.erase(novaCortada.begin() + i);
