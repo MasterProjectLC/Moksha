@@ -5,10 +5,13 @@ Hilda::Hilda(Map* m) : NPC{ m, "Hilda",
 "Hilda pilots the ship along with Santos.\n"
 "She's a big, towering woman, currently wearing a large blue jacket, heavy leather boots and a black tie."), 
 F, 11, 6 } {
-	trackablePeople.insert("Santos");
+	
 }
 
 void Hilda::setupActionsParticular() {
+	addTrackablePeople("Santos");
+	addTrackablePeople("Baxter");
+	addTrackablePeople("Tom");
 	addTrackableRoom("Mezzanine");
 	goap_set_pre(&ap, "enter_CrewArea", "in_Mezzanine", true);
 	goap_set_pst(&ap, "enter_CrewArea", "in_CrewArea", true);
@@ -34,6 +37,13 @@ int Hilda::decideActionParticular(string action) {
 	if (action == "pilot") {
 		actionArgs.push_back("piloting.");
 		return acaoNula;
+	}
+
+	if (action == "enter_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", true);
+		return interagir;
 	}
 
 	return descansar;

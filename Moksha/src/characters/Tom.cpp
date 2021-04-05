@@ -5,10 +5,12 @@ Tom::Tom(Map* m) : NPC{ m, "Tom",
 "He seems to have quite a grudge against his father, wanting both to impress and ruin him.\n"
 "Despite his father's strength, Tom relies more on technique and agility to perform tasks. He's currently wearing a white shirt, suspenders and a workers cap.", 
 M, 10, 11 } {
-	trackablePeople.insert("Santos");
+
 }
 
 void Tom::setupActionsParticular() {
+	addTrackablePeople("Hilda");
+	addTrackablePeople("Santos");
 	addTrackableRoom("ControlRoom");
 	addTrackableRoom("NorthEngines");
 	goap_set_pre(&ap, "work", "in_NorthEngines", true);

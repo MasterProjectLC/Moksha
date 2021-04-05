@@ -3,14 +3,19 @@
 Baxter::Baxter(Map* m) : NPC{ m, "Baxter", 
 ("Baxter Blakewell is one of the original founders of the Blakewell and Wright Aviation Company. "
 "He's a posh englishman known for his somewhat cold demeanor and conservative business moves. In regards to personal life, he's married to Willow Blakewell.\n"
-"Baxter has an average build and sports a simple moustache.Right now, he's wearing a sharp, elegant double suit and a black striped tie.")
+"Baxter has an average build and sports a simple moustache. Right now, he's wearing a sharp, elegant double suit and a black striped tie.")
 , M, 5, 7 } {
-	trackablePeople.insert("Elliot");
-	trackablePeople.insert("Santos");
+
 }
 
 void Baxter::setupActionsParticular() {
+	addTrackablePeople("Paul");
+	addTrackablePeople("Willow");
+	addTrackablePeople("Renard");
+	addTrackablePeople("Santos");
+	addTrackablePeople("Hilda");
 	addTrackableRoom("BlakewellRoom");
+	addTrackableRoom("ViewingLobby");
 }
 
 

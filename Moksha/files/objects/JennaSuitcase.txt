@@ -11,4 +11,4 @@ There's mostly just equipment here, like some of these newfangled cameras they i
 touch:
 It's just a suitcase.
 take,obtain:
-Got it.
+Got it.|obtain

@@ -5,7 +5,7 @@ Amelie::Amelie(Map* m) : NPC{ m, "Amelie",
 "it's safe to say that she’s some sort of indian religious figure - probably a monk. Her expression is distant, but her demeanor is gentle. "
 "Why is she here and what does she want?")
 , F, 0, 0 } {
-	trackablePeople.insert("Santos");
+
 }
 
 void Amelie::setupActionsParticular() {

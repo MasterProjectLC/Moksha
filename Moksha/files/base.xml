@@ -151,7 +151,9 @@
 			</GameRoom>
 
             <Mezzanine>
-				<Objects/>
+				<Objects>
+                    <CrewDoor/>
+                </Objects>
 			</Mezzanine>
 
             <SantosRoom>
@@ -177,7 +179,9 @@
 			</Study>
 
             <CrewCorridor>
-				<Objects/>
+				<Objects>
+                    <CrewDoorBack/>
+                </Objects>
 			</CrewCorridor>
 
             <Closet>

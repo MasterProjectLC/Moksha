@@ -37,21 +37,6 @@ protected:
 	vector<string> actionArgs;
 
 	void takeAction(int action, vector<string> args);
-	virtual void move(string str);
-	void move(Room* room);
-	virtual void mention(string obj, set<string> receivers);
-	virtual void mention(string obj, string receiver);
-	void attack(string target);
-	void leave(string target);
-	void listen(string target);
-	void check(string target);
-	void scan();
-	void say(string topico, string str, set<string> receivers);
-	void rest();
-	void talk(string convo);
-	void talk(string convo, bool isReaction);
-	void voidAction(string actionStatus);
-	virtual void interact(string action, string object);
 
 	void setBusy(bool novo) { busy = novo; }
 
@@ -78,6 +63,22 @@ public:
 	void addAbstract(string name, string codename, string description, char type) { inventory.addAbstract(name, codename, description, type); }
 	void addItem(string name, string codename, string description, set<string> actions) { inventory.addItem(name, codename, description, actions); }
 	void removeItem(string name) { inventory.removeItem(name); }
+
+	void move(Room* room);
+	virtual void move(string str);
+	virtual void mention(string obj, set<string> receivers);
+	virtual void mention(string obj, string receiver);
+	void attack(string target);
+	void leave(string target);
+	void listen(string target);
+	void check(string target);
+	void scan();
+	void say(string topico, string str, set<string> receivers);
+	void rest();
+	void talk(string convo);
+	void talk(string convo, bool isReaction);
+	void voidAction(string actionStatus);
+	virtual void interact(string action, string object);
 
 	string getStatus() { return status; }
 	void setStatus(string n) { status = n; }

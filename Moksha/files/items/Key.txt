@@ -1,0 +1,6 @@
+name:
+Key
+actions:
+
+description:
+The key to the Crew Corridor door, next to the Mezzanine.

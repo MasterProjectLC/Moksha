@@ -5,6 +5,6 @@ true
 actions:
 examine|look|see|check
 examine,look,see,check:
-The time is: 
+The time is:|time
 take,obtain:
 The clock is way too heavy.

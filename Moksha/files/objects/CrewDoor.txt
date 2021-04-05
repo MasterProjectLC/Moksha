@@ -5,8 +5,8 @@ CrewDoor
 visible:
 true
 actions:
-examine|look|see|check|go|traverse
+examine|look|see|check|go|open|traverse
 examine,look,see,check:
 It reads 'Crew Only'.
-go,traverse:
-Let's see...
+go,open,traverse:
+Let's see...|move|CrewCorridor

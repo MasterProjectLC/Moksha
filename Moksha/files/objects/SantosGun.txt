@@ -1,0 +1,12 @@
+name:
+Santos' gun
+codename:
+SantosGun
+visible:
+true
+actions:
+examine|look|see|check|take|obtain
+examine,look,see,check:
+Santos has a gun...? It's got probably something to do with his hunting hobby.
+take,obtain:
+Better with me than with someone else...|obtain

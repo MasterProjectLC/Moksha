@@ -402,12 +402,18 @@ void Game::update(int id) {
 
 void Game::objectAction(Object* object) {
 	// Obtain
+	Character *character = findCharacter(object->getUser());
+
 	switch (object->getNotifyID()) {
 	case object->obter:
-		Character *character = findCharacter(object->getUser());
 		obtainObject(object->getCodename(), character);					// Give object to character
 		character->setStatus("obtaining " + object->getName() + ".");	// Update char's status
 		character->getCurrentRoom()->removeObject(object);				// Remove object from the room
+		break;
+
+	case object->mover:
+		character->move(object->getArgs()[0]);
+		character->setStatus("obtaining " + object->getName() + ".");	// Update char's status
 		break;
 	}
 }
@@ -609,7 +615,7 @@ void Game::advanceConversations() {
 					infoAtom = cit->name();
 				else if (end == "end")
 					endConvo = true;
-				else if (conditionMet != inverted) {
+				else if (conditionMet == inverted) {
 					valid = false;
 					break;
 				}

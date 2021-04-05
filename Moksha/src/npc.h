@@ -24,6 +24,7 @@ protected:
 	string conversaAlvo;
 
 	actionplanner_t ap;
+	worldstate_t stateZero;
 	worldstate_t states[16];
 	worldstate_t world;
 	Goal currentGoal;
@@ -46,6 +47,7 @@ protected:
 	};
 
 	void addTrackableRoom(string room);
+	void addTrackablePeople(string person);
 
 	void advancePath();
 	void move(string room) override;

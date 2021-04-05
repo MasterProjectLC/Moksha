@@ -16,6 +16,13 @@ NPC::~NPC() {
 	clear();
 }
 
+void clearHelper(set<string*> toClear) {
+	for (set<string*>::iterator it = toClear.begin(); it != toClear.end(); it++) {
+		delete *it;
+	}
+	toClear.clear();
+}
+
 void NPC::clear() {
 	inventory.clear();
 	goalList.clear();
@@ -23,15 +30,10 @@ void NPC::clear() {
 	checkedRooms.clear();
 	statusEffects.clear();
 
-	for (set<string*>::iterator it = addedConditions.begin(); it != addedConditions.end(); it++) {
-		delete *it;
-	}
-	addedConditions.clear();
-
-	for (set<string*>::iterator it = addedActions.begin(); it != addedActions.end(); it++) {
-		delete *it;
-	}
-	addedActions.clear();
+	trackablePeople.clear();
+	clearHelper(trackableRooms);
+	clearHelper(addedConditions);
+	clearHelper(addedActions);
 
 	for (int i = 0; i < conditionNames.size(); i++) {
 		delete conditionNames[i];
@@ -43,6 +45,7 @@ void NPC::clear() {
 	lastSeen.clear();
 }
 
+
 void NPC::addTrackableRoom(string room) {
 	string* novo = new string(room);
 	trackableRooms.insert(novo);
@@ -51,6 +54,16 @@ void NPC::addTrackableRoom(string room) {
 	addedActions.insert(move_novo);
 	addedConditions.insert(in_novo);
 	goap_set_pst(&ap, move_novo->c_str(), in_novo->c_str(), true);
+}
+
+void NPC::addTrackablePeople(string person) {
+	string* novo = new string(person);
+	trackablePeople.insert(person);
+	string* search_novo = new string("search_" + *novo);
+	string* with_novo = new string("with_" + *novo);
+	addedActions.insert(search_novo);
+	addedConditions.insert(with_novo);
+	goap_set_pst(&ap, search_novo->c_str(), with_novo->c_str(), true);
 }
 
 // PATHFINDING ---------------
@@ -177,9 +190,6 @@ void NPC::setupPlans() {
 	goap_actionplanner_clear(&ap); // initializes action planner
 
 	// describe repertoire of actions
-	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++) {
-		setCondition("with_" + *it, false);
-	}
 	setupActionsParticular();
 
 	// describe current world state.
@@ -200,6 +210,7 @@ void NPC::setupPlans() {
 
 	// calculate initial plan
 	plansz = 16;
+	stateZero = world;
 	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
 	currentStep = -1;
 	updateWorld();
@@ -300,6 +311,7 @@ void NPC::changePlans(bool justUpdated) {
 
 	// Calculate a new plan
 	plansz = 16;
+	stateZero = world;
 	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
 	currentStep = -1;
 	advancePlans();
@@ -366,9 +378,14 @@ bool NPC::isCurrentStateFulfilled() {
 	bfield_t objState = states[currentStep].values;
 	if (currentStep > 0)
 		objState = states[currentStep].values & ~states[currentStep-1].values;
+	else
+		objState = states[currentStep].values & ~stateZero.values;
 	bool fulfilled = ((worldState & objState) == objState);
-	if (fulfilled && currentStep > 0) {
-		objState = states[currentStep].values | ~states[currentStep - 1].values;
+	if (fulfilled) {
+		if (currentStep > 0)
+			objState = states[currentStep].values | ~states[currentStep - 1].values;
+		else
+			objState = states[currentStep].values | ~stateZero.values;
 		fulfilled = fulfilled && ((worldState | objState) == objState);
 	}
 

@@ -6,11 +6,14 @@ Jenna::Jenna(Map* m) : NPC{m, "Jenna",
 "Her connection to her father, who was a prominent aeronaut, sparked her interest for technological marvels and allowed her to learn a lot about airships.\n"
 "She's currently wearing a brown vest, a bowler hat and big, round googles. Her hair is shorter than most women."),
 F, 9, 10} {
-	trackablePeople.insert("Elliot");
-	trackablePeople.insert("Santos");
+
 }
 
 void Jenna::setupActionsParticular() {
+	addTrackablePeople("Elliot");
+	addTrackablePeople("Magnus");
+	addTrackablePeople("Renard");
+	addTrackablePeople("George");
 	addTrackableRoom("Runway");
 	addTrackableRoom("ViewingDeck");
 	goap_set_pre(&ap, "wait_Runway", "in_Runway", true);

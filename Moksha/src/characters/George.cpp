@@ -5,10 +5,12 @@ George::George(Map* m) : NPC{ m, "George",
 "He seems kind and respectful, though Jenna has already told me of his... drinking problems.\n"
 "He's an old man with a grizzled beard and a large body, wearing a fully condecorated blue aeronautical uniform and a military hat."),
 M, 8, 13 } {
-	trackablePeople.insert("Jenna");
+
 }
 
 void George::setupActionsParticular() {
+	addTrackablePeople("Jenna");
+	addTrackablePeople("Willow");
 	addTrackableRoom("Runway");
 	addTrackableRoom("ViewingDeck");
 	goap_set_pre(&ap, "wait_Runway", "in_Runway", true);

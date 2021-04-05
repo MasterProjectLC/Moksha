@@ -28,8 +28,8 @@ void Player::interact(string action, string object) {
 	// Objects
 	if (getCurrentRoom()->hasObject(object)) {
 		// Print answer
-		vector<string> responses = getCurrentRoom()->getObject(object)->getResponses(action);
-		if (responses.size() > 0) { printText(responses[0]); }
+		string response = getCurrentRoom()->getObject(object)->getResponse(action);
+		if (response.size() > 0) { printText(response); }
 		else { printText(noActionError); }
 
 		// Take action
@@ -146,7 +146,7 @@ void Player::receiveArgs(vector<string> args) {
 			return;
 		}
 		// This object doesn't support this action
-		else if (getCurrentRoom()->getObject(objectName)->getResponses(args[0]).size() <= 0) {
+		else if (getCurrentRoom()->getObject(objectName)->getResponse(args[0]).size() <= 0) {
 			printText(noActionError);
 			return;
 		}

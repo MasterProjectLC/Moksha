@@ -5,7 +5,7 @@ true
 actions:
 examine|look|see|check
 examine,look,see,check:
-Huh, I can look down to the Dining Hall.
+Huh, I can look down at the Dining Hall.|peer
 touch:
 Nothing special about the balcony.
 take,obtain:

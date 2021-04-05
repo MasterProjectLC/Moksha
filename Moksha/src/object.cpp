@@ -1,6 +1,14 @@
 #include "object.h"
 
 Object::Object(Dictionary<vector<string>> dict) {
+	if (actionName.empty()) {
+		actionName.insert(pair<string, int>("obtain", obter));
+		actionName.insert(pair<string, int>("move", mover));
+		actionName.insert(pair<string, int>("peer", espiar));
+		actionName.insert(pair<string, int>("open", abrir));
+		actionName.insert(pair<string, int>("time", tempo));
+	}
+
 	this->dict = dict;
 	this->name = dict.getValue("name");
 	if (dict.hasKey("codename"))
@@ -11,19 +19,23 @@ Object::Object(Dictionary<vector<string>> dict) {
 	this->validActions = dict.getValues("actions");
 }
 
-vector<string> Object::getResponses(string action) {
+string Object::getResponse(string action) {
 	if (dict.hasKey(action))
-		return dict.getValues(action);
+		return dict.getValues(action)[0];
 	else
-		return vector<string>();
+		return string("");
 }
 
 void Object::takeAction(string prompt, string user) {
 	for (int i = 0; i < validActions.size(); i++) {
 		if (validActions[i].compare(prompt) == 0) {
 			this->user = user;
-			if (prompt == "obtain" || prompt == "take")
-				notify(obter);
+			args = dict.getValues(prompt);
+			if (args.size() > 1 && actionName.count(args[1]) > 0) {
+				int action = actionName[args[1]];
+				for (int i = 0; i < 2; i++, args.erase(args.begin()));
+				notify(action);
+			}
 		}
 	}
 }

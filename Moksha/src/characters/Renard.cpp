@@ -5,10 +5,13 @@ Renard::Renard(Map* m) : NPC{ m, "Renard",
 "While he doesn’t seem to care much for the sciences, even Jenna admits he has a good eye for art.\n"
 "Renard has a prominent french moustache and a stylish hairstyle .Currently, he wears a white bow tie, a dark green frock coat and a top hat."), 
 M, 3, 5 } {
-	trackablePeople.insert("Willow");
+
 }
 
 void Renard::setupActionsParticular() {
+	addTrackablePeople("Willow");
+	addTrackablePeople("Liz");
+	addTrackablePeople("Paul");
 	addTrackableRoom("RenardRoom");
 	goap_set_pre(&ap, "write", "in_RenardRoom", true);
 	goap_set_pst(&ap, "write", "writing", true);

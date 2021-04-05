@@ -8,5 +8,5 @@ actions:
 examine|look|see|check|go|traverse
 examine,look,see,check:
 I can go back to the mezzanine through here.
-go,traverse:
-Let's return.
+go,open,traverse:
+Let's return.|move|Mezzanine

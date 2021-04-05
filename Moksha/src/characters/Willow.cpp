@@ -5,10 +5,11 @@ Willow::Willow(Map* m) : NPC{ m, "Willow",
 "As far as I know, she seems to be a compassionate and kind individual.\n"
 "Her hair is long and elaborate, tranced in an intricate fashion. Today, she's wearing a golden and blue dress.")
 , F, 1, 1 } {
-	trackablePeople.insert("Baxter");
+
 }
 
 void Willow::setupActionsParticular() {
+	addTrackablePeople("Baxter");
 	addTrackableRoom("BlakewellRoom");
 	goap_set_pre(&ap, "write", "in_BlakewellRoom", true);
 	goap_set_pst(&ap, "write", "writing", true);

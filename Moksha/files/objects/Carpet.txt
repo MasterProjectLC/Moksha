@@ -3,8 +3,8 @@ Carpet
 visible:
 true
 actions:
-examine|look|see|check|take|obtain
+examine|look|see|check
 examine,look,see,check:
 It's very... uh, wild-looking. I guess it's just Santos' style.
-take,obtain:
+touch:
 Hmm, it's not as soft as I expected. Oh well.

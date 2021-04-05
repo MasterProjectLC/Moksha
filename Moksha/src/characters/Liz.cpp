@@ -5,10 +5,11 @@ Liz::Liz(Map* m) : NPC{ m, "Liz",
 "She's a cunning and perceptive woman, and seems willing to do anything necessary to save her family's honor.\n"
 "Her hair is long and straight, and her face is a bit more angular than Willow's. Today, she's wearing an elaborate red and white dress."),
 F, 2, 2 } {
-	trackablePeople.insert("Santos");
+
 }
 
 void Liz::setupActionsParticular() {
+	addTrackablePeople("Santos");
 	addTrackableRoom("LizRoom");
 	goap_set_pre(&ap, "paint", "in_LizRoom", true);
 	goap_set_pst(&ap, "paint", "painting", true);
@@ -27,7 +28,7 @@ void Liz::setupObjectivesParticular() {
 
 
 void Liz::updateWorldExtra() {
-	goap_worldstate_set(&ap, &world, "in_LizRoom", currentRoom->getCodename() == "LizRoom");
+
 }
 
 

@@ -4,10 +4,13 @@ Paul::Paul(Map* m) : NPC{ m, "Paul",
 "Paul Davis is Renard's quiet assistant. While seemingly curious about the inner workings of the ship, he doesn't seem that interested in helping Renard.\n"
 "Paul has a rough ginger beard and some untamed hair. Right now, he wears a closed leather jacket and a discreet newsy cap.", 
 M, 7, 9 } {
-	trackablePeople.insert("Santos");
+
 }
 
 void Paul::setupActionsParticular() {
+	addTrackablePeople("Baxter");
+	addTrackablePeople("Santos");
+	addTrackablePeople("Magnus");
 	addTrackableRoom("RenardRoom");
 	goap_set_pre(&ap, "plan", "in_RenardRoom", true);
 	goap_set_pst(&ap, "plan", "planning", true);
