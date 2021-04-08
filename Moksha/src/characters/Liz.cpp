@@ -32,7 +32,7 @@ void Liz::updateWorldExtra() {
 }
 
 
-void Liz::updateProcessExtra(string currentProcess) {
+void Liz::setupProcessParticular(string currentProcess) {
 
 }
 

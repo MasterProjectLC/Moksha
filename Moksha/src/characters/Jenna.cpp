@@ -46,7 +46,7 @@ void Jenna::updateWorldExtra() {
 }
 
 
-void Jenna::updateProcessExtra(string currentProcess) {
+void Jenna::setupProcessParticular(string currentProcess) {
 
 }
 

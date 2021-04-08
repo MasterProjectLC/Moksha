@@ -38,6 +38,6 @@ int Amelie::decideActionParticular(string action) {
 }
 
 
-void Amelie::updateProcessExtra(string currentProcess) {
+void Amelie::setupProcessParticular(string currentProcess) {
 
 }

@@ -50,7 +50,7 @@ int Hilda::decideActionParticular(string action) {
 }
 
 
-void Hilda::updateProcessExtra(string currentProcess) {
+void Hilda::setupProcessParticular(string currentProcess) {
 
 }
 

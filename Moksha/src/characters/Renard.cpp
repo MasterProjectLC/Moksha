@@ -29,7 +29,7 @@ void Renard::setupObjectivesParticular() {
 }
 
 
-void Renard::updateProcessExtra(string currentProcess) {
+void Renard::setupProcessParticular(string currentProcess) {
 
 }
 

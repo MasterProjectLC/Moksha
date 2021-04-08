@@ -10,7 +10,7 @@ public:
 	Tom() : NPC{ NULL, "Tom", "", M, 0, 0 } {}
 	explicit Tom(Map* m);
 	int decideActionParticular(string action) override;
-	void updateProcessExtra(string currentProcess) override;
+	void setupProcessParticular(string currentProcess) override;
 	void setupWorldParticular() override;
 	void setupObjectivesParticular() override;
 	void updateWorldExtra() override;

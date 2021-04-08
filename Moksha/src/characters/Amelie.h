@@ -10,7 +10,7 @@ public:
 	Amelie() : NPC{ NULL, "Amelie", "", F, 0, 0 } {}
 	explicit Amelie(Map* m);
 	int decideActionParticular(string action) override;
-	void updateProcessExtra(string currentProcess) override;
+	void setupProcessParticular(string currentProcess) override;
 	void setupWorldParticular() override;
 	void setupObjectivesParticular() override;
 	void updateWorldExtra() override;

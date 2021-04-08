@@ -31,7 +31,7 @@ void Paul::updateWorldExtra() {
 	// describe current world state.
 }
 
-void Paul::updateProcessExtra(string currentProcess) {
+void Paul::setupProcessParticular(string currentProcess) {
 
 }
 

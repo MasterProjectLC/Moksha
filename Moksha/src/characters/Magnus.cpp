@@ -32,7 +32,7 @@ void Magnus::updateWorldExtra() {
 	// describe current world state.
 }
 
-void Magnus::updateProcessExtra(string currentProcess) {
+void Magnus::setupProcessParticular(string currentProcess) {
 
 }
 

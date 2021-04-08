@@ -33,7 +33,7 @@ void Tom::updateWorldExtra() {
 	// describe current world state.
 }
 
-void Tom::updateProcessExtra(string currentProcess) {
+void Tom::setupProcessParticular(string currentProcess) {
 
 }
 

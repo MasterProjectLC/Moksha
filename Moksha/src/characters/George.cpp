@@ -38,7 +38,7 @@ void George::updateWorldExtra() {
 }
 
 
-void George::updateProcessExtra(string currentProcess) {
+void George::setupProcessParticular(string currentProcess) {
 
 }
 

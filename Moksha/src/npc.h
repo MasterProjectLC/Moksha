@@ -50,23 +50,28 @@ protected:
 	void addTrackableRoom(string room);
 	void addTrackablePeople(string person);
 	void addTrackableConvo(string convo);
+	void addTrackableConvo(string convo, string room);
 
 	void advancePath();
 	void move(string room) override;
 
-	virtual int decideActionParticular(string acao) { return descansar; }
 	virtual void setupWorldParticular() {}
 	virtual void setupObjectivesParticular() {}
 	virtual void setupActionsParticular() {}
+
 	void updateWorld();
 	void updateWorldVariables();
-	void updateLastSeen(string pursueTarget, string room);
 	virtual void updateWorldExtra() {}
-	void advancePlans();
-	void updateProcess(string currentProcess);
-	virtual void updateProcessExtra(string currentProcess) {}
+	void updateLastSeen(string pursueTarget, string room);
+
+	void createPlan();
 	void changePlans() { changePlans(false); };
 	void changePlans(bool justUpdated);
+	void advancePlans();
+	void setupProcess(string currentProcess);
+	virtual void setupProcessParticular(string currentProcess) {}
+
+	virtual int decideActionParticular(string acao) { return descansar; }
 
 	bool isCurrentStateFulfilled();
 	void setBusy(bool novo) { busy = novo; }

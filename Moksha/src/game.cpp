@@ -44,7 +44,7 @@ void Game::initializeGame() {
 	time = 0;
 	loop = 0;
 
-	// Generate characters
+	// Generate characters and scenario
 	player = new Player(&map);
 	player->add(this, OBSERVER_OFFSET);
 	characters.push_back(player);
@@ -367,6 +367,7 @@ void Game::rewindGame() {
 	map.clearAllObjects();
 	loop++;
 
+	// intro.xml to base.xml
 	if (findCharacter("Baxter") == NULL) {
 		Magnus* magnus = new Magnus(&map);
 		magnus->add(this, OBSERVER_OFFSET + 3);
@@ -419,6 +420,7 @@ void Game::rewindGame() {
 		npcs.push_back(amelie);
 	}
 
+	// Reload base.xml
 	loadGame("base.xml");
 	saveGame("base.xml");
 }

@@ -19,6 +19,7 @@ void Santos::setupActionsParticular() {
 	goap_set_pre(&ap, "enter_CrewArea", "in_Mezzanine", true);
 	goap_set_pst(&ap, "enter_CrewArea", "in_CrewArea", true);
 	goap_set_pre(&ap, "move_Navigation", "in_CrewArea", true);
+
 	addTrackableRoom("Navigation");
 	goap_set_pre(&ap, "pilot", "in_Navigation", true);
 	goap_set_pst(&ap, "pilot", "piloting", true);
@@ -33,8 +34,8 @@ void Santos::setupWorldParticular() {
 
 
 void Santos::setupObjectivesParticular() {
-	//goap_worldstate_set(&ap, &currentGoal.goal, "piloting", true);
-	goap_worldstate_set(&ap, &currentGoal.goal, "convo_santos_gun", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "piloting", true);
+	//goap_worldstate_set(&ap, &currentGoal.goal, "convo_santos_gun", true);
 }
 
 
@@ -55,7 +56,7 @@ int Santos::decideActionParticular(string action) {
 }
 
 
-void Santos::updateProcessExtra(string currentProcess) {
+void Santos::setupProcessParticular(string currentProcess) {
 
 }
 

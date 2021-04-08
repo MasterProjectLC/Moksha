@@ -31,7 +31,7 @@ void Willow::updateWorldExtra() {
 	
 }
 
-void Willow::updateProcessExtra(string currentProcess) {
+void Willow::setupProcessParticular(string currentProcess) {
 
 }
 

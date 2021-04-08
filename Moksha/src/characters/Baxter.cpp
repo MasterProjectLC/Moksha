@@ -16,6 +16,8 @@ void Baxter::setupActionsParticular() {
 	addTrackablePeople("Hilda");
 	addTrackableRoom("BlakewellRoom");
 	addTrackableRoom("ViewingLobby");
+	addTrackableConvo("baxter_facade", "BlakewellRoom");
+	addTrackableConvo("presentation", "ViewingLobby");
 }
 
 
@@ -34,7 +36,7 @@ void Baxter::updateWorldExtra() {
 }
 
 
-void Baxter::updateProcessExtra(string currentProcess) {
+void Baxter::setupProcessParticular(string currentProcess) {
 
 }
 

@@ -19,12 +19,12 @@
                 <Goals/>
                 <Atoms/>
 			</Baxter>
-            <Santos Room="EntranceLounge"> 
+            <Santos Room="Navigation"> 
 				<Inventory/>
                 <Goals/>
                 <Atoms/>
 			</Santos>
-            <Hilda Room="EntranceLounge"> 
+            <Hilda Room="Navigation"> 
 				<Inventory/>
                 <Goals/>
                 <Atoms/>
