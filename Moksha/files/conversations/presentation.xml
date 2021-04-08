@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Baxter/>
+    <Magnus/>
+    <Jenna/>
+    <Elliot/>
+    <Renard/>
+    <Paul/>
+    <George/>
+    <Amelie/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Baxter line="Flettner, is everyone here?"/>
+    <Magnus line="Yes, Herr Baxter. George and Jenna Maybourne, Elliot Johnson, Claude Renard, Paul Davis and... Amelie Bhattacharya."/>
+    <Baxter line="Marvelous. Alright, everyone. At this point of the trip, I'm sure you all have already enjoyed many of this ship's luxurious features."/>
+    <Renard line="Oh, yes, they are quite satisfactory, Monsieur."/>
+    <Baxter line="Today, we'd like to talk more about its technical design and production, and how it might affect the future of aviation. Flettner?"/>
+    <Magnus line="Right, Herr Baxter."/>
+    <Narrator line="The inventor opens a small notebook filled with scratched-out notes, reminders and points of interest."/>
+    <Magnus line="So... as you all, well, hopefully know, for the last 10 years our airships have consistently been known for meeting very narrow corners of the market."/>
+    <Magnus line="Problems such as incidence of accidents, slow travel speeds and low cargo capacity have all contributed to them being seen as niche modes of transportation for the elite."/>
+    <Baxter line="However, for the last 5 years, we have worked to change that, isn't it, Flettner?"/>
+    <Magnus line="Right. Due to several changes to our design philosophy, the capacity, resistance and speed of our current airships have more than doubled compared to previous models."/>
+    <Magnus line="Tthis, coupled with breakthroughs in material construction research, have allowed us to do all this and maintain the same production costs as before."/>
+    <Baxter line="Exactly. In fact, as you can see outside, ladies and gentlemen, we are currently flying above the Himalayan mountain range, infamous for being a deadly windy region."/>
+    <Baxter line="We have reached here from London after only one day of travel, and we should touch down by Madras tomorrow. No past dirigible has ever come close to achieving something such as this."/>
+    <Baxter line="What you are witnessing here, ladies and gentlemen, is history. We might be the first humans to fly across and survive the skies of the Himalaya. In fact, we will be."/>
+    <Baxter line="More resilience, more capacity, more speed - that's what the Medusa is all about. Our airship is classy, yes - but know that she is, above all, strong. Thank you."/>
+    <Narrator line="The small crowd claps and mumble among themselves, impressed and astonished in equal measure."/>
+    <Narrator line="After the clapping dies down, the General is the first to speak."/>
+    <George line="Excuse me, son. What uses do you think the United States Aeronautical Division would find for this transport?"/>
+    <Magnus line="W-Well, I can see it be used mainly for supply lines, but-"/>
+    <Baxter line="Many, my great sir. Due to the resilience of this airship, it easily could help supplement aerial missions as a central weapons battery, for example."/>
+    <Jenna line="What about plans for expansion? Do you already have a research trajectory for the next models?"/>
+    <Magnus line="Yes, that we do, though we aren't at liberty to disclose them yet, I think."/>
+    <Amelie line="One last question, dear. In regards to the general public, would you say that it would benefit from this new innovation, or is it still too expensive for a regular trip?"/>
+    <Baxter line="I'd certainly not affirm that the hoi polloi will have much stake on this matter, but I would dare say that one could afford a round aboard given smart savings over a year."/>
+    <Amelie line="...I see."/>
+    <Baxter line="Alright, I think that's it for today, folks. I'm jolly glad for the presence of all of you here, and I'll see you all again as we touch down in India. Goodbye."/>
+</Conversation>

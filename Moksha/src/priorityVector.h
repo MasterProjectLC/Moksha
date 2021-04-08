@@ -27,4 +27,5 @@ public:
 	T pop() { T retorno = v.back(); v.pop_back(); pop_heap(v.begin(), v.end(), comparison); return retorno; }
 	void sort() { make_heap(v.begin(), v.end(), comparison); sort_heap(v.begin(), v.end(), comparison); }
 	void clear() { v.clear(); }
+	void erase(typename vector<T>::iterator it) { v.erase(it); }
 };

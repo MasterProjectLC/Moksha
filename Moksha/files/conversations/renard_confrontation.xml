@@ -137,10 +137,10 @@
     <Renard line="W-Well, Monsieur Baxter. I'll tell you how: with this!">
         <Darren_escaped tag="tag"/>
     </Renard>
-    <Narrator line="The reporter dashes to a small leather bag and pulls out an enginnering textbook, grinning from ear to ear.">
+    <Narrator line="The reporter dashes to a small leather bag and pulls out an engineering textbook, grinning from ear to ear.">
         <Darren_escaped tag="tag"/>
     </Narrator>
-    <Renard line="I may not quite be the aeronaut you expected, but I do pride myself on being a dilligent researchar! Is that not what you wished, after all? Someone who would appreciate your construction?">
+    <Renard line="I may not quite be the aeronaut you expected, but I do pride myself on being a diligent researchar! Is that not what you wished, after all? Someone who would appreciate your construction?">
         <Darren_escaped tag="tag"/>
     </Renard>
     
@@ -201,7 +201,7 @@
         <Darren_escaped tag="tag"/>
         <Jenna_absent add_tag="add_tag"/>
     </Baxter>
-    <Narrator line="The millionare wrangles the book out of Renard's hands.">
+    <Narrator line="The millionaire wrangles the book out of Renard's hands.">
         <Darren_escaped tag="tag"/>
         <Jenna_absent tag="tag"/>
     </Narrator>
@@ -225,7 +225,7 @@
         <Darren_escaped tag="tag"/>
         <Jenna_absent tag="tag"/>
     </Baxter>
-    <Renard line="Parfait! Fantastique! Thank you for your time, Monsieur Baxter, and pardón again for the incovenience.">
+    <Renard line="Parfait! Fantastique! Thank you for your time, Monsieur Baxter, and pardón again for the inconvenience.">
         <Darren_escaped tag="tag"/>
         <Jenna_absent tag="tag"/>
     </Renard>

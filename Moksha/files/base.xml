@@ -3,7 +3,7 @@
 <GameData FormatVersion="1">
 	<Game Time="0" Loop="1">
 		<Characters>
-			<Elliot Room="EntranceLounge"> 
+			<Elliot Room="JennaRoom"> 
 				<Inventory/>
                 <Rumors/>
                 <Concepts/>
@@ -11,50 +11,62 @@
 			</Elliot>
 			<Jenna Room="JennaRoom"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Jenna>
 		    <Baxter Room="EntranceLounge"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Baxter>
             <Santos Room="EntranceLounge"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Santos>
             <Hilda Room="EntranceLounge"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Hilda>
             <Tom Room="NorthEngines"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Tom>
             <George Room="GeorgeRoom"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</George>
             <Willow Room="BlakewellRoom"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Willow>
             <Liz Room="LizRoom"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Liz>
             <Amelie Room="AmelieRoom"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Amelie>
             <Magnus Room="MagnusRoom"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Magnus>
             <Renard Room="RenardRoom"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Renard>
             <Paul Room="RenardRoom"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Paul>
 		</Characters>

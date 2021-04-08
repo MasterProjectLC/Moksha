@@ -11,10 +11,12 @@
 			</Elliot>
 			<Jenna Room="FlightDock"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</Jenna>
             <George Room="FlightDock"> 
 				<Inventory/>
+                <Goals/>
                 <Atoms/>
 			</George>
 		</Characters>

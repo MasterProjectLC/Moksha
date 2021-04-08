@@ -9,6 +9,7 @@ NPC::NPC(Map* m, string name, string description, int gender, int strength, int 
 
 	FileDict fileObject = FileManager::readFromFile("files/characters/" + getName() + ".txt");
 	this->dict = fileObject;
+	goalList = PriorityVector<Goal>(vector<Goal>(), goalCompare);
 }
 
 
@@ -16,11 +17,11 @@ NPC::~NPC() {
 	clear();
 }
 
-void clearHelper(set<string*> toClear) {
-	for (set<string*>::iterator it = toClear.begin(); it != toClear.end(); it++) {
+void clearHelper(set<string*> *toClear) {
+	for (set<string*>::iterator it = toClear->begin(); it != toClear->end(); it++) {
 		delete *it;
 	}
-	toClear.clear();
+	toClear->clear();
 }
 
 void NPC::clear() {
@@ -31,9 +32,10 @@ void NPC::clear() {
 	statusEffects.clear();
 
 	trackablePeople.clear();
-	clearHelper(trackableRooms);
-	clearHelper(addedConditions);
-	clearHelper(addedActions);
+	clearHelper(&trackableRooms);
+	clearHelper(&trackableConvos);
+	clearHelper(&addedConditions);
+	clearHelper(&addedActions);
 
 	for (int i = 0; i < conditionNames.size(); i++) {
 		delete conditionNames[i];
@@ -64,6 +66,14 @@ void NPC::addTrackablePeople(string person) {
 	addedActions.insert(search_novo);
 	addedConditions.insert(with_novo);
 	goap_set_pst(&ap, search_novo->c_str(), with_novo->c_str(), true);
+}
+
+void NPC::addTrackableConvo(string convo) {
+	string* novo = new string(convo);
+	trackableConvos.insert(novo);
+	string* convo_novo = new string("convo_" + *novo);
+	addedActions.insert(convo_novo);
+	goap_set_pst(&ap, convo_novo->c_str(), convo_novo->c_str(), true);
 }
 
 // PATHFINDING ---------------
@@ -186,7 +196,7 @@ void NPC::seeCharMoving(Character* person, Room* otherRoom, bool entering) {
 
 // PLANS -------------------------------------------
 
-void NPC::setupPlans() {
+void NPC::setupWorld() {
 	goap_actionplanner_clear(&ap); // initializes action planner
 
 	// describe repertoire of actions
@@ -196,12 +206,12 @@ void NPC::setupPlans() {
 	goap_worldstate_clear(&world);
 	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++)
 		setCondition("with_" + *it, false);
+	for (set<string*>::iterator it = trackableConvos.begin(); it != trackableConvos.end(); it++)
+		setCondition("convo_" + **it, false);
 	setupWorldParticular();
 	updateWorldVariables();
 
-	// describe goal
-	goalList = PriorityVector<Goal>(vector<Goal>(), goalCompare);
-
+	// Describe default goal
 	currentGoal = Goal(0, false);
 	goap_worldstate_clear(&currentGoal.goal);
 	setupObjectivesParticular();
@@ -213,10 +223,8 @@ void NPC::setupPlans() {
 	stateZero = world;
 	planCost = astar_plan(&ap, world, currentGoal.goal, plan, states, &plansz);
 	currentStep = -1;
-	updateWorld();
 	advancePlans();
 }
-
 
 void NPC::addGoal(vector<string*> conditions, vector<bool> conditionStates, int priority) {
 	if (conditions.size() != conditionStates.size())
@@ -235,6 +243,13 @@ void NPC::addGoal(string* condition, bool conditionState, int priority) {
 	goap_worldstate_clear(&newgoal.goal);
 	goap_worldstate_set(&ap, &newgoal.goal, condition->c_str(), conditionState);
 	conditionNames.push_back(condition);
+	goalList.push(newgoal);
+}
+
+void NPC::addGoal(bfield_t values, bfield_t dontcare, bool conditionState, int priority) {
+	Goal newgoal = Goal(priority, true);
+	goap_worldstate_clear(&newgoal.goal);
+	newgoal.setGoal(values, dontcare);
 	goalList.push(newgoal);
 }
 
@@ -307,7 +322,7 @@ void NPC::updateProcess(string currentProcess) {
 
 void NPC::changePlans(bool justUpdated) {
 	if (!justUpdated)
-		updateWorldExtra();
+		updateWorldVariables();
 
 	// Calculate a new plan
 	plansz = 16;
@@ -332,10 +347,13 @@ int NPC::decideAction() {
 		vector<Goal>::iterator it = goalList.highest();
 		if ( ((world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values || currentStep >= plansz) && !goalList.empty() ) {
 			do {
-				if (it->onetime)
-					goalList.getVector().erase(it);
+				if (it->onetime) {
+					vector<Goal>::iterator dit = it;
+					goalList.descend(it);
+					goalList.erase(dit);
+				} else
+					goalList.descend(it);
 
-				goalList.descend(it);
 				currentGoal = *it;
 				currentStep = 0;
 			} while ( (world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values && it != goalList.lowest() );
@@ -359,9 +377,17 @@ int NPC::decideAction() {
 		actionArgs.clear();
 		string action = plan[currentStep];
 
-		if ( action.substr(0, 5).compare("move_") == 0 || action.substr(0, 7).compare("search_") == 0 ) {
+		// Move / Search
+		if (action.substr(0, 5).compare("move_") == 0 || action.substr(0, 7).compare("search_") == 0) {
 			actionArgs.push_back(path.front()->getCodename());
 			currentAction = mover;
+		}
+		// Convo
+		else if (action.substr(0, 6).compare("convo_") == 0) {
+			goap_worldstate_set(&ap, &world, action.c_str(), true);
+			actionArgs.push_back(action.substr(6, 1000));
+			currentAction = conversar;
+		// Other actions
 		} else 
 			currentAction = decideActionParticular(action);
 	} else

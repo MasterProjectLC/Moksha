@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Jenna/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Jenna line="Morning, sunshine! Hey Elliot, you awake, buddy?"/>
+    <Narrator line="With a groggy sigh, you slowly wake up from your prolonged sleep. Meanwhile, Jenna is already up and running, doing jumping jacks and stretching exercises."/>
+    <Elliot line="What... What's the time, boss?"/>
+    <Jenna line="7 AM! Baxter's gonna give his presentation one hour from now, so you better get up already!"/>
+    <Elliot line="I... Argh, alright. Just give me one second."/>
+    <Elliot line="(Oof, did I drink last night? I don't think so... Maybe it's the altitude?)"/>
+    <Jenna line="Hey, buddy, have you looked outside yet? The mountains look great!"/>
+    <Elliot line="The... The mountains? Wait, we're already by the Himalayas?!"/>
+    <Jenna line="Yep! I did say this airship is a marvel, didn't I? Well, anyway, you have one hour to get prepared. Don't forget to pass by the Viewing Lobby at 8!">
+        <himalayas info="info"/>
+    </Jenna>
+    <Elliot line="Ok, boss! See you then."/>
+    <Elliot line="(Time to go exploring this airship proper.)"/>
+    <Narrator line="The map you got from the captain can be viewed in the same directory as the game's executable."/>
+</Conversation>

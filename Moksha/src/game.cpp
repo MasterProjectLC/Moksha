@@ -11,16 +11,17 @@ void Game::setup() {
 	initializeGame();
 	if (!loadGame("save.xml")) {
 		// Literally first boot
-		for (int i = 0; i < npcs.size(); i++)
-			npcs[i]->setupPlans();
+		for (int i = 0; i < npcs.size(); i++) {
+			npcs[i]->setupWorld();
+		}
 
 		conversations.push_back(Conversation("intro", "FlightDock", false));
 		advanceConversations();
 	}
 
 	if (findCharacter("Baxter") == NULL) {
-		((NPC*)findCharacter("Jenna"))->addGoal(new string("waiting_Runway"), true, 2);
-		((NPC*)findCharacter("George"))->addGoal(new string("waiting_Runway"), true, 2);
+		((NPC*)findCharacter("Jenna"))->addGoal(new string("waiting_Runway"), true, 1000);
+		((NPC*)findCharacter("George"))->addGoal(new string("waiting_Runway"), true, 1000);
 	}
 
 }
@@ -43,6 +44,7 @@ void Game::initializeGame() {
 	time = 0;
 	loop = 0;
 
+	// Generate characters
 	player = new Player(&map);
 	player->add(this, OBSERVER_OFFSET);
 	characters.push_back(player);
@@ -182,9 +184,9 @@ bool Game::loadGame(string loadFile) {
 
 		// Load objects
 		vector<string*> objectNames;
-		xml_node objects = it->child("Objects");
+		xml_node node = it->child("Objects");
 
-		for (xml_node_iterator ait = objects.begin(); ait != objects.end(); ++ait)
+		for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait)
 			objectNames.push_back(new string( ait->name()) );
 
 		thisRoom->setObjectNames(objectNames);
@@ -199,27 +201,44 @@ bool Game::loadGame(string loadFile) {
 		thisCharacter->setCurrentRoom(map.getRoom(room));
 
 		// Load inventory
-		xml_node inventario = it->child("Inventory");
-		for (xml_node_iterator ait = inventario.begin(); ait != inventario.end(); ++ait) {
+		xml_node node = it->child("Inventory");
+		for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait) {
 			obtainObject(ait->name(), thisCharacter);
 		}
 
-		// Load atoms
+		// Load NPCs
 		if (thisCharacter != player) {
-			xml_node atoms = it->child("Atoms");
-			((NPC*)thisCharacter)->setupPlans();
-			for (xml_node_iterator ait = atoms.begin(); ait != atoms.end(); ++ait) {
+			// Load atoms
+			node = it->child("Atoms");
+			((NPC*)thisCharacter)->setupWorld();
+			for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait) {
 				string s = ait->attribute("value").value();
 				((NPC*)thisCharacter)->setCondition(ait->name(), (s == "true"));
 			}
+
+			// Load goals
+			node = it->child("Goals");
+			for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait) {
+				__int64 val;
+				std::stringstream sstr(string(ait->name()).substr(1, string::npos)); sstr >> val;
+				bfield_t values = val;
+				std::stringstream sstr2(ait->attribute("dontcare").value()); sstr2 >> val;
+				bfield_t dontcare = val;
+				string onetime = ait->attribute("onetime").value();
+				int priority = stoi(ait->attribute("priority").value());
+				((NPC*)thisCharacter)->addGoal(values, dontcare, (onetime == "true"), priority);
+			}
 		}
-		// Load rumors and concepts
+		// Load player
 		else {
-			xml_node rumors = it->child("Rumors");
-			for (xml_node_iterator ait = rumors.begin(); ait != rumors.end(); ++ait)
+			// Load rumors
+			node = it->child("Rumors");
+			for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait)
 				obtainAbstract(ait->name(), thisCharacter);
-			xml_node concepts = it->child("Concepts");
-			for (xml_node_iterator ait = concepts.begin(); ait != concepts.end(); ++ait)
+
+			// Load concepts
+			node = it->child("Concepts");
+			for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait)
 				obtainAbstract(ait->name(), thisCharacter);
 		}
 	}
@@ -271,7 +290,7 @@ void Game::saveGame(string baseSave) {
 			if (!inventory.child(itemList[i]->getCodename().c_str()))
 				inventory.append_child(itemList[i]->getCodename().c_str());
 
-		// Save atoms
+		// Save NPCs
 		if (thisCharacter != player) {
 			xml_node atoms = it->child("Atoms");
 			vector<string> atomList = ((NPC*)thisCharacter)->getAtomList();
@@ -284,7 +303,25 @@ void Game::saveGame(string baseSave) {
 				}
 				atoms.child(atomList[i].c_str()).attribute("value").set_value( thisCharacter->hasCondition(atomList[i]) );
 			}
+
+			// Goal list updated
+			xml_node goals = it->child("Goals");
+			vector<Goal> goalList = ((NPC*)thisCharacter)->getGoalList();	// TODO: maybe make this more pointer-oriented
+			goals.remove_children();
+			for (int i = 0; i < goalList.size(); i++) {
+				string nodename = "a" + to_string(goalList[i].goal.values);
+				goals.append_child(nodename.c_str());
+				goals.child(nodename.c_str()).append_attribute("dontcare");
+				goals.child(nodename.c_str()).append_attribute("onetime");
+				goals.child(nodename.c_str()).append_attribute("priority");
+
+				goals.child(nodename.c_str()).attribute("dontcare").set_value(goalList[i].goal.dontcare);
+				goals.child(nodename.c_str()).attribute("onetime").set_value(goalList[i].onetime);
+				goals.child(nodename.c_str()).attribute("priority").set_value(goalList[i].priority);
+			}
 		}
+
+		// Save Player
 		else {
 			// Create and/or update each concept
 			xml_node rumors = it->child("Rumors");
@@ -322,7 +359,7 @@ void Game::saveGame(string baseSave) {
 void Game::rewindGame() {
 	// Clear NPCs
 	for (int i = 0; i < npcs.size(); i++) {
-		npcs.clear();
+		npcs[i]->clear();
 	}
 	player->rewind();
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Baxter/>
+    <Willow/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Baxter line="Darling, how do I look?"/>
+    <Narrator line="Willow turns around, fancying Baxter from head to toe. She smiles."/>
+    <Willow line="'Positively dashing', as you would sometimes say, my dear. I'm sure your presentation will be a success."/>
+    <Baxter line="Thank you, my darling. I hope so, too... there's a lot riding on this one."/>
+    <Willow line="Ah, look, Bax, you're stressing too much again! Just be yourself, okay? Talk as you would talk to me, look as you would look at me. Don't put up your facade."/>
+    <Narrator line="For a moment, Baxter pauses. He then deeply stares into Willow's eyes."/>
+    <Baxter line="I will try, Willow."/>
+    <Narrator line="She smiles."/>
+    <Willow line="That's good. Good luck, dear."/>
+    <Baxter line="Thank you, darling."/>
+</Conversation>

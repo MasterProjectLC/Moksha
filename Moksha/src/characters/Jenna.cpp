@@ -14,23 +14,30 @@ void Jenna::setupActionsParticular() {
 	addTrackablePeople("Magnus");
 	addTrackablePeople("Renard");
 	addTrackablePeople("George");
+	addTrackableRoom("ViewingLobby");
+
+	addTrackableRoom("JennaRoom");
+	goap_set_pre(&ap, "write", "in_JennaRoom", true);
+	goap_set_pst(&ap, "write", "writing", true);
+
+	addTrackableConvo("wake_up");
+	goap_set_pre(&ap, "convo_wake_up", "in_JennaRoom", true);
+
 	addTrackableRoom("Runway");
-	addTrackableRoom("ViewingDeck");
 	goap_set_pre(&ap, "wait_Runway", "in_Runway", true);
 	goap_set_pst(&ap, "wait_Runway", "waiting_Runway", true);
 }
 
 
 void Jenna::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "in_ViewingDeck", false);
-	goap_worldstate_set(&ap, &world, "in_Runway", false);
 	goap_worldstate_set(&ap, &world, "waiting_Runway", false);
-	updateWorldExtra();
+	goap_worldstate_set(&ap, &world, "writing", false);
 }
 
 
 void Jenna::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "in_ViewingDeck", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "writing", true);
+	addGoal(new string("convo_wake_up"), true, 5);
 }
 
 
@@ -47,6 +54,10 @@ void Jenna::updateProcessExtra(string currentProcess) {
 int Jenna::decideActionParticular(string action) {
 	if (action == "wait_Runway") {
 		actionArgs.push_back("waiting.");
+		return acaoNula;
+	}
+	else if (action == "write") {
+		actionArgs.push_back("writing.");
 		return acaoNula;
 	}
 

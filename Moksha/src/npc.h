@@ -18,6 +18,7 @@ protected:
 	set<string*> addedActions;
 	set<string> trackablePeople;
 	set<string*> trackableRooms;
+	set<string*> trackableConvos;
 	vector<string*> conditionNames;
 
 	queue<Room*> path;
@@ -48,6 +49,7 @@ protected:
 
 	void addTrackableRoom(string room);
 	void addTrackablePeople(string person);
+	void addTrackableConvo(string convo);
 
 	void advancePath();
 	void move(string room) override;
@@ -88,10 +90,12 @@ public:
 
 	void addGoal(vector<string*> conditions, vector<bool> conditionStates, int priority);
 	void addGoal(string* condition, bool conditionState, int priority);
+	void addGoal(bfield_t values, bfield_t dontcare, bool conditionState, int priority);
 
-	void setupPlans();
+	void setupWorld();
 	void clear();
 
 	vector<string> getActionList();
 	vector<string> getAtomList();
+	vector<Goal> getGoalList() { return goalList.getVector(); }
 };

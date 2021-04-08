@@ -1,0 +1,6 @@
+name:
+himalayas
+type:
+c
+description:
+We're truly flying over the Himalayas, huh? The tallest mountains on Earth, from what I've heard...

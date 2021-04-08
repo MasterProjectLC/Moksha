@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Hilda/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Hilda line="Ay, ay."/>
+    <Santos line="G'day, Hilda, mate. Everything done?"/>
+    <Hilda line="Done, Santos. Speech given, pistons calibrated, everything. Need anything else?"/>
+    <Santos line="Nah, I can take it from here. You go down there and catch some Zs, doll. Ya earned it."/>
+    <Hilda line="Right, I’ll do that. By the way, Tom just asked if you were on the yoke. I told the truth."/>
+    <Narrator line="For a moment, Santos remains silent."/>
+    <Santos line="I... alright, she’ll be apples. In any case, I’ll take a look behind my back every now and then, heh."/>
+    <Hilda line="Sure, Santos. Take care."/>
+    <Santos line="Take care, doll!"/>
+</Conversation>
