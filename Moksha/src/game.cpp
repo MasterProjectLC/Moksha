@@ -606,6 +606,9 @@ void Game::advanceTime() {
 
 
 void Game::advanceConversations() {
+	if (conversations.empty())
+		return;
+
 	// Iterate through each current convo
 	for (vector<Conversation>::iterator it = conversations.begin(); it != conversations.end(); it++) {
 		// Try until a message shoots through
@@ -614,7 +617,7 @@ void Game::advanceConversations() {
 			bool endConvo = false;
 			if (it->ended()) {
 				string s = it->getName();
-				conversations.erase(it);
+				it = conversations.erase(it);
 				emitEvent(_evento_fim_conversa, vector<string>({ s }));
 				break;
 			}
@@ -675,12 +678,14 @@ void Game::advanceConversations() {
 			it->clearListeners();
 
 			// End convo?
-			if (endConvo)
-				conversations.erase(it);
+			if (endConvo) {
+				it = conversations.erase(it);
+			}
 			break;
 		}
 
-		break;
+		if (conversations.empty() || it == conversations.end())
+			break;
 	}
 }
 

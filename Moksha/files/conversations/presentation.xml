@@ -38,5 +38,7 @@
     <Amelie line="One last question, dear. In regards to the general public, would you say that it would benefit from this new innovation, or is it still too expensive for a regular trip?"/>
     <Baxter line="I'd certainly not affirm that the hoi polloi will have much stake on this matter, but I would dare say that one could afford a round aboard given smart savings over a year."/>
     <Amelie line="...I see."/>
-    <Baxter line="Alright, I think that's it for today, folks. I'm jolly glad for the presence of all of you here, and I'll see you all again as we touch down in India. Goodbye."/>
+    <Baxter line="Alright, I think that's it for today, folks. I'm jolly glad for the presence of all of you here, and I'll see you all again as we touch down in India. Goodbye.">
+        <the_medusa info="info"/>
+    </Baxter>
 </Conversation>

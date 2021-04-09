@@ -88,7 +88,8 @@ void NPC::addTrackableConvo(string convo, string room) {
 		if (**it == ("in_" + room))
 			break;
 
-	goap_set_pre(&ap, convo_novo->c_str(), (*it)->c_str(), true);
+	if (it != addedConditions.end())
+		goap_set_pre(&ap, convo_novo->c_str(), (*it)->c_str(), true);
 }
 
 // PATHFINDING ==========================================

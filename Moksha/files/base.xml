@@ -14,7 +14,7 @@
                 <Goals/>
                 <Atoms/>
 			</Jenna>
-		    <Baxter Room="EntranceLounge"> 
+		    <Baxter Room="BlakewellRoom"> 
 				<Inventory/>
                 <Goals/>
                 <Atoms/>
@@ -24,12 +24,12 @@
                 <Goals/>
                 <Atoms/>
 			</Santos>
-            <Hilda Room="Navigation"> 
+            <Hilda Room="CrewQuarters"> 
 				<Inventory/>
                 <Goals/>
                 <Atoms/>
 			</Hilda>
-            <Tom Room="NorthEngines"> 
+            <Tom Room="CrewQuarters"> 
 				<Inventory/>
                 <Goals/>
                 <Atoms/>

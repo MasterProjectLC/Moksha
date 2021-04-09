@@ -16,20 +16,30 @@ void Hilda::setupActionsParticular() {
 	goap_set_pre(&ap, "enter_CrewArea", "in_Mezzanine", true);
 	goap_set_pst(&ap, "enter_CrewArea", "in_CrewArea", true);
 	goap_set_pre(&ap, "move_Navigation", "in_CrewArea", true);
+	goap_set_pre(&ap, "move_CrewQuarters", "in_CrewArea", false);
 	addTrackableRoom("Navigation");
+	addTrackableRoom("CrewQuarters");
+	addTrackableRoom("NorthEngines");
 	goap_set_pre(&ap, "pilot", "in_Navigation", true);
 	goap_set_pst(&ap, "pilot", "piloting", true);
+	addTrackableConvo("hilda_speech", "NorthEngines");
+	addTrackableConvo("hilda_sleep", "Navigation");
+	goap_set_pre(&ap, "sleep", "in_CrewQuarters", true);
+	goap_set_pst(&ap, "sleep", "sleeping", true);
 }
 
 
 void Hilda::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "with_Santos", true);
+	goap_worldstate_set(&ap, &world, "sleeping", false);
 	goap_worldstate_set(&ap, &world, "piloting", false);
+	goap_worldstate_set(&ap, &world, "in_CrewArea", false);
 }
 
 
 void Hilda::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "piloting", true);
+	goap_worldstate_set(&ap, &currentGoal.goal, "sleeping", true);
+	addGoal(new string("convo_hilda_speech"), true, 50);
+	addGoal(new string("convo_hilda_sleep"), true, 49);
 }
 
 

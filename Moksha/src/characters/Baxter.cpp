@@ -18,6 +18,7 @@ void Baxter::setupActionsParticular() {
 	addTrackableRoom("ViewingLobby");
 	addTrackableConvo("baxter_facade", "BlakewellRoom");
 	addTrackableConvo("presentation", "ViewingLobby");
+	goap_set_pre(&ap, "convo_presentation", "convo_baxter_facade", true);
 }
 
 
@@ -28,6 +29,7 @@ void Baxter::setupWorldParticular() {
 
 void Baxter::setupObjectivesParticular() {
 	goap_worldstate_set(&ap, &currentGoal.goal, "in_BlakewellRoom", true);
+	addGoal(new string("convo_presentation"), true, 5);
 }
 
 

@@ -27,8 +27,6 @@ void Santos::setupActionsParticular() {
 
 
 void Santos::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "with_Hilda", true);
-	goap_worldstate_set(&ap, &world, "with_Baxter", true);
 	goap_worldstate_set(&ap, &world, "piloting", false);
 }
 

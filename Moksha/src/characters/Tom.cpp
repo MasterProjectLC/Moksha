@@ -11,7 +11,13 @@ M, 10, 11 } {
 void Tom::setupActionsParticular() {
 	addTrackablePeople("Hilda");
 	addTrackablePeople("Santos");
+	addTrackableRoom("Mezzanine");
+	goap_set_pre(&ap, "enter_CrewArea", "in_Mezzanine", true);
+	goap_set_pst(&ap, "enter_CrewArea", "in_CrewArea", true);
+	goap_set_pre(&ap, "move_Navigation", "in_CrewArea", true);
+	goap_set_pre(&ap, "move_CrewQuarters", "in_CrewArea", false);
 	addTrackableRoom("ControlRoom");
+	addTrackableRoom("CrewQuarters");
 	addTrackableRoom("NorthEngines");
 	goap_set_pre(&ap, "work", "in_NorthEngines", true);
 	goap_set_pst(&ap, "work", "working", true);

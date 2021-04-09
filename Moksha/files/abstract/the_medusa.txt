@@ -1,0 +1,8 @@
+name:
+the Medusa
+codename:
+the_medusa
+type:
+c
+description:
+This airship, Medusa, was made by the Blakewell and Wright Aviation Company. From what everyone says, it's a pretty remarkable invention.
