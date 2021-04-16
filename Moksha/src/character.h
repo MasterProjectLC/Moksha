@@ -76,7 +76,7 @@ public:
 	void say(string topico, string str, set<string> receivers);
 	void rest();
 	void talk(string convo);
-	void talk(string convo, bool isReaction);
+	virtual void talk(string convo, bool isReaction);
 	void voidAction(string actionStatus);
 	virtual void interact(string action, string object);
 

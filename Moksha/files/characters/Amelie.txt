@@ -1,4 +1,10 @@
-Knife:
-Hah, got it.|
-What do you plan to do with that?|
-Don't approach me with that.
+description:
+Amelie is a mysterious guest aboard the airship. An old, frail woman in her 70s, from both her apparent ethnicity and traditional clothing, it's safe to say that she’s some sort of indian religious figure - probably a monk. Her expression is distant, but her demeanor is gentle.\nWhy is she here and what does she want?
+gender:
+F
+strength:
+0
+dexterity:
+0
+topics:
+himalayas|questionnaire

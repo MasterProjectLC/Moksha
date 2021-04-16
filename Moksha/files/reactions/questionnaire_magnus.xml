@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Magnus/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Magnus line="Oh, the questionnaire. Yes, I was the one who created it, under Baxter's request."/>
+    <Elliot line="What sort of questions did you put in there?"/>
+    <Magnus line="Mostly technical ones that related to aero-, thermo- and fluid dynamics, though they were also some focused on the business side of things. Those, in fact, were made by Herr Blakewell."/>
+</Conversation>

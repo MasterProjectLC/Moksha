@@ -3,6 +3,6 @@ Viewing Lobby
 codename:
 ViewingLobby
 text:
-A round, grand hall surrounded by windows and mirrors. It’s a frightening view to behold. 
+A round, grand hall surrounded by windows and mirrors. It's a frightening view to behold. 
 adjacent:
 EntranceLounge|Deposit

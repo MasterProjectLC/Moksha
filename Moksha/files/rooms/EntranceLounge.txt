@@ -5,4 +5,4 @@ EntranceLounge
 text:
 A relaxing lounge, inside which guests can rest and converse. It's one of the first rooms we saw when we entered - and one of the last we will see when we leave.
 adjacent:
-DiningHall|NorthCorridor|SouthCorridor|ViewingDeck
+DiningHall|NorthCorridor|SouthCorridor|ViewingDeck|ViewingLobby

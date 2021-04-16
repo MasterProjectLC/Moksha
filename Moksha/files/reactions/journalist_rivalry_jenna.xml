@@ -13,7 +13,7 @@
     <Narrator line="Some more guests are next - one seems to be another noblewoman from Austria, while the other is a female indian monk of some sort. Finally, it's your turn to board."/>
     <Narrator line="You, Jenna and George walk the steps to the entrance lounge, taking in the architecture and the design of the Medusa. If it looked grand from the outside, it looks even grander from the inside."/>
     <Narrator line="The only ones to board after you are Hilda Bernhard and her crew of workers, responsible for operating the engines. Most of them seem 30 or older, except notably a boy of 17.">
-        <the_crewboy info="info"/>
+        <crewboy info="info"/>
     </Narrator>
     <Narrator line="As soon as everyone is verified and present, the airship lifts off from the ground. The sound of gears and levers turning vibrates throughout the chamber, and soon the ground grows distant."/>
     <Narrator line="The skies engulf the Medusa in blue and grey as the guests disperse to find their rooms. Crew rush to their stations, and an overwhelming sense of awe overcomes your body. The voyage has officially begun."/>

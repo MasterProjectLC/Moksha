@@ -1,10 +1,6 @@
 #include "Santos.h"
 
-Santos::Santos(Map* m) : NPC{ m, "Santos", 
-("Albert Santos Wright is the loud, bold and extroverted half of the Blakewell and Wright Aviation Company. "
-"A skilled pilot and a fierce fighter, he's known for personally testing every model himself prior to launch.\n"
-"Santos is a strong englishman with a bulky body and an english moustache. Today, he's wearing a big, heavy fur coat and a pilot 'hat and goggles' combo.")
-, F, 13, 12 } {
+Santos::Santos(Map* m) : NPC(m, "Santos") {
 
 }
 
@@ -13,14 +9,12 @@ void Santos::setupActionsParticular() {
 	addTrackablePeople("Baxter");
 	addTrackablePeople("Tom");
 	addTrackableConvo("santos_gun");
-	goap_set_pre(&ap, "convo_santos_gun", "with_Baxter", true);
+	setupCrewArea();
 
-	addTrackableRoom("Mezzanine");
-	goap_set_pre(&ap, "enter_CrewArea", "in_Mezzanine", true);
-	goap_set_pst(&ap, "enter_CrewArea", "in_CrewArea", true);
 	goap_set_pre(&ap, "move_Navigation", "in_CrewArea", true);
-
 	addTrackableRoom("Navigation");
+
+	goap_set_pre(&ap, "convo_santos_gun", "with_Baxter", true);
 	goap_set_pre(&ap, "pilot", "in_Navigation", true);
 	goap_set_pst(&ap, "pilot", "piloting", true);
 }
@@ -46,6 +40,13 @@ int Santos::decideActionParticular(string action) {
 	if (action == "enter_CrewArea") {
 		actionArgs.push_back("open");
 		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", true);
+		return interagir;
+	}
+	if (action == "leave_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", false);
 		return interagir;
 	}
 

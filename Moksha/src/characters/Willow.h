@@ -7,7 +7,7 @@ class Willow : public NPC {
 private:
 
 public:
-	Willow() : NPC{ NULL, "Willow", "", F, 1, 1 } {}
+	Willow() : NPC(NULL, "") {}
 	explicit Willow(Map* m);
 	int decideActionParticular(string action) override;
 	void setupProcessParticular(string currentProcess) override;

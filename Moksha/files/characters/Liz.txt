@@ -1,4 +1,9 @@
-Knife:
-Hah, got it.|
-What do you plan to do with that?|
-Don't approach me with that.
+description:
+Liz Niedenberg is Willow’s sister and one of the last members of the austrian Niedenberg noble family. She's a cunning and perceptive woman, and seems willing to do anything necessary to save her family's honor.\nHer hair is long and straight, and her face is a bit more angular than Willow's. Today, she's wearing an elaborate red and white dress.
+gender:
+F
+strength:
+2
+dexterity:
+2
+topics:

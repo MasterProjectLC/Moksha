@@ -5,7 +5,7 @@ CrewDoorBack
 visible:
 true
 actions:
-examine|look|see|check|go|traverse
+examine|look|see|check|go|open|traverse
 examine,look,see,check:
 I can go back to the mezzanine through here.
 go,open,traverse:

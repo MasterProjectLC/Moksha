@@ -3,6 +3,6 @@ George's Room
 codename:
 GeorgeRoom
 text:
-It's General Maybourne's room. A bit empty, perhaps. Wait, is this whisky on the floor…?
+It's General Maybourne's room. A bit empty, perhaps. Wait, is this whisky on the floor...?
 adjacent:
 NorthCorridor|ViewingDeck

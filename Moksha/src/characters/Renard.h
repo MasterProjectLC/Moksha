@@ -5,9 +5,9 @@ using namespace std;
 
 class Renard : public NPC {
 private:
-
+	int photos_taken;
 public:
-	Renard() : NPC{ NULL, "Renard", "", M, 0, 0 } {}
+	Renard() : NPC(NULL, "") {}
 	explicit Renard(Map* m);
 	int decideActionParticular(string action) override;
 	void setupProcessParticular(string currentProcess) override;

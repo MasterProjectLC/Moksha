@@ -1,4 +1,9 @@
-Knife:
-Hah, got it.|
-What do you plan to do with that?|
-Don't approach me with that.
+description:
+Willow Blakewell, formerly known as Willow Niedenberg, is Baxter's wife, Liz' sister and a member of the austrian nobility. As far as I know, she seems to be a compassionate and kind individual.\nHer hair is long and elaborate, tranced in an intricate fashion. Today, she's wearing a golden and blue dress.
+gender:
+F
+strength:
+1
+dexterity:
+1
+topics:

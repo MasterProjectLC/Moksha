@@ -22,7 +22,9 @@
 using namespace std;
 using namespace pugi;
 
-static auto actionCompare = [](Character* a, Character* b) -> bool { return a->getAction() < b->getAction(); };
+static auto actionCompare = [](Character* a, Character* b) -> bool { 
+	return a->getAction() < b->getAction(); 
+};
 
 class Game : public IObservable, public IObserver {
 private:
@@ -36,7 +38,7 @@ private:
 	Player* player;
 	vector<Character*> characters;
 	vector<NPC*> npcs;
-	vector<Conversation> conversations;
+	vector<Conversation*> conversations;
 
 	Room* moveRoom(Room *origin, string destination);
 	Map map;
@@ -77,5 +79,5 @@ public:
 	string getText() { return text; }
 
 	enum {_obter, _imprimir, _ouvir, _salvar, _carregar, 
-		_evento_fim_conversa};
+		_evento_fim_conversa, _evento_passagem_tempo, _evento_inicio_conversa};
 };

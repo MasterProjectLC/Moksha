@@ -7,7 +7,7 @@ class Hilda : public NPC {
 private:
 
 public:
-	Hilda() : NPC{ NULL, "Hilda", "", F, 2, 1 } {}
+	Hilda() : NPC(NULL, "") {}
 	explicit Hilda(Map* m);
 	int decideActionParticular(string action) override;
 	void setupProcessParticular(string currentProcess) override;

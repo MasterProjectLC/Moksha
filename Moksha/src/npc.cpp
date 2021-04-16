@@ -1,14 +1,19 @@
 #include "npc.h"
 #include <stdexcept>
 
-NPC::NPC(Map* m, string name, string description, int gender, int strength, int dexterity) : Character(gender, strength, dexterity) {
-	this->name = name;
-	this->description = new string(description);
+NPC::NPC(Map* m, string name) {
 	this->mapp = m;
 	busy = false;
 
-	FileDict fileObject = FileManager::readFromFile("files/characters/" + getName() + ".txt");
-	this->dict = fileObject;
+	FileDict fileObject = FileManager::readFromFile("files/characters/" + name + ".txt");
+	this->name = name;
+	this->description = new string(fileObject.getValue("description"));
+	this->gender = fileObject.getValue("gender")[0];
+	this->strength = stoi(fileObject.getValue("strength"));
+	this->dexterity = stoi(fileObject.getValue("dexterity"));
+	vector<string> v = fileObject.getValues("topics");
+	this->topicList = set<string>(v.begin(), v.end());
+
 	goalList = PriorityVector<Goal>(vector<Goal>(), goalCompare);
 }
 
@@ -142,6 +147,13 @@ void NPC::move(string room) {
 	advancePath();
 }
 
+void NPC::talk(string convo, bool isReaction) {
+	for (set<string*>::iterator it = addedConditions.begin(); it != addedConditions.end(); it++)
+		if (**it == "convo_" + convo)
+			goap_worldstate_set(&ap, &world, (*it)->c_str(), true);
+	Character::talk(convo, isReaction);
+}
+
 // REACTIONS ----------------------------------
 
 void NPC::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
@@ -151,8 +163,8 @@ void NPC::executeReaction(string topic, string phrase, string sender, bool shoul
 	if (topic != "")
 		setCondition(topic, true);
 	// React to mentions
-	if (dict.hasKey(topic) && shouldRespond && !busy && !inConversation()) {
-		talk(dict.getValue(topic), true);
+	if (shouldRespond && !busy && !inConversation()) {
+		talk(topic + "_" + name, true);
 		notify(avancar);
 	}
 }
@@ -217,6 +229,7 @@ void NPC::setupWorld() {
 	goap_actionplanner_clear(&ap); // initializes action planner
 
 	// describe repertoire of actions
+	addTrackableRoom("DiningHall");
 	setupActionsParticular();
 
 	// describe current world state.
@@ -385,7 +398,6 @@ int NPC::decideAction() {
 				currentStep = 0;
 			} while ( (world.values & ~currentGoal.goal.dontcare) == currentGoal.goal.values && it != goalList.lowest() );
 			changePlans();
-
 		}
 		// Current objective not completed - find next action
 		else {
@@ -407,7 +419,6 @@ int NPC::decideAction() {
 		}
 		// Convo
 		else if (action.substr(0, 6).compare("convo_") == 0) {
-			goap_worldstate_set(&ap, &world, action.c_str(), true);
 			actionArgs.push_back(action.substr(6, 1000));
 			currentAction = conversar;
 		// Other actions
@@ -464,4 +475,16 @@ vector<string> NPC::getAtomList() {
 	for (int i = 0; i < ap.numatoms; i++)
 		retorno.push_back(ap.atm_names[i]);
 	return retorno;
+}
+
+
+// EXTRA =================================
+
+void NPC::setupCrewArea() {
+	addTrackableRoom("Mezzanine");
+	addTrackableRoom("CrewCorridor");
+	goap_set_pre(&ap, "enter_CrewArea", "in_Mezzanine", true);
+	goap_set_pst(&ap, "enter_CrewArea", "in_CrewArea", true);
+	goap_set_pre(&ap, "leave_CrewArea", "in_CrewCorridor", true);
+	goap_set_pst(&ap, "leave_CrewArea", "in_CrewArea", false);
 }

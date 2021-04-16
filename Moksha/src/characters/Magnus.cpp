@@ -1,10 +1,6 @@
 #include "Magnus.h"
 
-Magnus::Magnus(Map* m) : NPC{ m, "Magnus", 
-("Magnus Flettner is the german inventor responsible for designing the airship Medusa. "
-"Today, he was brought along to explain details of the ship to any interested guests and to perform specialized maintenance if needed.\n"
-"He's slim, somewhat old and wears delicate round glasses. Right now, he's outfitted with a golden bow tie, a red vest and a dark suit."), 
-M, 4, 3 } {
+Magnus::Magnus(Map* m) : NPC(m, "Magnus") {
 
 }
 
@@ -13,8 +9,13 @@ void Magnus::setupActionsParticular() {
 	addTrackablePeople("Baxter");
 	addTrackablePeople("Santos");
 	addTrackableRoom("Study");
+	addTrackableRoom("MagnusRoom");
+	addTrackableRoom("ViewingLobby");
 	goap_set_pre(&ap, "study", "in_Study", true);
 	goap_set_pst(&ap, "study", "studying", true);
+
+	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
+	goap_set_pst(&ap, "hear_presentation", "the_medusa", true);
 }
 
 
@@ -41,5 +42,24 @@ int Magnus::decideActionParticular(string action) {
 		actionArgs.push_back("studying.");
 		return acaoNula;
 	}
+
+	if (action == "hear_presentation") {
+		actionArgs.push_back("waiting.");
+		return acaoNula;
+	}
+
+	if (action == "enter_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", true);
+		return interagir;
+	}
+	if (action == "leave_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", false);
+		return interagir;
+	}
+
 	return descansar;
 }

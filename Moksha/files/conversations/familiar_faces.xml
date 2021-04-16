@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Baxter/>
+    <Magnus/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Narrator line="As the guests quietly vacate the lobby, Baxter and Magnus are left alone in the room."/>
+    <Baxter line="So, Flettner, what did you think?"/>
+    <Narrator line="Magnus pauses for a moment, seemingly confused about the question."/>
+    <Magnus line="O-of what, Herr Blakewell?"/>
+    <Baxter line="Heavens, Flettner, the presentation! How did it strike you?"/>
+    <Magnus line="Oh, uh, I think it went quite well, sir. The facts were well presented, the main selling points were all mentioned..."/>
+    <Baxter line="...That's a relief."/>
+    <Magnus line="...but, well, I did notice something a bit..."/>
+    <Baxter line="...odd?"/>
+    <Magnus line="...strange. W-Well, odd, too."/>
+    <Baxter line="Oh, jolly good. Then it wasn't just me. Was it, by chance, a familiar face?"/>
+    <Magnus line="Y-Yes, exactly! At first, I wasn't so sure... As the guests boarded the ship, that woman with religious clothes... It was as if I met her somewhere before."/>
+    <Narrator line="Baxter steps back."/>
+    <Baxter line="Wait, woman?"/>
+    <Magnus line="Y-Yes, isn't she the one you're talking about?"/>
+    <Baxter line="I... no, nevermind. In any case... No, heavens, you wouldn't even know him."/>
+    <Magnus line="Herr Blakewell..?"/>
+    <Baxter line="Apologies, forget it. Willow did comment the trip was taking a toll on my paranoia... Perhaps I should clear my head."/>
+    <Narrator line="An awkward silence creeps into the conversation. Magnus fidgets slightly."/>
+    <Magnus line="Is... Is there anything else you need, sir?"/>
+    <Narrator line="Baxter shakes his head."/>
+    <Baxter line="No, that shall be all for now, doctor. I, er, thank you for coming down here and helping to deliver the presentation."/>
+    <Magnus line="Oh, uh, you're welcome, sir. If it's in order with you, I shall take my leave."/>
+    <Baxter line="Alright, you do that. I'll return to my room as well. Pip pip, Flettner."/>
+    <Magnus line="Uh, pip pip, Herr Blakewell."/>
+</Conversation>

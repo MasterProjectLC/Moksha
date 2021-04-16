@@ -7,7 +7,7 @@ class Jenna: public NPC {
 private:
 
 public:
-	Jenna() : NPC{ NULL, "Jenna", "", F, 7, 1 } {}
+	Jenna() : NPC(NULL, "") {}
 	explicit Jenna(Map* m);
 	int decideActionParticular(string action) override;
 	void setupProcessParticular(string currentProcess) override;

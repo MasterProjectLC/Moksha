@@ -1,10 +1,6 @@
 #include "Willow.h"
 
-Willow::Willow(Map* m) : NPC{ m, "Willow", 
-("Willow Blakewell, formerly known as Willow Niedenberg, is Baxter's wife, Liz' sister and a member of the austrian nobility. "
-"As far as I know, she seems to be a compassionate and kind individual.\n"
-"Her hair is long and elaborate, tranced in an intricate fashion. Today, she's wearing a golden and blue dress.")
-, F, 1, 1 } {
+Willow::Willow(Map* m) : NPC(m, "Willow") {
 
 }
 

@@ -14,6 +14,7 @@ class NPC : public Character {
 protected:
 	string* description;
 
+	set<string> topicList;
 	set<string*> addedConditions;
 	set<string*> addedActions;
 	set<string> trackablePeople;
@@ -34,7 +35,6 @@ protected:
 	int plansz = 16; // Size of our return buffers
 	int planCost = 0;
 	int currentStep = 0;
-	Dictionary<vector<string>> dict;
 
 	Dictionary<string> lastSeen;
 
@@ -54,6 +54,7 @@ protected:
 
 	void advancePath();
 	void move(string room) override;
+	void talk(string convo, bool isReaction) override;
 
 	virtual void setupWorldParticular() {}
 	virtual void setupObjectivesParticular() {}
@@ -76,8 +77,10 @@ protected:
 	bool isCurrentStateFulfilled();
 	void setBusy(bool novo) { busy = novo; }
 
+	void setupCrewArea();
+
 public:
-	explicit NPC(Map* m, string name, string description, int gender, int strength, int dexterity);
+	explicit NPC(Map* m, string name);
 	~NPC();
 
 	string* getDescription() { return description; }
@@ -93,6 +96,7 @@ public:
 	void seeCharMoving(Character* character, Room* otherRoom, bool entering) override;
 	void setSalaAlvo(Room* nova) { findPath(nova); }
 
+	void clearGoals() { goalList.clear(); }
 	void addGoal(vector<string*> conditions, vector<bool> conditionStates, int priority);
 	void addGoal(string* condition, bool conditionState, int priority);
 	void addGoal(bfield_t values, bfield_t dontcare, bool conditionState, int priority);

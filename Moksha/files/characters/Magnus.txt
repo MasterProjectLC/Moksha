@@ -1,4 +1,10 @@
-Knife:
-Hah, got it.|
-What do you plan to do with that?|
-Don't approach me with that.
+description:
+Magnus Flettner is the german inventor responsible for designing the airship Medusa. Today, he was brought along to explain details of the ship to any interested guests and to perform specialized maintenance if needed.\nHe's slim, somewhat old and wears delicate round glasses. Right now, he's outfitted with a golden bow tie, a red vest and a dark suit.
+gender:
+M
+strength:
+4
+dexterity:
+3
+topics:
+himalayas|questionnaire

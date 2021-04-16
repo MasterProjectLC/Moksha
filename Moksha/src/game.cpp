@@ -15,7 +15,7 @@ void Game::setup() {
 			npcs[i]->setupWorld();
 		}
 
-		conversations.push_back(Conversation("intro", "FlightDock", false));
+		conversations.push_back(new Conversation("intro", "FlightDock", false));
 		advanceConversations();
 	}
 
@@ -30,9 +30,50 @@ void Game::setup() {
 // EVENTS
 void Game::emitEvent(int id, vector<string> args) {
 	switch (id) {
+	case _evento_inicio_conversa:
+		if (player->getCurrentRoom()->getCodename() == args[1]) {
+			printText(args[0] + " has begun talking.");
+		}
+		break;
+
 	case _evento_fim_conversa:
 		if (args[0] == "jenna_rivalry") {
 			rewindGame();
+		}
+		break;
+
+	case _evento_passagem_tempo:
+		if ((NPC*)findCharacter("Baxter") == NULL)
+			return;
+
+		switch (time) {
+		case 35:
+			((NPC*)findCharacter("Renard"))->addGoal(new string("taking_photos"), true, 50);
+			((NPC*)findCharacter("Paul"))->addGoal(new string("the_medusa"), true, 50);
+			break;
+
+		case 40:
+			((NPC*)findCharacter("Jenna"))->addGoal(new string("convo_renard_questionnaire"), true, 50);
+			break;
+
+		case 45:
+			//((NPC*)findCharacter("Baxter"))->addGoal(new string("convo_presentation"), true, 50);
+			((NPC*)findCharacter("Baxter"))->addGoal(new string("convo_familiar_faces"), true, 45);
+			break;
+
+		case 52:
+			((NPC*)findCharacter("Jenna"))->addGoal(new string("the_medusa"), true, 50);
+			((NPC*)findCharacter("Renard"))->addGoal(new string("the_medusa"), true, 50);
+			((NPC*)findCharacter("Amelie"))->addGoal(new string("the_medusa"), true, 50);
+			((NPC*)findCharacter("George"))->addGoal(new string("the_medusa"), true, 50);
+			((NPC*)findCharacter("Magnus"))->addGoal(new string("the_medusa"), true, 50);
+			break;
+
+		case (60+60+30):
+			((NPC*)findCharacter("George"))->addGoal(new string("convo_begin_card_game"), true, 50);
+			((NPC*)findCharacter("George"))->addGoal(new string("convo_begin_card_game"), true, 1);
+			((NPC*)findCharacter("Jenna"))->addGoal(new string("convo_begin_card_game"), true, 1);
+			break;
 		}
 		break;
 	}
@@ -161,7 +202,7 @@ void Game::initializeGame() {
 	// Load conversations
 	load_package = doc.child("GameData").child("Game").child("Conversations");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it)
-		conversations.push_back(Conversation(it->name(), it->attribute("room").value(), stoi(it->attribute("stage").value())));
+		conversations.push_back(new Conversation(it->name(), it->attribute("room").value(), stoi(it->attribute("stage").value())));
 }
 
 
@@ -218,15 +259,18 @@ bool Game::loadGame(string loadFile) {
 
 			// Load goals
 			node = it->child("Goals");
-			for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait) {
-				__int64 val;
-				std::stringstream sstr(string(ait->name()).substr(1, string::npos)); sstr >> val;
-				bfield_t values = val;
-				std::stringstream sstr2(ait->attribute("dontcare").value()); sstr2 >> val;
-				bfield_t dontcare = val;
-				string onetime = ait->attribute("onetime").value();
-				int priority = stoi(ait->attribute("priority").value());
-				((NPC*)thisCharacter)->addGoal(values, dontcare, (onetime == "true"), priority);
+			if (node.begin() != node.end()) {
+				((NPC*)thisCharacter)->clearGoals();
+				for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait) {
+					__int64 val;
+					std::stringstream sstr(string(ait->name()).substr(1, string::npos)); sstr >> val;
+					bfield_t values = val;
+					std::stringstream sstr2(ait->attribute("dontcare").value()); sstr2 >> val;
+					bfield_t dontcare = val;
+					string onetime = ait->attribute("onetime").value();
+					int priority = stoi(ait->attribute("priority").value());
+					((NPC*)thisCharacter)->addGoal(values, dontcare, (onetime == "true"), priority);
+				}
 			}
 		}
 		// Load player
@@ -246,7 +290,7 @@ bool Game::loadGame(string loadFile) {
 	// Load conversations
 	load_package = doc.child("GameData").child("Game").child("Conversations");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it)
-		conversations.push_back(Conversation( it->name(), it->attribute("room").value(), (strcmp(it->attribute("is_reaction").value(), "true") == 0),
+		conversations.push_back(new Conversation( it->name(), it->attribute("room").value(), (strcmp(it->attribute("is_reaction").value(), "true") == 0),
 			stoi(it->attribute("stage").value())));
 
 	return true;
@@ -342,14 +386,14 @@ void Game::saveGame(string baseSave) {
 	node = doc.child("GameData").child("Game").child("Conversations");
 	node.remove_children();
 	for (int i = 0; i < conversations.size(); i++) {
-		string convoName = conversations[i].getName();
+		string convoName = conversations[i]->getName();
 		node.append_child(convoName.c_str());
 		node.child(convoName.c_str()).append_attribute("stage");
 		node.child(convoName.c_str()).append_attribute("room");
 		node.child(convoName.c_str()).append_attribute("is_reaction");
-		node.child(convoName.c_str()).attribute("stage").set_value(conversations[i].getStage());
-		node.child(convoName.c_str()).attribute("room").set_value(conversations[i].getRoom().c_str());
-		node.child(convoName.c_str()).attribute("is_reaction").set_value(conversations[i].getIsReaction());
+		node.child(convoName.c_str()).attribute("stage").set_value(conversations[i]->getStage());
+		node.child(convoName.c_str()).attribute("room").set_value(conversations[i]->getRoom().c_str());
+		node.child(convoName.c_str()).attribute("is_reaction").set_value(conversations[i]->getIsReaction());
 	}
 
 	doc.save_file("files/save.xml");
@@ -452,7 +496,10 @@ void Game::objectAction(Object* object) {
 
 	case object->mover:
 		character->move(object->getArgs()[0]);
-		character->setStatus("obtaining " + object->getName() + ".");	// Update char's status
+		break;
+
+	case object->tempo:
+		printText(to_string(7+(time/60)) + ":" + to_string(time % 60));
 		break;
 	}
 }
@@ -462,6 +509,7 @@ void Game::characterAction(Character* character) {
 	int id = character->getNotifyID();
 	Character* target;
 	Room* oldRoom;
+	Conversation* convo;
 
 	switch (id) {
 	case avancar:
@@ -511,14 +559,22 @@ void Game::characterAction(Character* character) {
 		break;
 
 	case conversar:
-		conversations.push_back( Conversation(character->getNotifyText(), character->getCurrentRoom()->getCodename(),
-												character->getNotifyArgs()[1][0] == 'r') );
+		convo = new Conversation(character->getNotifyText(), character->getCurrentRoom()->getCodename(),
+			character->getNotifyArgs()[1][0] == 'r');
+		conversations.push_back(convo);
+		emitEvent(_evento_inicio_conversa, vector<string>({ character->getName(), convo->getRoom() }));
+		// Preemptively lock everyone
+		for (set<string>::iterator it = convo->getParticipants()->begin(); it != convo->getParticipants()->end(); it++) {
+			Character* toLock = findCharacter(*it);
+			if (toLock->getCurrentRoom()->getCodename() == convo->getRoom())
+				toLock->setInConversation(true);
+		}
 		break;
 
 	case ouvir:
 		for (int i = 0; i < conversations.size(); i++)
-			if (conversations[i].participates(character->getNotifyText())) {
-				conversations[i].addListener(character->getName());
+			if (conversations[i]->participates(character->getNotifyText())) {
+				conversations[i]->addListener(character->getName());
 				break;
 			}
 		break;
@@ -558,7 +614,7 @@ void Game::characterAction(Character* character) {
 			// TODO: maybe change this scripted thing later? It's not an often used action though, so it might not be worth it
 			if (codename == "JennaSuitcase") {
 				printText("Press Enter to continue.");
-				conversations.push_back(Conversation("intro2", "Runway"));
+				conversations.push_back(new Conversation("intro2", "Runway"));
 			}
 		}
 		
@@ -572,8 +628,6 @@ void Game::advanceTime() {
 	// Decide action
 	for (int i = 0; i < npcs.size(); i++) {
 		int action = npcs[i]->decideAction();
-		if (action == conversar)
-			npcs[i]->takeAction();
 	}
 	if (player->getAction() == ouvir)
 		player->takeAction();
@@ -584,7 +638,7 @@ void Game::advanceTime() {
 	// Order by priority
 	PriorityVector<Character*> orderAction = PriorityVector<Character*>(vector<Character*>(), actionCompare);
 	for (int i = 0; i < characters.size(); i++) {
-		if (characters[i]->getAction() != conversar && characters[i]->getAction() != ouvir)
+		if (characters[i]->getAction() != ouvir)
 			orderAction.push(characters[i]);
 	}
 
@@ -601,6 +655,7 @@ void Game::advanceTime() {
 
 	// Jogo
 	time++;
+	emitEvent(_evento_passagem_tempo, vector<string>());
 	saveGame("save.xml");
 }
 
@@ -610,20 +665,12 @@ void Game::advanceConversations() {
 		return;
 
 	// Iterate through each current convo
-	for (vector<Conversation>::iterator it = conversations.begin(); it != conversations.end(); it++) {
+	for (vector<Conversation*>::iterator it = conversations.begin(); it != conversations.end();) {
 		// Try until a message shoots through
+		bool endConvo = false;
 		while (1) {
-			// If the convo is over
-			bool endConvo = false;
-			if (it->ended()) {
-				string s = it->getName();
-				it = conversations.erase(it);
-				emitEvent(_evento_fim_conversa, vector<string>({ s }));
-				break;
-			}
-
 			// Advance
-			xml_node conversation = it->nextLine();
+			xml_node conversation = (*it)->nextLine();
 
 			Character* speaker = NULL;
 			bool isNarrator = (string(conversation.name()) == "Narrator");
@@ -631,7 +678,7 @@ void Game::advanceConversations() {
 				speaker = findCharacter(conversation.name());
 				// Test if valid
 				// Is the speaker in the room?
-				if (!speaker || speaker->getCurrentRoom()->getCodename() != it->getRoom())
+				if (!speaker || speaker->getCurrentRoom()->getCodename() != (*it)->getRoom())
 					continue;
 			}
 
@@ -647,12 +694,12 @@ void Game::advanceConversations() {
 				string tag = cit->attribute("tag").value();
 				bool checkTag = (tag == "tag");
 
-				bool conditionMet = ( !checkTag && (isNarrator || speaker->hasCondition(cit->name())) ) || ( checkTag && it->hasTag(cit->name()) );
+				bool conditionMet = ( !checkTag && (isNarrator || speaker->hasCondition(cit->name())) ) || ( checkTag && (*it)->hasTag(cit->name()) );
 				string nao = cit->attribute("n").value();
 				bool inverted = (nao == "n");
 				
 				if (addTag == "add_tag")
-					it->addTag(cit->name());
+					(*it)->addTag(cit->name());
 				else if (info == "info")
 					infoAtom = cit->name();
 				else if (end == "end")
@@ -668,20 +715,31 @@ void Game::advanceConversations() {
 
 			// Send message
 			if (isNarrator)
-				broadcastMessage( infoAtom, conversation.attribute("line").value(), "", *(it->getParticipants()), map.getRoom(it->getRoom()) );
+				broadcastMessage( infoAtom, conversation.attribute("line").value(), "", *((*it)->getParticipants()), map.getRoom((*it)->getRoom()) );
 			else
-				speaker->sayLine( infoAtom, conversation.attribute("line").value(), *(it->getParticipants()) );
+				speaker->sayLine( infoAtom, conversation.attribute("line").value(), *((*it)->getParticipants()) );
 
 			// Lock every participant
-			for (set<string>::iterator ait = it->getParticipants()->begin(); ait != it->getParticipants()->end(); ait++)
-				findCharacter(*ait)->setInConversation(true);
-			it->clearListeners();
-
-			// End convo?
-			if (endConvo) {
-				it = conversations.erase(it);
+			for (set<string>::iterator ait = (*it)->getParticipants()->begin(); ait != (*it)->getParticipants()->end(); ait++) {
+				Character* toLock = findCharacter(*ait);
+				if (toLock->getCurrentRoom()->getCodename() == (*it)->getRoom())
+					toLock->setInConversation(true);
 			}
+			(*it)->clearListeners();
 			break;
+		}
+
+		// End convo?
+		// If the convo is over
+		if (endConvo || (*it)->ended()) {
+			string s = (*it)->getName();
+			delete *it;
+			it = conversations.erase(it);
+			emitEvent(_evento_fim_conversa, vector<string>({ s }));
+		}
+		// Advance to next convo
+		else {
+			it++;
 		}
 
 		if (conversations.empty() || it == conversations.end())

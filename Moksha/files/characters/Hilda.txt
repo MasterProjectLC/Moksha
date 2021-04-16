@@ -1,4 +1,10 @@
-Knife:
-Hah, got it.|
-What do you plan to do with that?|
-Don't approach me with that.
+description:
+Hilda Bernhard is the strong, no-nonsense captain commanding the crew of Medusa. When she's not shouting out orders to the workers at the engine rooms, Hilda pilots the ship along with Santos.\nShe's a big, towering woman, currently wearing a large blue jacket, heavy leather boots and a black tie.
+gender:
+F
+strength:
+11
+dexterity:
+6
+topics:
+crewboy

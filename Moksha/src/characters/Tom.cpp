@@ -1,24 +1,21 @@
 #include "Tom.h"
 
-Tom::Tom(Map* m) : NPC{ m, "Tom", 
-"Thomas Wright is Santos' 17-year-old son, currently working under Hilda as a lowly crewman aboard the Medusa. "
-"He seems to have quite a grudge against his father, wanting both to impress and ruin him.\n"
-"Despite his father's strength, Tom relies more on technique and agility to perform tasks. He's currently wearing a white shirt, suspenders and a workers cap.", 
-M, 10, 11 } {
+Tom::Tom(Map* m) : NPC(m, "Tom") {
 
 }
 
 void Tom::setupActionsParticular() {
 	addTrackablePeople("Hilda");
 	addTrackablePeople("Santos");
-	addTrackableRoom("Mezzanine");
-	goap_set_pre(&ap, "enter_CrewArea", "in_Mezzanine", true);
-	goap_set_pst(&ap, "enter_CrewArea", "in_CrewArea", true);
-	goap_set_pre(&ap, "move_Navigation", "in_CrewArea", true);
-	goap_set_pre(&ap, "move_CrewQuarters", "in_CrewArea", false);
+	setupCrewArea();
+
+	goap_set_pre(&ap, "move_ControlRoom", "in_CrewArea", true);
 	addTrackableRoom("ControlRoom");
-	addTrackableRoom("CrewQuarters");
+	goap_set_pre(&ap, "move_NorthEngines", "in_CrewArea", true);
 	addTrackableRoom("NorthEngines");
+	goap_set_pre(&ap, "move_CrewQuarters", "in_CrewArea", false);
+	addTrackableRoom("CrewQuarters");
+
 	goap_set_pre(&ap, "work", "in_NorthEngines", true);
 	goap_set_pst(&ap, "work", "working", true);
 }
@@ -47,6 +44,18 @@ int Tom::decideActionParticular(string action) {
 	if (action == "work") {
 		actionArgs.push_back("working.");
 		return acaoNula;
+	}
+	if (action == "enter_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", true);
+		return interagir;
+	}
+	if (action == "leave_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", false);
+		return interagir;
 	}
 	
 	return descansar;

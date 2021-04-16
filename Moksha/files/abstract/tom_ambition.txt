@@ -1,0 +1,8 @@
+name:
+Tom's ambition
+codename:
+tom_ambition
+type:
+r
+description:
+Tom's ambition, it seems, is to somehow beat his father. Does he mean that physically or metaphorically?

@@ -1,10 +1,6 @@
 #include "Baxter.h"
 
-Baxter::Baxter(Map* m) : NPC{ m, "Baxter", 
-("Baxter Blakewell is one of the original founders of the Blakewell and Wright Aviation Company. "
-"He's a posh englishman known for his somewhat cold demeanor and conservative business moves. In regards to personal life, he's married to Willow Blakewell.\n"
-"Baxter has an average build and sports a simple moustache. Right now, he's wearing a sharp, elegant double suit and a black striped tie.")
-, M, 5, 7 } {
+Baxter::Baxter(Map* m) : NPC(m, "Baxter") {
 
 }
 
@@ -14,22 +10,29 @@ void Baxter::setupActionsParticular() {
 	addTrackablePeople("Renard");
 	addTrackablePeople("Santos");
 	addTrackablePeople("Hilda");
+
+	setupCrewArea();
 	addTrackableRoom("BlakewellRoom");
+	goap_set_pre(&ap, "prepare", "in_BlakewellRoom", true);
+	goap_set_pst(&ap, "prepare", "preparing", true);
+
 	addTrackableRoom("ViewingLobby");
 	addTrackableConvo("baxter_facade", "BlakewellRoom");
 	addTrackableConvo("presentation", "ViewingLobby");
 	goap_set_pre(&ap, "convo_presentation", "convo_baxter_facade", true);
+	addTrackableConvo("familiar_faces", "ViewingLobby");
+	goap_set_pre(&ap, "convo_familiar_faces", "convo_presentation", true);
 }
 
 
 void Baxter::setupWorldParticular() {
-
+	goap_worldstate_set(&ap, &world, "preparing", false);
+	goap_worldstate_set(&ap, &world, "the_medusa", false);
 }
 
 
 void Baxter::setupObjectivesParticular() {
-	goap_worldstate_set(&ap, &currentGoal.goal, "in_BlakewellRoom", true);
-	addGoal(new string("convo_presentation"), true, 5);
+	goap_worldstate_set(&ap, &currentGoal.goal, "preparing", true);
 }
 
 
@@ -44,5 +47,22 @@ void Baxter::setupProcessParticular(string currentProcess) {
 
 
 int Baxter::decideActionParticular(string action) {
+	if (action == "prepare") {
+		actionArgs.push_back("preparing speeches.");
+		return acaoNula;
+	}
+	if (action == "enter_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", true);
+		return interagir;
+	}
+	if (action == "leave_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", false);
+		return interagir;
+	}
+
 	return descansar;
 }

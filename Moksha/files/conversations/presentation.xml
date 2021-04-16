@@ -13,11 +13,11 @@
 
 <Conversation FormatVersion="1">
     <Baxter line="Flettner, is everyone here?"/>
-    <Magnus line="Yes, Herr Baxter. George and Jenna Maybourne, Elliot Johnson, Claude Renard, Paul Davis and... Amelie Bhattacharya."/>
+    <Magnus line="Yes, Herr Blakewell. George and Jenna Maybourne, Elliot Johnson, Claude Renard, Paul Davis and... Amelie Bhattacharya."/>
     <Baxter line="Marvelous. Alright, everyone. At this point of the trip, I'm sure you all have already enjoyed many of this ship's luxurious features."/>
     <Renard line="Oh, yes, they are quite satisfactory, Monsieur."/>
     <Baxter line="Today, we'd like to talk more about its technical design and production, and how it might affect the future of aviation. Flettner?"/>
-    <Magnus line="Right, Herr Baxter."/>
+    <Magnus line="Right, Herr Blakewell."/>
     <Narrator line="The inventor opens a small notebook filled with scratched-out notes, reminders and points of interest."/>
     <Magnus line="So... as you all, well, hopefully know, for the last 10 years our airships have consistently been known for meeting very narrow corners of the market."/>
     <Magnus line="Problems such as incidence of accidents, slow travel speeds and low cargo capacity have all contributed to them being seen as niche modes of transportation for the elite."/>
@@ -39,6 +39,6 @@
     <Baxter line="I'd certainly not affirm that the hoi polloi will have much stake on this matter, but I would dare say that one could afford a round aboard given smart savings over a year."/>
     <Amelie line="...I see."/>
     <Baxter line="Alright, I think that's it for today, folks. I'm jolly glad for the presence of all of you here, and I'll see you all again as we touch down in India. Goodbye.">
-        <the_medusa info="info"/>
+        <medusa info="info"/>
     </Baxter>
 </Conversation>

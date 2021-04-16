@@ -1,11 +1,6 @@
 #include "Jenna.h"
 
-Jenna::Jenna(Map* m) : NPC{m, "Jenna", 
-("Jenna Maybourne, George's niece, is an american 'innovation journalist', a title she coined herself."
-"She's also my boss. Overall, I find her somewhat laidback and playful, simultaneously taking her job seriously and having fun along the way. "
-"Her connection to her father, who was a prominent aeronaut, sparked her interest for technological marvels and allowed her to learn a lot about airships.\n"
-"She's currently wearing a brown vest, a bowler hat and big, round googles. Her hair is shorter than most women."),
-F, 9, 10} {
+Jenna::Jenna(Map* m) : NPC(m, "Jenna") {
 
 }
 
@@ -14,7 +9,6 @@ void Jenna::setupActionsParticular() {
 	addTrackablePeople("Magnus");
 	addTrackablePeople("Renard");
 	addTrackablePeople("George");
-	addTrackableRoom("ViewingLobby");
 
 	addTrackableRoom("JennaRoom");
 	goap_set_pre(&ap, "write", "in_JennaRoom", true);
@@ -23,15 +17,28 @@ void Jenna::setupActionsParticular() {
 	addTrackableConvo("wake_up");
 	goap_set_pre(&ap, "convo_wake_up", "in_JennaRoom", true);
 
+	addTrackableRoom("ViewingLobby");
+	addTrackableConvo("renard_questionnaire", "ViewingLobby");
+
 	addTrackableRoom("Runway");
 	goap_set_pre(&ap, "wait_Runway", "in_Runway", true);
 	goap_set_pst(&ap, "wait_Runway", "waiting_Runway", true);
+
+	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
+	goap_set_pst(&ap, "hear_presentation", "the_medusa", true);
+
+	addTrackableRoom("GameRoom");
+	addTrackableConvo("begin_card_game", "GameRoom");
+	goap_set_pre(&ap, "convo_wake_up", "in_JennaRoom", true);
+	goap_set_pre(&ap, "play", "in_GameRoom", true);
+	goap_set_pst(&ap, "play", "playing", true);
 }
 
 
 void Jenna::setupWorldParticular() {
 	goap_worldstate_set(&ap, &world, "waiting_Runway", false);
 	goap_worldstate_set(&ap, &world, "writing", false);
+	goap_worldstate_set(&ap, &world, "the_medusa", false);
 }
 
 
@@ -52,12 +59,18 @@ void Jenna::setupProcessParticular(string currentProcess) {
 
 
 int Jenna::decideActionParticular(string action) {
-	if (action == "wait_Runway") {
+	if (action == "wait_Runway" || action == "hear_presentation") {
 		actionArgs.push_back("waiting.");
 		return acaoNula;
 	}
-	else if (action == "write") {
+
+	if (action == "write") {
 		actionArgs.push_back("writing.");
+		return acaoNula;
+	}
+
+	if (action == "play") {
+		actionArgs.push_back("playing.");
 		return acaoNula;
 	}
 

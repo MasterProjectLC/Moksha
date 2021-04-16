@@ -1,4 +1,10 @@
-Knife:
-Hah, got it.|
-What do you plan to do with that?|
-Don't approach me with that.
+description:
+Albert Santos Wright is the loud, bold and extroverted half of the Blakewell and Wright Aviation Company. A skilled pilot and a fierce fighter, he's known for personally testing every model himself prior to launch.\nSantos is a strong englishman with a bulky body and an english moustache. Today, he's wearing a big, heavy fur coat and a pilot 'hat and goggles' combo.
+gender:
+F
+strength:
+13
+dexterity:
+12
+topics:
+crewboy|himalayas

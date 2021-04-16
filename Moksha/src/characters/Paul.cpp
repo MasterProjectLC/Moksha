@@ -1,9 +1,6 @@
 #include "Paul.h"
 
-Paul::Paul(Map* m) : NPC{ m, "Paul", 
-"Paul Davis is Renard's quiet assistant. While seemingly curious about the inner workings of the ship, he doesn't seem that interested in helping Renard.\n"
-"Paul has a rough ginger beard and some untamed hair. Right now, he wears a closed leather jacket and a discreet newsy cap.", 
-M, 7, 9 } {
+Paul::Paul(Map* m) : NPC(m, "Paul") {
 
 }
 
@@ -12,8 +9,14 @@ void Paul::setupActionsParticular() {
 	addTrackablePeople("Santos");
 	addTrackablePeople("Magnus");
 	addTrackableRoom("RenardRoom");
+	addTrackableRoom("ViewingLobby");
+	setupCrewArea();
+
 	goap_set_pre(&ap, "plan", "in_RenardRoom", true);
 	goap_set_pst(&ap, "plan", "planning", true);
+
+	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
+	goap_set_pst(&ap, "hear_presentation", "the_medusa", true);
 }
 
 
@@ -40,5 +43,24 @@ int Paul::decideActionParticular(string action) {
 		actionArgs.push_back("planning.");
 		return acaoNula;
 	}
+
+	if (action == "hear_presentation") {
+		actionArgs.push_back("waiting.");
+		return acaoNula;
+	}
+
+	if (action == "enter_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", true);
+		return interagir;
+	}
+	if (action == "leave_CrewArea") {
+		actionArgs.push_back("open");
+		actionArgs.push_back("Crew Door");
+		setCondition("in_CrewArea", false);
+		return interagir;
+	}
+
 	return descansar;
 }

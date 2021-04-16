@@ -1,2 +1,10 @@
-the_crewboy:
-george_crewboy
+description:
+George Maybourne, Jenna's uncle, is an United States Aeronautical Division General and the one representing the organization during today's voyage. He seems kind and respectful, though Jenna has already told me of his... drinking problems.\nHe's an old man with a grizzled beard and a large body, wearing a fully condecorated blue aeronautical uniform and a military hat.
+gender:
+M
+strength:
+8
+dexterity:
+13
+topics:
+crewboy

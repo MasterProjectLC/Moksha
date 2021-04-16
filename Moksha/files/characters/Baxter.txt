@@ -1,4 +1,9 @@
-Knife:
-Hah, got it.|
-What do you plan to do with that?|
-Don't approach me with that.
+description:
+Baxter Blakewell is one of the original founders of the Blakewell and Wright Aviation Company. He's a posh englishman known for his somewhat cold demeanor and conservative business moves. In regards to personal life, he's married to Willow Blakewell.\nBaxter has an average build and sports a simple moustache. Right now, he's wearing a sharp, elegant double suit and a black striped tie.
+gender:
+M
+strength:
+5
+dexterity:
+7
+topics:

@@ -1,7 +1,7 @@
 name:
 the crewboy
 codename:
-the_crewboy
+crewboy
 type:
 c
 description:

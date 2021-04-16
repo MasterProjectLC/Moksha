@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Magnus/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Magnus line="Oh, yes, these mountains. Really great, they are."/>
+    <Elliot line="Are… Are you being sarcastic..?"/>
+    <Magnus line="Hm? Oh, no. They are truly marvelous, without question. It's just... Well, they do introduce some problems… technical problems, I mean."/>
+    <Elliot line="Wait, but Baxter said this airship could withstand this climate..."/>
+    <Magnus line="Oh, no, it can! No, that's, uh, that's not what I meant. It can definitely endure the voyage. It's just that, well, it makes maintaining it a bit complicated, and the pressure is lower, so that introduces some..."/>
+    <Elliot line="I-I get it, I get it. You don't need to get into the details."/>
+    <Magnus line="Ah, good, sorry. Well, anyway, these mountains are indeed beautiful. So, uh, that's what I have to say about them."/>
+</Conversation>

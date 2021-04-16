@@ -7,7 +7,7 @@ class Magnus : public NPC {
 private:
 
 public:
-	Magnus() : NPC{ NULL, "Magnus", "", M, 0, 0 } {}
+	Magnus() : NPC(NULL, "") {}
 	explicit Magnus(Map* m);
 	int decideActionParticular(string action) override;
 	void setupProcessParticular(string currentProcess) override;

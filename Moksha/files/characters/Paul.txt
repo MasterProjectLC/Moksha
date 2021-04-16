@@ -1,4 +1,9 @@
-Knife:
-Hah, got it.|
-What do you plan to do with that?|
-Don't approach me with that.
+description:
+Paul Davis is Renard's quiet assistant. While seemingly curious about the inner workings of the ship, he doesn't seem that interested in helping Renard.\nPaul has a rough ginger beard and some untamed hair. Right now, he wears a closed leather jacket and a discreet newsy cap.
+gender:
+M
+strength:
+7
+dexterity:
+9
+topics:

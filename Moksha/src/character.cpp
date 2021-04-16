@@ -1,7 +1,7 @@
 #include "character.h"
 
 void Character::takeAction(int action, vector<string> args) {
-	// Trancado em conversa
+	// Locked in conversation
 	if (inConversation()) {
 		setInConversation(false);
 		return;
@@ -63,13 +63,13 @@ void Character::printText(string str) {
 }
 
 void Character::move(string str) {
+	status = "entering the room.";
 	notifyArgs.clear();
 	notifyArgs.push_back(str);
 	notify(mover);
 }
 
 void Character::move(Room* room) {
-	status = "entering the room.";
 	move(room->getCodename());
 }
 

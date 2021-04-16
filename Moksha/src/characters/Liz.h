@@ -7,7 +7,7 @@ class Liz : public NPC {
 private:
 
 public:
-	Liz() : NPC{ NULL, "Liz", "", F, 2, 2 } {}
+	Liz() : NPC(NULL, "") {}
 	explicit Liz(Map* m);
 	int decideActionParticular(string action) override;
 	void setupProcessParticular(string currentProcess) override;

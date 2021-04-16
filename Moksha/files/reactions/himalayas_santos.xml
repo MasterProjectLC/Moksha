@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Santos line="Oi, mate, these mountains! Listen, ask me whether it was my idea or not."/>
+    <Elliot line="Uh... was it your idea?"/>
+    <Santos line="EXCELLENT question, mate! Of course it bloody was! Going bush all by ourselves, riding forth into nature with our airship doll... That's defo good oil, ain't it? Can't debate with the view!"/>
+    <Elliot line="Yeah, I admit it’s hard to beat this."/>
+    <Santos line="Deadset, mate. All those journalists down by the deck are probably grinning like shot foxes! No press beats this. One hundred percent, mate."/>
+</Conversation>

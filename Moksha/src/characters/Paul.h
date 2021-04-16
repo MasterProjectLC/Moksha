@@ -7,7 +7,7 @@ class Paul : public NPC {
 private:
 
 public:
-	Paul() : NPC{ NULL, "Paul", "", M, 0, 0 } {}
+	Paul() : NPC(NULL, "") {}
 	explicit Paul(Map* m);
 	int decideActionParticular(string action) override;
 	void setupProcessParticular(string currentProcess) override;

@@ -1,4 +1,10 @@
-Knife:
-Hah, got it.|
-What do you plan to do with that?|
-Don't approach me with that.
+description:
+Thomas Wright is Santos' 17-year-old son, currently working under Hilda as a lowly crewman aboard the Medusa. He seems to have quite a grudge against his father, wanting both to impress and ruin him.\nDespite his father's strength, Tom relies more on technique and agility to perform tasks. He's currently wearing a white shirt, suspenders and a workers cap.
+gender:
+M
+strength:
+10
+dexterity:
+11
+topics:
+crewboy
