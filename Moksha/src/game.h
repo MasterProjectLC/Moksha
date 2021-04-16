@@ -17,6 +17,7 @@
 #include "map.h"
 #include "conversation.h"
 #include "fileManager.h"
+#include "interface.h"
 #include "../libs/pugixml/src/pugixml.hpp"
 
 using namespace std;
@@ -31,6 +32,11 @@ static auto actionCompare = [](Character* a, Character* b) -> bool {
 
 class Game : public IObservable, public IObserver {
 private:
+	Interface interfacer = Interface(140, 40, 60, 30);
+	int frameTime;
+	const int FPS = 60;
+	const int frameDelay = 1000 / FPS;
+
 	const int OBSERVER_OFFSET = 2000;
 
 	int time;
@@ -71,6 +77,7 @@ private:
 
 public:
 	Game();
+	int main();
 
 	void setup();
 	void receiveArgs(vector<string> args);

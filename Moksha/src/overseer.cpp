@@ -90,8 +90,3 @@ public:
 		return 0;
 	}
 };
-
-int main() {
-	Overseer m = Overseer();
-	m.main();
-};
