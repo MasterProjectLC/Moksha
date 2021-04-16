@@ -15,12 +15,13 @@ void Magnus::setupActionsParticular() {
 	goap_set_pst(&ap, "study", "studying", true);
 
 	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
-	goap_set_pst(&ap, "hear_presentation", "the_medusa", true);
+	goap_set_pst(&ap, "hear_presentation", "medusa", true);
 }
 
 
 void Magnus::setupWorldParticular() {
 	goap_worldstate_set(&ap, &world, "studying", false);
+	goap_worldstate_set(&ap, &world, "medusa", false);
 }
 
 

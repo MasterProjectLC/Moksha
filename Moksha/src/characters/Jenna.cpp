@@ -25,7 +25,11 @@ void Jenna::setupActionsParticular() {
 	goap_set_pst(&ap, "wait_Runway", "waiting_Runway", true);
 
 	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
-	goap_set_pst(&ap, "hear_presentation", "the_medusa", true);
+	goap_set_pst(&ap, "hear_presentation", "medusa", true);
+
+	addTrackableRoom("EntranceLounge");
+	addTrackableConvo("jenna_amelie");
+	goap_set_pre(&ap, "convo_jenna_amelie", "in_EntranceLounge", true);
 
 	addTrackableRoom("GameRoom");
 	addTrackableConvo("begin_card_game", "GameRoom");
@@ -38,7 +42,7 @@ void Jenna::setupActionsParticular() {
 void Jenna::setupWorldParticular() {
 	goap_worldstate_set(&ap, &world, "waiting_Runway", false);
 	goap_worldstate_set(&ap, &world, "writing", false);
-	goap_worldstate_set(&ap, &world, "the_medusa", false);
+	goap_worldstate_set(&ap, &world, "medusa", false);
 }
 
 

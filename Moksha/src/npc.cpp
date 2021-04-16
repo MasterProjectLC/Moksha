@@ -407,7 +407,6 @@ int NPC::decideAction() {
 	}
 
 	// Decide action
-	busy = false;
 	if (plansz > 0) {
 		actionArgs.clear();
 		string action = plan[currentStep];
@@ -427,6 +426,7 @@ int NPC::decideAction() {
 	} else
 		currentAction = descansar;
 
+	busy = !(currentAction == descansar || currentAction == acaoNula);
 	return currentAction;
 }
 

@@ -16,7 +16,7 @@ void Paul::setupActionsParticular() {
 	goap_set_pst(&ap, "plan", "planning", true);
 
 	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
-	goap_set_pst(&ap, "hear_presentation", "the_medusa", true);
+	goap_set_pst(&ap, "hear_presentation", "medusa", true);
 }
 
 

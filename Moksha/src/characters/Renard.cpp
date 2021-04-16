@@ -19,7 +19,7 @@ void Renard::setupActionsParticular() {
 	photos_taken = 0;
 
 	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
-	goap_set_pst(&ap, "hear_presentation", "the_medusa", true);
+	goap_set_pst(&ap, "hear_presentation", "medusa", true);
 }
 
 
@@ -27,7 +27,7 @@ void Renard::setupWorldParticular() {
 	goap_worldstate_set(&ap, &world, "in_RenardRoom", true);
 	goap_worldstate_set(&ap, &world, "writing", false);
 	goap_worldstate_set(&ap, &world, "taking_photos", false);
-	goap_worldstate_set(&ap, &world, "the_medusa", false);
+	goap_worldstate_set(&ap, &world, "medusa", false);
 }
 
 

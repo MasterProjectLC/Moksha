@@ -11,13 +11,13 @@ void Amelie::setupActionsParticular() {
 	goap_set_pst(&ap, "meditate", "meditating", true);
 
 	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
-	goap_set_pst(&ap, "hear_presentation", "the_medusa", true);
+	goap_set_pst(&ap, "hear_presentation", "medusa", true);
 }
 
 
 void Amelie::setupWorldParticular() {
 	goap_worldstate_set(&ap, &world, "meditating", false);
-	goap_worldstate_set(&ap, &world, "the_medusa", false);
+	goap_worldstate_set(&ap, &world, "medusa", false);
 }
 
 

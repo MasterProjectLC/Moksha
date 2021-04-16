@@ -37,7 +37,7 @@ void Game::emitEvent(int id, vector<string> args) {
 		break;
 
 	case _evento_fim_conversa:
-		if (args[0] == "jenna_rivalry") {
+		if (args[0] == "journalist_rivalry_Jenna") {
 			rewindGame();
 		}
 		break;
@@ -62,11 +62,15 @@ void Game::emitEvent(int id, vector<string> args) {
 			break;
 
 		case 52:
-			((NPC*)findCharacter("Jenna"))->addGoal(new string("the_medusa"), true, 50);
-			((NPC*)findCharacter("Renard"))->addGoal(new string("the_medusa"), true, 50);
-			((NPC*)findCharacter("Amelie"))->addGoal(new string("the_medusa"), true, 50);
-			((NPC*)findCharacter("George"))->addGoal(new string("the_medusa"), true, 50);
-			((NPC*)findCharacter("Magnus"))->addGoal(new string("the_medusa"), true, 50);
+			((NPC*)findCharacter("Jenna"))->addGoal(new string("medusa"), true, 50);
+			((NPC*)findCharacter("Renard"))->addGoal(new string("medusa"), true, 50);
+			((NPC*)findCharacter("Amelie"))->addGoal(new string("medusa"), true, 50);
+			((NPC*)findCharacter("George"))->addGoal(new string("medusa"), true, 50);
+			((NPC*)findCharacter("Magnus"))->addGoal(new string("medusa"), true, 50);
+			break;
+
+		case 70:
+			((NPC*)findCharacter("Jenna"))->addGoal(new string("convo_jenna_amelie"), true, 40);
 			break;
 
 		case (60+60+30):

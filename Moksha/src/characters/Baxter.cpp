@@ -27,7 +27,7 @@ void Baxter::setupActionsParticular() {
 
 void Baxter::setupWorldParticular() {
 	goap_worldstate_set(&ap, &world, "preparing", false);
-	goap_worldstate_set(&ap, &world, "the_medusa", false);
+	goap_worldstate_set(&ap, &world, "medusa", false);
 }
 
 

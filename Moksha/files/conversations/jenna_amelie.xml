@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Jenna/>
+    <Amelie/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Jenna line="Hey, uh, Amelie? Mrs. Bhattacharya?"/>
+    <Amelie line="Yes, dear?"/>
+    <Jenna line="Sorry, I couldn't help but notice your, uh, unusual clothing... To my knowledge, you answered the questionnaire too, didn't you?"/>
+    <Amelie line="That would be correct, yes. I assume you are intrigued by how I answered it, given my presumed profession?"/>
+    <Jenna line="Y-Yes, that's it."/>
+    <Amelie line="That is an understandable question. You see, before I became a monk, for a long time I worked as a physics lecturer at Oxford and Madras. As such, I was well-equipped to answer Mr. Blakewell's questions."/>
+    <Jenna line="Oh, I see! But... if that's the case, what interest did you have boarding this ship?"/>
+    <Amelie line="I... That's a difficult question to answer, I admit. For now, I can only say that I have... history with the Himalayas. And as such, I felt it was my duty to come here."/>
+    <Jenna line="Huh, intriguing, to say the least! Would you mind giving an interview later, then, discussing all of these details? I think it could develop into an interesting section in my piece..."/>
+    <Amelie line="Not at all, my dear. However, it would be of my preference to have it only once when we are outside the Himalayas, if that is alright with you."/>
+    <Jenna line="Sure! I'm in no rush for now, so we can have it whenever it suits you best."/>
+    <Amelie line="Excellent. I shall head to my quarters, then."/>
+    <Jenna line="Alright, I think I'll do the same. Bye, Mrs. Bhattacharya."/>
+    <Amelie line="Goodbye, dear."/>
+</Conversation>

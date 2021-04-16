@@ -22,8 +22,11 @@
 using namespace std;
 using namespace pugi;
 
-static auto actionCompare = [](Character* a, Character* b) -> bool { 
-	return a->getAction() < b->getAction(); 
+static auto actionCompare = [](Character* a, Character* b) -> bool {
+	if  (a->getAction() != b->getAction())
+		return a->getAction() < b->getAction();
+	else
+		return (b->getName() == "Elliot");
 };
 
 class Game : public IObservable, public IObserver {

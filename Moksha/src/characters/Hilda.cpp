@@ -46,6 +46,11 @@ int Hilda::decideActionParticular(string action) {
 		return acaoNula;
 	}
 
+	if (action == "sleep") {
+		actionArgs.push_back("sleeping.");
+		return acaoNula;
+	}
+
 	if (action == "enter_CrewArea") {
 		actionArgs.push_back("open");
 		actionArgs.push_back("Crew Door");
