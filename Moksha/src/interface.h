@@ -6,6 +6,15 @@
 #include <vector>
 #include <list>
 #include <iterator>
+#include <conio.h>
+#include <ctype.h>
+# pragma comment(lib, "secur32.lib")
+# pragma comment(lib, "winmm.lib")
+# pragma comment(lib, "dmoguids.lib")
+# pragma comment(lib, "wmcodecdspuuid.lib")
+# pragma comment(lib, "msdmo.lib")
+# pragma comment(lib, "Strmiids.lib")
+#include <timeapi.h>
 #include "graphics.h"
 #include "IObserver.h"
 #include "input.h"
@@ -19,6 +28,9 @@ private:
 	int const ULCOOLDOWN = 10000;
 	int const MENUANIMATION = 100;
 	int const CLOCKCD = ULCOOLDOWN;
+	int time = 0;
+	const int FPS = 60;
+	const int frameDelay = 1000 / FPS;
 
 	vector<string> const MENU_OPTIONS = { "CONTINUE", "OPTIONS", "QUIT" };
 
@@ -92,6 +104,7 @@ public:
 	Interface(int screenWidth, int screenHeight, int separator, int fps);
 
 	void mainInterface();
+	void gameLoop();
 	void clocking();
 	void printLine(string nova);
 

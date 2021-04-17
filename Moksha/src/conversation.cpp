@@ -1,8 +1,8 @@
 #include "conversation.h"
 
-Conversation::Conversation(string conversation, string room) : Conversation(conversation, room, false) {}
+Conversation::Conversation(string conversation, string room, vector<Character*> participants) : Conversation(conversation, room, participants, false) {}
 
-Conversation::Conversation(string conversation, string room, bool isReaction) {
+Conversation::Conversation(string conversation, string room, vector<Character*> participants, bool isReaction) {
 	name = conversation;
 	begun = true;
 	convoStage = 0;
@@ -16,18 +16,90 @@ Conversation::Conversation(string conversation, string room, bool isReaction) {
 
 	// Insert participants
 	for (xml_node_iterator ait = this->conversation.child("Participants").begin(); ait != this->conversation.child("Participants").end(); ait++) {
-		this->participants.insert(ait->name());
+		for (vector<Character*>::iterator nit = participants.begin(); nit != participants.end(); nit++)
+			if (ait->name() == (*nit)->getName())
+				this->participants.push_back(*nit);
 	}
 }
 
-Conversation::Conversation(string conversation, string room, bool isReaction, int stage) : Conversation(conversation, room, isReaction) {
+Conversation::Conversation(string conversation, string room, vector<Character*> participants, bool isReaction, int stage)
+	: Conversation(conversation, room, participants, isReaction) {
 	for (int i = 0; i < stage; i++) {
 		nextLine();
 	}
 }
 
-bool Conversation::participates(string name) {
-	return participants.count(name) > 0;
+
+bool Conversation::advance(message* returned) {
+	// Try until a message shoots through
+	bool endConvo = false;
+	while (1) {
+		// Advance
+		xml_node conversation = nextLine();
+
+		Character* speaker = NULL;
+		bool isNarrator = (string(conversation.name()) == "Narrator");
+		if (!isNarrator) {
+			speaker = findParticipant(conversation.name());
+			// Test if valid
+			// Is the speaker in the room?
+			if (!speaker || speaker->getCurrentRoom()->getCodename() != getRoom())
+				continue;
+		}
+
+		// Does the speaker fulfill the necessary conditions?
+		string infoAtom = ""; bool valid = true;
+		for (xml_node_iterator cit = conversation.begin(); cit != conversation.end(); ++cit) {
+			// Adding tags/infos
+			string addedTag = cit->attribute("add_tag").value();
+			string info = cit->attribute("info").value();
+			string end = cit->name();
+
+			// Check modifiers
+			string tag = cit->attribute("tag").value();
+			bool checkTag = (tag == "tag");
+
+			bool conditionMet = (!checkTag && (isNarrator || speaker->hasCondition(cit->name()))) || (checkTag && hasTag(cit->name()));
+			string nao = cit->attribute("n").value();
+			bool inverted = (nao == "n");
+
+			if (addedTag == "add_tag")
+				addTag(cit->name());
+			else if (info == "info")
+				infoAtom = cit->name();
+			else if (end == "end")
+				endConvo = true;
+			else if (conditionMet == inverted) {
+				valid = false;
+				break;
+			}
+		}
+
+		if (!valid)
+			continue;
+
+		// Send message
+		*returned = { infoAtom, string(conversation.attribute("line").value()), conversation.name() };
+
+		// Lock every participant
+		for (vector<Character*>::iterator ait = getParticipants().begin(); ait != getParticipants().end(); ait++) {
+			if ((*ait)->getCurrentRoom()->getCodename() == getRoom())
+				(*ait)->setInConversation(true);
+		}
+		clearListeners();
+		break;
+	}
+
+	// End convo?
+	// If the convo is over
+	if (endConvo || ended())
+		return true;
+	return false;
+}
+
+
+bool Conversation::participates(Character* name) {
+	
 }
 
 bool Conversation::hasTag(string tag) {
@@ -45,17 +117,17 @@ bool Conversation::ended() {
 
 
 void Conversation::clearListeners() {
-	for (set<string>::iterator it = listeners.begin(); it != listeners.end(); ++it)
-		participants.erase(*it);
+	for (vector<Character*>::iterator it = listeners.begin(); it != listeners.end(); ++it)
+		participants.erase(it);
 
 	listeners.clear();
 }
 
 
-set<string> Conversation::getParticipants(string removed) {
-	set<string> retorno = *getParticipants();
+vector<Character*> Conversation::getParticipants(Character* removed) {
+	vector<Character*> retorno = getParticipants();
 	
-	for (set<string>::iterator it = retorno.begin(); it != retorno.end(); it++) {
+	for (vector<Character*>::iterator it = retorno.begin(); it != retorno.end(); it++) {
 		if ((*it) == removed) {
 			retorno.erase(it);
 			break;
@@ -63,4 +135,11 @@ set<string> Conversation::getParticipants(string removed) {
 	}
 
 	return retorno;
+}
+
+
+Character* Conversation::findParticipant(string name) {
+	for (vector<Character*>::iterator it = participants.begin(); it != participants.end(); it++)
+		if ((*it)->getName() == name)
+			return *it;
 }

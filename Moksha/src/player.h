@@ -4,6 +4,7 @@
 #include "npc.h"
 #include "stringLib.h"
 #include "fileManager.h"
+#include "interface.h"
 
 using namespace std;
 
@@ -17,9 +18,9 @@ private:
 	string mindError;
 
 	map<string, set<string>> mindTheory;
+	Interface interfacer = Interface(140, 40, 60, 30);
 
-	void interact(string action, string objeto) override;
-
+	void interact(string action, string object) override;
 	bool characterCheck(vector<string> args);
 
 	void addToMind(string topic, string character);

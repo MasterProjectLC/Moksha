@@ -30,13 +30,8 @@ static auto actionCompare = [](Character* a, Character* b) -> bool {
 		return (b->getName() == "Elliot");
 };
 
-class Game : public IObservable, public IObserver {
+class Game : public IObservable, public IObserver{
 private:
-	Interface interfacer = Interface(140, 40, 60, 30);
-	int frameTime;
-	const int FPS = 60;
-	const int frameDelay = 1000 / FPS;
-
 	const int OBSERVER_OFFSET = 2000;
 
 	int time;
@@ -57,8 +52,7 @@ private:
 
 	void objectAction(Object* object);
 	void characterAction(Character* character);
-	Character* findCharacter(string nome);
-	void broadcastMessage(string topic, string str, string sender, set<string> receivers, Room* room);
+	void broadcastMessage(string topic, string str, string sender, vector<Character*> receivers, Room* room);
 	void broadcastEvent(Character* emitter, vector<string> args);
 
 	void update(int id) override;
@@ -77,7 +71,6 @@ private:
 
 public:
 	Game();
-	int main();
 
 	void setup();
 	void receiveArgs(vector<string> args);
@@ -87,6 +80,7 @@ public:
 
 	void printText(string text);
 	string getText() { return text; }
+	Character* findCharacter(string nome);
 
 	enum {_obter, _imprimir, _ouvir, _salvar, _carregar, 
 		_evento_fim_conversa, _evento_passagem_tempo, _evento_inicio_conversa};

@@ -2,10 +2,17 @@
 #include <vector>
 #include <set>
 #include <string>
+#include "character.h"
 #include "../libs/pugixml/src/pugixml.hpp"
 
 using namespace std;
 using namespace pugi;
+
+typedef struct {
+	string infoAtom;
+	string line;
+	string speaker;
+} message;
 
 class Conversation {
 private:
@@ -13,31 +20,34 @@ private:
 	string name;
 	xml_document conversation;
 	xml_node_iterator it;
-	set<string> participants;
-	set<string> listeners;
+	vector<Character*> participants;
+	vector<Character*> listeners;
 	set<string> tags;
 	string room;
 	bool begun;
 	bool isReaction;
 
+	Character* findParticipant(string name);
+
 public:
 	Conversation() {}
-	Conversation(string conversation, string room);
-	Conversation(string conversation, string room, bool reaction);
-	Conversation(string conversation, string room, bool reaction, int stage);
+	Conversation(string conversation, string room, vector<Character*> participants);
+	Conversation(string conversation, string room, vector<Character*> participants, bool reaction);
+	Conversation(string conversation, string room, vector<Character*> participants, bool reaction, int stage);
 
-	bool participates(string name); // If given character participates in the convo
+	bool participates(Character* name); // If given character participates in the convo
 	bool hasTag(string tag);
 
 	xml_node nextLine();
 	bool ended();
 
 	void addTag(string tag) { tags.insert(tag); }
-	void addListener(string listener) { participants.insert(listener); listeners.insert(listener); }
+	void addListener(Character* listener) { participants.push_back(listener); listeners.push_back(listener); }
 	void clearListeners();
 
-	set<string>* getParticipants() { return &participants; }
-	set<string> getParticipants(string removed);
+	bool advance(message* returned);
+	vector<Character*> getParticipants() { return participants; }
+	vector<Character*> getParticipants(Character* removed);
 	string getName() { return name; }
 	string getRoom() { return room; }
 	int getStage() { return convoStage; }

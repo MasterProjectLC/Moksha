@@ -246,6 +246,16 @@ void Interface::underlineInterface(bool n) {
 
 // EXECUÇÃO -------------------------------
 
+void Interface::gameLoop() {
+	while (1) {
+		time = (int)timeGetTime();
+		clocking();
+		time = (int)timeGetTime() - time;
+		if (frameDelay > time)
+			Sleep(frameDelay - time);
+	}
+}
+
 void Interface::clocking() {
 	input.input();
 

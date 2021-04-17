@@ -15,7 +15,7 @@ protected:
 
 	string name;
 	vector<string> notifyArgs;
-	set<string> notifyTargets;
+	set<Character*> notifyTargets;
 	set<Room*> checkedRooms;
 	string status;
 
@@ -35,9 +35,10 @@ protected:
 	set<int> basicActions;
 	int currentAction;
 	vector<string> actionArgs;
+	vector<Character*> neighbours;
 
+	Character* findNeighbour(string name);
 	void takeAction(int action, vector<string> args);
-
 	void setBusy(bool novo) { busy = novo; }
 
 public:
@@ -73,7 +74,7 @@ public:
 	void listen(string target);
 	void check(string target);
 	void scan();
-	void say(string topico, string str, set<string> receivers);
+	void say(string topico, string str, set<Character*> receivers);
 	void rest();
 	void talk(string convo);
 	virtual void talk(string convo, bool isReaction);
@@ -97,12 +98,12 @@ public:
 	bool isActionValid(int action);
 
 	virtual void takeAction() { takeAction(currentAction, actionArgs); }
-	void sayLine(string topic, string str, set<string> receivers) { say(topic, str, receivers); }
+	void sayLine(string topic, string str, set<Character*> receivers) { say(topic, str, receivers); }
 	void printText(string str);
 
 	string getNotifyText() { return notifyArgs[0]; }
 	vector<string> getNotifyArgs() { return notifyArgs; }
-	set<string> getNotifyTargets() { return notifyTargets; }
+	set<Character*> getNotifyTargets() { return notifyTargets; }
 
 	virtual bool hasCondition(string info) { return false; }
 	bool hasItem(string item) { return inventory.getItem(item) != NULL; }

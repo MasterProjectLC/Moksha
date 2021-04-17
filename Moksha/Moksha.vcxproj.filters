@@ -123,6 +123,9 @@
     <ClCompile Include="src\characters\Willow.cpp">
       <Filter>Source Files\Characters</Filter>
     </ClCompile>
+    <ClCompile Include="src\saveSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libs\pugixml\src\pugixml.hpp">
@@ -156,9 +159,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\npc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\saveModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="libs\GPGOAP\astar.h">

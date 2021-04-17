@@ -183,6 +183,7 @@
     <ClCompile Include="src\overseer.cpp" />
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\room.cpp" />
+    <ClCompile Include="src\saveSystem.cpp" />
     <ClCompile Include="src\stringLib.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -223,7 +224,6 @@
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\priorityVector.h" />
     <ClInclude Include="src\room.h" />
-    <ClInclude Include="src\saveModule.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

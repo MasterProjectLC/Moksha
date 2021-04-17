@@ -1,19 +1,16 @@
 #include "game.h"
 #include <iostream>
 
+int main() {
+	Game g = Game();
+	return 0;
+};
+
 Game::Game() {
-	Interface interfacer = Interface(140, 40, 60, 30);
-	interfacer.add(this, 0);
-	frameTime = 0;
 	time = 0;
 	loop = 0;
 	setup();
 }
-
-int main() {
-	Game g = Game();
-	g.main();
-};
 
 
 void Game::setup() {
@@ -24,7 +21,7 @@ void Game::setup() {
 			npcs[i]->setupWorld();
 		}
 
-		conversations.push_back(new Conversation("intro", "FlightDock", false));
+		conversations.push_back(new Conversation("intro", "FlightDock", characters, false));
 		advanceConversations();
 	}
 
@@ -33,18 +30,6 @@ void Game::setup() {
 		((NPC*)findCharacter("George"))->addGoal(new string("waiting_Runway"), true, 1000);
 	}
 
-}
-
-int Game::main() {
-	while (1) {
-		time = (int)timeGetTime();
-		interfacer.clocking();
-		time = (int)timeGetTime() - time;
-		if (frameDelay > time)
-			Sleep(frameDelay - time);
-	}
-
-	return 0;
 }
 
 
@@ -157,9 +142,9 @@ void Game::characterAction(Character* character) {
 
 	case mover:
 		// Characters see char leaving
-		for (int i = 0; i < characters.size(); i++)
-			if (characters[i] != character && characters[i]->getCurrentRoom() == character->getCurrentRoom())
-				characters[i]->seeCharMoving(character, map.getRoom(character->getNotifyText()), false);
+		for (vector<Character*>::iterator it = characters.begin(); it != characters.end(); it++)
+			if (*it != character && (*it)->getCurrentRoom() == character->getCurrentRoom())
+				(*it)->seeCharMoving(character, map.getRoom(character->getNotifyText()), false);
 
 		// Char enters the room
 		oldRoom = character->getCurrentRoom();
@@ -170,22 +155,9 @@ void Game::characterAction(Character* character) {
 			player->updateRoom(getPeopleInRoom(player->getCurrentRoom()));
 
 		// Characters see char entering
-		for (int i = 0; i < characters.size(); i++)
-			if (characters[i] != character && characters[i]->getCurrentRoom() == character->getCurrentRoom())
-				characters[i]->seeCharMoving(character, oldRoom, true);
-		break;
-
-	case mencionar:
-		for (int i = 0; i < characters.size(); i++) {
-			if (character->getNotifyTargets().count(characters[i]->getName()) && characters[i]->getCurrentRoom() == character->getCurrentRoom()) {
-				if (characters[i]->isBusy())
-					character->executeReaction("busy", "", characters[i]->getName(), false);
-				else {
-					characters[i]->executeReaction(character->getNotifyText(), "", character->getName(), true);
-				}
-				break;
-			}
-		}
+		for (vector<Character*>::iterator it = characters.begin(); it != characters.end(); it++)
+			if (*it != character && (*it)->getCurrentRoom() == character->getCurrentRoom())
+				(*it)->seeCharMoving(character, oldRoom, true);
 		break;
 
 	case falar:
@@ -194,38 +166,25 @@ void Game::characterAction(Character* character) {
 		break;
 
 	case conversar:
-		convo = new Conversation(character->getNotifyText(), character->getCurrentRoom()->getCodename(),
+		convo = new Conversation(character->getNotifyText(), character->getCurrentRoom()->getCodename(), characters,
 			character->getNotifyArgs()[1][0] == 'r');
 		conversations.push_back(convo);
 		emitEvent(_evento_inicio_conversa, vector<string>({ character->getName(), convo->getRoom() }));
 		// Preemptively lock everyone
-		for (set<string>::iterator it = convo->getParticipants()->begin(); it != convo->getParticipants()->end(); it++) {
-			Character* toLock = findCharacter(*it);
-			if (toLock->getCurrentRoom()->getCodename() == convo->getRoom())
-				toLock->setInConversation(true);
+		for (vector<Character*>::iterator it = convo->getParticipants()->begin(); it != convo->getParticipants()->end(); it++) {
+			if ((*it)->getCurrentRoom()->getCodename() == convo->getRoom())
+				(*it)->setInConversation(true);
 		}
 		break;
 
 	case ouvir:
-		for (int i = 0; i < conversations.size(); i++)
-			if (conversations[i]->participates(character->getNotifyText())) {
-				conversations[i]->addListener(character->getName());
-				break;
+		for (int i = 0; i < conversations.size(); i++) {
+			target = findCharacter(character->getNotifyText());
+			if (conversations[i]->participates(target)) {
+				conversations[i]->addListener(character);
+					break;
 			}
-		break;
-
-	case checar:
-		target = findCharacter(character->getNotifyText());
-		if (target->getCurrentRoom() == character->getCurrentRoom())
-			character->receiveCheck(target);
-		break;
-
-
-	case sondar:
-		character->checkRoom( getPeopleInRoom(character->getCurrentRoom()) );
-		break;
-
-	case descansar:
+		}
 		break;
 
 	case atacar:
@@ -249,7 +208,7 @@ void Game::characterAction(Character* character) {
 			// TODO: maybe change this scripted thing later? It's not an often used action though, so it might not be worth it
 			if (codename == "JennaSuitcase") {
 				printText("Press Enter to continue.");
-				conversations.push_back(new Conversation("intro2", "Runway"));
+				conversations.push_back(new Conversation("intro2", "Runway", characters));
 			}
 		}
 		
@@ -272,9 +231,9 @@ void Game::advanceTime() {
 
 	// Order by priority
 	PriorityVector<Character*> orderAction = PriorityVector<Character*>(vector<Character*>(), actionCompare);
-	for (int i = 0; i < characters.size(); i++) {
-		if (characters[i]->getAction() != ouvir)
-			orderAction.push(characters[i]);
+	for (vector<Character*>::iterator it = characters.begin(); it != characters.end(); it++) {
+		if ((*it)->getAction() != ouvir)
+			orderAction.push((*it));
 	}
 
 	// Take action
@@ -301,81 +260,22 @@ void Game::advanceConversations() {
 
 	// Iterate through each current convo
 	for (vector<Conversation*>::iterator it = conversations.begin(); it != conversations.end();) {
-		// Try until a message shoots through
-		bool endConvo = false;
-		while (1) {
-			// Advance
-			xml_node conversation = (*it)->nextLine();
+		message* receiver;
+		bool convoEnded = (*it)->advance(receiver);
+		if (receiver->speaker == "Narrator")
+			broadcastMessage(receiver->infoAtom, receiver->line, "", (*it)->getParticipants(), map.getRoom((*it)->getRoom()));
+		else
+			findCharacter(receiver->speaker)->sayLine(receiver->infoAtom, receiver->line, (*it)->getParticipants());
 
-			Character* speaker = NULL;
-			bool isNarrator = (string(conversation.name()) == "Narrator");
-			if (!isNarrator) {
-				speaker = findCharacter(conversation.name());
-				// Test if valid
-				// Is the speaker in the room?
-				if (!speaker || speaker->getCurrentRoom()->getCodename() != (*it)->getRoom())
-					continue;
-			}
-
-			// Does the speaker fulfill the necessary conditions?
-			string infoAtom = ""; bool valid = true;
-			for (xml_node_iterator cit = conversation.begin(); cit != conversation.end(); ++cit) {
-				// Adding tags/infos
-				string addTag = cit->attribute("add_tag").value();
-				string info = cit->attribute("info").value();
-				string end = cit->name();
-
-				// Check modifiers
-				string tag = cit->attribute("tag").value();
-				bool checkTag = (tag == "tag");
-
-				bool conditionMet = ( !checkTag && (isNarrator || speaker->hasCondition(cit->name())) ) || ( checkTag && (*it)->hasTag(cit->name()) );
-				string nao = cit->attribute("n").value();
-				bool inverted = (nao == "n");
-				
-				if (addTag == "add_tag")
-					(*it)->addTag(cit->name());
-				else if (info == "info")
-					infoAtom = cit->name();
-				else if (end == "end")
-					endConvo = true;
-				else if (conditionMet == inverted) {
-					valid = false;
-					break;
-				}
-			}
-
-			if (!valid) 
-				continue;
-
-			// Send message
-			if (isNarrator)
-				broadcastMessage( infoAtom, conversation.attribute("line").value(), "", *((*it)->getParticipants()), map.getRoom((*it)->getRoom()) );
-			else
-				speaker->sayLine( infoAtom, conversation.attribute("line").value(), *((*it)->getParticipants()) );
-
-			// Lock every participant
-			for (set<string>::iterator ait = (*it)->getParticipants()->begin(); ait != (*it)->getParticipants()->end(); ait++) {
-				Character* toLock = findCharacter(*ait);
-				if (toLock->getCurrentRoom()->getCodename() == (*it)->getRoom())
-					toLock->setInConversation(true);
-			}
-			(*it)->clearListeners();
-			break;
-		}
-
-		// End convo?
-		// If the convo is over
-		if (endConvo || (*it)->ended()) {
+		if (convoEnded) {
 			string s = (*it)->getName();
 			delete *it;
 			it = conversations.erase(it);
 			emitEvent(_evento_fim_conversa, vector<string>({ s }));
 		}
 		// Advance to next convo
-		else {
+		else
 			it++;
-		}
 
 		if (conversations.empty() || it == conversations.end())
 			break;
@@ -388,11 +288,11 @@ void Game::receiveArgs(vector<string> args) {
 }
 
 
-void Game::broadcastMessage(string topic, string str, string sender, set<string> receivers, Room* room) {
-	for (int i = 0; i < characters.size(); i++) {
-		if (receivers.count(characters[i]->getName()) && characters[i]->getCurrentRoom() == room) {
-			characters[i]->executeReaction(topic, str, sender, false);
-			if (characters[i] == player && topic != "") {
+void Game::broadcastMessage(string topic, string str, string sender, vector<Character*> receivers, Room* room) {
+	for (vector<Character*>::iterator it = receivers.begin(); it != receivers.end(); it++) {
+		if ((*it)->getCurrentRoom() == room) {
+			(*it)->executeReaction(topic, str, sender, false);
+			if ((*it) == player && topic != "") {
 				obtainAbstract(topic, player);
 				notify(_ouvir);
 			}
@@ -412,9 +312,9 @@ void Game::broadcastEvent(Character* emitter, vector<string> args) {
 
 vector<Character*> Game::getPeopleInRoom(Room* room) {
 	vector<Character*> retorno;
-	for (int i = 0; i < characters.size(); i++) {
-		if (characters[i]->getCurrentRoom() == room)
-			retorno.push_back(characters[i]);
+	for (vector<Character*>::iterator it = characters.begin(); it != characters.end(); it++) {
+		if ((*it)->getCurrentRoom() == room)
+			retorno.push_back((*it));
 	}
 
 	return retorno;
@@ -475,9 +375,9 @@ vector<Concept*> Game::getConcepts() {
 // HELPER FUNCTIONS ---------------------------------------------
 #include <stdexcept>
 Character* Game::findCharacter(string name) {
-	for (int i = 0; i < characters.size(); i++) {
-		if (characters[i]->getName() == name)
-			return characters[i];
+	for (vector<Character*>::iterator it = characters.begin(); it != characters.end(); it++) {
+		if ((*it)->getName() == name)
+			return (*it);
 	}
 
 	return NULL;

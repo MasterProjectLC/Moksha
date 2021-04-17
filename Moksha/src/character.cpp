@@ -78,17 +78,23 @@ void Character::mention(string obj, string receiver) {
 }
 
 void Character::mention(string obj, set<string> receivers) {
-	notifyArgs.clear();
-	notifyArgs.push_back(obj);
-	notifyTargets = receivers;
-	notify(mencionar);
+	for (vector<Character*>::iterator it = neighbours.begin(); it != neighbours.end(); it++) {
+		if (receivers.count((*it)->getName())) {
+			(*it)->executeReaction(getNotifyText(), "", getName(), true);
+			break;
+		}
+	}
 }
 
-void Character::attack(string target) {
-	status = "attacking " + target + "!";
-	notifyArgs.clear();
-	notifyArgs.push_back(target);
-	notify(atacar);
+void Character::attack(string targetName) {
+	status = "attacking " + targetName + "!";
+	Character* target = findNeighbour(getNotifyText());
+	if (target->getCurrentRoom() == getCurrentRoom())
+		if (target->beAttacked(this))
+			broadcastEvent(character, vector<string>({ "attack", target->getName() }));
+		else
+			broadcastEvent(target, vector<string>({ "attack", character->getName() }));
+	break;
 }
 
 void Character::leave(string target) {
@@ -105,19 +111,18 @@ void Character::listen(string target) {
 	notify(ouvir);
 }
 
-void Character::check(string target) {
-	status = "checking " + target + ".";
-	notifyArgs.clear();
-	notifyArgs.push_back(target);
-	notify(checar);
+void Character::check(string targetName) {
+	status = "checking " + targetName + ".";
+	Character* target = findNeighbour(targetName);
+	receiveCheck(target);
 }
 
 void Character::scan() {
 	status = "checking the room.";
-	notify(sondar);
+	checkRoom(neighbours);
 }
 
-void Character::say(string topic, string str, set<string> receivers) {
+void Character::say(string topic, string str, set<Character*> receivers) {
 	notifyArgs.clear();
 	notifyArgs.push_back(topic);
 	notifyArgs.push_back(str);
@@ -127,7 +132,6 @@ void Character::say(string topic, string str, set<string> receivers) {
 
 void Character::rest() {
 	status = "doing nothing.";
-	notify(descansar);
 }
 
 void Character::talk(string convo) {
@@ -147,7 +151,6 @@ void Character::talk(string convo, bool isReaction) {
 
 void Character::voidAction(string actionStatus) {
 	status = actionStatus;
-	notify(descansar);
 }
 
 void Character::interact(string action, string object) {
@@ -170,4 +173,14 @@ bool Character::getStatusEffect(string key) {
 	if (!statusEffects.hasKey(key))
 		return false;
 	return statusEffects.getValues(key); 
+}
+
+
+Character* Character::findNeighbour(string name) {
+	for (vector<Character*>::iterator it = neighbours.begin(); it != neighbours.end(); it++) {
+		if ((*it)->getName() == name)
+			return (*it);
+	}
+
+	return NULL;
 }
