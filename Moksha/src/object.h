@@ -2,6 +2,7 @@
 #include <vector>
 #include "dictionary.h"
 #include "IObservable.h"
+#include "actionEnum.h"
 
 using namespace std;
 
@@ -19,7 +20,6 @@ private:
 public:
 	Object() {};
 	Object(Dictionary<vector<string>> dict);
-	enum { obter, mover, espiar, abrir, tempo };
 
 	// Getters
 	string getName() { return name; }
@@ -30,5 +30,5 @@ public:
 
 	vector<string> getArgs() { return args; }
 	string getResponse(string action);
-	void takeAction(string prompt, string user);
+	int returnAction(string prompt);
 };

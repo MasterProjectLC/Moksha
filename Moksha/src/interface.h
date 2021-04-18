@@ -14,11 +14,14 @@
 # pragma comment(lib, "wmcodecdspuuid.lib")
 # pragma comment(lib, "msdmo.lib")
 # pragma comment(lib, "Strmiids.lib")
-#include <timeapi.h>
+#include <ctime>
+#include <windows.h>
+#pragma comment( lib, "winmm.lib")
 #include "graphics.h"
 #include "IObserver.h"
 #include "input.h"
 #include "stringLib.h"
+#include "concept.h"
 
 using namespace std;
 
@@ -64,10 +67,10 @@ private:
 	void removeLetter(bool before);
 	vector<string> riseLine();
 
-	// Inventario
+	// Inventory
 	vector<string> titles;
 	vector<int> titlePositions;
-	vector<list<string>> inventory;
+	vector<list<Concept*>> inventory;
 
 	// Pointers
 	int pointer;
@@ -117,7 +120,7 @@ public:
 
 	void setTab(boolean tab);
 	void setMenu(boolean menu);
-	void setItems(vector<string> items, int type);
-	void setConcepts(vector<string> concepts) { setItems(concepts, 2); }
+	void setConcepts(vector<Concept*> concepts, char type);
+	void setConcepts(vector<Concept*> concepts) { setConcepts(concepts, 'c'); }
 
 };

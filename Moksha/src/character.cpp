@@ -33,6 +33,10 @@ void Character::takeAction(int action, vector<string> args) {
 			listen(zusammenArgs);
 			break;
 
+		case pegar:
+			take(zusammenArgs);
+			break;
+
 		case deixar:
 			leave(zusammenArgs);
 			break;
@@ -53,20 +57,16 @@ void Character::takeAction(int action, vector<string> args) {
 			rest();
 			break;
 	}
+
+	notify(action);
 }
 
-
-void Character::printText(string str) {
-	notifyArgs.clear();
-	notifyArgs.push_back(str);
-	notify(imprimir);
-}
+// ACTIONS ======================================
 
 void Character::move(string str) {
 	status = "entering the room.";
 	notifyArgs.clear();
 	notifyArgs.push_back(str);
-	notify(mover);
 }
 
 void Character::move(Room* room) {
@@ -91,24 +91,34 @@ void Character::attack(string targetName) {
 	Character* target = findNeighbour(getNotifyText());
 	if (target->getCurrentRoom() == getCurrentRoom())
 		if (target->beAttacked(this))
-			broadcastEvent(character, vector<string>({ "attack", target->getName() }));
-		else
-			broadcastEvent(target, vector<string>({ "attack", character->getName() }));
-	break;
+			broadcastEvent(vector<string>({ "attack", target->getName() }));
 }
 
-void Character::leave(string target) {
-	status = "leaving " + target + ".";
-	notifyArgs.clear();
-	notifyArgs.push_back(target);
-	notify(deixar);
+bool Character::beAttacked(Character* attacker) {
+	if (attacker->getStrength() >= strength)
+		unconscious = true;
+	else {
+		broadcastEvent(vector<string>({ "attack", attacker->getName() }));
+		attacker->beAttacked(this);
+	}
+	return unconscious;
+};
+
+void Character::leave(string itemName) {
+	status = "leaving " + itemName + ".";
+	Item* item = getItem(itemName);
+	string codename = item->getCodename();
+	if (item != NULL && item->isActionValid("leave")) {
+		FileDict fileDict = FileManager::readFromFile("files/objects/" + codename + ".txt");
+		getCurrentRoom()->addObject(new Object(fileDict));
+		removeItem(codename);
+	}
 }
 
 void Character::listen(string target) {
 	status = "eavesdropping " + target + ".";
 	notifyArgs.clear();
 	notifyArgs.push_back(target);
-	notify(ouvir);
 }
 
 void Character::check(string targetName) {
@@ -122,12 +132,10 @@ void Character::scan() {
 	checkRoom(neighbours);
 }
 
-void Character::say(string topic, string str, set<Character*> receivers) {
-	notifyArgs.clear();
-	notifyArgs.push_back(topic);
-	notifyArgs.push_back(str);
-	notifyTargets = receivers;
-	notify(falar);
+void Character::say(string topic, string str, vector<Character*> receivers) {
+	for (vector<Character*>::iterator it = receivers.begin(); it != receivers.end(); it++)
+		if ((*it)->getCurrentRoom() == currentRoom)
+			(*it)->executeReaction(topic, str, getName(), false);
 }
 
 void Character::rest() {
@@ -146,17 +154,57 @@ void Character::talk(string convo, bool isReaction) {
 		notifyArgs.push_back("r");
 	else
 		notifyArgs.push_back("c");
-	notify(conversar);
+}
+
+void Character::take(string objectName) {
+	Object* object = currentRoom->getObject(objectName);
+	obtainObject(object->getCodename());					// Give object to character
+	setStatus("obtaining " + object->getName() + ".");		// Update char's status
+	getCurrentRoom()->removeObject(object);					// Remove object from the room
 }
 
 void Character::voidAction(string actionStatus) {
 	status = actionStatus;
 }
 
-void Character::interact(string action, string object) {
-	if (getCurrentRoom()->hasObject(object))
-		getCurrentRoom()->getObject(object)->takeAction(action, name);
+void Character::interact(string action, string objectName) {
+	Object* object = getCurrentRoom()->getObject(objectName);
+	int actionID = object->returnAction(action);
+	takeAction(actionID, object->getArgs());
 }
+
+// HELPER ====================================
+
+void Character::broadcastEvent(vector<string> args) {
+	for (int i = 0; i < neighbours.size(); i++)
+		if (neighbours[i] != this)
+			neighbours[i]->receiveEvent(args);
+}
+
+void Character::obtainObject(string codename) {
+	FileDict filedict = FileManager::readFromFile("files/items/" + codename + ".txt");
+	vector<string> actionVec = filedict.getValues("actions");
+	set<string> actionSet = set<string>();
+	for (int i = 0; i < actionVec.size(); i++)
+		actionSet.insert(actionVec[i]);
+
+	if (filedict.hasKey("codename"))
+		addItem(filedict.getValues("name")[0], filedict.getValues("codename")[0], "", actionSet);
+	else
+		addItem(filedict.getValues("name")[0], filedict.getValues("name")[0], "", actionSet);
+}
+
+
+void Character::obtainAbstract(string codename) {
+	FileDict filedict = FileManager::readFromFile("files/abstract/" + codename + ".txt");
+
+	if (filedict.hasKey("codename"))
+		addAbstract(filedict.getValues("name")[0], filedict.getValues("codename")[0], filedict.getValues("description")[0], filedict.getValues("type")[0][0]);
+	else
+		addAbstract(filedict.getValues("name")[0], filedict.getValues("name")[0], filedict.getValues("description")[0], filedict.getValues("type")[0][0]);
+}
+
+// GETTER =====================================
 
 bool Character::isActionValid(int action) {
 	if (basicActions.count(action) > 0)

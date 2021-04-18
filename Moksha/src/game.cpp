@@ -30,25 +30,34 @@ void Game::setup() {
 		((NPC*)findCharacter("George"))->addGoal(new string("waiting_Runway"), true, 1000);
 	}
 
+	player->bootGame();
+
 }
 
 
 // EVENTS
 void Game::emitEvent(int id, vector<string> args) {
 	switch (id) {
-	case _evento_inicio_conversa:
+	case inicio_conversa:
 		if (player->getCurrentRoom()->getCodename() == args[1]) {
-			printText(args[0] + " has begun talking.");
+			player->printText(args[0] + " has begun talking.");
 		}
 		break;
 
-	case _evento_fim_conversa:
+	case fim_conversa:
 		if (args[0] == "journalist_rivalry_Jenna") {
 			rewindGame();
 		}
 		break;
 
-	case _evento_passagem_tempo:
+	case item_deixado:
+		if (args[0] == "JennaSuitcase") {
+			player->printText("Press Enter to continue.");
+			conversations.push_back(new Conversation("intro2", "Runway", characters));
+		}
+		break;
+
+	case passagem_tempo:
 		if ((NPC*)findCharacter("Baxter") == NULL)
 			return;
 
@@ -91,37 +100,9 @@ void Game::emitEvent(int id, vector<string> args) {
 
 // UPDATE --------------------------------------------------------
 void Game::update(int id) {
-	// Object
-	if (id < OBSERVER_OFFSET) {
-		objectAction(map.getObject(id));
-	}
-
 	// Character
-	else {
+	if (id >= OBSERVER_OFFSET)
 		characterAction(characters[id - OBSERVER_OFFSET]);
-	}
-}
-
-
-void Game::objectAction(Object* object) {
-	// Obtain
-	Character *character = findCharacter(object->getUser());
-
-	switch (object->getNotifyID()) {
-	case object->obter:
-		obtainObject(object->getCodename(), character);					// Give object to character
-		character->setStatus("obtaining " + object->getName() + ".");	// Update char's status
-		character->getCurrentRoom()->removeObject(object);				// Remove object from the room
-		break;
-
-	case object->mover:
-		character->move(object->getArgs()[0]);
-		break;
-
-	case object->tempo:
-		printText(to_string(7+(time/60)) + ":" + to_string(time % 60));
-		break;
-	}
 }
 
 
@@ -136,8 +117,8 @@ void Game::characterAction(Character* character) {
 		advanceTime();
 		break;
 
-	case imprimir:
-		printText(character->getNotifyText());
+	case tempo:
+		player->printText(to_string(7 + (time / 60)) + ":" + to_string(time % 60));
 		break;
 
 	case mover:
@@ -160,26 +141,21 @@ void Game::characterAction(Character* character) {
 				(*it)->seeCharMoving(character, oldRoom, true);
 		break;
 
-	case falar:
-		broadcastMessage(character->getNotifyArgs()[0], character->getNotifyArgs()[1], character->getName(), 
-						character->getNotifyTargets(), character->getCurrentRoom());
-		break;
-
 	case conversar:
 		convo = new Conversation(character->getNotifyText(), character->getCurrentRoom()->getCodename(), characters,
 			character->getNotifyArgs()[1][0] == 'r');
 		conversations.push_back(convo);
-		emitEvent(_evento_inicio_conversa, vector<string>({ character->getName(), convo->getRoom() }));
+		emitEvent(inicio_conversa, vector<string>({ character->getName(), convo->getRoom() }));
 		// Preemptively lock everyone
-		for (vector<Character*>::iterator it = convo->getParticipants()->begin(); it != convo->getParticipants()->end(); it++) {
+		for (vector<Character*>::iterator it = convo->getParticipants().begin(); it != convo->getParticipants().end(); it++) {
 			if ((*it)->getCurrentRoom()->getCodename() == convo->getRoom())
 				(*it)->setInConversation(true);
 		}
 		break;
 
 	case ouvir:
+		target = findCharacter(character->getNotifyText());
 		for (int i = 0; i < conversations.size(); i++) {
-			target = findCharacter(character->getNotifyText());
 			if (conversations[i]->participates(target)) {
 				conversations[i]->addListener(character);
 					break;
@@ -187,31 +163,11 @@ void Game::characterAction(Character* character) {
 		}
 		break;
 
-	case atacar:
-		target = findCharacter(character->getNotifyText());
-		if (target->getCurrentRoom() == character->getCurrentRoom())
-			if (target->beAttacked(character))
-				broadcastEvent(character, vector<string>({ "attack", target->getName() }));
-			else
-				broadcastEvent(target, vector<string>({ "attack", character->getName() }));
-		break;
-
 	case deixar:
 		Item* item = character->getItem(character->getNotifyText());
 		string codename = item->getCodename();
-		if (item != NULL && item->isActionValid("leave")) {
-			FileDict fileDict = FileManager::readFromFile("files/objects/" + codename + ".txt");
-			character->getCurrentRoom()->addObject(new Object(fileDict));
-			character->removeItem(codename);
-			notify(_obter);
-
-			// TODO: maybe change this scripted thing later? It's not an often used action though, so it might not be worth it
-			if (codename == "JennaSuitcase") {
-				printText("Press Enter to continue.");
-				conversations.push_back(new Conversation("intro2", "Runway", characters));
-			}
-		}
-		
+		if (item != NULL && item->isActionValid("leave"))
+			emitEvent(item_deixado, vector<string>({ codename }));
 		break;
 	}
 
@@ -249,7 +205,7 @@ void Game::advanceTime() {
 
 	// Jogo
 	time++;
-	emitEvent(_evento_passagem_tempo, vector<string>());
+	emitEvent(passagem_tempo, vector<string>());
 	saveGame("save.xml");
 }
 
@@ -260,18 +216,18 @@ void Game::advanceConversations() {
 
 	// Iterate through each current convo
 	for (vector<Conversation*>::iterator it = conversations.begin(); it != conversations.end();) {
-		message* receiver;
-		bool convoEnded = (*it)->advance(receiver);
-		if (receiver->speaker == "Narrator")
-			broadcastMessage(receiver->infoAtom, receiver->line, "", (*it)->getParticipants(), map.getRoom((*it)->getRoom()));
+		message receiver = {"","",""};
+		bool convoEnded = (*it)->advance(&receiver);
+		if (receiver.speaker == "Narrator")
+			broadcastMessage(receiver.infoAtom, receiver.line, "", (*it)->getParticipants(), map.getRoom((*it)->getRoom()));
 		else
-			findCharacter(receiver->speaker)->sayLine(receiver->infoAtom, receiver->line, (*it)->getParticipants());
+			findCharacter(receiver.speaker)->sayLine(receiver.infoAtom, receiver.line, (*it)->getParticipants());
 
 		if (convoEnded) {
 			string s = (*it)->getName();
 			delete *it;
 			it = conversations.erase(it);
-			emitEvent(_evento_fim_conversa, vector<string>({ s }));
+			emitEvent(fim_conversa, vector<string>({ s }));
 		}
 		// Advance to next convo
 		else
@@ -293,8 +249,7 @@ void Game::broadcastMessage(string topic, string str, string sender, vector<Char
 		if ((*it)->getCurrentRoom() == room) {
 			(*it)->executeReaction(topic, str, sender, false);
 			if ((*it) == player && topic != "") {
-				obtainAbstract(topic, player);
-				notify(_ouvir);
+				player->obtainAbstract(topic);
 			}
 		}
 	}
@@ -322,53 +277,10 @@ vector<Character*> Game::getPeopleInRoom(Room* room) {
 
 
 // ACTIONS ----------------------------------
-void Game::obtainObject(string codename, Character* receiver) {
-	FileDict filedict = FileManager::readFromFile("files/items/" + codename + ".txt");
-	vector<string> actionVec = filedict.getValues("actions");
-	set<string> actionSet = set<string>();
-	for (int i = 0; i < actionVec.size(); i++)
-		actionSet.insert(actionVec[i]);
-
-	if (filedict.hasKey("codename"))
-		receiver->addItem(filedict.getValues("name")[0], filedict.getValues("codename")[0], "", actionSet);
-	else
-		receiver->addItem(filedict.getValues("name")[0], filedict.getValues("name")[0], "", actionSet);
-
-	notify(_obter);
-}
-
-
-void Game::obtainAbstract(string codename, Character* receiver) {
-	FileDict filedict = FileManager::readFromFile("files/abstract/" + codename + ".txt");
-
-	if (filedict.hasKey("codename"))
-		receiver->addAbstract(filedict.getValues("name")[0], filedict.getValues("codename")[0], filedict.getValues("description")[0], filedict.getValues("type")[0][0]);
-	else
-		receiver->addAbstract(filedict.getValues("name")[0], filedict.getValues("name")[0], filedict.getValues("description")[0], filedict.getValues("type")[0][0]);
-
-	notify(_obter);
-}
-
-
 Room* Game::moveRoom(Room* origin, string destination) {
 	// Movement
 	origin = map.getRoom(destination);
 	return origin;
-}
-
-
-void Game::printText(string text) {
-	this->text = text;
-	notify(_imprimir);
-}
-
-
-vector<Item*> Game::getItems() {
-	return player->getItems();
-}
-
-vector<Concept*> Game::getConcepts() {
-	return player->getConcepts();
 }
 
 

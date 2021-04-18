@@ -20,7 +20,7 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 		int titleOffset = titles[k].size() / 2;
 		titlePositions.push_back(titleCenter - titleOffset);
 
-		inventory.push_back(list<string>());
+		inventory.push_back(list<Concept*>());
 	}
 
 	this->textTab = false;
@@ -185,8 +185,8 @@ void Interface::inventoryInterface(int invP, int titleP, bool paintItem) {
 
 	// Itens
 	int sobre = 1;
-	for (it = inventory[titlesPointer].begin(); it != inventory[titlesPointer].end(); it++, sobre++) {
-		string s = *it;
+	for (list<Concept*>::iterator it = inventory[titlesPointer].begin(); it != inventory[titlesPointer].end(); it++, sobre++) {
+		string s = (*it)->getName();
 		sobre += s.size() / separator;
 		graphics.drawString(0, sobre, s);
 	}
@@ -208,13 +208,13 @@ void Interface::inventoryInterface(int invP, int titleP, bool paintItem) {
 }
 
 void Interface::consoleInterface() {
-	// Linha Atual
+	// Current line
 	string s = currentLine;
 	graphics.drawString(separator + 1, screenHeight - 1, s);
 	graphics.paint(separator + 1, screenHeight - 1, s.size() + 1, 'c');
 	underlineInterface(underline);
 
-	// Linhas
+	// Lines
 	int sobre = 1;
 	for (it = lines.begin(); it != lines.end(); it++, sobre++) {
 		s = *it;
@@ -411,10 +411,15 @@ void Interface::setMenu(boolean menu) {
 	inventoryInterface(invPointer, titlesPointer, !menu);
 }
 
-void Interface::setItems(vector<string> items, int type) { 
-	for (int i = 0; i < items.size(); i++) {
-		if (i >= inventory[type-1].size()) {
-			inventory[type-1].push_back(items[i]);
+void Interface::setConcepts(vector<Concept*> concepts, char type) {
+	int index;
+	for (index = 0; index < titles.size(); index++)
+		if (titles[index][0] == toupper(type))
+			break;
+
+	for (int i = 0; i < concepts.size(); i++) {
+		if (i >= inventory[index -1].size()) {
+			inventory[index-1].push_back(concepts[i]);
 		}
 	}
 
@@ -464,8 +469,8 @@ vector<string> Interface::riseLine() {
 }
 
 
-void Interface::printLine(string nova) {
-	vector<string> novaCortada = splitString(nova, '\n');
+void Interface::printLine(string newLine) {
+	vector<string> novaCortada = splitString(newLine, '\n');
 	int consoleSize = screenWidth - separator - 2;
 
 	for (int i = 0; i < novaCortada.size(); i++) {

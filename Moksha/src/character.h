@@ -15,7 +15,7 @@ protected:
 
 	string name;
 	vector<string> notifyArgs;
-	set<Character*> notifyTargets;
+	vector<Character*> notifyTargets;
 	set<Room*> checkedRooms;
 	string status;
 
@@ -61,23 +61,24 @@ public:
 	vector<Item*> getItems() { return inventory.getItems(); }
 	vector<Concept*> getRumors() { return inventory.getRumors(); }
 	vector<Concept*> getConcepts() { return inventory.getConcepts(); }
-	void addAbstract(string name, string codename, string description, char type) { inventory.addAbstract(name, codename, description, type); }
-	void addItem(string name, string codename, string description, set<string> actions) { inventory.addItem(name, codename, description, actions); }
-	void removeItem(string name) { inventory.removeItem(name); }
+	virtual void addAbstract(string name, string codename, string description, char type) { inventory.addAbstract(name, codename, description, type); }
+	virtual void addItem(string name, string codename, string description, set<string> actions) { inventory.addItem(name, codename, description, actions); }
+	virtual void removeItem(string name) { inventory.removeItem(name); }
 
 	void move(Room* room);
 	virtual void move(string str);
 	virtual void mention(string obj, set<string> receivers);
 	virtual void mention(string obj, string receiver);
 	void attack(string target);
-	void leave(string target);
+	void leave(string objectName);
 	void listen(string target);
 	void check(string target);
 	void scan();
-	void say(string topico, string str, set<Character*> receivers);
+	virtual void say(string topic, string str, vector<Character*> receivers);
 	void rest();
 	void talk(string convo);
 	virtual void talk(string convo, bool isReaction);
+	void take(string objectName);
 	void voidAction(string actionStatus);
 	virtual void interact(string action, string object);
 
@@ -98,29 +99,24 @@ public:
 	bool isActionValid(int action);
 
 	virtual void takeAction() { takeAction(currentAction, actionArgs); }
-	void sayLine(string topic, string str, set<Character*> receivers) { say(topic, str, receivers); }
-	void printText(string str);
+	void sayLine(string topic, string str, vector<Character*> receivers) { say(topic, str, receivers); }
 
 	string getNotifyText() { return notifyArgs[0]; }
 	vector<string> getNotifyArgs() { return notifyArgs; }
-	set<Character*> getNotifyTargets() { return notifyTargets; }
+	vector<Character*> getNotifyTargets() { return notifyTargets; }
 
 	virtual bool hasCondition(string info) { return false; }
 	bool hasItem(string item) { return inventory.getItem(item) != NULL; }
 	Item* getItem(string item) { return inventory.getItem(item); }
 
+	void broadcastEvent(vector<string> args);
 	virtual void receiveEvent(vector<string> args) {}
 	virtual void receiveCheck(Character* checkTarget) {}
 	virtual void executeReaction(string topic, string phrase, string sender, bool shouldRespond) {}
 	virtual void checkRoom(vector<Character*> peopleInRoom) {}
-	virtual void seeCharMoving(Character* pessoa, Room* otherRoom, bool entrando) {}
-	virtual bool beAttacked(Character* atacante) {
-		if (atacante->getStrength() >= strength)
-			unconscious = true;
-		else
-			atacante->beAttacked(this);
+	virtual void seeCharMoving(Character* person, Room* otherRoom, bool entering) {}
+	virtual bool beAttacked(Character* attacker);
 
-		return unconscious;
-	};
-
+	void obtainAbstract(string codename);
+	void obtainObject(string codename);
 };

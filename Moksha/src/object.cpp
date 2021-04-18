@@ -2,7 +2,7 @@
 
 Object::Object(Dictionary<vector<string>> dict) {
 	if (actionName.empty()) {
-		actionName.insert(pair<string, int>("obtain", obter));
+		actionName.insert(pair<string, int>("obtain", pegar));
 		actionName.insert(pair<string, int>("move", mover));
 		actionName.insert(pair<string, int>("peer", espiar));
 		actionName.insert(pair<string, int>("open", abrir));
@@ -26,16 +26,19 @@ string Object::getResponse(string action) {
 		return string("");
 }
 
-void Object::takeAction(string prompt, string user) {
+int Object::returnAction(string prompt) {
 	for (int i = 0; i < validActions.size(); i++) {
 		if (validActions[i].compare(prompt) == 0) {
-			this->user = user;
 			args = dict.getValues(prompt);
-			if (args.size() > 1 && actionName.count(args[1]) > 0) {
-				int action = actionName[args[1]];
-				for (int i = 0; i < 2; i++, args.erase(args.begin()));
-				notify(action);
-			}
+			if (args.size() <= 1)
+				continue;
+			for (int action = 0; action < stringEnum.size(); action++)
+				if (stringEnum[action] == args[0]) {
+					for (int j = 0; j < 2; j++, args.erase(args.begin()));
+					return action;
+				}
 		}
 	}
+
+	return -1;
 }

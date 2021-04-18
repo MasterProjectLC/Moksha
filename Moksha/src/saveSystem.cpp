@@ -123,7 +123,7 @@ void Game::initializeGame() {
 	// Load conversations
 	load_package = doc.child("GameData").child("Game").child("Conversations");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it)
-		conversations.push_back(new Conversation(it->name(), it->attribute("room").value(), stoi(it->attribute("stage").value())));
+		conversations.push_back(new Conversation(it->name(), it->attribute("room").value(), characters, stoi(it->attribute("stage").value())));
 }
 
 
@@ -211,8 +211,8 @@ bool Game::loadGame(string loadFile) {
 	// Load conversations
 	load_package = doc.child("GameData").child("Game").child("Conversations");
 	for (xml_node_iterator it = load_package.begin(); it != load_package.end(); ++it)
-		conversations.push_back(new Conversation(it->name(), it->attribute("room").value(), (strcmp(it->attribute("is_reaction").value(), "true") == 0),
-			stoi(it->attribute("stage").value())));
+		conversations.push_back(new Conversation(it->name(), it->attribute("room").value(), characters, 
+		                        (strcmp(it->attribute("is_reaction").value(), "true") == 0), stoi(it->attribute("stage").value())));
 
 	return true;
 }

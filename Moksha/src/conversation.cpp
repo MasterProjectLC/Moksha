@@ -79,10 +79,13 @@ bool Conversation::advance(message* returned) {
 			continue;
 
 		// Send message
-		*returned = { infoAtom, string(conversation.attribute("line").value()), conversation.name() };
+		returned->infoAtom = infoAtom;
+		returned->line = conversation.attribute("line").value();
+		returned->speaker = conversation.name();
 
 		// Lock every participant
-		for (vector<Character*>::iterator ait = getParticipants().begin(); ait != getParticipants().end(); ait++) {
+		vector<Character*> participants = getParticipants();
+		for (vector<Character*>::iterator ait = participants.begin(); ait != participants.end(); ait++) {
 			if ((*ait)->getCurrentRoom()->getCodename() == getRoom())
 				(*ait)->setInConversation(true);
 		}
@@ -98,8 +101,11 @@ bool Conversation::advance(message* returned) {
 }
 
 
-bool Conversation::participates(Character* name) {
-	
+bool Conversation::participates(Character* chara) {
+	for (vector<Character*>::iterator ait = getParticipants().begin(); ait != getParticipants().end(); ait++)
+		if ((*ait) == chara)
+			return true;
+	return false;
 }
 
 bool Conversation::hasTag(string tag) {

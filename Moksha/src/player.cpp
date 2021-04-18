@@ -12,7 +12,13 @@ Player::Player(Map* map) : Character(M, 5, 7) {
 	noPersonError = fileErros.getValues("no person")[0];
 	mindError = fileErros.getValues("mind theory")[0];
 
+	add(interfacer, 0);
 };
+
+void Player::update(int id) {
+	receiveArgs(interfacer.getArgs());
+}
+
 
 void Player::rewind() {
 	inventory.clearItems();
@@ -20,7 +26,31 @@ void Player::rewind() {
 }
 
 
-// ACOES -------------------------------------------------------------------------------------
+void Player::bootGame() {
+	interfacer.gameLoop();
+}
+
+// ACTIONS -------------------------------------------------------------------------------------
+
+void Player::printText(string str) {
+	interfacer.printLine(str);
+}
+
+void Player::addAbstract(string name, string codename, string description, char type) {
+	Character::addAbstract(name, codename, description, type);
+	interfacer.setConcepts(inventory.getConcepts());
+	
+}
+
+void Player::addItem(string name, string codename, string description, set<string> actions) {
+	Character::addItem(name, codename, description, actions);
+	interfacer.setConcepts(vector<Concept*>( inventory.getItems().begin(), inventory.getItems().end()), 'i');
+}
+
+void Player::removeItem(string name) {
+	Character::removeItem(name);
+	interfacer.setConcepts(vector<Concept*>(inventory.getItems().begin(), inventory.getItems().end()), 'i');
+}
 
 void Player::interact(string action, string object) {
 	// TODO: Maybe delete all the checks? They're already in receiveArgs
@@ -39,6 +69,11 @@ void Player::interact(string action, string object) {
 	// Object doesn't exist
 	else
 		printText(noObjectError);
+}
+
+void Player::say(string topic, string str, vector<Character*> receivers) {
+	Character::say(topic, str, receivers);
+	// TODO add abstract
 }
 
 
@@ -162,7 +197,7 @@ void Player::receiveArgs(vector<string> args) {
 }
 
 
-// REACOES -----------------------------------------------------------------------
+// REACTIONS -----------------------------------------------------------------------
 
 void Player::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
 	if (topic == "busy")
@@ -217,7 +252,6 @@ void Player::updateRoom(vector<Character*> charsInRoom) {
 }
 
 
-
 void Player::seeCharMoving(Character* person, Room* otherRoom, bool entering) {
 	if (entering)
 		printText(person->getName() + " entered the room, coming from the " + otherRoom->getName());
@@ -230,7 +264,6 @@ void Player::seeCharMoving(Character* person, Room* otherRoom, bool entering) {
 bool Player::hasCondition(string info) {
 	return inventory.hasConcept(info);
 }
-
 
 
 void Player::addToMind(string topic, string character) {

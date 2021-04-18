@@ -31,9 +31,9 @@ private:
 
 public:
 	Conversation() {}
-	Conversation(string conversation, string room, vector<Character*> participants);
-	Conversation(string conversation, string room, vector<Character*> participants, bool reaction);
-	Conversation(string conversation, string room, vector<Character*> participants, bool reaction, int stage);
+	Conversation(string conversation, string room, vector<Character*> characters);
+	Conversation(string conversation, string room, vector<Character*> characters, bool reaction);
+	Conversation(string conversation, string room, vector<Character*> characters, bool reaction, int stage);
 
 	bool participates(Character* name); // If given character participates in the convo
 	bool hasTag(string tag);

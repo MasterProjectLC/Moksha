@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class Player : public Character {
+class Player : public Character, public IObserver {
 private:
 	string noObjectError;
 	string noPersonError;
@@ -21,6 +21,7 @@ private:
 	Interface interfacer = Interface(140, 40, 60, 30);
 
 	void interact(string action, string object) override;
+	void say(string topic, string str, vector<Character*> receivers) override;
 	bool characterCheck(vector<string> args);
 
 	void addToMind(string topic, string character);
@@ -28,9 +29,15 @@ private:
 public:
 	Player() {}
 	Player(Map* mapp);
+	void bootGame();
+	void update(int id) override;
 	void receiveArgs(vector<string> args);
 
 	bool hasCondition(string info) override;
+
+	void addAbstract(string name, string codename, string description, char type) override;
+	void addItem(string name, string codename, string description, set<string> actions) override;
+	void removeItem(string name) override;
 
 	void seeCharMoving(Character* person, Room* otherRoom, bool entering) override;
 	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
@@ -44,4 +51,5 @@ public:
 	};
 
 	void rewind();
+	void printText(string str);
 };
