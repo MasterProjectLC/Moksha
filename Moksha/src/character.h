@@ -113,10 +113,13 @@ public:
 	virtual void receiveEvent(vector<string> args) {}
 	virtual void receiveCheck(Character* checkTarget) {}
 	virtual void executeReaction(string topic, string phrase, string sender, bool shouldRespond) {}
-	virtual void checkRoom(vector<Character*> peopleInRoom) {}
-	virtual void seeCharMoving(Character* person, Room* otherRoom, bool entering) {}
+	void checkRoom(vector<Character*> peopleInRoom);
+	virtual void checkRoomParticular(vector<Character*> peopleInRoom) {}
+	void seeCharMoving(Character* person, Room* otherRoom, bool entering);
+	virtual void seeCharMovingParticular(Character* person, Room* otherRoom, bool entering) {}
 	virtual bool beAttacked(Character* attacker);
 
+	void setNeighbours(vector<Character*> neighbours);
 	void obtainAbstract(string codename);
 	void obtainObject(string codename);
 };

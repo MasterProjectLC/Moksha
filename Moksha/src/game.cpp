@@ -20,7 +20,6 @@ void Game::setup() {
 		for (int i = 0; i < npcs.size(); i++) {
 			npcs[i]->setupWorld();
 		}
-
 		conversations.push_back(new Conversation("intro", "FlightDock", characters, false));
 		advanceConversations();
 	}
@@ -30,8 +29,10 @@ void Game::setup() {
 		((NPC*)findCharacter("George"))->addGoal(new string("waiting_Runway"), true, 1000);
 	}
 
-	player->bootGame();
+	for (int i = 0; i < characters.size(); i++)
+		characters[i]->setNeighbours(getPeopleInRoom(characters[i]->getCurrentRoom()));
 
+	player->bootGame();
 }
 
 
@@ -110,7 +111,6 @@ void Game::characterAction(Character* character) {
 	int id = character->getNotifyID();
 	Character* target;
 	Room* oldRoom;
-	Conversation* convo;
 
 	switch (id) {
 	case avancar:
@@ -121,53 +121,22 @@ void Game::characterAction(Character* character) {
 		player->printText(to_string(7 + (time / 60)) + ":" + to_string(time % 60));
 		break;
 
-	case mover:
-		// Characters see char leaving
-		for (vector<Character*>::iterator it = characters.begin(); it != characters.end(); it++)
-			if (*it != character && (*it)->getCurrentRoom() == character->getCurrentRoom())
-				(*it)->seeCharMoving(character, map.getRoom(character->getNotifyText()), false);
-
-		// Char enters the room
-		oldRoom = character->getCurrentRoom();
-		character->setCurrentRoom(moveRoom(character->getCurrentRoom(), character->getNotifyText()));
-		if (character != player)
-			character->checkRoom( getPeopleInRoom(character->getCurrentRoom()) );
-		else
-			player->updateRoom(getPeopleInRoom(player->getCurrentRoom()));
-
-		// Characters see char entering
-		for (vector<Character*>::iterator it = characters.begin(); it != characters.end(); it++)
-			if (*it != character && (*it)->getCurrentRoom() == character->getCurrentRoom())
-				(*it)->seeCharMoving(character, oldRoom, true);
+	case atualizar_vizinhos:
+		updateNeighbours(character);
 		break;
 
 	case conversar:
-		convo = new Conversation(character->getNotifyText(), character->getCurrentRoom()->getCodename(), characters,
-			character->getNotifyArgs()[1][0] == 'r');
-		conversations.push_back(convo);
-		emitEvent(inicio_conversa, vector<string>({ character->getName(), convo->getRoom() }));
-		// Preemptively lock everyone
-		for (vector<Character*>::iterator it = convo->getParticipants().begin(); it != convo->getParticipants().end(); it++) {
-			if ((*it)->getCurrentRoom()->getCodename() == convo->getRoom())
-				(*it)->setInConversation(true);
-		}
+		addConversation(character->getNotifyText(), character, character->getNotifyArgs()[1][0] == 'r');
 		break;
 
 	case ouvir:
-		target = findCharacter(character->getNotifyText());
-		for (int i = 0; i < conversations.size(); i++) {
-			if (conversations[i]->participates(target)) {
-				conversations[i]->addListener(character);
-					break;
-			}
-		}
+		addListener(character, character->getNotifyText());
 		break;
 
 	case deixar:
 		Item* item = character->getItem(character->getNotifyText());
-		string codename = item->getCodename();
 		if (item != NULL && item->isActionValid("leave"))
-			emitEvent(item_deixado, vector<string>({ codename }));
+			emitEvent(item_deixado, vector<string>({ item->getCodename() }));
 		break;
 	}
 
@@ -277,10 +246,34 @@ vector<Character*> Game::getPeopleInRoom(Room* room) {
 
 
 // ACTIONS ----------------------------------
-Room* Game::moveRoom(Room* origin, string destination) {
-	// Movement
-	origin = map.getRoom(destination);
-	return origin;
+void Game::updateNeighbours(Character* character) {
+	if (character != player)
+		character->checkRoom(getPeopleInRoom(character->getCurrentRoom()));
+	else
+		player->updateRoom(getPeopleInRoom(player->getCurrentRoom()));
+}
+
+
+void Game::addConversation(string convoName, Character* starter, bool isReaction) {
+	Conversation* convo = new Conversation(convoName, starter->getCurrentRoom()->getCodename(), characters, isReaction);
+	conversations.push_back(convo);
+	emitEvent(inicio_conversa, vector<string>({ starter->getName(), convo->getRoom() }));
+	// Preemptively lock everyone
+	vector<Character*> participants = convo->getParticipants();
+	for (vector<Character*>::iterator it = participants.begin(); it != participants.end(); it++) {
+		if ((*it)->getCurrentRoom()->getCodename() == convo->getRoom())
+			(*it)->setInConversation(true);
+	}
+}
+
+void Game::addListener(Character* character, string targetName) {
+	Character* target = findCharacter(targetName);
+	for (int i = 0; i < conversations.size(); i++) {
+		if (conversations[i]->participates(target)) {
+			conversations[i]->addListener(character);
+			break;
+		}
+	}
 }
 
 

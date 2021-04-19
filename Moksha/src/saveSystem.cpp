@@ -165,7 +165,7 @@ bool Game::loadGame(string loadFile) {
 		// Load inventory
 		xml_node node = it->child("Inventory");
 		for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait) {
-			obtainObject(ait->name(), thisCharacter);
+			thisCharacter->obtainObject(ait->name());
 		}
 
 		// Load NPCs
@@ -199,12 +199,12 @@ bool Game::loadGame(string loadFile) {
 			// Load rumors
 			node = it->child("Rumors");
 			for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait)
-				obtainAbstract(ait->name(), thisCharacter);
+				thisCharacter->obtainAbstract(ait->name());
 
 			// Load concepts
 			node = it->child("Concepts");
 			for (xml_node_iterator ait = node.begin(); ait != node.end(); ++ait)
-				obtainAbstract(ait->name(), thisCharacter);
+				thisCharacter->obtainAbstract(ait->name());
 		}
 	}
 

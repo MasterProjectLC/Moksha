@@ -92,8 +92,8 @@ public:
 
 	int decideAction();
 	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
-	void checkRoom(vector<Character*> peopleInRoom) override;
-	void seeCharMoving(Character* character, Room* otherRoom, bool entering) override;
+	void checkRoomParticular(vector<Character*> peopleInRoom) override;
+	void seeCharMovingParticular(Character* character, Room* otherRoom, bool entering) override;
 	void setSalaAlvo(Room* nova) { findPath(nova); }
 
 	void clearGoals() { goalList.clear(); }

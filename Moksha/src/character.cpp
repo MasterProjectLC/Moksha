@@ -58,15 +58,26 @@ void Character::takeAction(int action, vector<string> args) {
 			break;
 	}
 
-	notify(action);
 }
 
 // ACTIONS ======================================
 
 void Character::move(string str) {
-	status = "entering the room.";
-	notifyArgs.clear();
-	notifyArgs.push_back(str);
+	status = "entering the " + str + ".";
+	// Neighbours see char leaving
+	for (vector<Character*>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
+		(*it)->seeCharMoving(this, mapp->getRoom(str), false);
+
+	// Char enters the room
+	string oldRoom = str;
+	setCurrentRoom(mapp->getRoom(str));
+
+	// Update neighbours
+	notify(atualizar_vizinhos);
+
+	// Neighbours see char entering
+	for (vector<Character*>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
+		(*it)->seeCharMoving(this, mapp->getRoom(str), true);
 }
 
 void Character::move(Room* room) {
@@ -78,12 +89,9 @@ void Character::mention(string obj, string receiver) {
 }
 
 void Character::mention(string obj, set<string> receivers) {
-	for (vector<Character*>::iterator it = neighbours.begin(); it != neighbours.end(); it++) {
-		if (receivers.count((*it)->getName())) {
-			(*it)->executeReaction(getNotifyText(), "", getName(), true);
-			break;
-		}
-	}
+	for (vector<Character*>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
+		if (receivers.count((*it)->getName()))
+			(*it)->executeReaction(obj, "", name, true);
 }
 
 void Character::attack(string targetName) {
@@ -106,6 +114,10 @@ bool Character::beAttacked(Character* attacker) {
 
 void Character::leave(string itemName) {
 	status = "leaving " + itemName + ".";
+	notifyArgs.clear();
+	notifyArgs.push_back(itemName);
+	notify(deixar);
+
 	Item* item = getItem(itemName);
 	string codename = item->getCodename();
 	if (item != NULL && item->isActionValid("leave")) {
@@ -119,6 +131,7 @@ void Character::listen(string target) {
 	status = "eavesdropping " + target + ".";
 	notifyArgs.clear();
 	notifyArgs.push_back(target);
+	notify(ouvir);
 }
 
 void Character::check(string targetName) {
@@ -154,6 +167,7 @@ void Character::talk(string convo, bool isReaction) {
 		notifyArgs.push_back("r");
 	else
 		notifyArgs.push_back("c");
+	notify(conversar);
 }
 
 void Character::take(string objectName) {
@@ -180,6 +194,36 @@ void Character::broadcastEvent(vector<string> args) {
 		if (neighbours[i] != this)
 			neighbours[i]->receiveEvent(args);
 }
+
+void Character::checkRoom(vector<Character*> peopleInRoom) { 
+	setNeighbours(peopleInRoom);
+	checkRoomParticular(peopleInRoom);
+}
+
+void Character::seeCharMoving(Character* person, Room* otherRoom, bool entering) {
+	seeCharMovingParticular(person, otherRoom, entering);
+	if (entering)
+		neighbours.push_back(person);
+	else
+		for (vector<Character*>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
+			if ((*it)->getName() == person->getName()) {
+				neighbours.erase(it);
+				break;
+			}
+}
+
+
+// SETTERS ETC =================================================
+
+void Character::setNeighbours(vector<Character*> neighbours) {
+	this->neighbours = neighbours;
+	for (vector<Character*>::iterator it = this->neighbours.begin(); it != this->neighbours.end(); it++)
+		if ((*it)->getName() == name) {
+			this->neighbours.erase(it);
+			break;
+		}
+}
+
 
 void Character::obtainObject(string codename) {
 	FileDict filedict = FileManager::readFromFile("files/items/" + codename + ".txt");

@@ -12,7 +12,7 @@ Player::Player(Map* map) : Character(M, 5, 7) {
 	noPersonError = fileErros.getValues("no person")[0];
 	mindError = fileErros.getValues("mind theory")[0];
 
-	add(interfacer, 0);
+	interfacer.add(this, 0);
 };
 
 void Player::update(int id) {
@@ -44,31 +44,24 @@ void Player::addAbstract(string name, string codename, string description, char 
 
 void Player::addItem(string name, string codename, string description, set<string> actions) {
 	Character::addItem(name, codename, description, actions);
-	interfacer.setConcepts(vector<Concept*>( inventory.getItems().begin(), inventory.getItems().end()), 'i');
+	vector<Item*> v = inventory.getItems();
+	interfacer.setConcepts(vector<Concept*>( v.begin(), v.end()), 'i');
 }
 
 void Player::removeItem(string name) {
 	Character::removeItem(name);
-	interfacer.setConcepts(vector<Concept*>(inventory.getItems().begin(), inventory.getItems().end()), 'i');
+	vector<Item*> v = inventory.getItems();
+	interfacer.setConcepts(vector<Concept*>(v.begin(), v.end()), 'i');
 }
 
 void Player::interact(string action, string object) {
-	// TODO: Maybe delete all the checks? They're already in receiveArgs
+	// Print response
+	string response = getCurrentRoom()->getObject(object)->getResponse(action);
+	if (response.size() > 0) { printText(response); }
+	else { printText(noActionError); }
 
-	// Objects
-	if (getCurrentRoom()->hasObject(object)) {
-		// Print answer
-		string response = getCurrentRoom()->getObject(object)->getResponse(action);
-		if (response.size() > 0) { printText(response); }
-		else { printText(noActionError); }
-
-		// Take action
-		Character::interact(action, object);
-	}
-
-	// Object doesn't exist
-	else
-		printText(noObjectError);
+	// Take action
+	Character::interact(action, object);
 }
 
 void Player::say(string topic, string str, vector<Character*> receivers) {
@@ -157,7 +150,7 @@ void Player::receiveArgs(vector<string> args) {
 		if (args.size() <= 0 || args[1] == "around" || args[1] == "room" || (args.size() > 2 && args[2] == "room")) {
 			scan();	return;
 		}
-		else if (names.count(args[1]) > 0) {
+		else if (names.count(args[1]) > 0 && findNeighbour(args[1]) != NULL) {
 			check(concatStrings(args, 1));	return;
 		}
 		
@@ -218,7 +211,7 @@ void Player::receiveCheck(Character* checkTarget) {
 }
 
 
-void Player::checkRoom(vector<Character*> charsInRoom) {
+void Player::checkRoomParticular(vector<Character*> charsInRoom) {
 	// Adjacent rooms
 	printText("Current room: " + getCurrentRoom()->getName() + "\n" + getCurrentRoom()->getInitialText() + "\nAdjacent rooms:");
 	for (int i = 0; i < getCurrentRoom()->getAdjacentRoomCount(); i++)
@@ -235,28 +228,34 @@ void Player::checkRoom(vector<Character*> charsInRoom) {
 				printText(objects[i]->getName());
 		}
 	}
-	updateRoom(charsInRoom);
+	printNeighbours();
 }
 
 void Player::updateRoom(vector<Character*> charsInRoom) {
-	// Characters in the room
-	for (int i = 0; i < charsInRoom.size(); i++) {
-		if (charsInRoom[i]->getName() != name)
-			if (charsInRoom[i]->isDead())
-				printText("Oh, what the...?! " + charsInRoom[i]->getName() + " is dead!");
-			else if (charsInRoom[i]->isUnconscious())
-				printText("Oh, " + charsInRoom[i]->getName() + " is unconscious here!");
-			else
-				printText(charsInRoom[i]->getName() + " is in the room, " + charsInRoom[i]->getStatus());
-	}
+	setNeighbours(charsInRoom);
+	printNeighbours();
 }
 
 
-void Player::seeCharMoving(Character* person, Room* otherRoom, bool entering) {
+void Player::seeCharMovingParticular(Character* person, Room* otherRoom, bool entering) {
 	if (entering)
 		printText(person->getName() + " entered the room, coming from the " + otherRoom->getName());
 	else
 		printText(person->getName() + " left the room, going to the " + otherRoom->getName());
+}
+
+
+void Player::printNeighbours() {
+	// Characters in the room
+	for (int i = 0; i < neighbours.size(); i++) {
+		if (neighbours[i]->getName() != name)
+			if (neighbours[i]->isDead())
+				printText("Oh, what the...?! " + neighbours[i]->getName() + " is dead!");
+			else if (neighbours[i]->isUnconscious())
+				printText("Oh, " + neighbours[i]->getName() + " is unconscious here!");
+			else
+				printText(neighbours[i]->getName() + " is in the room, " + neighbours[i]->getStatus());
+	}
 }
 
 // HELPER FUNCTIONS ----------------------------------------------------

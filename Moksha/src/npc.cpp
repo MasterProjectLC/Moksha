@@ -154,7 +154,7 @@ void NPC::talk(string convo, bool isReaction) {
 	Character::talk(convo, isReaction);
 }
 
-// REACTIONS ----------------------------------
+// REACTIONS ==========================================
 
 void NPC::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
 	if (isUnconscious())
@@ -188,7 +188,7 @@ void NPC::receiveEvent(vector<string> args) {
 }
 
 
-void NPC::checkRoom(vector<Character*> peopleInRoom) {
+void NPC::checkRoomParticular(vector<Character*> peopleInRoom) {
 	// Run through tracked people
 	for (set<string>::iterator it = trackablePeople.begin(); it != trackablePeople.end(); it++) {
 		string theirName = *it;
@@ -208,7 +208,7 @@ void NPC::checkRoom(vector<Character*> peopleInRoom) {
 };
 
 
-void NPC::seeCharMoving(Character* person, Room* otherRoom, bool entering) {
+void NPC::seeCharMovingParticular(Character* person, Room* otherRoom, bool entering) {
 	if (trackablePeople.count(person->getName()) == 0)
 		return;
 
@@ -346,7 +346,6 @@ void NPC::advancePlans() {
 		else
 			changePlans();
 }
-
 
 
 void NPC::setupProcess(string currentProcess) {

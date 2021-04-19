@@ -27,18 +27,16 @@ string Object::getResponse(string action) {
 }
 
 int Object::returnAction(string prompt) {
-	for (int i = 0; i < validActions.size(); i++) {
-		if (validActions[i].compare(prompt) == 0) {
-			args = dict.getValues(prompt);
-			if (args.size() <= 1)
-				continue;
-			for (int action = 0; action < stringEnum.size(); action++)
-				if (stringEnum[action] == args[0]) {
-					for (int j = 0; j < 2; j++, args.erase(args.begin()));
-					return action;
-				}
-		}
-	}
-
+	for (int i = 0; i < validActions.size(); i++)
+		if (validActions[i].compare(prompt) == 0)
+			goto SCRIPT;
 	return -1;
+
+	SCRIPT:
+	args = dict.getValues(prompt);
+	if (args.size() <= 1)
+		return -1;
+	string action = args[1];
+	for (int j = 0; j < 2; j++, args.erase(args.begin()));
+	return actionName[action];
 }

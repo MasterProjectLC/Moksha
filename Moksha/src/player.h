@@ -39,11 +39,12 @@ public:
 	void addItem(string name, string codename, string description, set<string> actions) override;
 	void removeItem(string name) override;
 
-	void seeCharMoving(Character* person, Room* otherRoom, bool entering) override;
+	void seeCharMovingParticular(Character* person, Room* otherRoom, bool entering) override;
 	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
 	void receiveCheck(Character* checkTarget) override;
-	void checkRoom(vector<Character*> peopleInRoom) override;
+	void checkRoomParticular(vector<Character*> peopleInRoom) override;
 	void updateRoom(vector<Character*> peopleInRoom);
+	void printNeighbours();
 
 	bool beAttacked(Character* attacker) override {
 		printText(attacker->getName() + " attacked you!");

@@ -44,7 +44,6 @@ private:
 	vector<NPC*> npcs;
 	vector<Conversation*> conversations;
 
-	Room* moveRoom(Room *origin, string destination);
 	Map map;
 	vector<Character*> getPeopleInRoom(Room* room);
 
@@ -64,6 +63,10 @@ private:
 	void rewindGame();
 
 	void emitEvent(int id, vector<string> args);
+
+	void updateNeighbours(Character* character);
+	void addConversation(string convo, Character* starter, bool isReaction);
+	void addListener(Character* character, string target);
 
 public:
 	Game();

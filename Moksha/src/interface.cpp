@@ -417,9 +417,16 @@ void Interface::setConcepts(vector<Concept*> concepts, char type) {
 		if (titles[index][0] == toupper(type))
 			break;
 
-	for (int i = 0; i < concepts.size(); i++) {
-		if (i >= inventory[index -1].size()) {
-			inventory[index-1].push_back(concepts[i]);
+	if (concepts.size() > inventory[index].size())
+		for (int i = 0; i < concepts.size(); i++) {
+			if (i >= inventory[index].size()) {
+				inventory[index].push_back(concepts[i]);
+			}
+		}
+	else if (concepts.size() < inventory[index].size()) {
+		inventory[index].clear();
+		for (int i = 0; i < concepts.size(); i++) {
+			inventory[index].push_back(concepts[i]);
 		}
 	}
 
