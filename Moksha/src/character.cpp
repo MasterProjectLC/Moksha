@@ -29,6 +29,10 @@ void Character::takeAction(int action, vector<string> args) {
 				interact(args.at(0), concatStrings(args, 1));
 			break;
 
+		case tempo:
+			notify(tempo);
+			break;
+
 		case ouvir:
 			listen(zusammenArgs);
 			break;
@@ -63,7 +67,7 @@ void Character::takeAction(int action, vector<string> args) {
 // ACTIONS ======================================
 
 void Character::move(string str) {
-	status = "entering the " + str + ".";
+	status = "entering a room.";
 	// Neighbours see char leaving
 	for (vector<Character*>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
 		(*it)->seeCharMoving(this, mapp->getRoom(str), false);

@@ -193,6 +193,7 @@ bool Game::loadGame(string loadFile) {
 					((NPC*)thisCharacter)->addGoal(values, dontcare, (onetime == "true"), priority);
 				}
 			}
+			((NPC*)thisCharacter)->createPlan();
 		}
 		// Load player
 		else {

@@ -319,9 +319,8 @@ void NPC::updateLastSeen(string pursueTarget, string room) {
 		return;
 
 	string currentProcess = plan[currentStep];
-	if (currentProcess.compare("search_" + pursueTarget) == 0) {
+	if (currentProcess.compare("search_" + pursueTarget) == 0)
 		path = search(mapp->getRoom( lastSeen.getValues(pursueTarget) ));
-	}
 }
 
 

@@ -172,7 +172,7 @@ void Game::advanceTime() {
 	for (int i = 0; i < npcs.size(); i++)
 		npcs[i]->checkRoom( getPeopleInRoom(npcs[i]->getCurrentRoom()) );
 
-	// Jogo
+	// Game
 	time++;
 	emitEvent(passagem_tempo, vector<string>());
 	saveGame("save.xml");
@@ -191,6 +191,7 @@ void Game::advanceConversations() {
 			broadcastMessage(receiver.infoAtom, receiver.line, "", (*it)->getParticipants(), map.getRoom((*it)->getRoom()));
 		else
 			findCharacter(receiver.speaker)->sayLine(receiver.infoAtom, receiver.line, (*it)->getParticipants());
+		(*it)->clearListeners();
 
 		if (convoEnded) {
 			string s = (*it)->getName();
@@ -232,7 +233,7 @@ void Game::broadcastEvent(Character* emitter, vector<string> args) {
 }
 
 
-// LIDAR COM MAPA ------------------------------------------
+// MAP ------------------------------------------
 
 vector<Character*> Game::getPeopleInRoom(Room* room) {
 	vector<Character*> retorno;

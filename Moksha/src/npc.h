@@ -65,7 +65,6 @@ protected:
 	virtual void updateWorldExtra() {}
 	void updateLastSeen(string pursueTarget, string room);
 
-	void createPlan();
 	void changePlans() { changePlans(false); };
 	void changePlans(bool justUpdated);
 	void advancePlans();
@@ -95,6 +94,8 @@ public:
 	void checkRoomParticular(vector<Character*> peopleInRoom) override;
 	void seeCharMovingParticular(Character* character, Room* otherRoom, bool entering) override;
 	void setSalaAlvo(Room* nova) { findPath(nova); }
+
+	void createPlan();
 
 	void clearGoals() { goalList.clear(); }
 	void addGoal(vector<string*> conditions, vector<bool> conditionStates, int priority);

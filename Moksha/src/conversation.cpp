@@ -89,7 +89,6 @@ bool Conversation::advance(message* returned) {
 			if ((*ait)->getCurrentRoom()->getCodename() == getRoom())
 				(*ait)->setInConversation(true);
 		}
-		clearListeners();
 		break;
 	}
 
@@ -102,7 +101,7 @@ bool Conversation::advance(message* returned) {
 
 
 bool Conversation::participates(Character* chara) {
-	for (vector<Character*>::iterator ait = getParticipants().begin(); ait != getParticipants().end(); ait++)
+	for (vector<Character*>::iterator ait = participants.begin(); ait != participants.end(); ait++)
 		if ((*ait) == chara)
 			return true;
 	return false;
@@ -123,8 +122,12 @@ bool Conversation::ended() {
 
 
 void Conversation::clearListeners() {
-	for (vector<Character*>::iterator it = listeners.begin(); it != listeners.end(); ++it)
-		participants.erase(it);
+	for (vector<Character*>::iterator it = listeners.begin(); it != listeners.end(); it++)
+		for (vector<Character*>::iterator ait = participants.begin(); ait != participants.end(); ait++)
+			if ((*it)->getName() == (*ait)->getName()) {
+				participants.erase(ait);
+				break;
+			}
 
 	listeners.clear();
 }
