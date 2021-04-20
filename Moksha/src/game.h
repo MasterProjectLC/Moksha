@@ -27,7 +27,7 @@ static auto actionCompare = [](Character* a, Character* b) -> bool {
 	if  (a->getAction() != b->getAction())
 		return a->getAction() < b->getAction();
 	else
-		return (b->getName() == "Elliot");
+		return (a->getName() == "Elliot");
 };
 
 class Game : public IObserver {

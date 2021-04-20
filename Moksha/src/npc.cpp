@@ -164,6 +164,8 @@ void NPC::executeReaction(string topic, string phrase, string sender, bool shoul
 		setCondition(topic, true);
 	// React to mentions
 	if (shouldRespond && !busy && !inConversation()) {
+		if (topicList.count(topic) == 0)
+			return;
 		talk(topic + "_" + name, true);
 		notify(avancar);
 	}

@@ -155,16 +155,17 @@ void Game::advanceTime() {
 	advanceConversations();
 
 	// Order by priority
-	PriorityVector<Character*> orderAction = PriorityVector<Character*>(vector<Character*>(), actionCompare);
+	vector<Character*> orderAction;
 	for (vector<Character*>::iterator it = characters.begin(); it != characters.end(); it++) {
 		if ((*it)->getAction() != ouvir)
-			orderAction.push((*it));
+			orderAction.push_back((*it));
 	}
+	sort(orderAction.begin(), orderAction.end(), actionCompare);
 
 	// Take action
 	while (!orderAction.empty()) {
-		(*orderAction.highest())->takeAction();
-		orderAction.pop();
+		(orderAction.back())->takeAction();
+		orderAction.pop_back();
 	}
 	player->setInConversation(false);
 
