@@ -37,7 +37,7 @@ void Game::setup() {
 
 
 // EVENTS
-void Game::emitEvent(int id, vector<string> args) {
+bool Game::emitEvent(int id, vector<string> args) {
 	switch (id) {
 	case inicio_conversa:
 		if (player->getCurrentRoom()->getCodename() == args[1]) {
@@ -46,7 +46,11 @@ void Game::emitEvent(int id, vector<string> args) {
 		break;
 
 	case fim_conversa:
-		if (args[0] == "journalist_rivalry_Jenna") {
+		if (args[0] == "journalist_rivalry_Jenna" && (NPC*)findCharacter("Baxter") == NULL) {
+			player->printText("Press Enter to continue.");
+			conversations.push_back(new Conversation("intro3", "Runway", characters));
+			return false;
+		} else if (args[0] == "intro3") {
 			rewindGame();
 		}
 		break;
@@ -60,12 +64,12 @@ void Game::emitEvent(int id, vector<string> args) {
 
 	case passagem_tempo:
 		if ((NPC*)findCharacter("Baxter") == NULL)
-			return;
+			return true;
 
 		switch (time) {
 		case 35:
 			((NPC*)findCharacter("Renard"))->addGoal(new string("taking_photos"), true, 50);
-			((NPC*)findCharacter("Paul"))->addGoal(new string("the_medusa"), true, 50);
+			((NPC*)findCharacter("Paul"))->addGoal(new string("medusa"), true, 50);
 			break;
 
 		case 40:
@@ -90,6 +94,7 @@ void Game::emitEvent(int id, vector<string> args) {
 			break;
 
 		case (60+60+30):
+			((NPC*)findCharacter("Paul"))->addGoal(new string("convo_airship_design"), true, 50);
 			((NPC*)findCharacter("George"))->addGoal(new string("convo_begin_card_game"), true, 50);
 			((NPC*)findCharacter("George"))->addGoal(new string("convo_begin_card_game"), true, 1);
 			((NPC*)findCharacter("Jenna"))->addGoal(new string("convo_begin_card_game"), true, 1);
@@ -97,6 +102,8 @@ void Game::emitEvent(int id, vector<string> args) {
 		}
 		break;
 	}
+
+	return true;
 }
 
 // UPDATE --------------------------------------------------------
@@ -188,6 +195,7 @@ void Game::advanceConversations() {
 	for (vector<Conversation*>::iterator it = conversations.begin(); it != conversations.end();) {
 		message receiver = {"","",""};
 		bool convoEnded = (*it)->advance(&receiver);
+		bool invalid = false;
 		if (receiver.speaker == "Narrator")
 			broadcastMessage(receiver.infoAtom, receiver.line, "", (*it)->getParticipants(), map.getRoom((*it)->getRoom()));
 		else
@@ -198,13 +206,13 @@ void Game::advanceConversations() {
 			string s = (*it)->getName();
 			delete *it;
 			it = conversations.erase(it);
-			emitEvent(fim_conversa, vector<string>({ s }));
+			invalid = !emitEvent(fim_conversa, vector<string>({ s }));
 		}
 		// Advance to next convo
 		else
 			it++;
 
-		if (conversations.empty() || it == conversations.end())
+		if (invalid || conversations.empty() || it == conversations.end())
 			break;
 	}
 }

@@ -62,7 +62,7 @@ private:
 	void saveGame(string baseSave);
 	void rewindGame();
 
-	void emitEvent(int id, vector<string> args);
+	bool emitEvent(int id, vector<string> args);
 
 	void updateNeighbours(Character* character);
 	void addConversation(string convo, Character* starter, bool isReaction);

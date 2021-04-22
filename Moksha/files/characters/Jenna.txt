@@ -1,5 +1,5 @@
 description:
-Jenna Maybourne, George's niece, is an american 'innovation journalist', a title she coined herself. She's also my boss. Overall, I find her somewhat laidback and playful, simultaneously taking her job seriously and having fun along the way. Her connection to her father, who was a prominent aeronaut, sparked her interest for technological marvels and allowed her to learn a lot about airships.\nShe's currently wearing a brown vest, a bowler hat and big, round googles. Her hair is shorter than most women.
+Janet 'Jenna' Maybourne, George's niece, is an american 'innovation journalist', a title she coined herself. She's also my boss. Overall, I find her somewhat laidback and playful, simultaneously taking her job seriously and having fun along the way. Her connection to her father, who was a prominent aeronaut, sparked her interest for technological marvels and allowed her to learn a lot about airships.\nShe's currently wearing a brown vest, a bowler hat and big, round googles. Her hair is shorter than most women.
 gender:
 F
 strength:
@@ -7,4 +7,4 @@ strength:
 dexterity:
 10
 topics:
-crewboy|journalist_rivalry|questionnaire
+crewboy|journalist_rivalry|medusa|questionnaire

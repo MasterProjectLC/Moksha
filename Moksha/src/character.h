@@ -52,7 +52,7 @@ public:
 		conversation = false;
 		status = "doing nothing.";
 
-		basicActions = { mover, descansar, mencionar, falar, conversar, interagir };
+		basicActions = { mover, descansar, mencionar, falar, conversar, interagir, deixar };
 	}
 
 	string getName() { return name; }

@@ -77,6 +77,7 @@ bool Player::characterCheck(vector<string> args) {
 	return false;
 }
 
+
 void Player::receiveArgs(vector<string> args) {
 	// TODO: FIX THIS GARBAGE CODE
 	currentAction = nulo;
@@ -119,7 +120,7 @@ void Player::receiveArgs(vector<string> args) {
 		}
 
 		Concept* info = inventory.getInfoByName(topic);
-		// Don't have this info/item
+		// I don't have this info/item
 		if (info == NULL)
 			printText(noItemError);
 		// Mention

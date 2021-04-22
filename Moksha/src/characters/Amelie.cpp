@@ -14,8 +14,7 @@ void Amelie::setupActionsParticular() {
 
 
 void Amelie::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "meditating", false);
-	goap_worldstate_set(&ap, &world, "medusa", false);
+
 }
 
 

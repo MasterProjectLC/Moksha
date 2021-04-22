@@ -7,4 +7,4 @@ strength:
 dexterity:
 12
 topics:
-crewboy|himalayas
+crewboy|himalayas|medusa

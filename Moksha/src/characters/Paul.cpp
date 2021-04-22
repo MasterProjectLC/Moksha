@@ -10,12 +10,12 @@ void Paul::setupActionsParticular() {
 	addTrackablePeople("Magnus");
 	addTrackableRoom("RenardRoom");
 	addTrackableRoom("ViewingLobby");
+	addTrackableRoom("Study");
 	setupCrewArea();
 
 	addTrackableNull("plan", "planning", "RenardRoom");
+	addTrackableConvo("airship_design", "Study");
 
-	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
-	goap_set_pst(&ap, "hear_presentation", "medusa", true);
 	addTrackableNull("hear_presentation", "medusa", "waiting", "ViewingLobby");
 }
 
