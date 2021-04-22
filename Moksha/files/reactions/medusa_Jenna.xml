@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Jenna line="Yep, that's the airship we're in, did you know that?"/>
+    <Elliot line="I... I think the sarcasm is a bit unwarranted, boss."/>
+    <Jenna line="Hah, I'm just messing with ya, buddy. Did you have a question about the Medusa?"/>
+    <Elliot line="Yeah, well... Since you did the questionnaire and all, how does the ship work, exactly?"/>
+    <Jenna line="Hm, so, I might be a bit wrong on the details, but the gist of it is, this airship lifts via two methods - one, the balloon, and two, the engines."/>
+    <Jenna line="Y'see, unlike most airships, this one is heavier than air, which means it can't sustain itself with just the balloon. It needs the engines for that extra 'oomph'. That's why the ship can get so much bigger and grander."/>
+    <Elliot line="Huh, makes sense. So it needs more fuel?"/>
+    <Jenna line="Yeah, I guess you could say that. It's a bit unfortunate, but at the end of the day, progress is progress, I guess."/>
+</Conversation>

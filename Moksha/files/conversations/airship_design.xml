@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Paul/>
+    <Magnus/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Paul line="Excuse me."/>
+    <Magnus line="Hm? Oh, hello, Herr Davis. D-Do you search something here?"/>
+    <Paul line="No, I want to speak to ya. You weren't in your room, so I looked here."/>
+    <Magnus line="Oh, yes, here's where I spend most of my time... But what did you want to discuss?"/>
+    <Paul line="You were the one who took over the airship's design, innit? After Mr. Morgan left the company?"/>
+    <Magnus line="Yes, that's correct."/>
+    <Paul line="Alright, great. Tell me more about what you did, then. How did you manage to cram in so much stuff here without bloating it out of the skies?"/>
+    <Magnus line="Ah, well, aside from some small architectural changes, my most significant contribution was probably a shift to heavier-than-air design."/>
+    <Narrator line="Paul steps back."/>
+    <Paul line="Heavier-than-air..? Elaborate."/>
+    <Magnus line="W-Well, former attempts at airships all tried to rely exclusively on buoyancy to provide their lift. This ended up constraining the ship's size and capacity a bit too much..."/>
+    <Paul line="Okay, so how did you solve it?"/>
+    <Magnus line="Well, steam power. With some thermodynamics techniques, we managed to create an engine that provides upwards momentum, and as such, supports the weight of the ship."/>
+    <Narrator line="For a moment, Paul remains silent."/>
+    <Magnus line="Herr Davis? S-Sir?"/>
+    <Paul line="You... Instead of finding a solution, ya just... thermodynamic-ed it?"/>
+    <Magnus line="Uh, well, an engineer must use every tool in their toolbox, yes?"/>
+    <Paul line="No..! I, this, urgh... I can't believe you've done this. You ruined it."/>
+    <Magnus line="G'day, Hilda, mate. Everything done?"/>
+    <Paul line="W-Was? Uh, sorry, what?"/>
+    <Magnus line="N-Nevermind. I've heard enough."/>
+    <Narrator line="With a sudden turn, Paul leaves the room, distraught. Magnus, in turn, is left wondering the meaning of that exchange."/>
+</Conversation>

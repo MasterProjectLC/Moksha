@@ -18,13 +18,12 @@ void Tom::setupActionsParticular() {
 
 	goap_set_pre(&ap, "work", "in_NorthEngines", true);
 	goap_set_pst(&ap, "work", "working", true);
+	addTrackableNull("work", "working", "NorthEngines");
 }
 
 
 void Tom::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "in_ControlRoom", false);
-	goap_worldstate_set(&ap, &world, "in_NorthEngines", true);
-	goap_worldstate_set(&ap, &world, "working", false);
+
 }
 
 
@@ -41,10 +40,6 @@ void Tom::setupProcessParticular(string currentProcess) {
 }
 
 int Tom::decideActionParticular(string action) {
-	if (action == "work") {
-		actionArgs.push_back("working.");
-		return acaoNula;
-	}
 	if (action == "enter_CrewArea") {
 		actionArgs.push_back("open");
 		actionArgs.push_back("Crew Door");

@@ -13,8 +13,7 @@ void Baxter::setupActionsParticular() {
 
 	setupCrewArea();
 	addTrackableRoom("BlakewellRoom");
-	goap_set_pre(&ap, "prepare", "in_BlakewellRoom", true);
-	goap_set_pst(&ap, "prepare", "preparing", true);
+	addTrackableNull("prepare", "preparing", "BlakewellRoom");
 
 	addTrackableRoom("ViewingLobby");
 	addTrackableConvo("baxter_facade", "BlakewellRoom");
@@ -26,7 +25,6 @@ void Baxter::setupActionsParticular() {
 
 
 void Baxter::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "preparing", false);
 	goap_worldstate_set(&ap, &world, "medusa", false);
 }
 
@@ -47,10 +45,6 @@ void Baxter::setupProcessParticular(string currentProcess) {
 
 
 int Baxter::decideActionParticular(string action) {
-	if (action == "prepare") {
-		actionArgs.push_back("preparing speeches.");
-		return acaoNula;
-	}
 	if (action == "enter_CrewArea") {
 		actionArgs.push_back("open");
 		actionArgs.push_back("Crew Door");

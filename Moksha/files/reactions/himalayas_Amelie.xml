@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Amelie/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Amelie line="Oh, these mountains... Yes, I actually know them quite well."/>
+    <Amelie line="Around 20 years ago, I participated in a research expedition here. The things I saw..."/>
+    <Narrator line="She pauses. It's as if the events are unfolding right before her eyes."/>
+    <Amelie line="Amelie: ...they were truly... unforgettable."/>
+    <Elliot line="Would you be willing to tell me a bit more about them?"/>
+    <Amelie line="Honestly... I would. Perhaps I even will. But now, under the current circumstances, you would probably not believe me. Perhaps given different conditions, I might tell it to you, another time."/>
+</Conversation>

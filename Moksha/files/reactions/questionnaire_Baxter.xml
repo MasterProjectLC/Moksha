@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Baxter line="Ah, yes, the infamous questionnaire. If you were wondering it, no, I wasn't the one who created it - I put up Flettner to do it."/>
+    <Elliot line="If I may ask, sir, why did you create such a test in the first place?"/>
+    <Baxter line="Aside from filtering out the tens or even hundreds of journalists trying to enter the airship? Well, one could say it was a combination of a publicity stunt and a declaration of our target market."/>
+    <Baxter line="By announcing the questionnaire, we made sure that everyone who would be interested in our invention actually heard about it."/>
+    <Elliot line="But only three people passed the test?"/>
+    <Baxter line="Maybourne, Renard and Bhattacharya, you mean? No, they were not the only ones. More guests are expected further down in the voyage."/>
+    <Elliot line="Oh, I see."/>
+</Conversation>

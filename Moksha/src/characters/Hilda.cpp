@@ -17,18 +17,14 @@ void Hilda::setupActionsParticular() {
 	goap_set_pre(&ap, "move_CrewQuarters", "in_CrewArea", false);
 	addTrackableRoom("CrewQuarters");
 
-	goap_set_pre(&ap, "pilot", "in_Navigation", true);
-	goap_set_pst(&ap, "pilot", "piloting", true);
+	addTrackableNull("pilot", "piloting", "Navigation");
 	addTrackableConvo("hilda_speech", "NorthEngines");
 	addTrackableConvo("hilda_sleep", "Navigation");
-	goap_set_pre(&ap, "sleep", "in_CrewQuarters", true);
-	goap_set_pst(&ap, "sleep", "sleeping", true);
+	addTrackableNull("sleep", "sleeping", "CrewQuarters");
 }
 
 
 void Hilda::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "sleeping", false);
-	goap_worldstate_set(&ap, &world, "piloting", false);
 	goap_worldstate_set(&ap, &world, "in_CrewArea", false);
 }
 
@@ -41,16 +37,6 @@ void Hilda::setupObjectivesParticular() {
 
 
 int Hilda::decideActionParticular(string action) {
-	if (action == "pilot") {
-		actionArgs.push_back("piloting.");
-		return acaoNula;
-	}
-
-	if (action == "sleep") {
-		actionArgs.push_back("sleeping.");
-		return acaoNula;
-	}
-
 	if (action == "enter_CrewArea") {
 		actionArgs.push_back("open");
 		actionArgs.push_back("Crew Door");

@@ -13,21 +13,19 @@ void Renard::setupActionsParticular() {
 
 	goap_set_pre(&ap, "write", "in_RenardRoom", true);
 	goap_set_pst(&ap, "write", "writing", true);
+	addTrackableNull("write", "writing", "RenardRoom");
 
-	goap_set_pre(&ap, "take_photos", "in_ViewingLobby", true);
-	goap_set_pst(&ap, "take_photos", "taking_photos", true);
+	addTrackableNull("take_photos", "taking_photos", "taking photos", "ViewingLobby");
 	photos_taken = 0;
 
 	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
 	goap_set_pst(&ap, "hear_presentation", "medusa", true);
+	addTrackableNull("hear_presentation", "medusa", "waiting", "ViewingLobby");
 }
 
 
 void Renard::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "in_RenardRoom", true);
-	goap_worldstate_set(&ap, &world, "writing", false);
-	goap_worldstate_set(&ap, &world, "taking_photos", false);
-	goap_worldstate_set(&ap, &world, "medusa", false);
+
 }
 
 
@@ -48,21 +46,5 @@ void Renard::updateWorldExtra() {
 
 
 int Renard::decideActionParticular(string action) {
-	if (action == "write") {
-		actionArgs.push_back("writing.");
-		return acaoNula;
-	}
-
-	if (action == "take_photos") {
-		photos_taken++;
-		actionArgs.push_back("taking photos.");
-		return acaoNula;
-	}
-
-	if (action == "hear_presentation") {
-		actionArgs.push_back("waiting.");
-		return acaoNula;
-	}
-
 	return descansar;
 }

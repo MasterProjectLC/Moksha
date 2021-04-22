@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Baxter line="..Yes? What did you say?"/>
+    <Elliot line="The Medusa, sir. Could you talk more about it?"/>
+    <Baxter line="Ah, right. Well, Dr. Flettner would be better equipped to discuss its technical details, but if you'd like more information for your report, I'll indulge."/>
+    <Baxter line="Hm, let's see… The Medusa is an aerial vessel capable of carrying up to 200 thousand kilograms. While designed to be a passenger cruiser, it is also equipped to function as a cargo ship or even a military unit."/>
+    <Baxter line="Its current price tag hangs around 2 million pounds. A passenger ticket, in turn, is estimated to cost around 360 pounds."/>
+    <Baxter line="As such, we're marketing it towards mostly aeronautical enthusiasts, high society members and great entrepreneurs. Is there anything else you need?"/>
+    <Elliot line="No, that will be all, sir. Thank you."/>
+</Conversation>

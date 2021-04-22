@@ -7,6 +7,7 @@
 #include "dictionary.h"
 #include "../libs/GPGOAP/goap.h"
 #include "../libs/GPGOAP/astar.h"  // ASTER GASTER WOWOWOWOW
+#include <functional>
 
 using namespace std;
 
@@ -20,6 +21,7 @@ protected:
 	set<string> trackablePeople;
 	set<string*> trackableRooms;
 	set<string*> trackableConvos;
+	map<string, tuple<string, string>> trackableNulls;
 	vector<string*> conditionNames;
 
 	queue<Room*> path;
@@ -47,10 +49,15 @@ protected:
 		return mapp->optimalPath(inicio, alvo).size();
 	};
 
+	string* addTrackable(string trackable, set<string*>* trackableSet, string action_name, string condition_name);
+	string* addTrackable(string trackable, set<string>* trackableSet, string action_name, string condition_name);
+	string* addTrackableHelper(string action_name, string condition_name);
 	void addTrackableRoom(string room);
 	void addTrackablePeople(string person);
 	void addTrackableConvo(string convo);
 	void addTrackableConvo(string convo, string room);
+	void addTrackableNull(string action, string condition, string room) { addTrackableNull(action, condition, condition, room); }
+	void addTrackableNull(string action, string condition, string description, string room);
 
 	void advancePath();
 	void move(string room) override;

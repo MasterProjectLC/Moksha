@@ -53,40 +53,50 @@ void NPC::clear() {
 }
 
 
+// TRACKERS =====================================================
+
+string* NPC::addTrackable(string trackable, set<string>* trackableSet, string action_name, string condition_name) {
+	trackableSet->insert(trackable);
+	return addTrackableHelper(action_name, condition_name);
+}
+
+string* NPC::addTrackable(string trackable, set<string*>* trackableSet, string action_name, string condition_name) {
+	string* new_trackable = new string(trackable);
+	trackableSet->insert(new_trackable);
+	return addTrackableHelper(action_name, condition_name);
+}
+
+string* NPC::addTrackableHelper(string action_name, string condition_name) {
+	string* new_action = new string(action_name);
+	addedActions.insert(new_action);
+
+	string* new_condition;
+	if (condition_name.empty())
+		new_condition = new_action;
+	else {
+		new_condition = new string(condition_name);
+		addedConditions.insert(new_condition);
+	}
+
+	goap_set_pst(&ap, new_action->c_str(), new_condition->c_str(), true);
+	return new_action;
+}
+
+
 void NPC::addTrackableRoom(string room) {
-	string* novo = new string(room);
-	trackableRooms.insert(novo);
-	string* move_novo = new string("move_" + *novo);
-	string* in_novo = new string("in_" + *novo);
-	addedActions.insert(move_novo);
-	addedConditions.insert(in_novo);
-	goap_set_pst(&ap, move_novo->c_str(), in_novo->c_str(), true);
+	addTrackable(room, &trackableRooms, "move_" + room, "in_" + room);
 }
 
 void NPC::addTrackablePeople(string person) {
-	string* novo = new string(person);
-	trackablePeople.insert(person);
-	string* search_novo = new string("search_" + *novo);
-	string* with_novo = new string("with_" + *novo);
-	addedActions.insert(search_novo);
-	addedConditions.insert(with_novo);
-	goap_set_pst(&ap, search_novo->c_str(), with_novo->c_str(), true);
+	addTrackable(person, &trackablePeople, "search_" + person, "with_" + person);
 }
 
 void NPC::addTrackableConvo(string convo) {
-	string* novo = new string(convo);
-	trackableConvos.insert(novo);
-	string* convo_novo = new string("convo_" + *novo);
-	addedActions.insert(convo_novo);
-	goap_set_pst(&ap, convo_novo->c_str(), convo_novo->c_str(), true);
+	addTrackable(convo, &trackableConvos, "convo_" + convo, "");
 }
 
 void NPC::addTrackableConvo(string convo, string room) {
-	string* novo = new string(convo);
-	trackableConvos.insert(novo);
-	string* convo_novo = new string("convo_" + *novo);
-	addedActions.insert(convo_novo);
-	goap_set_pst(&ap, convo_novo->c_str(), convo_novo->c_str(), true);
+	string* convo_novo = addTrackable(convo, &trackableConvos, "convo_" + convo, "");
 
 	set<string*>::iterator it;
 	for (it = addedConditions.begin(); it != addedConditions.end(); it++)
@@ -95,6 +105,19 @@ void NPC::addTrackableConvo(string convo, string room) {
 
 	if (it != addedConditions.end())
 		goap_set_pre(&ap, convo_novo->c_str(), (*it)->c_str(), true);
+}
+
+void NPC::addTrackableNull(string action, string condition, string description, string room) {
+	string* new_action = addTrackableHelper(action, condition);
+	trackableNulls[action] = tuple<string, string>(condition, description);
+
+	set<string*>::iterator it;
+	for (it = addedConditions.begin(); it != addedConditions.end(); it++)
+		if (**it == ("in_" + room))
+			break;
+
+	if (it != addedConditions.end())
+		goap_set_pre(&ap, new_action->c_str(), (*it)->c_str(), true);
 }
 
 // PATHFINDING ==========================================
@@ -240,6 +263,8 @@ void NPC::setupWorld() {
 		setCondition("with_" + *it, false);
 	for (set<string*>::iterator it = trackableConvos.begin(); it != trackableConvos.end(); it++)
 		setCondition("convo_" + **it, false);
+	for (map<string, tuple<string, string>>::iterator it = trackableNulls.begin(); it != trackableNulls.end(); it++)
+		setCondition(get<0>((*it).second), false);
 	setupWorldParticular();
 	updateWorldVariables();
 
@@ -416,10 +441,17 @@ int NPC::decideAction() {
 			actionArgs.push_back(path.front()->getCodename());
 			currentAction = mover;
 		}
+
 		// Convo
 		else if (action.substr(0, 6).compare("convo_") == 0) {
 			actionArgs.push_back(action.substr(6, 1000));
 			currentAction = conversar;
+
+		// Null action
+		} else if (trackableNulls.count(action)) {
+			actionArgs.push_back(get<1>(trackableNulls[action]) + ".");
+			currentAction = acaoNula;
+
 		// Other actions
 		} else 
 			currentAction = decideActionParticular(action);

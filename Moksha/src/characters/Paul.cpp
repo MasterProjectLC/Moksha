@@ -12,16 +12,16 @@ void Paul::setupActionsParticular() {
 	addTrackableRoom("ViewingLobby");
 	setupCrewArea();
 
-	goap_set_pre(&ap, "plan", "in_RenardRoom", true);
-	goap_set_pst(&ap, "plan", "planning", true);
+	addTrackableNull("plan", "planning", "RenardRoom");
 
 	goap_set_pre(&ap, "hear_presentation", "in_ViewingLobby", true);
 	goap_set_pst(&ap, "hear_presentation", "medusa", true);
+	addTrackableNull("hear_presentation", "medusa", "waiting", "ViewingLobby");
 }
 
 
 void Paul::setupWorldParticular() {
-	goap_worldstate_set(&ap, &world, "planning", false);
+
 }
 
 
@@ -39,16 +39,6 @@ void Paul::setupProcessParticular(string currentProcess) {
 }
 
 int Paul::decideActionParticular(string action) {
-	if (action == "plan") {
-		actionArgs.push_back("planning.");
-		return acaoNula;
-	}
-
-	if (action == "hear_presentation") {
-		actionArgs.push_back("waiting.");
-		return acaoNula;
-	}
-
 	if (action == "enter_CrewArea") {
 		actionArgs.push_back("open");
 		actionArgs.push_back("Crew Door");
