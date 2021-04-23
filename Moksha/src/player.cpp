@@ -196,11 +196,13 @@ void Player::receiveArgs(vector<string> args) {
 void Player::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
 	if (topic == "busy")
 		printText(sender + " is busy.");
-	else if (topic == "talking")
+	else if (topic == "talking") {
 		if (mindTheory.count(sender) || mindTheory[sender].count(topic))
 			printText(sender + " has begun talking.");
-		else
+		else if (phrase == "F")
 			printText(sender + " has begun talking. To listen to the conversation, type 'listen " + sender + "'.");
+
+	}
 	else if (sender != "")
 		printText(sender + ": " + phrase);
 	else if (phrase != "")

@@ -41,7 +41,7 @@ bool Game::emitEvent(int id, vector<string> args) {
 	switch (id) {
 	case inicio_conversa:
 		if (player->getCurrentRoom()->getCodename() == args[1]) {
-			player->executeReaction("talking", "", args[0], false);
+			player->executeReaction("talking", args[2], args[0], false);
 		}
 		break;
 
@@ -266,7 +266,8 @@ void Game::updateNeighbours(Character* character) {
 void Game::addConversation(string convoName, Character* starter, bool isReaction) {
 	Conversation* convo = new Conversation(convoName, starter->getCurrentRoom()->getCodename(), characters, isReaction);
 	conversations.push_back(convo);
-	emitEvent(inicio_conversa, vector<string>({ starter->getName(), convo->getRoom() }));
+	string s = convo->participates(findCharacter("Elliot")) ? "T" : "F";
+	emitEvent(inicio_conversa, vector<string>({ starter->getName(), convo->getRoom(), s }));
 	// Preemptively lock everyone
 	vector<Character*> participants = convo->getParticipants();
 	for (vector<Character*>::iterator it = participants.begin(); it != participants.end(); it++) {
