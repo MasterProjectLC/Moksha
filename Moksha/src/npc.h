@@ -38,15 +38,15 @@ protected:
 	int planCost = 0;
 	int currentStep = 0;
 
-	Dictionary<string> lastSeen;
+	map<string, vector<Room*>> lastSeen;
 
-	queue<Room*> findPath(Room* salaInicial, Room* salaAlvo);
-	queue<Room*> findPath(Room* salaAlvo);
+	queue<Room*> findPath(Room* initialRoom, Room* targetRoom);
+	queue<Room*> findPath(Room* targetRoom);
 	queue<Room*> search();
-	queue<Room*> search(Room* salaPista);
+	queue<Room*> search(vector<Room*> breadcrumbs);
 
-	int pathSize(Room* inicio, Room* alvo) {
-		return mapp->optimalPath(inicio, alvo).size();
+	int pathSize(Room* initial, Room* target) {
+		return mapp->optimalPath(initial, target).size();
 	};
 
 	string* addTrackable(string trackable, set<string*>* trackableSet, string action_name, string condition_name);
@@ -54,8 +54,9 @@ protected:
 	string* addTrackableHelper(string action_name, string condition_name);
 	void addTrackableRoom(string room);
 	void addTrackablePeople(string person);
+	void addTrackablePeople(string person, vector<string> breadcrumbs);
 	void addTrackableConvo(string convo);
-	void addTrackableConvo(string convo, string room);
+	void addTrackableConvo(string convo, string precondition);
 	void addTrackableNull(string action, string condition, string room) { addTrackableNull(action, condition, condition, room); }
 	void addTrackableNull(string action, string condition, string description, string room);
 
@@ -100,7 +101,7 @@ public:
 	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
 	void checkRoomParticular(vector<Character*> peopleInRoom) override;
 	void seeCharMovingParticular(Character* character, Room* otherRoom, bool entering) override;
-	void setSalaAlvo(Room* nova) { findPath(nova); }
+	void setTargetRoom(Room* newRoom) { findPath(newRoom); }
 
 	void createPlan();
 

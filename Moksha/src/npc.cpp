@@ -91,16 +91,23 @@ void NPC::addTrackablePeople(string person) {
 	addTrackable(person, &trackablePeople, "search_" + person, "with_" + person);
 }
 
+void NPC::addTrackablePeople(string person, vector<string> breadcrumbs) {
+	addTrackablePeople(person);
+	lastSeen[person].push_back(mapp->getRoom(breadcrumbs[0]));
+	for (int i = 0; i < breadcrumbs.size(); i++)
+		lastSeen[person].push_back(mapp->getRoom(breadcrumbs[i]));
+}
+
 void NPC::addTrackableConvo(string convo) {
 	addTrackable(convo, &trackableConvos, "convo_" + convo, "");
 }
 
-void NPC::addTrackableConvo(string convo, string room) {
+void NPC::addTrackableConvo(string convo, string precondition) {
 	string* convo_novo = addTrackable(convo, &trackableConvos, "convo_" + convo, "");
 
 	set<string*>::iterator it;
 	for (it = addedConditions.begin(); it != addedConditions.end(); it++)
-		if (**it == ("in_" + room))
+		if (**it == precondition)
 			break;
 
 	if (it != addedConditions.end())
@@ -131,18 +138,27 @@ queue<Room*> NPC::findPath(Room* initialRoom, Room* targetRoom) {
 };
 
 queue<Room*> NPC::search() {
-	return search(currentRoom);
+	return search(vector<Room*>({ currentRoom }));
 };
 
-queue<Room*> NPC::search(Room* roomClue) {
-	// Path to the clue
+queue<Room*> NPC::search(vector<Room*> breadcrumbs) {
 	queue<Room*> retorno;
 	retorno.push(currentRoom);
-	if (roomClue != currentRoom)
-		retorno = findPath(roomClue);
 
-	// Start search
-	queue<Room*> search = mapp->breadthSearch(roomClue);
+	// Breadcrumbs
+	queue<Room*> breadHunt;
+	for (vector<Room*>::iterator it = breadcrumbs.begin(); it != breadcrumbs.end(); it++) {
+		if (*it != currentRoom) {
+			breadHunt = findPath(retorno.back(), *it);
+			while (!breadHunt.empty()) {
+				retorno.push(breadHunt.front());
+				breadHunt.pop();
+			}
+		}
+	}
+
+	// Breadth search
+	queue<Room*> search = mapp->breadthSearch(retorno.back());
 	while (!search.empty()) {
 		queue<Room*> path = findPath(retorno.back(), search.front());
 		while (!path.empty()) {
@@ -334,20 +350,25 @@ void NPC::updateWorldVariables() {
 	for (set<string*>::iterator it = trackableRooms.begin(); it != trackableRooms.end(); it++)
 		goap_worldstate_set(&ap, &world, ("in_" + **it).c_str(), currentRoom->getCodename() == **it);
 
+	for (map<string, vector<Room*>> ::iterator it = lastSeen.begin(); it != lastSeen.end(); it++)
+		goap_set_cost(&ap, ("search_" + (*it).first).c_str(), pathSize( currentRoom, (*it).second[0] ));
+
 	updateWorldExtra();
 }
 
 
 void NPC::updateLastSeen(string pursueTarget, string room) {
-	string alvoVec[1] = { pursueTarget };
-	lastSeen.addPair(set<string>(alvoVec, alvoVec + 1), room);
+	if (!lastSeen.count(pursueTarget))
+		lastSeen[pursueTarget] = vector<Room*>({ mapp->getRoom(room) });
+	else
+		lastSeen[pursueTarget].insert(lastSeen[pursueTarget].begin(), mapp->getRoom(room));
 
 	if (plansz == 0)
 		return;
 
 	string currentProcess = plan[currentStep];
 	if (currentProcess.compare("search_" + pursueTarget) == 0)
-		path = search(mapp->getRoom( lastSeen.getValues(pursueTarget) ));
+		path = search(lastSeen[pursueTarget]);
 }
 
 
@@ -377,8 +398,8 @@ void NPC::advancePlans() {
 void NPC::setupProcess(string currentProcess) {
 	// Search - Setup path plan
 	if (currentProcess.substr(0, 7).compare("search_") == 0) {
-		if (lastSeen.hasKey(currentProcess.substr(7, 10000)))
-			path = search(mapp->getRoom(lastSeen.getValues(currentProcess.substr(7, 10000))));
+		if (lastSeen.count(currentProcess.substr(7, 10000)))
+			path = search(lastSeen[currentProcess.substr(7, 10000)]);
 		else
 			path = search();
 	}

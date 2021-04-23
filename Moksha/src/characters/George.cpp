@@ -5,22 +5,25 @@ George::George(Map* m) : NPC(m, "George") {
 }
 
 void George::setupActionsParticular() {
-	addTrackablePeople("Jenna");
+	addTrackablePeople("Jenna", vector<string>({ "JennaRoom" }));
 	addTrackablePeople("Willow");
 	addTrackableRoom("Runway");
 	addTrackableRoom("ViewingLobby");
+	addTrackableRoom("JennaRoom");
+	addTrackableRoom("GeorgeRoom");
 	addTrackableRoom("DiningHall");
 
 	addTrackableNull("wait_Runway", "waiting_Runway", "waiting", "Runway");
 	addTrackableNull("have_breakfast", "breakfast", "having breakfast", "DiningHall");
+	addTrackableNull("write", "writing", "GeorgeRoom");
 	addTrackableNull("hear_presentation", "medusa", "waiting", "ViewingLobby");
 
 	addTrackableRoom("GameRoom");
-	addTrackableConvo("begin_card_game", "GameRoom");
+	addTrackableConvo("begin_card_game", "in_GameRoom");
 
+	goap_set_pre(&ap, "search_Jenna", "expecting_Jenna", false);
 	goap_set_pre(&ap, "wait_Jenna", "expecting_Jenna", true);
 	goap_set_pst(&ap, "wait_Jenna", "with_Jenna", true);
-	goap_set_cost(&ap, "wait_Jenna", 1);
 
 	addTrackableNull("play", "playing", "GameRoom");
 	goap_set_pre(&ap, "play", "with_Jenna", true);
@@ -38,9 +41,7 @@ void George::setupObjectivesParticular() {
 
 
 void George::updateWorldExtra() {
-	// describe current world state.
-	if (lastSeen.hasKey("Jenna"))
-		goap_set_cost(&ap, "search_Jenna", pathSize(currentRoom, mapp->getRoom(lastSeen.getValues("Jenna"))));
+	
 }
 
 
@@ -50,12 +51,10 @@ void George::setupProcessParticular(string currentProcess) {
 
 
 int George::decideActionParticular(string action) {
-	if (action == "wait_Jenna" || action == "hear_presentation") {
+	if (action == "wait_Jenna") {
 		actionArgs.push_back("waiting.");
 		return acaoNula;
 	}
-
-
 
 	return descansar;
 }

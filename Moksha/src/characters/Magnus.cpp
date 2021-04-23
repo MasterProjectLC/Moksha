@@ -12,6 +12,9 @@ void Magnus::setupActionsParticular() {
 	addTrackableRoom("MagnusRoom");
 	addTrackableRoom("ViewingLobby");
 
+	addTrackableRoom("AmelieRoom");
+	addTrackableConvo("amelie_magnus", "in_AmelieRoom");
+
 	addTrackableNull("study", "studying", "Study");
 	addTrackableNull("hear_presentation", "medusa", "waiting", "ViewingLobby");
 }

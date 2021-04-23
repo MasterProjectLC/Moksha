@@ -8,13 +8,12 @@ void Santos::setupActionsParticular() {
 	addTrackablePeople("Hilda");
 	addTrackablePeople("Baxter");
 	addTrackablePeople("Tom");
-	addTrackableConvo("santos_gun");
+	addTrackableConvo("santos_gun", "with_Baxter");
 	setupCrewArea();
 
 	goap_set_pre(&ap, "move_Navigation", "in_CrewArea", true);
 	addTrackableRoom("Navigation");
 
-	goap_set_pre(&ap, "convo_santos_gun", "with_Baxter", true);
 	addTrackableNull("pilot", "piloting", "Navigation");
 }
 

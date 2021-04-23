@@ -41,7 +41,7 @@ bool Game::emitEvent(int id, vector<string> args) {
 	switch (id) {
 	case inicio_conversa:
 		if (player->getCurrentRoom()->getCodename() == args[1]) {
-			player->printText(args[0] + " has begun talking.");
+			player->executeReaction("talking", "", args[0], false);
 		}
 		break;
 
@@ -86,6 +86,7 @@ bool Game::emitEvent(int id, vector<string> args) {
 			((NPC*)findCharacter("Renard"))->addGoal(new string("medusa"), true, 50);
 			((NPC*)findCharacter("Amelie"))->addGoal(new string("medusa"), true, 50);
 			((NPC*)findCharacter("George"))->addGoal(new string("medusa"), true, 50);
+			((NPC*)findCharacter("George"))->addGoal(new string("writing"), true, 1);
 			((NPC*)findCharacter("Magnus"))->addGoal(new string("medusa"), true, 50);
 			break;
 
@@ -96,8 +97,8 @@ bool Game::emitEvent(int id, vector<string> args) {
 		case (60+60+30):
 			((NPC*)findCharacter("Paul"))->addGoal(new string("convo_airship_design"), true, 50);
 			((NPC*)findCharacter("George"))->addGoal(new string("convo_begin_card_game"), true, 50);
-			((NPC*)findCharacter("George"))->addGoal(new string("convo_begin_card_game"), true, 1);
-			((NPC*)findCharacter("Jenna"))->addGoal(new string("convo_begin_card_game"), true, 1);
+			((NPC*)findCharacter("George"))->addGoal(new string("playing"), true, 2);
+			((NPC*)findCharacter("Jenna"))->addGoal(new string("playing"), true, 2);
 			break;
 		}
 		break;
@@ -116,8 +117,6 @@ void Game::update(int id) {
 
 void Game::characterAction(Character* character) {
 	int id = character->getNotifyID();
-	Character* target;
-	Room* oldRoom;
 
 	switch (id) {
 	case avancar:

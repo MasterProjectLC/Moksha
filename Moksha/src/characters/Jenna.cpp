@@ -15,21 +15,19 @@ void Jenna::setupActionsParticular() {
 
 	addTrackableConvo("wake_up");
 	goap_set_pre(&ap, "convo_wake_up", "in_JennaRoom", true);
+	goap_set_pre(&ap, "convo_wake_up", "in_JennaRoom", true);
 
 	addTrackableRoom("ViewingLobby");
-	addTrackableConvo("renard_questionnaire", "ViewingLobby");
+	addTrackableConvo("renard_questionnaire", "in_ViewingLobby");
 	addTrackableNull("hear_presentation", "medusa", "waiting", "ViewingLobby");
 
 	addTrackableRoom("Runway");
 	addTrackableNull("wait_Runway", "waiting_Runway", "waiting", "Runway");
 
 	addTrackableRoom("EntranceLounge");
-	addTrackableConvo("jenna_amelie");
-	goap_set_pre(&ap, "convo_jenna_amelie", "in_EntranceLounge", true);
+	addTrackableConvo("jenna_amelie", "in_EntranceLounge");
 
 	addTrackableRoom("GameRoom");
-	addTrackableConvo("begin_card_game", "GameRoom");
-	goap_set_pre(&ap, "convo_wake_up", "in_JennaRoom", true);
 	addTrackableNull("play", "playing", "GameRoom");
 }
 

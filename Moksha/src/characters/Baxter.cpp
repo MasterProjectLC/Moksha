@@ -16,10 +16,10 @@ void Baxter::setupActionsParticular() {
 	addTrackableNull("prepare", "preparing", "BlakewellRoom");
 
 	addTrackableRoom("ViewingLobby");
-	addTrackableConvo("baxter_facade", "BlakewellRoom");
-	addTrackableConvo("presentation", "ViewingLobby");
+	addTrackableConvo("baxter_facade", "in_BlakewellRoom");
+	addTrackableConvo("presentation", "in_ViewingLobby");
 	goap_set_pre(&ap, "convo_presentation", "convo_baxter_facade", true);
-	addTrackableConvo("familiar_faces", "ViewingLobby");
+	addTrackableConvo("familiar_faces", "in_ViewingLobby");
 	goap_set_pre(&ap, "convo_familiar_faces", "convo_presentation", true);
 }
 

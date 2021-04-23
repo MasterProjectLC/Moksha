@@ -7,14 +7,14 @@ Paul::Paul(Map* m) : NPC(m, "Paul") {
 void Paul::setupActionsParticular() {
 	addTrackablePeople("Baxter");
 	addTrackablePeople("Santos");
-	addTrackablePeople("Magnus");
+	addTrackablePeople("Magnus", vector<string>({"MagnusRoom", "Study"}));
 	addTrackableRoom("RenardRoom");
 	addTrackableRoom("ViewingLobby");
 	addTrackableRoom("Study");
 	setupCrewArea();
 
 	addTrackableNull("plan", "planning", "RenardRoom");
-	addTrackableConvo("airship_design", "Study");
+	addTrackableConvo("airship_design", "with_Magnus");
 
 	addTrackableNull("hear_presentation", "medusa", "waiting", "ViewingLobby");
 }
