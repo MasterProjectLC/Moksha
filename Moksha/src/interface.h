@@ -60,6 +60,7 @@ private:
 	string currentLine = "";
 	string savedLine = "";
 	list<string> lines;
+	list<char> lineColors;
 	list<string> sentLines;
 	list<string>::iterator it;
 
@@ -109,7 +110,7 @@ public:
 	void mainInterface();
 	void gameLoop();
 	void clocking();
-	void printLine(string nova);
+	void printLine(string newLine, char newColor);
 
 	enum {notifyArgs, item, rumor, concept};
 

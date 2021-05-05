@@ -98,7 +98,7 @@ public:
 	void receiveEvent(vector<string> args) override;
 
 	int decideAction();
-	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
+	void executeReaction(string topic, string phrase, Character* sender, bool shouldRespond) override;
 	void checkRoomParticular(vector<Character*> peopleInRoom) override;
 	void seeCharMovingParticular(Character* character, Room* otherRoom, bool entering) override;
 	void setTargetRoom(Room* newRoom) { findPath(newRoom); }

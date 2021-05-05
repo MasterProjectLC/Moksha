@@ -19,7 +19,7 @@ protected:
 	set<Room*> checkedRooms;
 	string status;
 
-	int gender;
+	char gender;
 	int strength;
 	int dexterity;
 	Dictionary<bool> statusEffects;
@@ -43,7 +43,7 @@ protected:
 
 public:
 	Character() {}
-	Character(int gender, int strength, int dexterity) {
+	Character(char gender, int strength, int dexterity) {
 		this->gender = gender;
 		this->strength = strength;
 		this->dexterity = dexterity;
@@ -86,7 +86,7 @@ public:
 	void setStatus(string n) { status = n; }
 	void setCurrentRoom(Room *room) { currentRoom = room; }
 	Room* getCurrentRoom() { return currentRoom; }
-	int getGender() { return gender; }
+	char getGender() { return gender; }
 	int getStrength() { return strength; }
 	int getDexterity() { return dexterity; }
 	bool isUnconscious() { return unconscious || dead; }
@@ -112,7 +112,7 @@ public:
 	void broadcastEvent(vector<string> args);
 	virtual void receiveEvent(vector<string> args) {}
 	virtual void receiveCheck(Character* checkTarget) {}
-	virtual void executeReaction(string topic, string phrase, string sender, bool shouldRespond) {}
+	virtual void executeReaction(string topic, string phrase, Character* sender, bool shouldRespond) {}
 	void checkRoom(vector<Character*> peopleInRoom);
 	virtual void checkRoomParticular(vector<Character*> peopleInRoom) {}
 	void seeCharMoving(Character* person, Room* otherRoom, bool entering);

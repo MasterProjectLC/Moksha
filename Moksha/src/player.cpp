@@ -32,10 +32,6 @@ void Player::bootGame() {
 
 // ACTIONS -------------------------------------------------------------------------------------
 
-void Player::printText(string str) {
-	interfacer.printLine(str);
-}
-
 void Player::addAbstract(string name, string codename, string description, char type) {
 	Character::addAbstract(name, codename, description, type);
 	interfacer.setConcepts(inventory.getConcepts());
@@ -58,7 +54,7 @@ void Player::interact(string action, string object) {
 	// Print response
 	string response = getCurrentRoom()->getObject(object)->getResponse(action);
 	if (response.size() > 0) { printText(response); }
-	else { printText(noActionError); }
+	else { printMindText(noActionError); }
 
 	// Take action
 	Character::interact(action, object);
@@ -73,7 +69,7 @@ void Player::say(string topic, string str, vector<Character*> receivers) {
 bool Player::characterCheck(vector<string> args) {
 	if (args.size() > 1 && names.count(args[1]) > 0)
 		return true;
-	printText(noPersonError);
+	printMindText(noPersonError);
 	return false;
 }
 
@@ -89,13 +85,13 @@ void Player::receiveArgs(vector<string> args) {
 		string destination = concatStrings(args, 1);
 		// Room doesn't exist
 		if (!mapp->hasRoomByName(destination)) {
-			printText(noRoomError);
+			printMindText(noRoomError);
 			return;
 		}
 		// Room isn't adjacent
 		destination = mapp->getRoomByName(destination)->getCodename();
 		if (!currentRoom->isRoomAdjacent(destination)) {
-			printText(noRoomError);
+			printMindText(noRoomError);
 			return;
 		}
 		// Move
@@ -108,21 +104,21 @@ void Player::receiveArgs(vector<string> args) {
 	else if (args[0] == "mention") {
 		// Person doesn't exist
 		if (!(args.size() > 2 && names.count(args[1]) > 0)) {
-			printText(noPersonError);
+			printMindText(noPersonError);
 			return;
 		}
 
 		string topic = concatStrings(args, 2);
 		// Person already heard this
 		if (mindTheory.count(topic) && mindTheory.at(topic).find(args[1]) != mindTheory.at(topic).end()) {
-			printText(mindError);
+			printMindText(mindError);
 			return;
 		}
 
 		Concept* info = inventory.getInfoByName(topic);
 		// I don't have this info/item
 		if (info == NULL)
-			printText(noItemError);
+			printMindText(noItemError);
 		// Mention
 		else {
 			mention(info->getCodename(), args[1]);
@@ -164,19 +160,19 @@ void Player::receiveArgs(vector<string> args) {
 	if (currentAction == nulo) {	// Hasn't gotten an action yet
 		// Not a valid action
 		if (args.size() < 2) {
-			printText(noActionError);
+			printMindText(noActionError);
 			return;
 		}
 		string objectName = concatStrings(args, 1);
 
 		// Not an object
 		if ( !getCurrentRoom()->hasObject(objectName) ) {
-			printText(noObjectError);
+			printMindText(noObjectError);
 			return;
 		}
 		// This object doesn't support this action
 		else if (getCurrentRoom()->getObject(objectName)->getResponse(args[0]).size() <= 0) {
-			printText(noActionError);
+			printMindText(noActionError);
 			return;
 		}
 
@@ -193,20 +189,27 @@ void Player::receiveArgs(vector<string> args) {
 
 // REACTIONS -----------------------------------------------------------------------
 
-void Player::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
+void Player::executeReaction(string topic, string phrase, Character* senderC, bool shouldRespond) {
+	string sender = senderC != NULL ? senderC->getName() : "";
+
 	if (topic == "busy")
-		printText(sender + " is busy.");
+		printGameText(sender + " is busy.");
 	else if (topic == "talking") {
 		if (mindTheory.count(sender) || mindTheory[sender].count(topic))
-			printText(sender + " has begun talking.");
+			printGameText(sender + " has begun talking.");
 		else if (phrase == "F")
-			printText(sender + " has begun talking. To listen to the conversation, type 'listen " + sender + "'.");
+			printGameText(sender + " has begun talking. To listen to the conversation, type 'listen " + sender + "'.");
 
 	}
 	else if (sender != "")
-		printText(sender + ": " + phrase);
+		if (senderC == this)
+			printMindText(sender + ": " + phrase);
+		else if (senderC->getGender() == 'M')
+			printMaleText(sender + ": " + phrase);
+		else
+			printFemaleText(sender + ": " + phrase);
 	else if (phrase != "")
-		printText(phrase);
+		printNarratorText(phrase);
 
 	if (topic != "") {
 		addToMind(topic, sender);
@@ -215,25 +218,25 @@ void Player::executeReaction(string topic, string phrase, string sender, bool sh
 
 
 void Player::receiveCheck(Character* checkTarget) {
-	printText( *((NPC*)checkTarget)->getDescription() );
+	printMindText( *((NPC*)checkTarget)->getDescription() );
 }
 
 
 void Player::checkRoomParticular(vector<Character*> charsInRoom) {
 	// Adjacent rooms
-	printText("Current room: " + getCurrentRoom()->getName() + "\n" + getCurrentRoom()->getInitialText() + "\nAdjacent rooms:");
+	printGameText("Current room: " + getCurrentRoom()->getName() + "\n" + getCurrentRoom()->getInitialText() + "\nAdjacent rooms:");
 	for (int i = 0; i < getCurrentRoom()->getAdjacentRoomCount(); i++)
-		printText(mapp->getRoom(getCurrentRoom()->getAdjacentRoomCodename(i))->getName());
+		printGameText(mapp->getRoom(getCurrentRoom()->getAdjacentRoomCodename(i))->getName());
 
 	// Objects in the room
-	printText("Objects in the room: ");
+	printGameText("Objects in the room: ");
 	vector<Object*> objects = getCurrentRoom()->getObjects();
 	if (objects.size() == 0)
-		printText("There's no object here.");
+		printGameText("There's no object here.");
 	else {
 		for (int i = 0; i < objects.size(); i++) {
 			if (objects[i]->isVisible())
-				printText(objects[i]->getName());
+				printGameText(objects[i]->getName());
 		}
 	}
 	printNeighbours();
@@ -247,9 +250,9 @@ void Player::updateRoom(vector<Character*> charsInRoom) {
 
 void Player::seeCharMovingParticular(Character* person, Room* otherRoom, bool entering) {
 	if (entering)
-		printText(person->getName() + " entered the room, coming from the " + otherRoom->getName());
+		printGameText(person->getName() + " entered the room, coming from the " + otherRoom->getName());
 	else
-		printText(person->getName() + " left the room, going to the " + otherRoom->getName());
+		printGameText(person->getName() + " left the room, going to the " + otherRoom->getName());
 }
 
 
@@ -258,11 +261,11 @@ void Player::printNeighbours() {
 	for (int i = 0; i < neighbours.size(); i++) {
 		if (neighbours[i]->getName() != name)
 			if (neighbours[i]->isDead())
-				printText("Oh, what the...?! " + neighbours[i]->getName() + " is dead!");
+				printGameText(neighbours[i]->getName() + " is dead!");
 			else if (neighbours[i]->isUnconscious())
-				printText("Oh, " + neighbours[i]->getName() + " is unconscious here!");
+				printGameText(neighbours[i]->getName() + " is unconscious here!");
 			else
-				printText(neighbours[i]->getName() + " is in the room, " + neighbours[i]->getStatus());
+				printGameText(neighbours[i]->getName() + " is in the room, " + neighbours[i]->getStatus());
 	}
 }
 

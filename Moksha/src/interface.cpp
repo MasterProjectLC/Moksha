@@ -216,10 +216,12 @@ void Interface::consoleInterface() {
 
 	// Lines
 	int sobre = 1;
-	for (it = lines.begin(); it != lines.end(); it++, sobre++) {
+	list<char>::iterator cit;
+	for (cit = lineColors.begin(), it = lines.begin(); it != lines.end(); it++, cit++, sobre++) {
 		s = *it;
 		sobre += s.size() / (screenWidth - separator);
 		graphics.drawString(separator + 1, screenHeight - sobre - 1, s);
+		graphics.paint(separator + 1, screenHeight - sobre - 1, s.length(), *cit);
 	}
 }
 
@@ -227,7 +229,7 @@ void Interface::underlineInterface(bool n) {
 	underline = n;
 	if (underline) {
 		if (pointer < currentLine.size()) {
-			graphics.paintBG(separator + pointer + 1, screenHeight - 1, 1, 'c');
+			graphics.paintBG(separator + pointer + 1, screenHeight - 1, 1, 'y');
 			graphics.paint(separator + pointer + 1, screenHeight - 1, 1, 'n');
 		}
 		else
@@ -236,7 +238,7 @@ void Interface::underlineInterface(bool n) {
 	else
 		if (pointer < currentLine.size()) {
 			graphics.paintBG(separator + pointer + 1, screenHeight - 1, 1, 'n');
-			graphics.paint(separator + pointer + 1, screenHeight - 1, 1, 'c');
+			graphics.paint(separator + pointer + 1, screenHeight - 1, 1, 'y');
 		}
 		else
 			graphics.draw(separator + pointer + 1, screenHeight - 1, ' ');
@@ -468,7 +470,7 @@ vector<string> Interface::riseLine() {
 	if (sentLines.size() > screenHeight - 1)
 		sentLines.pop_back();
 
-	printLine(currentLine);
+	printLine(currentLine, 'y');
 	savedLine = "";
 	setVPointer(0);
 	setPointer(0);
@@ -476,7 +478,8 @@ vector<string> Interface::riseLine() {
 }
 
 
-void Interface::printLine(string newLine) {
+
+void Interface::printLine(string newLine, char newColor) {
 	vector<string> novaCortada = splitString(newLine, '\n');
 	int consoleSize = screenWidth - separator - 2;
 
@@ -491,8 +494,11 @@ void Interface::printLine(string newLine) {
 		}
 	}
 	for (int i = 0; i < novaCortada.size(); i++) {
+		lineColors.push_front(newColor);
 		lines.push_front(novaCortada[i]);
-		if (lines.size() > screenHeight - 1)
+		if (lines.size() > screenHeight - 1) {
 			lines.pop_back();
+			lineColors.pop_back();
+		}
 	}
 }

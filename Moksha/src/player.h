@@ -40,7 +40,7 @@ public:
 	void removeItem(string name) override;
 
 	void seeCharMovingParticular(Character* person, Room* otherRoom, bool entering) override;
-	void executeReaction(string topic, string phrase, string sender, bool shouldRespond) override;
+	void executeReaction(string topic, string phrase, Character* sender, bool shouldRespond) override;
 	void receiveCheck(Character* checkTarget) override;
 	void checkRoomParticular(vector<Character*> peopleInRoom) override;
 	void updateRoom(vector<Character*> peopleInRoom);
@@ -52,5 +52,11 @@ public:
 	};
 
 	void rewind();
-	void printText(string str);
+	void printText(string str) { printText(str, 'w'); }
+	void printMaleText(string str) { printText(str, 'c'); }
+	void printFemaleText(string str) { printText(str, 'r'); }
+	void printGameText(string str) { printText(str, 'w'); }
+	void printMindText(string str) { printText(str, 'y'); }
+	void printNarratorText(string str) { printText(str, 'p'); }
+	void printText(string str, char color) { interfacer.printLine(str, color); }
 };

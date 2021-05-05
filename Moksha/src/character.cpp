@@ -95,7 +95,7 @@ void Character::mention(string obj, string receiver) {
 void Character::mention(string obj, set<string> receivers) {
 	for (vector<Character*>::iterator it = neighbours.begin(); it != neighbours.end(); it++)
 		if (receivers.count((*it)->getName()))
-			(*it)->executeReaction(obj, "", name, true);
+			(*it)->executeReaction(obj, "", this, true);
 }
 
 void Character::attack(string targetName) {
@@ -152,7 +152,7 @@ void Character::scan() {
 void Character::say(string topic, string str, vector<Character*> receivers) {
 	for (vector<Character*>::iterator it = receivers.begin(); it != receivers.end(); it++)
 		if ((*it)->getCurrentRoom() == currentRoom)
-			(*it)->executeReaction(topic, str, getName(), false);
+			(*it)->executeReaction(topic, str, this, false);
 }
 
 void Character::rest() {

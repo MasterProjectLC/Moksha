@@ -50,7 +50,7 @@ private:
 	class No;
 
 	void characterAction(Character* character);
-	void broadcastMessage(string topic, string str, string sender, vector<Character*> receivers, Room* room);
+	void broadcastMessage(string topic, string str, Character* sender, vector<Character*> receivers, Room* room);
 	void broadcastEvent(Character* emitter, vector<string> args);
 
 	void update(int id) override;

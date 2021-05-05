@@ -41,13 +41,13 @@ bool Game::emitEvent(int id, vector<string> args) {
 	switch (id) {
 	case inicio_conversa:
 		if (player->getCurrentRoom()->getCodename() == args[1]) {
-			player->executeReaction("talking", args[2], args[0], false);
+			player->executeReaction("talking", args[2], findCharacter(args[0]), false);
 		}
 		break;
 
 	case fim_conversa:
 		if (args[0] == "journalist_rivalry_Jenna" && (NPC*)findCharacter("Baxter") == NULL) {
-			player->printText("Press Enter to continue.");
+			player->printGameText("Press Enter to continue.");
 			conversations.push_back(new Conversation("intro3", "Runway", characters));
 			return false;
 		} else if (args[0] == "intro3") {
@@ -57,7 +57,7 @@ bool Game::emitEvent(int id, vector<string> args) {
 
 	case item_deixado:
 		if (args[0] == "JennaSuitcase") {
-			player->printText("Press Enter to continue.");
+			player->printGameText("Press Enter to continue.");
 			conversations.push_back(new Conversation("intro2", "Runway", characters));
 		}
 		break;
@@ -124,7 +124,7 @@ void Game::characterAction(Character* character) {
 		break;
 
 	case tempo:
-		player->printText(to_string(7 + (time / 60)) + ":" + to_string(time % 60));
+		player->printGameText(to_string(7 + (time / 60)) + ":" + to_string(time % 60));
 		break;
 
 	case atualizar_vizinhos:
@@ -196,7 +196,7 @@ void Game::advanceConversations() {
 		bool convoEnded = (*it)->advance(&receiver);
 		bool invalid = false;
 		if (receiver.speaker == "Narrator")
-			broadcastMessage(receiver.infoAtom, receiver.line, "", (*it)->getParticipants(), map.getRoom((*it)->getRoom()));
+			broadcastMessage(receiver.infoAtom, receiver.line, NULL, (*it)->getParticipants(), map.getRoom((*it)->getRoom()));
 		else
 			findCharacter(receiver.speaker)->sayLine(receiver.infoAtom, receiver.line, (*it)->getParticipants());
 		(*it)->clearListeners();
@@ -222,7 +222,7 @@ void Game::receiveArgs(vector<string> args) {
 }
 
 
-void Game::broadcastMessage(string topic, string str, string sender, vector<Character*> receivers, Room* room) {
+void Game::broadcastMessage(string topic, string str, Character* sender, vector<Character*> receivers, Room* room) {
 	for (vector<Character*>::iterator it = receivers.begin(); it != receivers.end(); it++) {
 		if ((*it)->getCurrentRoom() == room) {
 			(*it)->executeReaction(topic, str, sender, false);

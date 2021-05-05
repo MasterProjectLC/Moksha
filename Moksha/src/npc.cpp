@@ -7,7 +7,7 @@ NPC::NPC(Map* m, string name) {
 
 	FileDict fileObject = FileManager::readFromFile("files/characters/" + name + ".txt");
 	this->name = name;
-	this->description = new string(fileObject.getValue("description"));
+	this->description = new string(concatStrings(editVector("", splitString(fileObject.getValue("description"), '@'), "\n"), 0));
 	this->gender = fileObject.getValue("gender")[0];
 	this->strength = stoi(fileObject.getValue("strength"));
 	this->dexterity = stoi(fileObject.getValue("dexterity"));
@@ -195,7 +195,7 @@ void NPC::talk(string convo, bool isReaction) {
 
 // REACTIONS ==========================================
 
-void NPC::executeReaction(string topic, string phrase, string sender, bool shouldRespond) {
+void NPC::executeReaction(string topic, string phrase, Character* sender, bool shouldRespond) {
 	if (isUnconscious())
 		return;
 
