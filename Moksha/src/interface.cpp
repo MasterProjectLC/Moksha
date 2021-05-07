@@ -223,6 +223,7 @@ void Interface::consoleInterface() {
 
 void Interface::inputInterface() {
 	string s = currentLine;
+	graphics.drawArea(separator + 1, screenHeight - 1, screenWidth, screenHeight, ' ');
 	graphics.drawString(separator + 1, screenHeight - 1, s);
 	graphics.paint(separator + 1, screenHeight - 1, s.size() + 1, 'y');
 	underlineInterface(underline);

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <GameData FormatVersion="1">
-	<Game Time="120" Loop="1">
+	<Game Time="195" Loop="1">
 		<Characters>
-			<Elliot Room="EntranceLounge">
+			<Elliot Room="LizRoom">
 				<Inventory />
 				<Rumors />
 				<Concepts>
@@ -11,21 +11,23 @@
 					<himalayas />
 					<questionnaire />
 					<medusa />
+					<niedenberg_family />
 				</Concepts>
 				<Mind />
 			</Elliot>
-			<Jenna Room="JennaRoom">
+			<Jenna Room="GameRoom">
 				<Inventory />
 				<Goals>
 					<a64 dontcare="-65" onetime="true" priority="0" />
+					<a65536 dontcare="-65537" onetime="true" priority="2" />
 				</Goals>
 				<Atoms>
 					<in_DiningHall value="false" />
 					<with_Elliot value="false" />
 					<with_Magnus value="false" />
 					<with_Renard value="false" />
-					<with_George value="false" />
-					<in_JennaRoom value="true" />
+					<with_George value="true" />
+					<in_JennaRoom value="false" />
 					<writing value="false" />
 					<convo_wake_up value="true" />
 					<in_ViewingLobby value="false" />
@@ -35,7 +37,7 @@
 					<waiting_Runway value="false" />
 					<in_EntranceLounge value="false" />
 					<convo_jenna_amelie value="true" />
-					<in_GameRoom value="false" />
+					<in_GameRoom value="true" />
 					<playing value="false" />
 					<himalayas value="true" />
 					<questionnaire value="true" />
@@ -124,26 +126,27 @@
 					<working value="false" />
 				</Atoms>
 			</Tom>
-			<George Room="GeorgeRoom">
+			<George Room="GameRoom">
 				<Inventory />
 				<Goals>
 					<a256 dontcare="-257" onetime="true" priority="0" />
 					<a512 dontcare="-513" onetime="true" priority="1" />
+					<a16384 dontcare="-16385" onetime="true" priority="2" />
 				</Goals>
 				<Atoms>
 					<in_DiningHall value="false" />
-					<with_Jenna value="false" />
+					<with_Jenna value="true" />
 					<with_Willow value="false" />
 					<in_Runway value="false" />
 					<in_ViewingLobby value="false" />
 					<in_JennaRoom value="false" />
-					<in_GeorgeRoom value="true" />
+					<in_GeorgeRoom value="false" />
 					<waiting_Runway value="false" />
 					<breakfast value="false" />
 					<writing value="false" />
 					<medusa value="true" />
-					<in_GameRoom value="false" />
-					<convo_begin_card_game value="false" />
+					<in_GameRoom value="true" />
+					<convo_begin_card_game value="true" />
 					<expecting_Jenna value="true" />
 					<playing value="false" />
 				</Atoms>
@@ -211,7 +214,7 @@
 					<medusa value="true" />
 				</Atoms>
 			</Magnus>
-			<Renard Room="ViewingLobby">
+			<Renard Room="SouthCorridor">
 				<Inventory />
 				<Goals>
 					<a64 dontcare="-65" onetime="true" priority="0" />
@@ -224,11 +227,11 @@
 					<with_Liz value="false" />
 					<with_Paul value="false" />
 					<in_RenardRoom value="false" />
-					<in_ViewingLobby value="true" />
+					<in_ViewingLobby value="false" />
 					<writing value="false" />
 					<taking_photos value="false" />
 					<medusa value="true" />
-					<convo_renard_and_liz value="false" />
+					<convo_renard_and_liz value="true" />
 					<convo_renard_interruption value="false" />
 					<questionnaire value="true" />
 				</Atoms>
@@ -250,7 +253,7 @@
 					<in_CrewCorridor value="false" />
 					<in_CrewArea value="false" />
 					<planning value="false" />
-					<convo_airship_design value="false" />
+					<convo_airship_design value="true" />
 					<medusa value="true" />
 				</Atoms>
 			</Paul>
