@@ -1,0 +1,14 @@
+name:
+Covered painting
+codename:
+CoveredPainting
+visible:
+true
+actions:
+examine|look|see|check|uncover
+examine,look,see,check:
+Some sort of canvas, though it has been covered by a black fabric. Maybe I could uncover it...?
+take,obtain:
+I can't walk around with something like this without attracting attention. Bad idea.
+uncover:
+Huh, there really is a painting behind this!|transform|Painting

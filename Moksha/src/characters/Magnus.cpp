@@ -5,15 +5,16 @@ Magnus::Magnus(Map* m) : NPC(m, "Magnus") {
 }
 
 void Magnus::setupActionsParticular() {
-	addTrackablePeople("Amelie");
+	addTrackablePeople("Amelie", vector<string>({ "AmelieRoom" }));
 	addTrackablePeople("Baxter");
 	addTrackablePeople("Santos");
 	addTrackableRoom("Study");
 	addTrackableRoom("MagnusRoom");
+	addTrackableRoom("AmelieRoom");
 	addTrackableRoom("ViewingLobby");
 
 	addTrackableRoom("AmelieRoom");
-	addTrackableConvo("amelie_magnus", "in_AmelieRoom");
+	addTrackableConvo("amelie_magnus", "with_Amelie");
 
 	addTrackableNull("study", "studying", "Study");
 	addTrackableNull("hear_presentation", "medusa", "waiting", "ViewingLobby");

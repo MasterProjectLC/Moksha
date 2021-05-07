@@ -7,6 +7,8 @@ Object::Object(Dictionary<vector<string>> dict) {
 		actionName.insert(pair<string, int>("peer", espiar));
 		actionName.insert(pair<string, int>("open", abrir));
 		actionName.insert(pair<string, int>("time", tempo));
+		actionName.insert(pair<string, int>("reveal", revelar));
+		actionName.insert(pair<string, int>("transform", transformar));
 	}
 
 	this->dict = dict;

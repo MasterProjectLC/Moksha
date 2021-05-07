@@ -221,104 +221,119 @@ bool Game::loadGame(string loadFile) {
 
 void Game::saveGame(string baseSave) {
 	xml_document doc;
-	if (!doc.load_file(("files/" + baseSave).c_str()))
-		doc.load_file("files/intro.xml");
-	xml_node node = doc.child("GameData").child("Game");
+	try {
+		if (!doc.load_file(("files/" + baseSave).c_str()))
+			doc.load_file("files/intro.xml");
+		xml_node node = doc.child("GameData").child("Game");
 
-	// Save game
-	node.attribute("Time").set_value(to_string(time).c_str());
-	node.attribute("Loop").set_value(to_string(loop).c_str());
+		// Save game
+		node.attribute("Time").set_value(to_string(time).c_str());
+		node.attribute("Loop").set_value(to_string(loop).c_str());
 
-	// Save map
-	node = doc.child("GameData").child("Game").child("Map");
-	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
-		Room* thisRoom = map.getRoom(it->name());
+		// Save map
+		node = doc.child("GameData").child("Game").child("Map");
+		for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
+			Room* thisRoom = map.getRoom(it->name());
 
-		// Save objects
-		xml_node objects = it->child("Objects");
-		objects.remove_children();
-		for (int i = 0; i < thisRoom->getObjectNames().size(); i++) {
-			objects.append_child((*thisRoom->getObjectNames()[i]).c_str());
+			// Save objects
+			xml_node objects = it->child("Objects");
+			objects.remove_children();
+			for (int i = 0; i < thisRoom->getObjectNames().size(); i++) {
+				objects.append_child((*thisRoom->getObjectNames()[i]).c_str());
+			}
 		}
-	}
 
-	// Save characters
-	node = doc.child("GameData").child("Game").child("Characters");
-	for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
-		Character* thisCharacter = findCharacter(it->name());
-		it->attribute("Room").set_value(thisCharacter->getCurrentRoom()->getCodename().c_str());
+		// Save characters
+		node = doc.child("GameData").child("Game").child("Characters");
+		for (xml_node_iterator it = node.begin(); it != node.end(); ++it) {
+			Character* thisCharacter = findCharacter(it->name());
+			it->attribute("Room").set_value(thisCharacter->getCurrentRoom()->getCodename().c_str());
 
-		// Save inventory
-		xml_node inventory = it->child("Inventory");
-		inventory.remove_children();
-		vector<Item*> itemList = thisCharacter->getItems();
-		for (int i = 0; i < itemList.size(); i++)
-			if (!inventory.child(itemList[i]->getCodename().c_str()))
-				inventory.append_child(itemList[i]->getCodename().c_str());
+			// Save inventory
+			xml_node inventory = it->child("Inventory");
+			inventory.remove_children();
+			vector<Item*> itemList = thisCharacter->getItems();
+			for (int i = 0; i < itemList.size(); i++)
+				if (!inventory.child(itemList[i]->getCodename().c_str()))
+					inventory.append_child(itemList[i]->getCodename().c_str());
 
-		// Save NPCs
-		if (thisCharacter != player) {
-			xml_node atoms = it->child("Atoms");
-			vector<string> atomList = ((NPC*)thisCharacter)->getAtomList();
+			// Save NPCs
+			if (thisCharacter != player) {
+				xml_node atoms = it->child("Atoms");
+				vector<string> atomList = ((NPC*)thisCharacter)->getAtomList();
 
-			// Create and/or update each atom
-			for (int i = 0; i < atomList.size(); i++) {
-				if (!atoms.child(atomList[i].c_str())) {
-					atoms.append_child(atomList[i].c_str());
-					atoms.child(atomList[i].c_str()).append_attribute("value");
+				// Create and/or update each atom
+				for (int i = 0; i < atomList.size(); i++) {
+					if (!atoms.child(atomList[i].c_str())) {
+						atoms.append_child(atomList[i].c_str());
+						atoms.child(atomList[i].c_str()).append_attribute("value");
+					}
+					atoms.child(atomList[i].c_str()).attribute("value").set_value(thisCharacter->hasCondition(atomList[i]));
 				}
-				atoms.child(atomList[i].c_str()).attribute("value").set_value(thisCharacter->hasCondition(atomList[i]));
+
+				// Goal list updated
+				xml_node goals = it->child("Goals");
+				vector<Goal> goalList = ((NPC*)thisCharacter)->getGoalList();	// TODO: maybe make this more pointer-oriented
+				goals.remove_children();
+				for (int i = 0; i < goalList.size(); i++) {
+					string nodename = "a" + to_string(goalList[i].goal.values);
+					goals.append_child(nodename.c_str());
+					goals.child(nodename.c_str()).append_attribute("dontcare");
+					goals.child(nodename.c_str()).append_attribute("onetime");
+					goals.child(nodename.c_str()).append_attribute("priority");
+
+					goals.child(nodename.c_str()).attribute("dontcare").set_value(goalList[i].goal.dontcare);
+					goals.child(nodename.c_str()).attribute("onetime").set_value(goalList[i].onetime);
+					goals.child(nodename.c_str()).attribute("priority").set_value(goalList[i].priority);
+				}
 			}
 
-			// Goal list updated
-			xml_node goals = it->child("Goals");
-			vector<Goal> goalList = ((NPC*)thisCharacter)->getGoalList();	// TODO: maybe make this more pointer-oriented
-			goals.remove_children();
-			for (int i = 0; i < goalList.size(); i++) {
-				string nodename = "a" + to_string(goalList[i].goal.values);
-				goals.append_child(nodename.c_str());
-				goals.child(nodename.c_str()).append_attribute("dontcare");
-				goals.child(nodename.c_str()).append_attribute("onetime");
-				goals.child(nodename.c_str()).append_attribute("priority");
+			// Save Player
+			else {
+				// Create and/or update each concept
+				xml_node rumors = it->child("Rumors");
+				vector<Concept*> rumorList = thisCharacter->getRumors();
+				for (int i = 0; i < rumorList.size(); i++)
+					if (!rumors.child(rumorList[i]->getCodename().c_str()))
+						rumors.append_child(rumorList[i]->getCodename().c_str());
 
-				goals.child(nodename.c_str()).attribute("dontcare").set_value(goalList[i].goal.dontcare);
-				goals.child(nodename.c_str()).attribute("onetime").set_value(goalList[i].onetime);
-				goals.child(nodename.c_str()).attribute("priority").set_value(goalList[i].priority);
+				xml_node concepts = it->child("Concepts");
+				vector<Concept*> conceptList = thisCharacter->getConcepts();
+				for (int i = 0; i < conceptList.size(); i++)
+					if (!concepts.child(conceptList[i]->getCodename().c_str()))
+						concepts.append_child(conceptList[i]->getCodename().c_str());
 			}
 		}
 
-		// Save Player
-		else {
-			// Create and/or update each concept
-			xml_node rumors = it->child("Rumors");
-			vector<Concept*> rumorList = thisCharacter->getRumors();
-			for (int i = 0; i < rumorList.size(); i++)
-				if (!rumors.child(rumorList[i]->getCodename().c_str()))
-					rumors.append_child(rumorList[i]->getCodename().c_str());
-
-			xml_node concepts = it->child("Concepts");
-			vector<Concept*> conceptList = thisCharacter->getConcepts();
-			for (int i = 0; i < conceptList.size(); i++)
-				if (!concepts.child(conceptList[i]->getCodename().c_str()))
-					concepts.append_child(conceptList[i]->getCodename().c_str());
+		// Save conversations
+		node = doc.child("GameData").child("Game").child("Conversations");
+		node.remove_children();
+		for (int i = 0; i < conversations.size(); i++) {
+			string convoName = conversations[i]->getName();
+			node.append_child(convoName.c_str());
+			node.child(convoName.c_str()).append_attribute("stage");
+			node.child(convoName.c_str()).append_attribute("room");
+			node.child(convoName.c_str()).append_attribute("is_reaction");
+			node.child(convoName.c_str()).attribute("stage").set_value(conversations[i]->getStage());
+			node.child(convoName.c_str()).attribute("room").set_value(conversations[i]->getRoom().c_str());
+			node.child(convoName.c_str()).attribute("is_reaction").set_value(conversations[i]->getIsReaction());
 		}
 	}
-
-	// Save conversations
-	node = doc.child("GameData").child("Game").child("Conversations");
-	node.remove_children();
-	for (int i = 0; i < conversations.size(); i++) {
-		string convoName = conversations[i]->getName();
-		node.append_child(convoName.c_str());
-		node.child(convoName.c_str()).append_attribute("stage");
-		node.child(convoName.c_str()).append_attribute("room");
-		node.child(convoName.c_str()).append_attribute("is_reaction");
-		node.child(convoName.c_str()).attribute("stage").set_value(conversations[i]->getStage());
-		node.child(convoName.c_str()).attribute("room").set_value(conversations[i]->getRoom().c_str());
-		node.child(convoName.c_str()).attribute("is_reaction").set_value(conversations[i]->getIsReaction());
+	catch (const std::exception& ex) {
+		if (baseSave != "backup.xml") {
+			player->printGameText("Save file corrupted. Restoring latest backup...");
+			saveGame("backup.xml");
+		}
+		return;
 	}
 
 	doc.save_file("files/save.xml");
+	// Backup file
+	if (time % 5 == 0) {
+		std::ifstream  src("files/save.xml"); 
+		std::ofstream  dst("files/backup.xml"); 
+		dst << src.rdbuf();
+	}
 }
 
 

@@ -100,6 +100,31 @@ bool Game::emitEvent(int id, vector<string> args) {
 			((NPC*)findCharacter("George"))->addGoal(new string("playing"), true, 2);
 			((NPC*)findCharacter("Jenna"))->addGoal(new string("playing"), true, 2);
 			break;
+
+		case (60 + 60 + 60):
+			((NPC*)findCharacter("Renard"))->addGoal(new string("convo_renard_and_liz"), true, 51);
+			break;
+
+		case (3*60 + 30):
+			((NPC*)findCharacter("Renard"))->addGoal(new string("convo_renard_interruption"), true, 50);
+			break;
+
+		case (3 * 60 + 45):
+			((NPC*)findCharacter("Liz"))->addGoal(new string("convo_liz_card_game"), true, 50);
+			break;
+
+		case (4 * 60):
+			((NPC*)findCharacter("Magnus"))->addGoal(new string("convo_amelie_magnus"), true, 50);
+			break;
+
+		case (4 * 60 + 15):
+			((NPC*)findCharacter("Hilda"))->addGoal(new string("convo_lunch_switch"), true, 50);
+			((NPC*)findCharacter("Hilda"))->addGoal(new string("piloting"), true, 3);
+			break;
+
+		case (4 * 60 + 45):
+			((NPC*)findCharacter("Liz"))->addGoal(new string("convo_liz_victory"), true, 50);
+			break;
 		}
 		break;
 	}

@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player(Map* map) : Character(M, 5, 7) {
+Player::Player(Map* map) : Character('M', 5, 7) {
 	name = "Elliot";
 	this->mapp = map;
 
@@ -191,15 +191,17 @@ void Player::receiveArgs(vector<string> args) {
 
 void Player::executeReaction(string topic, string phrase, Character* senderC, bool shouldRespond) {
 	string sender = senderC != NULL ? senderC->getName() : "";
+	bool gameMessage = false;
 
-	if (topic == "busy")
+	if (topic == "busy") {
 		printGameText(sender + " is busy.");
-	else if (topic == "talking") {
+		gameMessage = true;
+	} else if (topic == "talking") {
 		if (mindTheory.count(sender) || mindTheory[sender].count(topic))
 			printGameText(sender + " has begun talking.");
 		else if (phrase == "F")
 			printGameText(sender + " has begun talking. To listen to the conversation, type 'listen " + sender + "'.");
-
+		gameMessage = true;
 	}
 	else if (sender != "")
 		if (senderC == this)
@@ -211,8 +213,9 @@ void Player::executeReaction(string topic, string phrase, Character* senderC, bo
 	else if (phrase != "")
 		printNarratorText(phrase);
 
-	if (topic != "") {
+	if (topic != "" && !gameMessage) {
 		addToMind(topic, sender);
+		obtainAbstract(topic);
 	}
 }
 

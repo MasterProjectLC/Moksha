@@ -71,8 +71,10 @@ public:
 	virtual void mention(string obj, string receiver);
 	void attack(string target);
 	void leave(string objectName);
+	void transform(string oldObjectName, string newObjectCodename);
 	void listen(string target);
 	void check(string target);
+	void reveal(string info);
 	void scan();
 	virtual void say(string topic, string str, vector<Character*> receivers);
 	void rest();

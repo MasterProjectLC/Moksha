@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Liz/>
+    <Jenna/>
+    <George/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<George line="...Alright, scoring time. I failed to even cross the Rubicon, so I'm definitely out. It's up to you, ladies."/>
+    <Jenna line="I got exactly 120 points. What about you, Liz?"/>
+    <Narrator line="Liz smiles, satisfied with herself, almost with a sigh of relief."/>
+    <Liz line="154. I got 154!"/>
+	<George line="Uffda, that’s a lot. Well, I guess we have a clear winner, then. Congratulations, Liz."/>
+    <Liz line="Thank you. I'm glad to know I haven't yet lost my touch."/>
+    <Jenna line="Nice. So, wanna play another?"/>
+    <Liz line="I… actually was thinking of going to talk with Santos now. I'm not completely sure, but I think I heard his voice in the other room, back when we were playing."/>
+	<George line="Yep, I heard it too. Wasn't so sure of it, either. Well, you should probably not leave him waiting, then. Go and do your business."/>
+    <Liz line="Thank you, General. I will."/>
+</Conversation>

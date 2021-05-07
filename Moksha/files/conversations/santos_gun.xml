@@ -7,6 +7,8 @@
 </Participants>
 
 <Conversation FormatVersion="1">
+    <Narrator line="Suddenly, Santos barges in unannounced, shouting."/>
+
 	<Santos line="Bax, mate, did you take my gun?">
 		<with_Baxter/>
 		<with_Hilda n="n"/>

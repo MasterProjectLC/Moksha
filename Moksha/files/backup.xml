@@ -1,0 +1,387 @@
+<?xml version="1.0"?>
+<GameData FormatVersion="1">
+	<Game Time="120" Loop="1">
+		<Characters>
+			<Elliot Room="EntranceLounge">
+				<Inventory />
+				<Rumors />
+				<Concepts>
+					<journalist_rivalry />
+					<crewboy />
+					<himalayas />
+					<questionnaire />
+					<medusa />
+				</Concepts>
+				<Mind />
+			</Elliot>
+			<Jenna Room="JennaRoom">
+				<Inventory />
+				<Goals>
+					<a64 dontcare="-65" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Elliot value="false" />
+					<with_Magnus value="false" />
+					<with_Renard value="false" />
+					<with_George value="false" />
+					<in_JennaRoom value="true" />
+					<writing value="false" />
+					<convo_wake_up value="true" />
+					<in_ViewingLobby value="false" />
+					<convo_renard_questionnaire value="true" />
+					<medusa value="true" />
+					<in_Runway value="false" />
+					<waiting_Runway value="false" />
+					<in_EntranceLounge value="false" />
+					<convo_jenna_amelie value="true" />
+					<in_GameRoom value="false" />
+					<playing value="false" />
+					<himalayas value="true" />
+					<questionnaire value="true" />
+				</Atoms>
+			</Jenna>
+			<Baxter Room="BlakewellRoom">
+				<Inventory />
+				<Goals>
+					<a1024 dontcare="-1025" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Paul value="false" />
+					<with_Willow value="true" />
+					<with_Renard value="false" />
+					<with_Santos value="false" />
+					<with_Hilda value="false" />
+					<in_Mezzanine value="false" />
+					<in_CrewCorridor value="false" />
+					<in_CrewArea value="false" />
+					<in_BlakewellRoom value="true" />
+					<preparing value="false" />
+					<in_ViewingLobby value="false" />
+					<convo_baxter_facade value="true" />
+					<convo_presentation value="true" />
+					<convo_familiar_faces value="true" />
+					<medusa value="true" />
+				</Atoms>
+			</Baxter>
+			<Santos Room="Navigation">
+				<Inventory />
+				<Goals>
+					<a512 dontcare="-513" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Hilda value="false" />
+					<with_Baxter value="false" />
+					<with_Tom value="false" />
+					<convo_santos_gun value="false" />
+					<in_Mezzanine value="false" />
+					<in_CrewCorridor value="false" />
+					<in_CrewArea value="false" />
+					<in_Navigation value="true" />
+					<piloting value="false" />
+				</Atoms>
+			</Santos>
+			<Hilda Room="CrewQuarters">
+				<Inventory />
+				<Goals>
+					<a8192 dontcare="-8193" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Santos value="false" />
+					<with_Baxter value="false" />
+					<with_Tom value="false" />
+					<in_Mezzanine value="false" />
+					<in_CrewCorridor value="false" />
+					<in_CrewArea value="false" />
+					<in_Navigation value="false" />
+					<in_NorthEngines value="false" />
+					<in_CrewQuarters value="true" />
+					<piloting value="false" />
+					<convo_hilda_speech value="true" />
+					<convo_hilda_sleep value="true" />
+					<sleeping value="false" />
+					<convo_convo_lunch_switch value="false" />
+				</Atoms>
+			</Hilda>
+			<Tom Room="NorthEngines">
+				<Inventory />
+				<Goals>
+					<a512 dontcare="-513" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Hilda value="false" />
+					<with_Santos value="false" />
+					<in_Mezzanine value="false" />
+					<in_CrewCorridor value="false" />
+					<in_CrewArea value="true" />
+					<in_ControlRoom value="false" />
+					<in_NorthEngines value="true" />
+					<in_CrewQuarters value="false" />
+					<working value="false" />
+				</Atoms>
+			</Tom>
+			<George Room="GeorgeRoom">
+				<Inventory />
+				<Goals>
+					<a256 dontcare="-257" onetime="true" priority="0" />
+					<a512 dontcare="-513" onetime="true" priority="1" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Jenna value="false" />
+					<with_Willow value="false" />
+					<in_Runway value="false" />
+					<in_ViewingLobby value="false" />
+					<in_JennaRoom value="false" />
+					<in_GeorgeRoom value="true" />
+					<waiting_Runway value="false" />
+					<breakfast value="false" />
+					<writing value="false" />
+					<medusa value="true" />
+					<in_GameRoom value="false" />
+					<convo_begin_card_game value="false" />
+					<expecting_Jenna value="true" />
+					<playing value="false" />
+				</Atoms>
+			</George>
+			<Willow Room="BlakewellRoom">
+				<Inventory />
+				<Goals>
+					<a8 dontcare="-9" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Baxter value="true" />
+					<in_BlakewellRoom value="true" />
+					<writing value="false" />
+				</Atoms>
+			</Willow>
+			<Liz Room="LizRoom">
+				<Inventory />
+				<Goals>
+					<a512 dontcare="-513" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Santos value="false" />
+					<with_George value="false" />
+					<in_LizRoom value="true" />
+					<in_SantosRoom value="false" />
+					<in_GameRoom value="false" />
+					<in_GeorgeRoom value="false" />
+					<convo_liz_card_game value="false" />
+					<convo_liz_victory value="false" />
+					<painting value="false" />
+					<playing value="false" />
+				</Atoms>
+			</Liz>
+			<Amelie Room="AmelieRoom">
+				<Inventory />
+				<Goals>
+					<a8 dontcare="-9" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<in_AmelieRoom value="true" />
+					<in_ViewingLobby value="false" />
+					<meditating value="false" />
+					<medusa value="true" />
+				</Atoms>
+			</Amelie>
+			<Magnus Room="Study">
+				<Inventory />
+				<Goals>
+					<a512 dontcare="-513" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Amelie value="false" />
+					<with_Baxter value="false" />
+					<with_Santos value="false" />
+					<in_Study value="true" />
+					<in_MagnusRoom value="false" />
+					<in_AmelieRoom value="false" />
+					<in_ViewingLobby value="false" />
+					<convo_amelie_magnus value="false" />
+					<studying value="false" />
+					<medusa value="true" />
+				</Atoms>
+			</Magnus>
+			<Renard Room="ViewingLobby">
+				<Inventory />
+				<Goals>
+					<a64 dontcare="-65" onetime="true" priority="0" />
+					<a256 dontcare="-257" onetime="true" priority="50" />
+					<a128 dontcare="-129" onetime="true" priority="50" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Willow value="false" />
+					<with_Liz value="false" />
+					<with_Paul value="false" />
+					<in_RenardRoom value="false" />
+					<in_ViewingLobby value="true" />
+					<writing value="false" />
+					<taking_photos value="false" />
+					<medusa value="true" />
+					<convo_renard_and_liz value="false" />
+					<convo_renard_interruption value="false" />
+					<questionnaire value="true" />
+				</Atoms>
+			</Renard>
+			<Paul Room="RenardRoom">
+				<Inventory />
+				<Goals>
+					<a1024 dontcare="-1025" onetime="true" priority="0" />
+				</Goals>
+				<Atoms>
+					<in_DiningHall value="false" />
+					<with_Baxter value="false" />
+					<with_Santos value="false" />
+					<with_Magnus value="false" />
+					<in_RenardRoom value="true" />
+					<in_ViewingLobby value="false" />
+					<in_Study value="false" />
+					<in_Mezzanine value="false" />
+					<in_CrewCorridor value="false" />
+					<in_CrewArea value="false" />
+					<planning value="false" />
+					<convo_airship_design value="false" />
+					<medusa value="true" />
+				</Atoms>
+			</Paul>
+		</Characters>
+		<Map>
+			<ViewingLobby>
+				<Objects />
+			</ViewingLobby>
+			<Deposit>
+				<Objects />
+			</Deposit>
+			<CrewQuarters>
+				<Objects />
+			</CrewQuarters>
+			<NorthCorridor>
+				<Objects>
+					<Clock />
+				</Objects>
+			</NorthCorridor>
+			<SouthCorridor>
+				<Objects>
+					<Clock />
+				</Objects>
+			</SouthCorridor>
+			<NorthBathroom>
+				<Objects />
+			</NorthBathroom>
+			<SouthBathroom>
+				<Objects />
+			</SouthBathroom>
+			<DiningHall>
+				<Objects>
+					<Table />
+				</Objects>
+			</DiningHall>
+			<EntranceLounge>
+				<Objects />
+			</EntranceLounge>
+			<AmelieRoom>
+				<Objects />
+			</AmelieRoom>
+			<JennaRoom>
+				<Objects />
+			</JennaRoom>
+			<GeorgeRoom>
+				<Objects />
+			</GeorgeRoom>
+			<LizRoom>
+				<Objects>
+					<CoveredPainting />
+					<Crest />
+				</Objects>
+			</LizRoom>
+			<MagnusRoom>
+				<Objects />
+			</MagnusRoom>
+			<RenardRoom>
+				<Objects />
+			</RenardRoom>
+			<ViewingDeck>
+				<Objects />
+			</ViewingDeck>
+			<Bar>
+				<Objects />
+			</Bar>
+			<Kitchen>
+				<Objects>
+					<Knife />
+				</Objects>
+			</Kitchen>
+			<Lavatory>
+				<Objects />
+			</Lavatory>
+			<GameRoom>
+				<Objects>
+					<Table />
+				</Objects>
+			</GameRoom>
+			<Mezzanine>
+				<Objects>
+					<CrewDoor />
+				</Objects>
+			</Mezzanine>
+			<SantosRoom>
+				<Objects>
+					<SantosDrawer />
+				</Objects>
+			</SantosRoom>
+			<BlakewellRoom>
+				<Objects>
+					<BaxterDrawer />
+				</Objects>
+			</BlakewellRoom>
+			<GardenLounge>
+				<Objects />
+			</GardenLounge>
+			<Study>
+				<Objects>
+					<Table />
+				</Objects>
+			</Study>
+			<CrewCorridor>
+				<Objects>
+					<CrewDoorBack />
+				</Objects>
+			</CrewCorridor>
+			<Closet>
+				<Objects />
+			</Closet>
+			<SouthEngines>
+				<Objects />
+			</SouthEngines>
+			<NorthEngines>
+				<Objects />
+			</NorthEngines>
+			<Navigation>
+				<Objects />
+			</Navigation>
+			<SouthGenerator>
+				<Objects />
+			</SouthGenerator>
+			<NorthGenerator>
+				<Objects />
+			</NorthGenerator>
+			<ControlRoom>
+				<Objects />
+			</ControlRoom>
+			<ExternalStructure>
+				<Objects />
+			</ExternalStructure>
+		</Map>
+		<Conversations />
+	</Game>
+</GameData>

@@ -34,6 +34,7 @@ void Room::removeObject(Object* object) {
 
 		} else if (objects[i]->getName().compare(object->getName()) == 0) {
 			found = true;
+			delete objects[i];
 		}
 	}
 

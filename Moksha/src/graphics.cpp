@@ -4,6 +4,14 @@ Graphic::Graphic(int screenWidth, int screenHeight, int fps) {
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
 	this->fps = fps;
+	SetConsoleTitle("Moksha");
+
+	wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
+	rHnd = GetStdHandle(STD_INPUT_HANDLE);
+
+	/* A COORD struct for specificying the console's screen buffer dimensions */
+	COORD bufferSize = { 140, 40 };
+	SetConsoleScreenBufferSize(console, bufferSize);
 
 	screen = new wchar_t[screenWidth*screenHeight];
 	console = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
@@ -120,5 +128,5 @@ void Graphic::paintBG(int initialX, int initialY, int length, char color) {
 void Graphic::update() {
 	screen[screenWidth*screenHeight - 1] = '\0';
 	WriteConsoleOutputCharacterW(console, screen, screenWidth*screenHeight, { 0, 0 }, &bytesWritten);
-	Sleep(1000 / fps);
+	//Sleep(1000 / fps);
 }

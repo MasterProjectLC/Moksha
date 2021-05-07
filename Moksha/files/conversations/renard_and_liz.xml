@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Renard/>
+    <Liz/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Renard line="Ah, Ms. Niedenberg?"/>
+    <Narrator line="Liz turns around. Renard is leaning forward through the door's frame, seemingly cautious over entering the room unannounced."/>
+    <Liz line="Yes? Who are you?"/>
+    <Renard line="My name is Claude Renard, Miss. I'm a journahlist from Le Journal, a newspahpair from France. I would like to have an interview with you, if that's possible."/>
+    <Liz line="Interview? Now?"/>
+    <Renard line="W-Well, not now, necessarily, but this ahfternoon, perhahps?"/>
+    <Narrator line="Liz ponders on the frenchman's proposal. She looks towards her family's crest on the wall, and lets out a heavy sigh."/>
+    <Liz line="I'm sorry, Mr. Renard, but I must decline. I'm not exactly in the mood for an interview right now."/>
+    <Narrator line="Claude hesitates for a second, but ultimately concedes."/>
+    <Renard line="Understahndable, Ms. Niedenberg. Take as much time ahs you need. I'll take my leave, then."/>
+</Conversation>

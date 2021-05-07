@@ -1,0 +1,12 @@
+name:
+Family crest
+codename:
+Crest
+visible:
+true
+actions:
+examine|look|see|check
+examine,look,see,check:
+It seems to be the Niedenberg family crest. They come from the Autro-Hungary empire, huh?|reveal|niedenberg_family
+take,obtain:
+Nope, that's a very bad idea.

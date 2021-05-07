@@ -11,6 +11,7 @@ Interface::Interface(int screenWidth, int screenHeight, int separator, int fps) 
 	this->menuPointer = 0;
 	this->fps = fps;
 	this->clock = 0;
+	this->updatedLines = false;
 
 	titles.push_back("Items");
 	titles.push_back("Rumors");
@@ -102,12 +103,10 @@ void Interface::setMenuPointer(int n) {
 void Interface::mainInterface() {
 	screenInterface();
 	consoleInterface();
+	inputInterface();
 
 	if (menu)
 		menuInterface();
-
-	// Update
-	graphics.update();
 }
 
 void Interface::screenInterface() {
@@ -208,21 +207,25 @@ void Interface::inventoryInterface(int invP, int titleP, bool paintItem) {
 }
 
 void Interface::consoleInterface() {
-	// Current line
-	string s = currentLine;
-	graphics.drawString(separator + 1, screenHeight - 1, s);
-	graphics.paint(separator + 1, screenHeight - 1, s.size() + 1, 'c');
-	underlineInterface(underline);
-
 	// Lines
+	string s;
 	int sobre = 1;
 	list<char>::iterator cit;
 	for (cit = lineColors.begin(), it = lines.begin(); it != lines.end(); it++, cit++, sobre++) {
 		s = *it;
 		sobre += s.size() / (screenWidth - separator);
 		graphics.drawString(separator + 1, screenHeight - sobre - 1, s);
-		graphics.paint(separator + 1, screenHeight - sobre - 1, s.length(), *cit);
+		if (updatedLines)
+			graphics.paint(separator + 1, screenHeight - sobre - 1, s.length(), *cit);
 	}
+	updatedLines = false;
+}
+
+void Interface::inputInterface() {
+	string s = currentLine;
+	graphics.drawString(separator + 1, screenHeight - 1, s);
+	graphics.paint(separator + 1, screenHeight - 1, s.size() + 1, 'y');
+	underlineInterface(underline);
 }
 
 void Interface::underlineInterface(bool n) {
@@ -232,8 +235,10 @@ void Interface::underlineInterface(bool n) {
 			graphics.paintBG(separator + pointer + 1, screenHeight - 1, 1, 'y');
 			graphics.paint(separator + pointer + 1, screenHeight - 1, 1, 'n');
 		}
-		else
+		else {
 			graphics.draw(separator + pointer + 1, screenHeight - 1, '_');
+			graphics.draw(separator + pointer + 2, screenHeight - 1, ' ');
+		}
 	}
 	else
 		if (pointer < currentLine.size()) {
@@ -282,28 +287,38 @@ void Interface::clocking() {
 
 void Interface::update(int id) {
 	// Update
+	bool onlyTextUpdate = true;
+
 	switch (id) {
 	case 0:
-		inputUpdate();
+		onlyTextUpdate = inputUpdate();
 		break;
 	}
 
 	// Design & Draw
-	mainInterface();
+	if (onlyTextUpdate)
+		inputInterface();
+	else
+		mainInterface();
+
+	// Update
+	graphics.update();
 }
 
-void Interface::inputUpdate() {
+bool Interface::inputUpdate() {
+	bool onlyTextUpdate = true;
+
 	if (input.getInput(input.left))
-		pointerLeft();
+		if (pointerHorz(-1)) onlyTextUpdate = false;
 
 	if (input.getInput(input.right))
-		pointerRight();
+		if (pointerHorz(1)) onlyTextUpdate = false;
 
 	if (input.getInput(input.up))
-		pointerUp();
+		if (pointerVert(-1)) onlyTextUpdate = false;
 
 	if (input.getInput(input.down))
-		pointerDown();
+		if (pointerVert(1)) onlyTextUpdate = false;
 
 	if (input.getInput(input.space))
 		space();
@@ -315,6 +330,7 @@ void Interface::inputUpdate() {
 		removeLetter(false);
 
 	if (input.getInput(input.enter)) {
+		onlyTextUpdate = false;
 		if (!menu) {
 			args = riseLine();
 			setNotifyID(notifyArgs);
@@ -333,57 +349,48 @@ void Interface::inputUpdate() {
 		}
 	}
 
-	if (input.getInput(input.tab))
+	if (input.getInput(input.tab)) {
+		onlyTextUpdate = false;
 		setTab(!getTab());
+	}
 
-	if (input.getInput(input.escape))
+	if (input.getInput(input.escape)) {
+		onlyTextUpdate = false;
 		setMenu(!getMenu());
+	}
 
 	if (input.getInput(input.typing))
 		addLetter(input.getTyped());
+
+	return onlyTextUpdate;
 }
 
 
-void Interface::pointerLeft() {
-	if (menu)
-		return;
+bool Interface::pointerHorz(int shift) {
+	if (!menu)
+		if (textTab)
+			setTitulosPointer(titlesPointer + shift);
+		else {
+			setPointer(pointer + shift);
+			return false;
+		}
 
-	if (textTab)
-		setTitulosPointer(titlesPointer - 1);
-	else
-		setPointer(pointer - 1);
+	return true;
 }
 
-void Interface::pointerRight() {
+bool Interface::pointerVert(int shift) {
 	if (menu)
-		return;
-
-	if (textTab)
-		setTitulosPointer(titlesPointer +1);
-	else
-		setPointer(pointer + 1);
-}
-
-void Interface::pointerUp() {
-	if (menu)
-		setMenuPointer(menuPointer - 1);
+		setMenuPointer(menuPointer + shift);
 	else {
 		if (textTab)
-			setInvPointer(invPointer - 1);
-		else
-			setVPointer(vPointer + 1);
+			setInvPointer(invPointer + shift);
+		else {
+			setVPointer(vPointer - shift);
+			return false;
+		}
 	}
-}
 
-void Interface::pointerDown() {
-	if (menu)
-		setMenuPointer(menuPointer + 1);
-	else {
-		if (textTab)
-			setInvPointer(invPointer + 1);
-		else
-			setVPointer(vPointer - 1);
-	}
+	return true;
 }
 
 void Interface::space() {
@@ -482,6 +489,7 @@ vector<string> Interface::riseLine() {
 void Interface::printLine(string newLine, char newColor) {
 	vector<string> novaCortada = splitString(newLine, '\n');
 	int consoleSize = screenWidth - separator - 2;
+	updatedLines = true;
 
 	for (int i = 0; i < novaCortada.size(); i++) {
 		if (novaCortada[i].size() > consoleSize) {

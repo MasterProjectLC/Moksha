@@ -45,6 +45,15 @@ void Character::takeAction(int action, vector<string> args) {
 			leave(zusammenArgs);
 			break;
 
+		case transformar:
+			if (args.size() >= 2)
+				transform(args[0], args[1]);
+			break;
+
+		case revelar:
+			reveal(zusammenArgs);
+			break;
+
 		case checar:
 			check(zusammenArgs);
 			break;
@@ -144,6 +153,11 @@ void Character::check(string targetName) {
 	receiveCheck(target);
 }
 
+void Character::reveal(string info) {
+	status = "discovering about " + info + ".";
+	obtainAbstract(info);
+}
+
 void Character::scan() {
 	status = "checking the room.";
 	checkRoom(neighbours);
@@ -179,6 +193,18 @@ void Character::take(string objectName) {
 	obtainObject(object->getCodename());					// Give object to character
 	setStatus("obtaining " + object->getName() + ".");		// Update char's status
 	getCurrentRoom()->removeObject(object);					// Remove object from the room
+}
+
+void Character::transform(string oldObjectName, string newObjectCodename) {
+	// Remove old object
+	Object* object = currentRoom->getObject(oldObjectName);
+	obtainObject(object->getCodename());
+	setStatus("handling " + object->getName() + ".");
+	getCurrentRoom()->removeObject(object);
+
+	// Create new object
+	FileDict fileDict = FileManager::readFromFile("files/objects/" + newObjectCodename + ".txt");
+	getCurrentRoom()->addObject(new Object(fileDict));
 }
 
 void Character::voidAction(string actionStatus) {

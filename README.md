@@ -9,6 +9,9 @@ Repeatedly rewind in time and try to save everyone aboard the steampunk airship 
 * Arseny Kapoulkine (zeux) - [pugixml](https://github.com/zeux/pugixml)
 * Abraham 'Bram' Stolk - [GPGOAP](https://github.com/stolk/GPGOAP)
 
+### Reference
+* Javidx9 - [Console Game Engine](https://github.com/OneLoneCoder/videos/blob/master/olcConsoleGameEngine.h)
+
 ### Writing/Narrative
 * Ágata Drigo (Akatze)
 * Dan Isamu (MisterProject)

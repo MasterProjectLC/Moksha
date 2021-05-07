@@ -127,7 +127,10 @@
 			</GeorgeRoom>
 
             <LizRoom>
-				<Objects/>
+				<Objects>
+                    <CoveredPainting/>
+                    <Crest/>
+                </Objects>
 			</LizRoom>
 
             <MagnusRoom>

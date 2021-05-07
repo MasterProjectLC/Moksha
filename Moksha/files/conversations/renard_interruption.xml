@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Renard/>
+    <Willow/>
+    <Baxter/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Willow line="...Here, dear. It's a G, see? Second line."/>
+    <Baxter line="Oh, I see. Thank you."/>
+    <Narrator line="The pair continues to play the piano, weaving their fingers together over the keyboard. Baxter seems inexperienced at this, though his expression doesn't divulge any frustration."/>
+    <Narrator line="Meanwhile, Renard cautiously approaches the stage..."/>
+    <Renard line="Ms. Niedenberg? Can I, ah, talk to you for a second?"/>
+    <Narrator line="The pair keeps on playing, seemingly unaware of Renard's presence. The reporter awkwardly shuffles and coughs."/>
+    <Renard line="Ah, Ms. Niedenberg? W-Willow?"/>
+    <Narrator line="The melody stops. This time, they seem to take notice of him. Willow and Baxter look over down next to the dining table."/>
+    <Willow line="Excuse me, mister, did you just mention my name?"/>
+    <Renard line="Yes, pardón for interrupting your magnificent song, Ms. Niedenberg, but could I perhahps interview you for my newspahpair?"/>
+    <Narrator line="A bit taken aback, the two Blakewells exchange looks and trade whispers."/>
+    <Willow line="I, umm... Dear, if that's alright with you..."/>
+    <Baxter line="Of course, darling, but surely later would be..."/>
+    <Willow line="Alright, yes, that would be best..."/>
+    <Renard line="Ms. Niedenberg? I, ah, need an answar, please."/>
+    <Willow line="Sorry, Mr. Renard. Yes, we can have an interview in the afternoon, if you're available. Additionally, I think both of us would prefer if you called me Ms. Blakewell instead of Ms. Niedenberg."/>
+    <Renard line="Ah, apologies! Alright, thank you, Ms., ah, Blakewell. See you in the afternoon, then."/>
+    <Willow line="Likewise, Mr. Renard."/>
+</Conversation>

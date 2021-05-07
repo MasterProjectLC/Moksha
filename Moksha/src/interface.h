@@ -67,6 +67,7 @@ private:
 	void addLetter(char nova);
 	void removeLetter(bool before);
 	vector<string> riseLine();
+	bool updatedLines;
 
 	// Inventory
 	vector<string> titles;
@@ -90,16 +91,15 @@ private:
 	void screenInterface();
 	void menuInterface();
 	void consoleInterface();
+	void inputInterface();
 	void inventoryInterface(int invP, int titleP, bool paintItem = true);
 	void underlineInterface(bool n);
 
 	// Input
 	void update(int id) override;
-	void inputUpdate();
-	void pointerLeft();
-	void pointerRight();
-	void pointerUp();
-	void pointerDown();
+	bool inputUpdate();
+	bool pointerHorz(int shift);
+	bool pointerVert(int shift);
 	void space();
 
 	vector<string> args;

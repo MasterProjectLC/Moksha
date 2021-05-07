@@ -16,6 +16,9 @@ private:
 	// Tela
 	wchar_t *screen;	// wide character array
 	HANDLE console;
+	HANDLE wHnd; /* write (output) handle */
+	HANDLE rHnd; /* read (input handle */
+
 	DWORD bytesWritten;
 
 	int getCoords(int x, int y);

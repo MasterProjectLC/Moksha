@@ -11,8 +11,10 @@ void Liz::setupActionsParticular() {
 	addTrackableRoom("LizRoom");
 	addTrackableRoom("SantosRoom");
 	addTrackableRoom("GameRoom");
+	addTrackableRoom("GeorgeRoom");
 
 	addTrackableConvo("liz_card_game", "with_George");
+	addTrackableConvo("liz_victory", "in_GameRoom");
 
 	addTrackableNull("paint", "painting", "LizRoom");
 	addTrackableNull("play", "playing", "GameRoom");
