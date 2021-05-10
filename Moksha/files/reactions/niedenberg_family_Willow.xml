@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Willow/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Willow line="I... don't really talk to my family anymore. I 'left the coop', as Bax would put it. But I'm trying to get back in touch!"/>
+    <Elliot line="Was it you who invited Liz to this voyage?"/>
+    <Willow line="Yes, it was. She resents me for leaving, but deep down, I know we can still make amends."/>
+    <Elliot line="Why does she resent you?"/>
+    <Willow line="It's... complicated. I wouldn't be comfortable sharing her reasons to others, as it's something very personal to her. It wouldn't be right."/>
+    <Elliot line="I understand. Thank you, Ms. Blakewell."/>
+</Conversation>

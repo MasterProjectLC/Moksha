@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Hilda/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Jenna line="Hey, Dr. Magnus!"/>
+    <George line="Hello, son."/>
+    <Magnus line="Greetings, Janet and George Maybourne. How are you today? What did you think of the presentation?"/>
+    <Jenna line="We're pretty good! And the presentation was top notch, too!"/>
+    <George line="Can we, uh, ask a question about the Medusa, son? My niece here especially seems really interested in what you have to say about it."/>
+    <Narrator line="Magnus pauses, for a moment."/>
+    <Magnus line="Uh... S-Sure! Ask away."/>
+    <Jenna line="So... My uncle and I were wondering how exactly you built this airship. Like, what's the design intent behind it all. How can it carry so much?"/>
+    <Magnus line="Ah, well, we, uh, use steam engines to propel the ship forward and up, providing additional lift to the balloons. It's a... heavier-than-air design."/>
+    <Jenna line="Interesting... While I do like the purity of lighter-than-air models, I can understand the shift to heavier-than-air."/>
+    <Narrator line="Magnus lets out a sigh of relief."/>
+    <Magnus line="That's good to hear. There are some out there whom I discovered despise our design philosophy..."/>
+    <Narrator line="George shortly laughs at the remark."/>
+    <George line="Ah, don't get discouraged, son. There will always be critics. Back when I used to test the first steam birds, many people called us 'Orpheus' followers', can you believe that?"/>
+    <Magnus line="Wait, you worked with the Alpha models..?"/>
+    <George line="Hah, yep, I did! Wanna hear some stories about that time?"/>
+    <Jenna line="Oh, here we go..."/>
+    <Magnus line="O-Of course! They are a cornerstone of aerial development, after all."/>
+    <George line="Alright, so I'll start at the beginning. Twenty years ago, a man from the Aeronautical Division approached me with an offer..."/>
+    <Magnus line="And with this, the General begins to tell about his adventures as a first generation pilot, filled with excitement and joy. You, however, quickly begin to lose interest, and are unable to pay attention anymore..."/>
+</Conversation>

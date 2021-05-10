@@ -57,7 +57,15 @@ string Room::getAdjacentRoomCodename(int i) {
 };
 
 
-bool Room::hasObject(string name) {
+bool Room::hasObject(string codename) {
+	for (int i = 0; i < objects.size(); i++) {
+		if (codename.compare(objects[i]->getCodename()) == 0)
+			return true;
+	}
+	return false;
+}
+
+bool Room::hasObjectByName(string name) {
 	for (int i = 0; i < objects.size(); i++) {
 		if (name.compare(objects[i]->getName()) == 0)
 			return true;
@@ -67,13 +75,25 @@ bool Room::hasObject(string name) {
 
 
 #include <stdexcept>
-Object* Room::getObject(string name) {
+Object* Room::getObject(string codename) {
+	for (int i = 0; i < objects.size(); i++) {
+		if (codename.compare(objects[i]->getCodename()) == 0)
+			return objects[i];
+	}
+
+	//throw invalid_argument("There's no object with that name :(");
+	return NULL;
+}
+
+
+Object* Room::getObjectByName(string name) {
 	for (int i = 0; i < objects.size(); i++) {
 		if (name.compare(objects[i]->getName()) == 0)
 			return objects[i];
 	}
 
-	throw invalid_argument("There's no object with that name :(");
+	//throw invalid_argument("There's no object with that name :(");
+	return NULL;
 }
 
 

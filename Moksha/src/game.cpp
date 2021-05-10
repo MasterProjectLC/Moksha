@@ -56,7 +56,7 @@ bool Game::emitEvent(int id, vector<string> args) {
 		break;
 
 	case item_deixado:
-		if (args[0] == "JennaSuitcase") {
+		if (args[0] == "jenna_suitcase") {
 			player->printGameText("Press Enter to continue.");
 			conversations.push_back(new Conversation("intro2", "Runway", characters));
 		}
@@ -77,7 +77,7 @@ bool Game::emitEvent(int id, vector<string> args) {
 			break;
 
 		case 45:
-			//((NPC*)findCharacter("Baxter"))->addGoal(new string("convo_presentation"), true, 50);
+			((NPC*)findCharacter("Baxter"))->addGoal(new string("convo_presentation"), true, 50);
 			((NPC*)findCharacter("Baxter"))->addGoal(new string("convo_familiar_faces"), true, 45);
 			break;
 
@@ -90,18 +90,18 @@ bool Game::emitEvent(int id, vector<string> args) {
 			((NPC*)findCharacter("Magnus"))->addGoal(new string("medusa"), true, 50);
 			break;
 
-		case 70:
+		case (60 + 10):
 			((NPC*)findCharacter("Jenna"))->addGoal(new string("convo_jenna_amelie"), true, 40);
 			break;
 
-		case (60+60+30):
+		case (2*60 + 30):
 			((NPC*)findCharacter("Paul"))->addGoal(new string("convo_airship_design"), true, 50);
 			((NPC*)findCharacter("George"))->addGoal(new string("convo_begin_card_game"), true, 50);
 			((NPC*)findCharacter("George"))->addGoal(new string("playing"), true, 2);
 			((NPC*)findCharacter("Jenna"))->addGoal(new string("playing"), true, 2);
 			break;
 
-		case (60 + 60 + 60):
+		case (3*60):
 			((NPC*)findCharacter("Renard"))->addGoal(new string("convo_renard_and_liz"), true, 51);
 			break;
 
@@ -115,15 +115,48 @@ bool Game::emitEvent(int id, vector<string> args) {
 
 		case (4 * 60):
 			((NPC*)findCharacter("Magnus"))->addGoal(new string("convo_amelie_magnus"), true, 50);
+			((NPC*)findCharacter("Tom"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Hilda"))->addGoal(new string("having_lunch"), true, 5);
 			break;
 
 		case (4 * 60 + 15):
 			((NPC*)findCharacter("Hilda"))->addGoal(new string("convo_lunch_switch"), true, 50);
-			((NPC*)findCharacter("Hilda"))->addGoal(new string("piloting"), true, 3);
+			((NPC*)findCharacter("Hilda"))->addGoal(new string("piloting"), true, 8);
+			break;
+
+		case (4 * 60 + 30):
+			((NPC*)findCharacter("Hilda"))->addGoal(new string("convo_lunch_switch"), true, 50);
+			((NPC*)findCharacter("Santos"))->addGoal(new string("convo_tom_lunch"), true, 50);
+			((NPC*)findCharacter("Santos"))->addGoal(new string("piloting"), true, 3);
 			break;
 
 		case (4 * 60 + 45):
 			((NPC*)findCharacter("Liz"))->addGoal(new string("convo_liz_victory"), true, 50);
+			((NPC*)findCharacter("Liz"))->addGoal(new string("having_lunch"), true, 5);
+			break;
+
+		case (4 * 60 + 50):
+			((NPC*)findCharacter("Santos"))->addGoal(new string("convo_tom_slacking"), true, 49);
+			((NPC*)findCharacter("Santos"))->addGoal(new string("training"), true, 4);
+			break;
+
+		case (5 * 60):
+			((NPC*)findCharacter("Willow"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Santos"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Baxter"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Renard"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Jenna"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("George"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Paul"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Amelie"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Magnus"))->addGoal(new string("having_lunch"), true, 5);
+			break;
+
+		case (5 * 60 + 5):
+			((NPC*)findCharacter("Hilda"))->addGoal(new string("convo_hilda_tom"), true, 50);
+			((NPC*)findCharacter("Willow"))->addGoal(new string("convo_willow_liz"), true, 50);
+			((NPC*)findCharacter("Jenna"))->addGoal(new string("convo_aeronauticals"), true, 50);
+			((NPC*)findCharacter("Santos"))->addGoal(new string("convo_baxter_santos"), true, 48);
 			break;
 		}
 		break;
@@ -248,14 +281,9 @@ void Game::receiveArgs(vector<string> args) {
 
 
 void Game::broadcastMessage(string topic, string str, Character* sender, vector<Character*> receivers, Room* room) {
-	for (vector<Character*>::iterator it = receivers.begin(); it != receivers.end(); it++) {
-		if ((*it)->getCurrentRoom() == room) {
+	for (vector<Character*>::iterator it = receivers.begin(); it != receivers.end(); it++)
+		if ((*it)->getCurrentRoom() == room)
 			(*it)->executeReaction(topic, str, sender, false);
-			if ((*it) == player && topic != "") {
-				player->obtainAbstract(topic);
-			}
-		}
-	}
 }
 
 void Game::broadcastEvent(Character* emitter, vector<string> args) {

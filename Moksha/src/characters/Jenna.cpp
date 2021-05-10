@@ -6,7 +6,7 @@ Jenna::Jenna(Map* m) : NPC(m, "Jenna") {
 
 void Jenna::setupActionsParticular() {
 	addTrackablePeople("Elliot");
-	addTrackablePeople("Magnus");
+	addTrackablePeople("Magnus", vector<string>({ "Study", "MagnusRoom" }));
 	addTrackablePeople("Renard");
 	addTrackablePeople("George");
 
@@ -29,6 +29,8 @@ void Jenna::setupActionsParticular() {
 
 	addTrackableRoom("GameRoom");
 	addTrackableNull("play", "playing", "GameRoom");
+
+	addTrackableConvo("aeronauticals", "in_DiningHall");
 }
 
 

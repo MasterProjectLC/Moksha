@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Baxter/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Baxter line="Oh, that's Willow's family. Austro-Hungarian noble blood, from what I've gathered. As a matter of fact, I've already talked to her parents, once. It was an unpleasant conversation."/>
+    <Elliot line="Oh, really? How?"/>
+    <Baxter line="Well, they're nobles. Old money. They don't care for people like me, the nouveau riche, who made the money themselves. It seems they find us... too inconspicuous."/>
+    <Elliot line="What about Willow? Or Liz?"/>
+    <Baxter line="Ah, Willow is different. Fortunately she left that den of eagles to pursue her own dreams. Liz, on the other hand... she still has the same antiquated mindset."/>
+    <Elliot line="I see..."/>
+</Conversation>

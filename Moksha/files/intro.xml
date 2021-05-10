@@ -24,13 +24,13 @@
 		<Map>
             <FlightDock>
 				<Objects>
-					<JennaSuitcase/>
+					<jenna_suitcase/>
 				</Objects>
 			</FlightDock>
 
 			<Runway>
 				<Objects>
-					<SuitcaseStash/>
+					<suitcase_stash/>
 				</Objects>
 			</Runway>
             

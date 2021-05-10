@@ -1,5 +1,5 @@
 name:
-Table
+table
 visible:
 true
 actions:

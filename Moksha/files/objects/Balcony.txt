@@ -1,5 +1,5 @@
 name:
-Balcony
+balcony
 visible:
 true
 actions:

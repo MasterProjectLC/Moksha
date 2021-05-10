@@ -1,5 +1,5 @@
 name:
-Clock
+clock
 visible:
 true
 actions:

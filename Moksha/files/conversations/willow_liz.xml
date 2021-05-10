@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Willow/>
+    <Liz/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Willow line="Oh, hi, Liz... Can we talk for a moment?"/>
+    <Liz line="Hello, Willow. Have you seen Santos?"/>
+    <Narrator line="Willow is caught a bit off-guard by the question. She composes herself again."/>
+    <Willow line="He... He just left, Liz. Can we talk?"/>
+    <Narrator line="Liz sighs."/>
+    <Liz line="Alright. What do you want?"/>
+    <Willow line="...I want to make amends. I invited you here to try to heal these old wounds we've been letting fester. I know what mom and dad think of me, and I'd like to change that."/>
+    <Narrator line="Liz falls silent, for a moment."/>
+    <Liz line="You left the family, Willow. Went to write stories, marry that Baxter type, and change your name. Do you know how hard things have become for us? Dad had to sell almost half of our lands, and I've been breeding dogs just to keep our influence floating."/>
+    <Willow line="Isn't there anything I can do to help? I could bring in some money, if that's needed."/>
+    <Liz line="No. No, it's not... it's not about money. Not money from you, at least."/>
+    <Willow line="What do you mean by that?"/>
+    <Liz line="I... We don't want your handouts. It's about our influence, not our pockets."/>
+    <Willow line="You're still following mom and dad's path after prestige? Why can't we just settle for becoming, well, a normal family?"/>
+    <Narrator line="Liz scoffs at her remark."/>
+    <Liz line="Really? You, of all people, talking about ‘settling for' something? After you left us in the mud to marry that rich guy?"/>
+    <Willow line="It's not because of his riches, Liz! I love him! I truly, truly do. He doesn't show it to others, but there's good in his heart."/>
+    <Willow line="Liz, look."/>
+    <Narrator line="Willow pauses. It's almost as if she's afraid of what she's about to say."/>
+    <Willow line="I... I know you don't really care about the family's honor as much as you preach. And... I think your art is nice."/>
+    <Liz line="Where are you going with this? How are these two topics even related?"/>
+    <Willow line="I read your diary, Liz, back when we were younger. I know you resent me for being better at writing. But I think you paint better than me. And, and, and I think you should pursue it."/>
+    <Liz line="You read my diary?!"/>
+    <Willow line="L-Listen! I didn't leave mom and dad for bad intentions. I just thought it was a corrupting place to live, you know? For both of us. You don't need to try to ‘prove' yourself, or whatever you're doing. You'll always be my sister."/>
+    <Narrator line="Liz goes silent. Her entire body trembles, as if Pandora's box had just been unleashed then and there."/>
+    <Liz line="Never talk to me again, alright? Never. You breached my trust. You invaded my privacy. And you left. Our. Family."/>
+    <Narrator line="Storming out, the noblewoman turns her back to Willow. Their fraternal bond is irreparably severed."/>
+</Conversation>

@@ -1,12 +1,12 @@
 name:
-Crew Door
+crew door
 codename:
-CrewDoor
+crew_door_back
 visible:
 true
 actions:
 examine|look|see|check|go|open|traverse
 examine,look,see,check:
-It reads 'Crew Only'.
+I can go back to the mezzanine through here.
 go,open,traverse:
-Let's see...|move|CrewCorridor
+Let's return.|move|Mezzanine

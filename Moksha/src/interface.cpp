@@ -426,18 +426,16 @@ void Interface::setConcepts(vector<Concept*> concepts, char type) {
 	for (index = 0; index < titles.size(); index++)
 		if (titles[index][0] == toupper(type))
 			break;
-
-	if (concepts.size() > inventory[index].size())
-		for (int i = 0; i < concepts.size(); i++) {
-			if (i >= inventory[index].size()) {
-				inventory[index].push_back(concepts[i]);
-			}
-		}
-	else if (concepts.size() < inventory[index].size()) {
-		inventory[index].clear();
-		for (int i = 0; i < concepts.size(); i++) {
+	// Added concept
+	if (inventory[index].size() < concepts.size())
+		for (int i = inventory[index].size(); i < concepts.size(); i++)
 			inventory[index].push_back(concepts[i]);
-		}
+
+	// Removed concept
+	else if (inventory[index].size() > concepts.size()) {
+		inventory[index].clear();
+		for (int i = 0; i < concepts.size(); i++)
+			inventory[index].push_back(concepts[i]);
 	}
 
 	inventoryInterface(invPointer, titlesPointer, false);

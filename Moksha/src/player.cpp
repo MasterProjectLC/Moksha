@@ -52,7 +52,7 @@ void Player::removeItem(string name) {
 
 void Player::interact(string action, string object) {
 	// Print response
-	string response = getCurrentRoom()->getObject(object)->getResponse(action);
+	string response = getCurrentRoom()->getObjectByName(object)->getResponse(action);
 	if (response.size() > 0) { printText(response); }
 	else { printMindText(noActionError); }
 
@@ -166,12 +166,12 @@ void Player::receiveArgs(vector<string> args) {
 		string objectName = concatStrings(args, 1);
 
 		// Not an object
-		if ( !getCurrentRoom()->hasObject(objectName) ) {
+		if ( !getCurrentRoom()->hasObjectByName(objectName) ) {
 			printMindText(noObjectError);
 			return;
 		}
 		// This object doesn't support this action
-		else if (getCurrentRoom()->getObject(objectName)->getResponse(args[0]).size() <= 0) {
+		else if (getCurrentRoom()->getObjectByName(objectName)->getResponse(args[0]).size() <= 0) {
 			printMindText(noActionError);
 			return;
 		}

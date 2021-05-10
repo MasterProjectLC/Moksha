@@ -6,7 +6,10 @@ Willow::Willow(Map* m) : NPC(m, "Willow") {
 
 void Willow::setupActionsParticular() {
 	addTrackablePeople("Baxter");
+	addTrackablePeople("Liz", vector<string>({ "LizRoom", "GameRoom", "DiningHall" }));
 	addTrackableRoom("BlakewellRoom");
+
+	addTrackableConvo("willow_liz", "with_Liz");
 	addTrackableNull("write", "writing", "BlakewellRoom");
 }
 

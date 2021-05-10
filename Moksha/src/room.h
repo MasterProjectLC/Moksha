@@ -43,8 +43,10 @@ public:
 	string getAdjacentRoomCodename(int i);
 	int getAdjacentRoomCount() { return adjacentRoomCodenames.size(); }
 
-	bool hasObject(string name);
-	Object* getObject(string name);
+	bool hasObject(string codename);
+	bool hasObjectByName(string name);
+	Object* getObject(string codename);
+	Object* getObjectByName(string name);
 	Object* getObject(int index) { return objects[index]; }
 	vector<Object*> getObjects() { return objects; }
 	vector<string*> getObjectNames();

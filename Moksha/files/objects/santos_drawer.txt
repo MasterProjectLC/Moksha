@@ -1,13 +1,13 @@
 name:
-Drawer
+drawer
 codename:
-BaxterDrawer
+santos_drawer
 visible:
 true
 actions:
 examine|look|see|check
 examine,look,see,check:
-It's Baxter's drawer.
+It's Santos' drawer.
 touch:
 Nothing special about this drawer.
 take,obtain:

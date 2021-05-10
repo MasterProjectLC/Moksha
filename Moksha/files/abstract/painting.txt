@@ -1,0 +1,6 @@
+name:
+painting
+type:
+c
+description:
+Liz's painting in her room. It depicts a sunny flower field, with a family of four on the center of the canvas.

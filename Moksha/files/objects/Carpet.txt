@@ -1,5 +1,5 @@
 name:
-Carpet
+carpet
 visible:
 true
 actions:

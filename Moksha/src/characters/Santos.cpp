@@ -14,7 +14,15 @@ void Santos::setupActionsParticular() {
 	goap_set_pre(&ap, "move_Navigation", "in_CrewArea", true);
 	addTrackableRoom("Navigation");
 
+	goap_set_pre(&ap, "move_SantosRoom", "in_CrewArea", false);
+	addTrackableRoom("SantosRoom");
+
+	addTrackableConvo("tom_lunch", "in_DiningHall");
+	addTrackableConvo("tom_slacking", "in_Navigation");
+	addTrackableConvo("baxter_santos", "in_DiningHall");
+
 	addTrackableNull("pilot", "piloting", "Navigation");
+	addTrackableNull("train", "training", "SantosRoom");
 }
 
 

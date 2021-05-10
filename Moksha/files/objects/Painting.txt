@@ -1,12 +1,12 @@
 name:
-Painting
+painting
 visible:
 true
 actions:
 examine|look|see|check|cover
 examine,look,see,check:
-It's a painting depicting a sunny flower field, with a family of four on the center of the canvas. Did Liz paint this...? It's honestly quite beautiful.
+It's a painting depicting a sunny flower field, with a family of four on the center of the canvas. Did Liz paint this...? It's honestly quite beautiful.|reveal|covered_painting
 take,obtain:
 I can't walk around with something like this without attracting attention. Bad idea.
 cover:
-I should probably leave this as I found it...|transform|CoveredPainting
+I should probably leave this as I found it...|transform|painting|covered_painting

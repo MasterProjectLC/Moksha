@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Tom/>
+    <Hilda/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Hilda line="Ay, Tom... Can we talk for a moment?"/>
+    <Tom line="Uh, sure, ma'am."/>
+    <Narrator line="The two move off to an unoccupied corner of the Engines Room."/>
+    <Hilda line="Listen, your jackass father just demanded that you don't dine tonight with the other workers. Claimed that you were slacking off."/>
+    <Hilda line="Now, look, I don't want to force you to do any of that. I told him that if you don't want to do it, you don't need to do it. But it seems he expects you to say yes."/>
+    <Narrator line="Tom stares at Hilda for a moment, deep in thought. He doesn't seem very surprised."/>
+    <Tom line="I... Hmpf. It's another test of his, probably. "/>
+    <Hilda line="Yes, probably."/>
+    <Narrator line="He persists in thought for a few more seconds. Determination suddenly dawns on his expression."/>
+    <Tom line="Fuck, I'm not a weakling. And... And I'm damn sure I'm not backing down. Alright, screw it, my answer is yes."/>
+    <Narrator line="Hilda doesn't react. At least, not at first."/>
+    <Hilda line="Are you sure? Working with an empty stomach can be dangerous. And look, you don't owe your father anything. If you say no, I'll make him accept it."/>
+    <Tom line="No, I'm sure. I can handle it."/>
+    <Narrator line="The captain sighs in response."/>
+    <Hilda line="...Alright. If you change your mind, you just come out and say it. I won't judge you for it."/>
+    <Tom line="No problem. And, uh, thanks for the concern, ma'am. Truly."/>
+    <Hilda line="You're welcome, Tom. Keep up the good work."/>
+</Conversation>

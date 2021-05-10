@@ -271,6 +271,8 @@ void NPC::setupWorld() {
 
 	// describe repertoire of actions
 	addTrackableRoom("DiningHall");
+	addTrackableNull("lunch", "having_lunch", "having lunch", "DiningHall");
+	addTrackableNull("dinner", "having_dinner", "having dinner", "DiningHall");
 	setupActionsParticular();
 
 	// describe current world state.

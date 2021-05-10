@@ -1,7 +1,7 @@
 name:
 Jenna's suitcase
 codename:
-JennaSuitcase
+jenna_suitcase
 actions:
 leave
 description:

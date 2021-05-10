@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Baxter/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Santos line="G'day, Bax."/>
+    <Baxter line="Hello, Albert."/>
+    <Santos line="How did the whole presentation thing go? Did they seem interested?"/>
+    <Baxter line="I believe so, yes. I talked to Dr. Flettner after the presentation and he seemed to agree with my assessment."/>
+    <Santos line="Ah, well, that old glassie licks your boots at every opportunity anyway. Still, good on ya."/>
+    <Baxter line="What about you? Is the voyage going well?"/>
+    <Santos line="Hah, 'bout that ya don't need no worries. It's been a real piece of piss so far... Good weather, good view, all around good stuff. Hilda's been taking care of the yoke now."/>
+    <Baxter line="I see. Notify me if the situation changes, alright?"/>
+    <Santos line="Sure, Bax. Have a good lunch!"/>
+    <Baxter line="Likewise. Pip pip."/>
+</Conversation>

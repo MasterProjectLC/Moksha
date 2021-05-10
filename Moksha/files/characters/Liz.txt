@@ -7,3 +7,4 @@ strength:
 dexterity:
 2
 topics:
+covered_painting|niedenberg_family

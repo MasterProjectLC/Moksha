@@ -86,13 +86,13 @@
 
 			<NorthCorridor>
 				<Objects>
-					<Clock/>
+					<clock/>
 				</Objects>
 			</NorthCorridor>
 
             <SouthCorridor>
 				<Objects>
-					<Clock/>
+					<clock/>
 				</Objects>
 			</SouthCorridor>
 
@@ -106,7 +106,7 @@
 
 			<DiningHall>
 				<Objects>
-					<Table/>
+					<table/>
 				</Objects>
 			</DiningHall>
 
@@ -128,8 +128,8 @@
 
             <LizRoom>
 				<Objects>
-                    <CoveredPainting/>
-                    <Crest/>
+                    <covered_painting/>
+                    <crest/>
                 </Objects>
 			</LizRoom>
 
@@ -151,7 +151,7 @@
 
             <Kitchen>
 				<Objects>
-					<Knife/>
+					<knife/>
 				</Objects>
 			</Kitchen>
 
@@ -161,25 +161,25 @@
 
             <GameRoom>
 				<Objects>
-					<Table/>
+					<table/>
 				</Objects>
 			</GameRoom>
 
             <Mezzanine>
 				<Objects>
-                    <CrewDoor/>
+                    <crew_door/>
                 </Objects>
 			</Mezzanine>
 
             <SantosRoom>
 				<Objects>
-					<SantosDrawer/>
+					<santos_drawer/>
 				</Objects>
 			</SantosRoom>
 
             <BlakewellRoom>
 				<Objects>
-					<BaxterDrawer/>
+					<baxter_drawer/>
 				</Objects>
 			</BlakewellRoom>
 
@@ -189,13 +189,13 @@
 
             <Study>
 				<Objects>
-					<Table/>
+					<table/>
 				</Objects>
 			</Study>
 
             <CrewCorridor>
 				<Objects>
-                    <CrewDoorBack/>
+                    <crew_door_back/>
                 </Objects>
 			</CrewCorridor>
 

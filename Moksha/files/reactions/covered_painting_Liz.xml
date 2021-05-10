@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Liz/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Elliot line="Hey, uh... I saw the painting in your room, Ms. Niedenberg."/>
+    <Liz line="W-What? What makes you think you have the right to do that?"/>
+    <Elliot line="Sorry, I... Well... I just wanted to say... it's beautiful."/>
+    <Liz line="Hmph. It's... nothing. Who are you, anyway, to know about art? Leave me alone, please."/>
+</Conversation>

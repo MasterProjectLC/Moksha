@@ -1,7 +1,7 @@
 name:
-Family crest
+family crest
 codename:
-Crest
+crest
 visible:
 true
 actions:

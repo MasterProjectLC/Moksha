@@ -20,6 +20,7 @@ void Hilda::setupActionsParticular() {
 	addTrackableNull("pilot", "piloting", "Navigation");
 	addTrackableConvo("hilda_speech", "in_NorthEngines");
 	addTrackableConvo("hilda_sleep", "in_Navigation");
+	addTrackableConvo("hilda_tom", "in_Navigation");
 	addTrackableNull("sleep", "sleeping", "CrewQuarters");
 	addTrackableConvo("convo_lunch_switch", "in_Navigation");
 }

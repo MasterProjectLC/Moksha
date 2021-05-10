@@ -1,7 +1,7 @@
 name:
-Covered painting
+covered painting
 codename:
-CoveredPainting
+covered_painting
 visible:
 true
 actions:
@@ -11,4 +11,4 @@ Some sort of canvas, though it has been covered by a black fabric. Maybe I could
 take,obtain:
 I can't walk around with something like this without attracting attention. Bad idea.
 uncover:
-Huh, there really is a painting behind this!|transform|Painting
+Huh, there really is a painting behind this!|transform|covered_painting|painting

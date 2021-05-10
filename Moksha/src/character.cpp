@@ -189,7 +189,8 @@ void Character::talk(string convo, bool isReaction) {
 }
 
 void Character::take(string objectName) {
-	Object* object = currentRoom->getObject(objectName);
+	Object* object = currentRoom->getObjectByName(objectName);
+	if (!object) object = currentRoom->getObject(objectName);
 	obtainObject(object->getCodename());					// Give object to character
 	setStatus("obtaining " + object->getName() + ".");		// Update char's status
 	getCurrentRoom()->removeObject(object);					// Remove object from the room
@@ -197,8 +198,8 @@ void Character::take(string objectName) {
 
 void Character::transform(string oldObjectName, string newObjectCodename) {
 	// Remove old object
-	Object* object = currentRoom->getObject(oldObjectName);
-	obtainObject(object->getCodename());
+	Object* object = currentRoom->getObjectByName(oldObjectName);
+	if (!object) object = currentRoom->getObject(oldObjectName);
 	setStatus("handling " + object->getName() + ".");
 	getCurrentRoom()->removeObject(object);
 
@@ -212,7 +213,8 @@ void Character::voidAction(string actionStatus) {
 }
 
 void Character::interact(string action, string objectName) {
-	Object* object = getCurrentRoom()->getObject(objectName);
+	Object* object = getCurrentRoom()->getObjectByName(objectName);
+	if (!object) object = currentRoom->getObject(objectName);
 	int actionID = object->returnAction(action);
 	takeAction(actionID, object->getArgs());
 }

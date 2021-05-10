@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Liz/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Elliot line="Could you tell me more about your family, Ms. Niedenberg?"/>
+    <Liz line="I can, yes. The Niedenberg family dates back to 1274, when the fief of Windberg bestowed their lands to the stewards of Niedenberg. Since then, we've maintained our position in austrian society."/>
+    <Elliot line="I see... So your wealth comes mostly from lands?"/>
+    <Liz line="Well, y-yes, mostly. Part of our income also comes from noble dog breeds."/>
+    <Elliot line="Noble dog breeds? That's comparable to land wealth?"/>
+    <Narrator line="Liz goes silent for a few moments. Her expression darkens."/>
+    <Liz line="...This conversation is over."/>
+</Conversation>

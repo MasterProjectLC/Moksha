@@ -1,14 +1,14 @@
 name:
-Suitcase stash
+drawer
 codename:
-SuitcaseStash
+baxter_drawer
 visible:
 true
 actions:
 examine|look|see|check
 examine,look,see,check:
-I should probably 'leave Jenna's suitcase' here.
+It's Baxter's drawer.
 touch:
-Huh?
+Nothing special about this drawer.
 take,obtain:
-...That's a bad idea.
+Hm??
