@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Tom/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Elliot line="Are you sure you want this? I mean, this whole beat-my-father thing?"/>
+    <Tom line="Look, kid-"/>
+    <Elliot line="I'm older than you."/>
+    <Tom line="-the thing is... there is this shadow over me, okay? This shadow of oppression and ridicule regulating everything I do. If I don't stand up to my father, I don't have a voice - that's it. It's not a matter of what I want - it's a matter of what I need."/>
+    <Elliot line="But isn't what you're doing exactly what your father wants you to do? Becoming like him? If you hate him so much, why do you obey his every command?"/>
+    <Tom line="Because... Because!"/>
+    <Narrator line="Tom runs out of words. His hand trembles, and he backs off."/>
+    <Tom line="Because I want to prove to him I'm not a weakling. I want to wipe that idiotic grin off his face everytime he laughs at me, or ridicules me, or thinks I'm just a kid."/>
+    <Tom line="What better way to do that than to beat him at his own game? He asks me to do something, and I not only do it, but I crush it. His whole sense of identity shattered before him, just like he did to me."/>
+    <Elliot line="And so... because of that... you accepted working here as a crewman?"/>
+    <Tom line="Yeah. Y-Yeah, basically."/>
+    <Elliot line="Hm. I see."/>
+</Conversation>

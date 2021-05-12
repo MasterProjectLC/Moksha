@@ -15,6 +15,7 @@ void Liz::setupActionsParticular() {
 
 	addTrackableConvo("liz_card_game", "with_George");
 	addTrackableConvo("liz_victory", "in_GameRoom");
+	addTrackableConvo("blackmail", "with_SantosRoom");
 
 	addTrackableNull("paint", "painting", "LizRoom");
 	addTrackableNull("play", "playing", "GameRoom");

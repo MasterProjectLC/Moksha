@@ -7,4 +7,4 @@ strength:
 dexterity:
 11
 topics:
-crewboy
+crewboy|tom_ambition

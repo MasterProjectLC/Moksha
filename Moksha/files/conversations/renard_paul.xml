@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Renard/>
+    <Paul/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Renard line="Paul, please ready our equipment. Our interview with Willow is one hour from now."/>
+    <Paul line="W-What? Interview with Willow? Ya never told me about that."/>
+    <Renard line="I'm telling it to you now. I just booked the interview."/>
+    <Narrator line="Paul intently stares at Renard. Then, he shakes his head and turns back to his notebook."/>
+    <Paul line="Nah, I... I have other things to do."/>
+    <Renard line="Such as what? What else would you possibly have to do here?"/>
+    <Paul line="I..."/>
+    <Narrator line="Paul freezes. He looks to his bag, then to the door."/>
+    <Renard line="Must I remind you, Paul, that I hired you to assist me? What are you even writing in that book?"/>
+    <Narrator line="As the frenchman approaches to yank the notes out of Paul's hand, the assistant instinctively flinches and steps back."/>
+    <Paul line="I-It's none of ya damn business! A-And, alright, alright, I'll assist ya! How long will it even take?"/>
+    <Renard line="Two hours, at most."/>
+    <Narrator line="Paul pauses, for a moment."/>
+    <Paul line="That's... That's fine."/>
+    <Narrator line="He tucks the notebook back into his drawer."/>
+    <Paul line="But as soon as we're finished, I'll need to leave immediately."/>
+    <Renard line="That's acceptable. As long as the interview goes smoothly."/>
+</Conversation>

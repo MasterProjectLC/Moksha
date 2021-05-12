@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Liz/>
+</Participants>
+
+<Conversation FormatVersion="1">
+    <Liz line="Santos. We need to talk."/>
+    <Santos line="Ay, G'day, doll! Whaddya wanna talk about?"/>
+    <Narrator line="Liz hesitates for a moment."/>
+    <Liz line="We need to talk about... last night."/>
+    <Santos line="Oh. Do ya want a reprise today, I reckon?"/>
+    <Liz line="N-No, I... Listen. Santos, you have a son. I take it you also have a wife?"/>
+    <Narrator line="Santos goes silent. His demeanor becomes slightly more serious."/>
+    <Santos line="Hm, right. But we're in the middle of the bush, doll. There's no risk that..."/>
+    <Liz line="No, Santos. You don't get it. I'm the risk."/>
+    <Santos line="W-What?"/>
+    <Liz line="Listen, if I divulge the fact that you betrayed your wife, your life goes down. Especially at this moment, during this important voyage, when all eyes are focused on you and Blakewell."/>
+    <Santos line="Hoo, yes, but why would you-"/>
+    <Liz line="I'm not finished. I've seen around the airship and I believe your company will be a great success. My family business, on the other hand, is failing. So I need money."/>
+    <Liz line="So, in exchange for not telling that french journalist you've been cheating on your wife, I'd like 15% of your company. And some money in advance, because I'm not an idiot."/>
+    <Santos line="15%?! Crikey, that's bonkers! Bax defo won't agree to that!"/>
+    <Liz line="Blakewell doesn't need to know anything about this. Everything can come from your share of the pie."/>
+    <Narrator line="Santos steps back. He's completely outraged."/>
+    <Santos line="Ya bludger dropkick! No, I... I won't pay ya 15% of my share just because of a little root!"/>
+    <Liz line="Oh, you will. Give it a little thought. Overnight your name will be associated with untrust and betrayal. Who will buy from a company like this?"/>
+    <Liz line="Soon, Blakewell will try to remove you, and then, it will be only a matter of time before you'll be destitute on the streets. Honestly, why take the risk?"/>
+    <Narrator line="Santos remains silent. His menacing glare is palpable."/>
+    <Liz line="I'll leave, for now. You have until 4 o' clock to change your mind. Otherwise, I'm going to the journalists."/>
+</Conversation>

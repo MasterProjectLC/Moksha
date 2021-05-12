@@ -128,11 +128,13 @@ bool Game::emitEvent(int id, vector<string> args) {
 			((NPC*)findCharacter("Hilda"))->addGoal(new string("convo_lunch_switch"), true, 50);
 			((NPC*)findCharacter("Santos"))->addGoal(new string("convo_tom_lunch"), true, 50);
 			((NPC*)findCharacter("Santos"))->addGoal(new string("piloting"), true, 3);
+			((NPC*)findCharacter("Paul"))->addGoal(new string("watching_workers"), true, 5);
 			break;
 
 		case (4 * 60 + 45):
 			((NPC*)findCharacter("Liz"))->addGoal(new string("convo_liz_victory"), true, 50);
 			((NPC*)findCharacter("Liz"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Paul"))->addGoal(new string("listen_santos"), true, 51);
 			break;
 
 		case (4 * 60 + 50):
@@ -147,9 +149,9 @@ bool Game::emitEvent(int id, vector<string> args) {
 			((NPC*)findCharacter("Renard"))->addGoal(new string("having_lunch"), true, 5);
 			((NPC*)findCharacter("Jenna"))->addGoal(new string("having_lunch"), true, 5);
 			((NPC*)findCharacter("George"))->addGoal(new string("having_lunch"), true, 5);
-			((NPC*)findCharacter("Paul"))->addGoal(new string("having_lunch"), true, 5);
 			((NPC*)findCharacter("Amelie"))->addGoal(new string("having_lunch"), true, 5);
 			((NPC*)findCharacter("Magnus"))->addGoal(new string("having_lunch"), true, 5);
+			((NPC*)findCharacter("Paul"))->addGoal(new string("with_gun"), true, 50);
 			break;
 
 		case (5 * 60 + 5):
@@ -157,6 +159,11 @@ bool Game::emitEvent(int id, vector<string> args) {
 			((NPC*)findCharacter("Willow"))->addGoal(new string("convo_willow_liz"), true, 50);
 			((NPC*)findCharacter("Jenna"))->addGoal(new string("convo_aeronauticals"), true, 50);
 			((NPC*)findCharacter("Santos"))->addGoal(new string("convo_baxter_santos"), true, 48);
+			break;
+
+		case (7 * 60 + 5):
+			((NPC*)findCharacter("Liz"))->addGoal(new string("convo_blackmail"), true, 50);
+			((NPC*)findCharacter("Renard"))->addGoal(new string("convo_renard_paul"), true, 50);
 			break;
 		}
 		break;

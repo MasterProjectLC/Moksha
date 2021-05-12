@@ -7,7 +7,7 @@ Renard::Renard(Map* m) : NPC(m, "Renard") {
 void Renard::setupActionsParticular() {
 	addTrackablePeople("Willow");
 	addTrackablePeople("Liz", vector<string>({ "LizRoom" }));
-	addTrackablePeople("Paul");
+	addTrackablePeople("Paul", vector<string>({ "RenardRoom" }));
 	addTrackableRoom("RenardRoom");
 	addTrackableRoom("ViewingLobby");
 
@@ -22,8 +22,9 @@ void Renard::setupActionsParticular() {
 	goap_set_pst(&ap, "hear_presentation", "medusa", true);
 	addTrackableNull("hear_presentation", "medusa", "waiting", "ViewingLobby");
 
-	addTrackableConvo("renard_and_liz", "with_Liz");
+	addTrackableConvo("renard_liz", "with_Liz");
 	addTrackableConvo("renard_interruption", "in_DiningHall");
+	addTrackableConvo("renard_paul", "with_Paul");
 }
 
 

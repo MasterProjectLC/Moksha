@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Participants>
+    <Santos/>
+    <Elliot/>
+</Participants>
+
+<Conversation FormatVersion="1">
+	<Elliot line="Did you know about Tom's ambition to, uh, ‘beat' you?"/>
+    <Santos line="Hah! If I know it, mate? I can't remember the last time he hasn't told me some'ing like that!"/>
+    <Elliot line="And that doesn't bother you?"/>
+    <Santos line="Bother me? Hah! It's great that he wants to fly above his pa! In fact, I encourage it. It's just a shame that he doesn't have the capability to do that yet."/>
+    <Elliot line="Huh..."/>
+</Conversation>
